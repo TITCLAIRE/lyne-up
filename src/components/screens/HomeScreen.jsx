@@ -86,7 +86,7 @@ export const HomeScreen = () => {
         </div>
       </div>
 
-      {/* Section Urgence & Réalignement */}
+      {/* Section Urgence & Réalignement - SWITCH et RESET côte à côte */}
       <div className="mb-8">
         <div className="flex items-baseline gap-3 mb-4">
           <h2 className="text-lg font-semibold flex items-center gap-2">
@@ -94,7 +94,7 @@ export const HomeScreen = () => {
           </h2>
           <span className="text-sm text-white/60 italic">sessions guidées</span>
         </div>
-        <div className="grid grid-cols-1 gap-3">
+        <div className="grid grid-cols-2 gap-3">
           {urgencyAndRealignmentSessions.map((session) => {
             const Icon = session.icon;
             return (
@@ -103,20 +103,18 @@ export const HomeScreen = () => {
                 onClick={() => handleSessionClick(session.id)}
                 className="bg-white/8 border border-white/15 rounded-2xl p-4 cursor-pointer hover:bg-white/12 transition-all duration-200 hover:scale-[1.02]"
               >
-                <div className="flex items-center gap-4">
-                  <div className={`w-12 h-12 bg-gradient-to-r ${session.color} rounded-xl flex items-center justify-center`}>
-                    <Icon size={24} className="text-white" />
+                <div className="text-center">
+                  <div className={`w-10 h-10 bg-gradient-to-r ${session.color} rounded-xl flex items-center justify-center mx-auto mb-2`}>
+                    <Icon size={20} className="text-white" />
                   </div>
-                  <div className="flex-1">
-                    <h3 className="font-medium text-lg mb-1">{session.name}</h3>
-                    <p className="text-sm text-white/60 mb-1">{session.time}</p>
-                    <p className="text-sm text-white/50 italic">{session.baseline}</p>
-                    {session.id === 'reset' && (
-                      <div className="text-xs text-indigo-300 mt-1">
-                        🫁 Rythme 4/7/8 • Technique du Dr. Andrew Weil
-                      </div>
-                    )}
-                  </div>
+                  <h3 className="font-medium text-sm mb-1">{session.name}</h3>
+                  <p className="text-xs text-white/60 mb-1">{session.time}</p>
+                  <p className="text-xs text-white/50 italic">{session.baseline}</p>
+                  {session.id === 'reset' && (
+                    <div className="text-xs text-indigo-300 mt-1">
+                      🫁 Rythme 4/7/8
+                    </div>
+                  )}
                 </div>
               </div>
             );
