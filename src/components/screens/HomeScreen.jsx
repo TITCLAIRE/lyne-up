@@ -33,19 +33,19 @@ export const HomeScreen = () => {
   };
 
   const handleCoherenceClick = () => {
-    console.log('💖 Clic sur Cohérence Cardiaque');
+    console.log('💖 Clic sur Cohérence Cardiaque Intégrative');
     setCurrentScreen('coherenceSelection');
   };
 
   return (
     <div className="px-5 pb-5">
-      {/* Module Cohérence Cardiaque principal */}
+      {/* Module Cohérence Cardiaque Intégrative principal - EN CAPITALES */}
       <div 
         onClick={handleCoherenceClick}
         className="bg-gradient-to-r from-pink-500/20 to-purple-500/20 border-2 border-pink-500/30 rounded-2xl p-6 mb-6 cursor-pointer hover:from-pink-500/30 hover:to-purple-500/30 transition-all duration-300 hover:scale-[1.02]"
       >
         <div className="text-center">
-          <h2 className="text-xl font-semibold mb-2">Cohérence Cardiaque</h2>
+          <h2 className="text-xl font-semibold mb-2">COHÉRENCE CARDIAQUE INTÉGRATIVE</h2>
           <p className="text-white/70">3 min - 5 min - 15 min<br />Pour recentrer le système nerveux</p>
         </div>
       </div>
