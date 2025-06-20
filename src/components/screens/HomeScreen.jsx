@@ -13,10 +13,10 @@ const kidsSessions = [
   { id: 'kids', icon: Baby, name: 'KIDS', time: '2min', color: 'from-pink-400 to-purple-400', baseline: 'Respiration magique pour les petits' },
 ];
 
-// Sessions de voyage intérieur
+// Sessions de voyage intérieur - NOMS EN CAPITALES
 const innerJourneySessions = [
-  { id: 'scan', icon: Brain, name: 'Scan Corporel', time: '10min', color: 'from-indigo-500 to-purple-500', baseline: 'Relaxation profonde guidée' },
-  { id: 'meditation', icon: Sparkles, name: 'Méditations', time: '5-10min', color: 'from-pink-500 to-rose-500', baseline: 'Thèmes personnalisés' },
+  { id: 'scan', icon: Brain, name: 'SCAN CORPOREL', time: '10min', color: 'from-indigo-500 to-purple-500', baseline: 'Relaxation profonde guidée' },
+  { id: 'meditation', icon: Sparkles, name: 'MÉDITATIONS', time: '5-10min', color: 'from-pink-500 to-rose-500', baseline: 'Thèmes personnalisés' },
 ];
 
 export const HomeScreen = () => {
@@ -122,7 +122,7 @@ export const HomeScreen = () => {
         </div>
       </div>
 
-      {/* Section Voyage Intérieur */}
+      {/* Section Voyage Intérieur - NOMS EN CAPITALES */}
       <div className="mb-6">
         <div className="flex items-baseline gap-3 mb-4">
           <h2 className="text-lg font-semibold flex items-center gap-2">
