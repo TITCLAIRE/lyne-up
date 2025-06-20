@@ -23,7 +23,9 @@ export const CoherenceSessionScreen = () => {
   const { speak, stop: stopVoice, startCoherenceGuidance } = useVoiceManager();
 
   const [lastPhase, setLastPhase] = useState(null);
-  
+  const [sessionEnded, setSessionEnded] = useState(false);
+  const [voiceSystemStarted, setVoiceSystemStarted] = useState(false);
+
   // NOUVEAU : État pour le debug du pattern respiratoire
   const [debugPattern, setDebugPattern] = useState(null);
 
