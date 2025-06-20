@@ -1,0 +1,165 @@
+export const sessions = {
+  switch: {
+    name: 'SWITCH',
+    duration: 105, // 1min 45s
+    description: 'Sérénité express',
+    // NOUVEAU : Rythme respiratoire spécifique
+    breathingPattern: {
+      inhale: 4,
+      hold: 0,
+      exhale: 6
+    },
+    guidance: {
+      start: "Bienvenue dans votre bulle de calme. Posez vos pieds bien à plat sur le sol. Détendez vos épaules. Suivez simplement le rythme de la barre visuelle.",
+      inhale: ["Inspirez... le calme", "Accueillez... l'air frais", "Respirez... la sérénité"],
+      exhale: ["Soufflez doucement... lâchez tout", "Relâchez... toutes les tensions", "Libérez... le stress"],
+      phases: [
+        "Vos pieds touchent le sol. Vous êtes ancré, solide, stable.",
+        "Le stress s'évapore à chaque souffle. Votre corps se détend profondément.", 
+        "Vous retrouvez votre centre. Tout va bien. Vous êtes en sécurité."
+      ],
+      end: "Parfait. Vous avez retrouvé votre calme intérieur. Gardez cette sensation avec vous."
+    }
+  },
+
+  // NOUVEAU : Module KIDS pour les enfants - RYTHME 4/4 GARANTI
+  kids: {
+    name: 'KIDS',
+    duration: 120, // 2 minutes - Durée adaptée aux enfants
+    description: 'Respiration magique pour les petits',
+    // RYTHME 4/4 EXPLICITE ET GARANTI
+    breathingPattern: {
+      inhale: 4,  // 4 secondes inspiration
+      hold: 0,   // Pas de pause pour les enfants
+      exhale: 4  // 4 secondes expiration
+    },
+    guidance: {
+      start: "Salut petit champion ! On va faire de la respiration magique ensemble. Assieds-toi confortablement comme un petit bouddha.",
+      inhale: ["Inspire comme un ballon qui se gonfle", "Respire l'air magique", "Gonfle ton ventre comme un ballon"],
+      exhale: ["Souffle doucement comme le vent", "Laisse sortir l'air magique", "Dégonfle ton ballon tout doucement"],
+      phases: [
+        "Imagine que tu es un arbre avec des racines qui poussent dans le sol. Tu es fort et stable !",
+        "Maintenant tu es un nuage léger qui flotte dans le ciel. Tout ton corps devient tout doux.",
+        "Tu es un petit chat qui s'étire et qui se détend. Tes muscles deviennent tout mous.",
+        "Bravo ! Tu es maintenant calme et détendu comme un petit koala qui fait la sieste."
+      ],
+      end: "Super ! Tu as fait de la vraie magie avec ta respiration. Tu peux être fier de toi, petit champion !"
+    }
+  },
+
+  scan: {
+    name: 'Scan Corporel',
+    duration: 600, // 10 minutes
+    description: 'Relaxation profonde guidée de tout le corps',
+    // NOUVEAU : Rythme respiratoire spécifique pour relaxation profonde
+    breathingPattern: {
+      inhale: 5,
+      hold: 0,
+      exhale: 5
+    },
+    guidance: {
+      start: "Scan corporel en cohérence 5 et 5. Installez-vous confortablement, fermez les yeux si vous le souhaitez.",
+      inhale: ["Inspirez 5", "Accueillez", "Remplissez"],
+      exhale: ["Expirez 5", "Relâchez", "Détendez"],
+      phases: [
+        "Portez votre attention sur le sommet de votre tête. Relâchez toute tension.",
+        "Descendez vers votre visage et vos épaules. Laissez-les se détendre complètement.",
+        "Sentez votre poitrine s'ouvrir et se détendre à chaque respiration.",
+        "Votre ventre se gonfle et se dégonfle naturellement, sans effort.",
+        "Relâchez vos hanches et tout votre bassin.",
+        "Vos cuisses et vos genoux se détendent profondément.",
+        "Vos mollets et vos chevilles se relâchent complètement.",
+        "Vos pieds sont lourds et complètement détendus.",
+        "Une vague de bien-être parcourt tout votre corps de la tête aux pieds.",
+        "Vous êtes complètement détendu. Savourez cette sensation de paix profonde."
+      ],
+      end: "Scan corporel terminé. Votre corps est complètement détendu et votre esprit apaisé."
+    }
+  }
+};
+
+// NOUVEAU : Rythmes respiratoires par défaut pour les sessions sans pattern défini
+export const defaultBreathingPatterns = {
+  // Sessions d'urgence - Rythme anti-stress
+  'sos': { inhale: 4, hold: 0, exhale: 6 },
+  'focus': { inhale: 4, hold: 0, exhale: 6 },
+  'recovery': { inhale: 4, hold: 0, exhale: 6 },
+  'transition': { inhale: 4, hold: 0, exhale: 6 },
+  
+  // NOUVEAU : Module enfants - RYTHME 4/4 EXPLICITE
+  'kids': { inhale: 4, hold: 0, exhale: 4 },
+  
+  // Méditations - Rythme équilibré
+  'meditation': { inhale: 5, hold: 0, exhale: 5 },
+  
+  // Cohérence cardiaque - Selon le rythme choisi
+  'coherence': { inhale: 5, hold: 0, exhale: 5 }, // Par défaut 5/5
+  
+  // Fallback général
+  'default': { inhale: 5, hold: 0, exhale: 5 }
+};
+
+// FONCTION CORRIGÉE : Obtenir le pattern respiratoire d'une session
+export const getBreathingPattern = (sessionId, coherenceRhythm = null) => {
+  console.log(`🔍 getBreathingPattern appelée avec: sessionId="${sessionId}", coherenceRhythm="${coherenceRhythm}"`);
+  
+  // PRIORITÉ 1 : Si la session a un pattern défini dans sessions.js, l'utiliser
+  if (sessions[sessionId]?.breathingPattern) {
+    const pattern = sessions[sessionId].breathingPattern;
+    console.log(`✅ Pattern trouvé dans sessions.js pour "${sessionId}":`, pattern);
+    
+    // VÉRIFICATION SPÉCIALE POUR KIDS
+    if (sessionId === 'kids') {
+      console.log(`👶 VÉRIFICATION KIDS: Pattern = ${pattern.inhale}/${pattern.exhale}`);
+      if (pattern.inhale === 4 && pattern.exhale === 4) {
+        console.log(`✅ KIDS PATTERN CORRECT: 4/4`);
+      } else {
+        console.error(`❌ KIDS PATTERN INCORRECT:`, pattern);
+      }
+    }
+    
+    return pattern;
+  }
+  
+  // PRIORITÉ 2 : Pour la cohérence cardiaque, utiliser le rythme choisi
+  if (sessionId === 'coherence' && coherenceRhythm) {
+    console.log(`💖 Cohérence cardiaque - Rythme: ${coherenceRhythm}`);
+    
+    switch (coherenceRhythm) {
+      case '4-6':
+        return { inhale: 4, hold: 0, exhale: 6 };
+      case '5-5':
+        return { inhale: 5, hold: 0, exhale: 5 };
+      case '4-4':
+        return { inhale: 4, hold: 0, exhale: 4 };
+      case '4-7-8':
+        return { inhale: 4, hold: 7, exhale: 8 };
+      case '6-2-6':
+        return { inhale: 6, hold: 2, exhale: 6 };
+      case '3-3-3':
+        return { inhale: 3, hold: 3, exhale: 3 };
+      default:
+        console.log(`⚠️ Rythme inconnu: ${coherenceRhythm}, utilisation du 5/5 par défaut`);
+        return { inhale: 5, hold: 0, exhale: 5 };
+    }
+  }
+  
+  // PRIORITÉ 3 : Utiliser le pattern par défaut pour cette session
+  const defaultPattern = defaultBreathingPatterns[sessionId] || defaultBreathingPatterns.default;
+  console.log(`🔄 Pattern par défaut pour "${sessionId}":`, defaultPattern);
+  
+  // VÉRIFICATION FINALE POUR KIDS
+  if (sessionId === 'kids') {
+    console.log(`👶 VÉRIFICATION FINALE KIDS: Pattern par défaut = ${defaultPattern.inhale}/${defaultPattern.exhale}`);
+    if (defaultPattern.inhale === 4 && defaultPattern.exhale === 4) {
+      console.log(`✅ KIDS DEFAULT PATTERN CORRECT: 4/4`);
+    } else {
+      console.error(`❌ KIDS DEFAULT PATTERN INCORRECT:`, defaultPattern);
+      // FORCER LE PATTERN 4/4 POUR KIDS
+      console.log(`🔧 CORRECTION FORCÉE POUR KIDS: 4/4`);
+      return { inhale: 4, hold: 0, exhale: 4 };
+    }
+  }
+  
+  return defaultPattern;
+};
