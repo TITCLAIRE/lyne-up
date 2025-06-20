@@ -85,9 +85,11 @@ export const SessionScreen = () => {
     if (timeRemaining === 0 && isSessionActive && !sessionEnded) {
       setSessionEnded(true);
       
-      // Message de fin adapté aux enfants
+      // Message de fin adapté aux enfants et RESET
       if (currentSession === 'kids') {
         speak("Super ! Tu as fait de la vraie magie avec ta respiration. Tu peux être fier de toi, petit champion !");
+      } else if (currentSession === 'reset') {
+        speak("Magnifique. Votre système nerveux est maintenant apaisé. Cette technique 4-7-8 peut être utilisée à tout moment pour retrouver instantanément le calme.");
       } else {
         speak("Session terminée. Félicitations pour cette pratique.");
       }
@@ -229,7 +231,7 @@ export const SessionScreen = () => {
                 <div>⏸️ <strong>Pause :</strong> {debugPattern.hold} secondes</div>
               )}
               <div>⏱️ <strong>Expiration :</strong> {debugPattern.exhale} secondes</div>
-              <div>🎯 <strong>Rythme :</strong> {debugPattern.inhale}/{debugPattern.exhale}</div>
+              <div>🎯 <strong>Rythme :</strong> {debugPattern.inhale}/{debugPattern.hold > 0 ? debugPattern.hold + '/' : ''}{debugPattern.exhale}</div>
               <div>🔧 <strong>Session :</strong> {currentSession}</div>
               <div className="mt-2 text-yellow-200">
                 ✅ <strong>PATTERN TRANSMIS À L'ANIMATION</strong>
@@ -253,6 +255,25 @@ export const SessionScreen = () => {
               <div>🔄 <strong>Progression :</strong> {Math.round(breathingState.progress)}%</div>
               <div className="mt-2 text-cyan-200">
                 🎯 <strong>ANIMATION ACTIVE AVEC PATTERN CORRECT</strong>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Indicateur spécial pour RESET - RYTHME 4/7/8 */}
+        {currentSession === 'reset' && (
+          <div className="bg-indigo-500/20 border border-indigo-500/30 rounded-lg p-3 mb-4">
+            <p className="text-sm text-indigo-200 mb-2">
+              🔄 <strong>MODULE RESET - RYTHME 4/7/8 :</strong>
+            </p>
+            <div className="text-xs text-indigo-100/80 space-y-1">
+              <div>🫁 <strong>Inspiration :</strong> 4 secondes (par le nez)</div>
+              <div>⏸️ <strong>Rétention :</strong> 7 secondes (gardez l'air)</div>
+              <div>💨 <strong>Expiration :</strong> 8 secondes (par la bouche)</div>
+              <div>🧠 <strong>Effet :</strong> Active le système nerveux parasympathique</div>
+              <div>🎯 <strong>Usage :</strong> Crise de calme, insomnie, stress intense</div>
+              <div className="mt-2 text-yellow-200">
+                ✨ <strong>TECHNIQUE DU DR. ANDREW WEIL</strong>
               </div>
             </div>
           </div>
@@ -284,6 +305,8 @@ export const SessionScreen = () => {
             <p className="text-xs text-blue-100/80 leading-relaxed">
               {currentSession === 'kids' 
                 ? "Les sons magiques sont encore plus beaux avec des écouteurs !" 
+                : currentSession === 'reset'
+                ? "Pour une efficacité maximale de la technique 4-7-8, utilisez des écouteurs pour une immersion complète."
                 : "Les sons binauraux nécessitent impérativement l'utilisation d'écouteurs stéréo pour créer l'effet de battement binaural entre les deux oreilles."
               }
             </p>
@@ -332,6 +355,8 @@ export const SessionScreen = () => {
               ? 'bg-white/10 text-white/50 cursor-not-allowed'
               : currentSession === 'kids'
                 ? 'bg-gradient-to-r from-pink-500 to-purple-500 text-white hover:from-pink-600 hover:to-purple-600'
+                : currentSession === 'reset'
+                ? 'bg-gradient-to-r from-indigo-500 to-purple-500 text-white hover:from-indigo-600 hover:to-purple-600'
                 : 'bg-gradient-to-r from-blue-500 to-cyan-500 text-white hover:from-blue-600 hover:to-cyan-600'
           }`}
         >
@@ -340,7 +365,7 @@ export const SessionScreen = () => {
           ) : (
             <>
               {isSessionActive ? <Pause size={20} /> : <Play size={20} />}
-              {isSessionActive ? 'Pause' : (currentSession === 'kids' ? 'C\'est parti !' : 'Commencer')}
+              {isSessionActive ? 'Pause' : (currentSession === 'kids' ? 'C\'est parti !' : currentSession === 'reset' ? 'Commencer RESET' : 'Commencer')}
             </>
           )}
         </button>

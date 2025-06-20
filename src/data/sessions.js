@@ -22,6 +22,34 @@ export const sessions = {
     }
   },
 
+  // NOUVEAU : Module RESET pour crises de calme et insomnie
+  reset: {
+    name: 'RESET',
+    duration: 180, // 3 minutes
+    description: 'Crise de calme & Insomnie',
+    // Rythme 4/7/8 spécialement conçu pour la relaxation profonde
+    breathingPattern: {
+      inhale: 4,   // 4 secondes inspiration
+      hold: 7,    // 7 secondes rétention
+      exhale: 8   // 8 secondes expiration
+    },
+    guidance: {
+      start: "Bienvenue dans votre session RESET. Cette technique 4-7-8 va calmer votre système nerveux et préparer votre corps au repos profond. Installez-vous confortablement.",
+      inhale: ["Inspirez par le nez pendant 4 secondes", "Remplissez vos poumons calmement", "Accueillez l'air apaisant"],
+      hold: ["Retenez votre souffle pendant 7 secondes", "Gardez l'air précieux en vous", "Laissez l'oxygène circuler"],
+      exhale: ["Expirez lentement pendant 8 secondes", "Relâchez tout par la bouche", "Libérez toutes les tensions"],
+      phases: [
+        "Cette respiration 4-7-8 active votre système nerveux parasympathique, celui du repos et de la récupération.",
+        "Chaque cycle vous emmène plus profondément dans un état de calme. Votre rythme cardiaque ralentit naturellement.",
+        "Votre corps reconnaît ce signal de détente. Les tensions se dissolvent, muscle par muscle.",
+        "Cette technique ancestrale prépare votre esprit au lâcher-prise total. Vous glissez vers la sérénité.",
+        "Votre respiration devient le pont entre l'agitation et la paix intérieure. Continuez ce rythme apaisant.",
+        "Chaque expiration emporte avec elle les soucis de la journée. Vous vous sentez de plus en plus léger."
+      ],
+      end: "Magnifique. Votre système nerveux est maintenant apaisé. Cette technique 4-7-8 peut être utilisée à tout moment pour retrouver instantanément le calme."
+    }
+  },
+
   // NOUVEAU : Module KIDS pour les enfants - RYTHME 4/4 GARANTI
   kids: {
     name: 'KIDS',
@@ -86,6 +114,9 @@ export const defaultBreathingPatterns = {
   'recovery': { inhale: 4, hold: 0, exhale: 6 },
   'transition': { inhale: 4, hold: 0, exhale: 6 },
   
+  // NOUVEAU : Module RESET - RYTHME 4/7/8 EXPLICITE
+  'reset': { inhale: 4, hold: 7, exhale: 8 },
+  
   // NOUVEAU : Module enfants - RYTHME 4/4 EXPLICITE
   'kids': { inhale: 4, hold: 0, exhale: 4 },
   
@@ -107,6 +138,16 @@ export const getBreathingPattern = (sessionId, coherenceRhythm = null) => {
   if (sessions[sessionId]?.breathingPattern) {
     const pattern = sessions[sessionId].breathingPattern;
     console.log(`✅ Pattern trouvé dans sessions.js pour "${sessionId}":`, pattern);
+    
+    // VÉRIFICATION SPÉCIALE POUR RESET
+    if (sessionId === 'reset') {
+      console.log(`🔄 VÉRIFICATION RESET: Pattern = ${pattern.inhale}/${pattern.hold}/${pattern.exhale}`);
+      if (pattern.inhale === 4 && pattern.hold === 7 && pattern.exhale === 8) {
+        console.log(`✅ RESET PATTERN CORRECT: 4/7/8`);
+      } else {
+        console.error(`❌ RESET PATTERN INCORRECT:`, pattern);
+      }
+    }
     
     // VÉRIFICATION SPÉCIALE POUR KIDS
     if (sessionId === 'kids') {
@@ -147,6 +188,19 @@ export const getBreathingPattern = (sessionId, coherenceRhythm = null) => {
   // PRIORITÉ 3 : Utiliser le pattern par défaut pour cette session
   const defaultPattern = defaultBreathingPatterns[sessionId] || defaultBreathingPatterns.default;
   console.log(`🔄 Pattern par défaut pour "${sessionId}":`, defaultPattern);
+  
+  // VÉRIFICATION FINALE POUR RESET
+  if (sessionId === 'reset') {
+    console.log(`🔄 VÉRIFICATION FINALE RESET: Pattern par défaut = ${defaultPattern.inhale}/${defaultPattern.hold}/${defaultPattern.exhale}`);
+    if (defaultPattern.inhale === 4 && defaultPattern.hold === 7 && defaultPattern.exhale === 8) {
+      console.log(`✅ RESET DEFAULT PATTERN CORRECT: 4/7/8`);
+    } else {
+      console.error(`❌ RESET DEFAULT PATTERN INCORRECT:`, defaultPattern);
+      // FORCER LE PATTERN 4/7/8 POUR RESET
+      console.log(`🔧 CORRECTION FORCÉE POUR RESET: 4/7/8`);
+      return { inhale: 4, hold: 7, exhale: 8 };
+    }
+  }
   
   // VÉRIFICATION FINALE POUR KIDS
   if (sessionId === 'kids') {

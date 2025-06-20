@@ -1,10 +1,11 @@
 import React from 'react';
-import { Heart, Target, Zap, Waves, Brain, Sparkles, Baby } from 'lucide-react';
+import { Heart, Target, Zap, Waves, Brain, Sparkles, Baby, RotateCcw } from 'lucide-react';
 import { useAppStore } from '../../store/appStore';
 
 // Sessions d'urgence et réalignement
 const urgencyAndRealignmentSessions = [
   { id: 'switch', icon: Zap, name: 'SWITCH', time: '1min 45s', color: 'from-red-500 to-orange-500', baseline: 'Sérénité express' },
+  { id: 'reset', icon: RotateCcw, name: 'RESET', time: '3min', color: 'from-indigo-500 to-purple-500', baseline: 'Crise de calme & Insomnie' },
 ];
 
 // NOUVEAU : Sessions pour enfants
@@ -110,6 +111,11 @@ export const HomeScreen = () => {
                     <h3 className="font-medium text-lg mb-1">{session.name}</h3>
                     <p className="text-sm text-white/60 mb-1">{session.time}</p>
                     <p className="text-sm text-white/50 italic">{session.baseline}</p>
+                    {session.id === 'reset' && (
+                      <div className="text-xs text-indigo-300 mt-1">
+                        🫁 Rythme 4/7/8 • Technique du Dr. Andrew Weil
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>

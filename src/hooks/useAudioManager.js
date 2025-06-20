@@ -16,6 +16,8 @@ const frequencies = {
 
 const sessionFrequencies = {
   switch: 'theta',    // SWITCH : Theta pour relaxation rapide
+  reset: 'delta',     // RESET : Delta pour relaxation profonde et sommeil
+  kids: 'alpha',      // KIDS : Alpha pour calme et concentration enfants
   scan: 'delta',      // Scan Corporel : Delta pour relaxation profonde
   coherence: 'coherence', // Cohérence cardiaque : 0,1 Hz
   // Méditations
