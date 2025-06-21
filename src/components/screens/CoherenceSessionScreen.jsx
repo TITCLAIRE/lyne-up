@@ -27,14 +27,9 @@ export const CoherenceSessionScreen = () => {
   const [sessionEnded, setSessionEnded] = useState(false);
   const [voiceSystemStarted, setVoiceSystemStarted] = useState(false);
 
-  // NOUVEAU : État pour le debug du pattern respiratoire
-  const [debugPattern, setDebugPattern] = useState(null);
-
-  // NOUVEAU : Obtenir le pattern respiratoire EXPLICITEMENT pour la cohérence cardiaque
+  // Obtenir le pattern respiratoire pour la cohérence cardiaque
   const getCoherenceBreathingPattern = () => {
-    console.log('💖 RÉCUPÉRATION PATTERN COHÉRENCE CARDIAQUE:', coherenceSettings.rhythm);
     const pattern = getBreathingPattern('coherence', coherenceSettings.rhythm);
-    console.log('💖 Pattern cohérence cardiaque récupéré:', pattern);
     return pattern;
   };
 
@@ -50,30 +45,19 @@ export const CoherenceSessionScreen = () => {
 
   const handleToggleSession = () => {
     if (!isSessionActive) {
-      console.log('💖 DÉMARRAGE COHÉRENCE CARDIAQUE');
-      
-      // NOUVEAU : Récupérer le pattern respiratoire EXPLICITEMENT
       const breathingPattern = getCoherenceBreathingPattern();
-      console.log('🫁 PATTERN RÉCUPÉRÉ POUR COHÉRENCE:', breathingPattern);
-      setDebugPattern(breathingPattern); // Pour l'affichage debug
       
       setSessionActive(true);
       
-      // MODIFICATION CLÉE : Utiliser la fréquence sélectionnée manuellement
+      // Utiliser la fréquence sélectionnée manuellement
       if (coherenceSettings.gongEnabled && !coherenceSettings.silentMode) {
-        // Si une fréquence manuelle est sélectionnée, l'utiliser
-        // Sinon, utiliser la fréquence par défaut de la cohérence cardiaque
         const selectedFrequency = audioSettings.frequency !== 'coherence' ? audioSettings.frequency : 'coherence';
-        console.log('🎵 FRÉQUENCE SÉLECTIONNÉE:', selectedFrequency);
         startAudio(selectedFrequency);
       }
       
-      // Démarrer le timer et la respiration avec la durée correcte
+      // Démarrer le timer et la respiration
       const durationInSeconds = (coherenceSettings.duration || 5) * 60;
       startTimer(durationInSeconds);
-      
-      // NOUVEAU : Passer le pattern EXPLICITEMENT à l'animation
-      console.log('🚀 DÉMARRAGE ANIMATION COHÉRENCE AVEC PATTERN:', breathingPattern);
       startBreathing(breathingPattern);
       
       // Démarrage du guidage vocal spécialisé pour la cohérence cardiaque
@@ -81,19 +65,16 @@ export const CoherenceSessionScreen = () => {
         startCoherenceGuidance(coherenceSettings);
       }
     } else {
-      console.log('⏸️ PAUSE COHÉRENCE CARDIAQUE');
       setSessionActive(false);
       stopTimer();
       stopBreathing();
       stopAudio();
       stopVoice();
       setLastPhase(null);
-      setDebugPattern(null);
     }
   };
 
   const handleGoHome = () => {
-    console.log('🏠 Retour à l\'accueil');
     setSessionActive(false);
     stopTimer();
     stopBreathing();
@@ -101,7 +82,6 @@ export const CoherenceSessionScreen = () => {
     stopVoice();
     resetTimer();
     setLastPhase(null);
-    setDebugPattern(null);
     setCurrentScreen('home');
   };
 
@@ -143,47 +123,6 @@ export const CoherenceSessionScreen = () => {
           </div>
         </div>
 
-        {/* NOUVEAU : Debug du pattern respiratoire pour cohérence cardiaque */}
-        {debugPattern && (
-          <div className="bg-green-500/20 border border-green-500/30 rounded-lg p-3 mb-4">
-            <p className="text-sm text-green-200 mb-2">
-              💖 <strong>PATTERN COHÉRENCE CARDIAQUE :</strong>
-            </p>
-            <div className="text-xs text-green-100/80 space-y-1">
-              <div>⏱️ <strong>Inspiration :</strong> {debugPattern.inhale} secondes</div>
-              {debugPattern.hold > 0 && (
-                <div>⏸️ <strong>Pause :</strong> {debugPattern.hold} secondes</div>
-              )}
-              <div>⏱️ <strong>Expiration :</strong> {debugPattern.exhale} secondes</div>
-              <div>🎯 <strong>Rythme choisi :</strong> {coherenceSettings.rhythm}</div>
-              <div>💖 <strong>Type :</strong> Cohérence cardiaque</div>
-              <div className="mt-2 text-yellow-200">
-                ✅ <strong>PATTERN TRANSMIS À L'ANIMATION</strong>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* NOUVEAU : Debug de l'état de l'animation */}
-        {breathingState.currentPattern && (
-          <div className="bg-blue-500/20 border border-blue-500/30 rounded-lg p-3 mb-4">
-            <p className="text-sm text-blue-200 mb-2">
-              🎬 <strong>ANIMATION EN COURS :</strong>
-            </p>
-            <div className="text-xs text-blue-100/80 space-y-1">
-              <div>⏱️ <strong>Utilise :</strong> {breathingState.inhaleTime}s inspiration / {breathingState.exhaleTime}s expiration</div>
-              {breathingState.holdTime > 0 && (
-                <div>⏸️ <strong>Pause :</strong> {breathingState.holdTime}s</div>
-              )}
-              <div>📊 <strong>Phase actuelle :</strong> {breathingState.phase}</div>
-              <div>🔄 <strong>Progression :</strong> {Math.round(breathingState.progress)}%</div>
-              <div className="mt-2 text-cyan-200">
-                💖 <strong>COHÉRENCE CARDIAQUE ACTIVE</strong>
-              </div>
-            </div>
-          </div>
-        )}
-
         {/* Indication importante sur les écouteurs */}
         {!coherenceSettings.silentMode && (
           <div className="bg-blue-500/20 border border-blue-500/30 rounded-xl p-3 mb-4 flex items-start gap-3">
@@ -197,7 +136,7 @@ export const CoherenceSessionScreen = () => {
           </div>
         )}
 
-        {/* Fréquence audio active - MODIFIÉE pour afficher la fréquence sélectionnée */}
+        {/* Fréquence audio active */}
         {coherenceSettings.gongEnabled && !coherenceSettings.silentMode && (
           <div className="bg-white/10 rounded-lg p-2 mb-4">
             <p className="text-xs text-white/70">

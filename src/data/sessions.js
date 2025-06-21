@@ -3,7 +3,6 @@ export const sessions = {
     name: 'SWITCH',
     duration: 105, // 1min 45s
     description: 'Sérénité express',
-    // NOUVEAU : Rythme respiratoire spécifique
     breathingPattern: {
       inhale: 4,
       hold: 0,
@@ -22,12 +21,10 @@ export const sessions = {
     }
   },
 
-  // NOUVEAU : Module RESET pour crises de calme et insomnie
   reset: {
     name: 'RESET',
     duration: 180, // 3 minutes
     description: 'Crise de calme & Insomnie',
-    // Rythme 4/7/8 spécialement conçu pour la relaxation profonde
     breathingPattern: {
       inhale: 4,   // 4 secondes inspiration
       hold: 7,    // 7 secondes rétention
@@ -50,18 +47,15 @@ export const sessions = {
     }
   },
 
-  // NOUVEAU : Module ENTRAÎNEMENT PROGRESSIF
   progressive: {
     name: 'ENTRAÎNEMENT PROGRESSIF',
     duration: 180, // 3 minutes (1min + 1min + 1min)
     description: 'Progression respiratoire guidée',
-    // Pattern initial - sera changé dynamiquement
     breathingPattern: {
       inhale: 3,  // Commence par 3/3
       hold: 0,
       exhale: 3
     },
-    // Définition des phases progressives
     progressivePhases: [
       {
         startTime: 0,    // 0-60s : Phase 1
@@ -95,12 +89,10 @@ export const sessions = {
     }
   },
 
-  // NOUVEAU : Session libre (gérée par les paramètres freeSessionSettings)
   free: {
     name: 'SESSION LIBRE',
     duration: 300, // Durée par défaut, sera remplacée par freeSessionSettings.duration
     description: 'Rythme et durée personnalisables',
-    // Pattern par défaut, sera remplacé par les paramètres utilisateur
     breathingPattern: {
       inhale: 5,
       hold: 0,
@@ -119,12 +111,10 @@ export const sessions = {
     }
   },
 
-  // NOUVEAU : Module KIDS pour les enfants - RYTHME 4/4 GARANTI
   kids: {
     name: 'KIDS',
     duration: 120, // 2 minutes - Durée adaptée aux enfants
     description: 'Respiration magique pour les petits',
-    // RYTHME 4/4 EXPLICITE ET GARANTI
     breathingPattern: {
       inhale: 4,  // 4 secondes inspiration
       hold: 0,   // Pas de pause pour les enfants
@@ -144,12 +134,10 @@ export const sessions = {
     }
   },
 
-  // NOUVEAU : Module SENIORS + pour les plus de 70 ans - RYTHME 3/4
   seniors: {
     name: 'SENIORS +',
     duration: 300, // 5 minutes
     description: 'Relaxation & baisse de la tension',
-    // RYTHME 3/4 SPÉCIALEMENT ADAPTÉ AUX SENIORS
     breathingPattern: {
       inhale: 3,  // 3 secondes inspiration (plus doux)
       hold: 0,   // Pas de pause pour éviter l'effort
@@ -174,7 +162,6 @@ export const sessions = {
     name: 'SCAN CORPOREL',
     duration: 600, // 10 minutes
     description: 'Relaxation profonde guidée de tout le corps',
-    // NOUVEAU : Rythme respiratoire spécifique pour relaxation profonde
     breathingPattern: {
       inhale: 5,
       hold: 0,
@@ -201,7 +188,7 @@ export const sessions = {
   }
 };
 
-// NOUVEAU : Rythmes respiratoires par défaut pour les sessions sans pattern défini
+// Rythmes respiratoires par défaut pour les sessions sans pattern défini
 export const defaultBreathingPatterns = {
   // Sessions d'urgence - Rythme anti-stress
   'sos': { inhale: 4, hold: 0, exhale: 6 },
@@ -209,19 +196,19 @@ export const defaultBreathingPatterns = {
   'recovery': { inhale: 4, hold: 0, exhale: 6 },
   'transition': { inhale: 4, hold: 0, exhale: 6 },
   
-  // NOUVEAU : Module RESET - RYTHME 4/7/8 EXPLICITE
+  // Module RESET - RYTHME 4/7/8
   'reset': { inhale: 4, hold: 7, exhale: 8 },
   
-  // NOUVEAU : Module enfants - RYTHME 4/4 EXPLICITE
+  // Module enfants - RYTHME 4/4
   'kids': { inhale: 4, hold: 0, exhale: 4 },
 
-  // NOUVEAU : Module seniors - RYTHME 3/4 EXPLICITE
+  // Module seniors - RYTHME 3/4
   'seniors': { inhale: 3, hold: 0, exhale: 4 },
 
-  // NOUVEAU : Module entraînement progressif - RYTHME INITIAL 3/3
+  // Module entraînement progressif - RYTHME INITIAL 3/3
   'progressive': { inhale: 3, hold: 0, exhale: 3 },
 
-  // NOUVEAU : Session libre - RYTHME PAR DÉFAUT 5/5 (sera remplacé par les paramètres utilisateur)
+  // Session libre - RYTHME PAR DÉFAUT 5/5
   'free': { inhale: 5, hold: 0, exhale: 5 },
   
   // Méditations - Rythme équilibré
@@ -234,62 +221,16 @@ export const defaultBreathingPatterns = {
   'default': { inhale: 5, hold: 0, exhale: 5 }
 };
 
-// FONCTION CORRIGÉE : Obtenir le pattern respiratoire d'une session
+// Fonction pour obtenir le pattern respiratoire d'une session
 export const getBreathingPattern = (sessionId, coherenceRhythm = null) => {
-  console.log(`🔍 getBreathingPattern appelée avec: sessionId="${sessionId}", coherenceRhythm="${coherenceRhythm}"`);
-  
-  // PRIORITÉ 1 : Si la session a un pattern défini dans sessions.js, l'utiliser
+  // Si la session a un pattern défini dans sessions.js, l'utiliser
   if (sessions[sessionId]?.breathingPattern) {
     const pattern = sessions[sessionId].breathingPattern;
-    console.log(`✅ Pattern trouvé dans sessions.js pour "${sessionId}":`, pattern);
-    
-    // VÉRIFICATION SPÉCIALE POUR RESET
-    if (sessionId === 'reset') {
-      console.log(`🔄 VÉRIFICATION RESET: Pattern = ${pattern.inhale}/${pattern.hold}/${pattern.exhale}`);
-      if (pattern.inhale === 4 && pattern.hold === 7 && pattern.exhale === 8) {
-        console.log(`✅ RESET PATTERN CORRECT: 4/7/8`);
-      } else {
-        console.error(`❌ RESET PATTERN INCORRECT:`, pattern);
-      }
-    }
-    
-    // VÉRIFICATION SPÉCIALE POUR KIDS
-    if (sessionId === 'kids') {
-      console.log(`👶 VÉRIFICATION KIDS: Pattern = ${pattern.inhale}/${pattern.exhale}`);
-      if (pattern.inhale === 4 && pattern.exhale === 4) {
-        console.log(`✅ KIDS PATTERN CORRECT: 4/4`);
-      } else {
-        console.error(`❌ KIDS PATTERN INCORRECT:`, pattern);
-      }
-    }
-
-    // VÉRIFICATION SPÉCIALE POUR SENIORS
-    if (sessionId === 'seniors') {
-      console.log(`👴 VÉRIFICATION SENIORS: Pattern = ${pattern.inhale}/${pattern.exhale}`);
-      if (pattern.inhale === 3 && pattern.exhale === 4) {
-        console.log(`✅ SENIORS PATTERN CORRECT: 3/4`);
-      } else {
-        console.error(`❌ SENIORS PATTERN INCORRECT:`, pattern);
-      }
-    }
-
-    // VÉRIFICATION SPÉCIALE POUR PROGRESSIVE
-    if (sessionId === 'progressive') {
-      console.log(`📈 VÉRIFICATION PROGRESSIVE: Pattern initial = ${pattern.inhale}/${pattern.exhale}`);
-      if (pattern.inhale === 3 && pattern.exhale === 3) {
-        console.log(`✅ PROGRESSIVE PATTERN INITIAL CORRECT: 3/3`);
-      } else {
-        console.error(`❌ PROGRESSIVE PATTERN INITIAL INCORRECT:`, pattern);
-      }
-    }
-    
     return pattern;
   }
   
-  // PRIORITÉ 2 : Pour la cohérence cardiaque, utiliser le rythme choisi
+  // Pour la cohérence cardiaque, utiliser le rythme choisi
   if (sessionId === 'coherence' && coherenceRhythm) {
-    console.log(`💖 Cohérence cardiaque - Rythme: ${coherenceRhythm}`);
-    
     switch (coherenceRhythm) {
       case '4-6':
         return { inhale: 4, hold: 0, exhale: 6 };
@@ -304,66 +245,12 @@ export const getBreathingPattern = (sessionId, coherenceRhythm = null) => {
       case '3-3-3':
         return { inhale: 3, hold: 3, exhale: 3 };
       default:
-        console.log(`⚠️ Rythme inconnu: ${coherenceRhythm}, utilisation du 5/5 par défaut`);
         return { inhale: 5, hold: 0, exhale: 5 };
     }
   }
   
-  // PRIORITÉ 3 : Utiliser le pattern par défaut pour cette session
+  // Utiliser le pattern par défaut pour cette session
   const defaultPattern = defaultBreathingPatterns[sessionId] || defaultBreathingPatterns.default;
-  console.log(`🔄 Pattern par défaut pour "${sessionId}":`, defaultPattern);
-  
-  // VÉRIFICATION FINALE POUR RESET
-  if (sessionId === 'reset') {
-    console.log(`🔄 VÉRIFICATION FINALE RESET: Pattern par défaut = ${defaultPattern.inhale}/${defaultPattern.hold}/${defaultPattern.exhale}`);
-    if (defaultPattern.inhale === 4 && defaultPattern.hold === 7 && defaultPattern.exhale === 8) {
-      console.log(`✅ RESET DEFAULT PATTERN CORRECT: 4/7/8`);
-    } else {
-      console.error(`❌ RESET DEFAULT PATTERN INCORRECT:`, defaultPattern);
-      // FORCER LE PATTERN 4/7/8 POUR RESET
-      console.log(`🔧 CORRECTION FORCÉE POUR RESET: 4/7/8`);
-      return { inhale: 4, hold: 7, exhale: 8 };
-    }
-  }
-  
-  // VÉRIFICATION FINALE POUR KIDS
-  if (sessionId === 'kids') {
-    console.log(`👶 VÉRIFICATION FINALE KIDS: Pattern par défaut = ${defaultPattern.inhale}/${defaultPattern.exhale}`);
-    if (defaultPattern.inhale === 4 && defaultPattern.exhale === 4) {
-      console.log(`✅ KIDS DEFAULT PATTERN CORRECT: 4/4`);
-    } else {
-      console.error(`❌ KIDS DEFAULT PATTERN INCORRECT:`, defaultPattern);
-      // FORCER LE PATTERN 4/4 POUR KIDS
-      console.log(`🔧 CORRECTION FORCÉE POUR KIDS: 4/4`);
-      return { inhale: 4, hold: 0, exhale: 4 };
-    }
-  }
-
-  // VÉRIFICATION FINALE POUR SENIORS
-  if (sessionId === 'seniors') {
-    console.log(`👴 VÉRIFICATION FINALE SENIORS: Pattern par défaut = ${defaultPattern.inhale}/${defaultPattern.exhale}`);
-    if (defaultPattern.inhale === 3 && defaultPattern.exhale === 4) {
-      console.log(`✅ SENIORS DEFAULT PATTERN CORRECT: 3/4`);
-    } else {
-      console.error(`❌ SENIORS DEFAULT PATTERN INCORRECT:`, defaultPattern);
-      // FORCER LE PATTERN 3/4 POUR SENIORS
-      console.log(`🔧 CORRECTION FORCÉE POUR SENIORS: 3/4`);
-      return { inhale: 3, hold: 0, exhale: 4 };
-    }
-  }
-
-  // VÉRIFICATION FINALE POUR PROGRESSIVE
-  if (sessionId === 'progressive') {
-    console.log(`📈 VÉRIFICATION FINALE PROGRESSIVE: Pattern par défaut = ${defaultPattern.inhale}/${defaultPattern.exhale}`);
-    if (defaultPattern.inhale === 3 && defaultPattern.exhale === 3) {
-      console.log(`✅ PROGRESSIVE DEFAULT PATTERN CORRECT: 3/3`);
-    } else {
-      console.error(`❌ PROGRESSIVE DEFAULT PATTERN INCORRECT:`, defaultPattern);
-      // FORCER LE PATTERN 3/3 POUR PROGRESSIVE
-      console.log(`🔧 CORRECTION FORCÉE POUR PROGRESSIVE: 3/3`);
-      return { inhale: 3, hold: 0, exhale: 3 };
-    }
-  }
   
   return defaultPattern;
 };

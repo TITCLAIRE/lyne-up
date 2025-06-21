@@ -149,18 +149,6 @@ export const BreathingGuide = ({ breathingState, isActive }) => {
           {breathingState.phase === 'hold' && (isKidsMode ? '⭐ Garde l\'air magique dans ton ballon ⭐' : '• Rétention - Maintenez l\'air •')}
           {breathingState.phase === 'exhale' && (isKidsMode ? '🌸 Laisse sortir l\'air tout doucement 🌸' : '→ Contraction progressive vers le centre ←')}
         </div>
-
-        {/* NOUVEAU : Debug des timings utilisés par l'animation */}
-        {breathingState.currentPattern && (
-          <div className="mt-4 text-xs text-blue-300 bg-black/20 rounded-lg p-2">
-            🫁 <strong>ANIMATION ACTIVE :</strong> {breathingState.inhaleTime}s inspiration 
-            {breathingState.holdTime > 0 && ` / ${breathingState.holdTime}s pause`} / {breathingState.exhaleTime}s expiration
-            <div className="text-green-300 mt-1">
-              ✅ Pattern reçu et appliqué correctement
-              {isKidsMode && ' • 👶 Mode enfants détecté automatiquement'}
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );

@@ -30,10 +30,7 @@ export const SessionScreen = () => {
   const [sessionEnded, setSessionEnded] = useState(false);
   const [voiceSystemStarted, setVoiceSystemStarted] = useState(false);
 
-  // NOUVEAU : État pour le debug du pattern respiratoire
-  const [debugPattern, setDebugPattern] = useState(null);
-
-  // NOUVEAU : État pour l'entraînement progressif - CORRIGÉ
+  // État pour l'entraînement progressif
   const [currentProgressivePhase, setCurrentProgressivePhase] = useState(0);
   const [progressivePhaseChanged, setProgressivePhaseChanged] = useState(false);
   const [lastProgressiveCheck, setLastProgressiveCheck] = useState(0);
@@ -60,29 +57,23 @@ export const SessionScreen = () => {
 
   const sessionData = getSessionData();
 
-  // NOUVEAU : Obtenir le pattern respiratoire EXPLICITEMENT
+  // Obtenir le pattern respiratoire
   const getCurrentBreathingPattern = () => {
-    console.log('🔍 RÉCUPÉRATION PATTERN POUR SESSION:', currentSession);
-    
     if (currentSession === 'coherence') {
       const pattern = getBreathingPattern('coherence', coherenceSettings.rhythm);
-      console.log('💖 Pattern cohérence cardiaque:', pattern);
       return pattern;
     } else {
       const pattern = getBreathingPattern(currentSession);
-      console.log(`🎯 Pattern session ${currentSession}:`, pattern);
       return pattern;
     }
   };
 
-  // NOUVEAU : Gestion de l'entraînement progressif - LOGIQUE CORRIGÉE
+  // Gestion de l'entraînement progressif
   useEffect(() => {
     if (currentSession === 'progressive' && isSessionActive && sessions.progressive?.progressivePhases) {
       const totalDuration = sessionData?.duration || 180;
       const elapsedTime = totalDuration - timeRemaining;
       const phases = sessions.progressive.progressivePhases;
-      
-      console.log(`📈 PROGRESSIVE CHECK: Temps écoulé=${elapsedTime}s, Phase actuelle=${currentProgressivePhase}`);
       
       // Éviter les vérifications trop fréquentes
       if (Math.abs(elapsedTime - lastProgressiveCheck) < 2) {
@@ -99,27 +90,20 @@ export const SessionScreen = () => {
         }
       }
       
-      console.log(`📈 PHASE CALCULÉE: ${newPhaseIndex} (temps: ${elapsedTime}s)`);
-      
       // Si on a trouvé une nouvelle phase différente de l'actuelle
       if (newPhaseIndex !== -1 && newPhaseIndex !== currentProgressivePhase) {
         const newPhase = phases[newPhaseIndex];
-        console.log(`📈 CHANGEMENT DE PHASE: ${currentProgressivePhase} → ${newPhaseIndex}`);
-        console.log(`📈 Nouveau pattern:`, newPhase.pattern);
-        console.log(`📈 Timing: ${newPhase.startTime}s-${newPhase.endTime}s`);
         
         setCurrentProgressivePhase(newPhaseIndex);
         setProgressivePhaseChanged(true);
         
-        // Changer le pattern respiratoire IMMÉDIATEMENT
+        // Changer le pattern respiratoire
         const newPattern = newPhase.pattern;
-        console.log(`🫁 APPLICATION NOUVEAU PATTERN:`, newPattern);
         
         // Arrêter l'ancienne animation et démarrer la nouvelle
         stopBreathing();
         setTimeout(() => {
           startBreathing(newPattern);
-          setDebugPattern(newPattern);
         }, 100);
         
         // Annoncer le changement
@@ -132,7 +116,7 @@ export const SessionScreen = () => {
     }
   }, [timeRemaining, currentSession, isSessionActive, currentProgressivePhase, voiceSettings.enabled, speak, startBreathing, stopBreathing, sessionData?.duration, lastProgressiveCheck]);
 
-  // Gérer les changements de phase pour le gong SEULEMENT
+  // Gérer les changements de phase pour le gong
   useEffect(() => {
     if (isSessionActive && breathingState.phase !== 'idle' && breathingState.phase !== lastPhase) {
       if (lastPhase !== null) {
@@ -147,7 +131,7 @@ export const SessionScreen = () => {
     if (timeRemaining === 0 && isSessionActive && !sessionEnded) {
       setSessionEnded(true);
       
-      // Message de fin adapté aux enfants, RESET, PROGRESSIVE et SENIORS
+      // Message de fin adapté aux différentes sessions
       if (currentSession === 'kids') {
         speak("Super ! Tu as fait de la vraie magie avec ta respiration. Tu peux être fier de toi, petit champion !");
       } else if (currentSession === 'reset') {
@@ -160,21 +144,17 @@ export const SessionScreen = () => {
         speak("Session terminée. Félicitations pour cette pratique.");
       }
       
-      // Délai standard
-      const delayBeforeResults = 3000;
-      
       setTimeout(() => {
         setCurrentScreen('results');
-      }, delayBeforeResults);
+      }, 3000);
     }
   }, [timeRemaining, isSessionActive, sessionEnded, setCurrentScreen, currentSession, speak]);
 
-  // DÉMARRAGE VOCAL AUTOMATIQUE - SYSTÈME PREMIUM UNIFIÉ
+  // Démarrage vocal automatique
   useEffect(() => {
     if (isSessionActive && !voiceSystemStarted && voiceSettings.enabled) {
       setVoiceSystemStarted(true);
       
-      // Délai court pour laisser le temps à la session de se stabiliser
       setTimeout(() => {
         startSessionGuidance();
       }, 200);
@@ -183,54 +163,41 @@ export const SessionScreen = () => {
 
   const handleToggleSession = () => {
     if (!isSessionActive) {
-      console.log('🎬 DÉMARRAGE SESSION:', currentSession);
-      
-      // NOUVEAU : Récupérer le pattern respiratoire EXPLICITEMENT
       const breathingPattern = getCurrentBreathingPattern();
-      console.log('🫁 PATTERN RÉCUPÉRÉ POUR DÉMARRAGE:', breathingPattern);
-      setDebugPattern(breathingPattern); // Pour l'affichage debug
       
       setSessionActive(true);
       setSessionEnded(false);
       setVoiceSystemStarted(false);
       
-      // NOUVEAU : Reset pour l'entraînement progressif
+      // Reset pour l'entraînement progressif
       if (currentSession === 'progressive') {
         setCurrentProgressivePhase(0);
         setProgressivePhaseChanged(false);
         setLastProgressiveCheck(0);
-        console.log('📈 RESET ENTRAÎNEMENT PROGRESSIF - Phase 0 (3/3)');
       }
       
-      // Démarrer l'audio avec la fréquence par défaut de la session
+      // Démarrer l'audio
       if (audioSettings.enabled) {
         startAudio();
       }
       
-      // Démarrer le timer et la respiration avec la durée correcte
+      // Démarrer le timer et la respiration
       const duration = sessionData?.duration || 180;
       startTimer(duration);
-      
-      // NOUVEAU : Passer le pattern EXPLICITEMENT à l'animation
-      console.log('🚀 DÉMARRAGE ANIMATION AVEC PATTERN:', breathingPattern);
       startBreathing(breathingPattern);
       
     } else {
-      console.log('⏸️ PAUSE SESSION');
       setSessionActive(false);
       stopTimer();
       stopBreathing();
       stopAudio();
-      
-      // ARRÊT IMMÉDIAT ET COMPLET DU SYSTÈME VOCAL
       stopVoice();
       
       setLastPhase(null);
       setSessionEnded(false);
       setVoiceSystemStarted(false);
-      setDebugPattern(null);
       
-      // NOUVEAU : Reset pour l'entraînement progressif
+      // Reset pour l'entraînement progressif
       if (currentSession === 'progressive') {
         setCurrentProgressivePhase(0);
         setProgressivePhaseChanged(false);
@@ -244,17 +211,14 @@ export const SessionScreen = () => {
     stopTimer();
     stopBreathing();
     stopAudio();
-    
-    // ARRÊT IMMÉDIAT ET COMPLET DU SYSTÈME VOCAL
     stopVoice();
     
     resetTimer();
     setLastPhase(null);
     setSessionEnded(false);
     setVoiceSystemStarted(false);
-    setDebugPattern(null);
     
-    // NOUVEAU : Reset pour l'entraînement progressif
+    // Reset pour l'entraînement progressif
     if (currentSession === 'progressive') {
       setCurrentProgressivePhase(0);
       setProgressivePhaseChanged(false);
@@ -308,48 +272,7 @@ export const SessionScreen = () => {
           </div>
         </div>
 
-        {/* NOUVEAU : Debug du pattern respiratoire */}
-        {debugPattern && (
-          <div className="bg-green-500/20 border border-green-500/30 rounded-lg p-3 mb-4">
-            <p className="text-sm text-green-200 mb-2">
-              🫁 <strong>PATTERN RESPIRATOIRE ACTUEL :</strong>
-            </p>
-            <div className="text-xs text-green-100/80 space-y-1">
-              <div>⏱️ <strong>Inspiration :</strong> {debugPattern.inhale} secondes</div>
-              {debugPattern.hold > 0 && (
-                <div>⏸️ <strong>Pause :</strong> {debugPattern.hold} secondes</div>
-              )}
-              <div>⏱️ <strong>Expiration :</strong> {debugPattern.exhale} secondes</div>
-              <div>🎯 <strong>Rythme :</strong> {debugPattern.inhale}/{debugPattern.hold > 0 ? debugPattern.hold + '/' : ''}{debugPattern.exhale}</div>
-              <div>🔧 <strong>Session :</strong> {currentSession}</div>
-              <div className="mt-2 text-yellow-200">
-                ✅ <strong>PATTERN TRANSMIS À L'ANIMATION</strong>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* NOUVEAU : Debug de l'état de l'animation */}
-        {breathingState.currentPattern && (
-          <div className="bg-blue-500/20 border border-blue-500/30 rounded-lg p-3 mb-4">
-            <p className="text-sm text-blue-200 mb-2">
-              🎬 <strong>ANIMATION EN COURS :</strong>
-            </p>
-            <div className="text-xs text-blue-100/80 space-y-1">
-              <div>⏱️ <strong>Utilise :</strong> {breathingState.inhaleTime}s inspiration / {breathingState.exhaleTime}s expiration</div>
-              {breathingState.holdTime > 0 && (
-                <div>⏸️ <strong>Pause :</strong> {breathingState.holdTime}s</div>
-              )}
-              <div>📊 <strong>Phase actuelle :</strong> {breathingState.phase}</div>
-              <div>🔄 <strong>Progression :</strong> {Math.round(breathingState.progress)}%</div>
-              <div className="mt-2 text-cyan-200">
-                🎯 <strong>ANIMATION ACTIVE AVEC PATTERN CORRECT</strong>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* NOUVEAU : Indicateur spécial pour ENTRAÎNEMENT PROGRESSIF - CORRIGÉ */}
+        {/* Indicateur spécial pour ENTRAÎNEMENT PROGRESSIF */}
         {currentSession === 'progressive' && (
           <div className="bg-green-500/20 border border-green-500/30 rounded-lg p-3 mb-4">
             <p className="text-sm text-green-200 mb-2">
@@ -366,8 +289,7 @@ export const SessionScreen = () => {
                 {currentProgressivePhase === 1 && ' 60-120s : Approfondissement'}
                 {currentProgressivePhase === 2 && ' 120-180s : Maîtrise'}
               </div>
-              <div>🫁 <strong>Rythme actuel :</strong> {breathingState.inhaleTime || debugPattern?.inhale || 3}/{breathingState.exhaleTime || debugPattern?.exhale || 3}</div>
-              <div>⏰ <strong>Temps écoulé :</strong> {(sessionData?.duration || 180) - timeRemaining}s</div>
+              <div>🫁 <strong>Rythme actuel :</strong> {breathingState.inhaleTime || 3}/{breathingState.exhaleTime || 3}</div>
               <div className="mt-2 text-yellow-200">
                 ✨ <strong>PROGRESSION AUTOMATIQUE ACTIVÉE</strong>
               </div>
@@ -404,7 +326,6 @@ export const SessionScreen = () => {
               <div>🎈 <strong>Inspiration :</strong> 4 secondes (gonfle ton ballon)</div>
               <div>🌸 <strong>Expiration :</strong> 4 secondes (souffle doucement)</div>
               <div>🦄 <strong>Rythme :</strong> 4/4 (parfait pour les enfants)</div>
-              <div>🎯 <strong>Session :</strong> {currentSession}</div>
               <div className="mt-2 text-yellow-200">
                 ✨ <strong>RESPIRATION MAGIQUE ACTIVÉE</strong>
               </div>
@@ -412,7 +333,7 @@ export const SessionScreen = () => {
           </div>
         )}
 
-        {/* NOUVEAU : Indicateur spécial pour SENIORS - RYTHME 3/4 */}
+        {/* Indicateur spécial pour SENIORS - RYTHME 3/4 */}
         {currentSession === 'seniors' && (
           <div className="bg-cyan-500/20 border border-cyan-500/30 rounded-lg p-3 mb-4">
             <p className="text-sm text-cyan-200 mb-2">
@@ -481,17 +402,6 @@ export const SessionScreen = () => {
         <div className="text-sm text-white/60 mt-2">
           Progression : {Math.round(progress)}%
         </div>
-        
-        {/* Debug pour SOS Stress */}
-        {currentSession === 'switch' && isSessionActive && (
-          <div className="mt-2 text-xs text-white/50 bg-black/20 rounded-lg p-2">
-            <div>Temps écoulé : {(sessionData?.duration || 90) - timeRemaining}s</div>
-            <div>Phase respiration : {breathingState.phase}</div>
-            <div className="text-green-300 mt-1">
-              ✅ Système vocal : TIMINGS CORRIGÉS
-            </div>
-          </div>
-        )}
       </div>
 
       {/* Contrôles */}

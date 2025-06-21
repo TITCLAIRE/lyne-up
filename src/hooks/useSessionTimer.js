@@ -9,7 +9,6 @@ export const useSessionTimer = () => {
   const { setCurrentScreen, setSessionActive } = useAppStore();
 
   const startTimer = useCallback((duration) => {
-    console.log(`⏰ TIMER START: Démarrage timer pour ${duration} secondes`);
     setTotalDuration(duration);
     setTimeRemaining(duration);
     setIsRunning(true);
@@ -18,28 +17,18 @@ export const useSessionTimer = () => {
       setTimeRemaining((prev) => {
         const newTime = prev - 1;
         
-        // Log détaillé quand on approche de la fin
-        if (newTime <= 5 && newTime > 0) {
-          console.log(`⏰ TIMER COUNTDOWN: ${newTime} secondes restantes`);
-        }
-        
         if (newTime <= 0) {
-          console.log('⏰ TIMER END: Timer terminé - newTime <= 0 détecté');
-          console.log('⏰ TIMER END: Fin de session programmée');
           setIsRunning(false);
           setSessionActive(false);
           
           if (intervalRef.current) {
             clearInterval(intervalRef.current);
             intervalRef.current = null;
-            console.log('⏰ TIMER END: Interval cleared');
           }
           
-          // Rediriger vers l'écran de résultats après un délai
           setTimeout(() => {
-            console.log('📊 TIMER END: Redirection vers les résultats');
             setCurrentScreen('results');
-          }, 2000); // 2 secondes pour laisser le temps au message de fin
+          }, 2000);
           
           return 0;
         }
@@ -49,18 +38,14 @@ export const useSessionTimer = () => {
   }, [setCurrentScreen, setSessionActive]);
 
   const stopTimer = useCallback(() => {
-    console.log('⏸️ TIMER STOP: Arrêt du timer demandé');
-    console.log('⏸️ TIMER STOP: isRunning avant arrêt:', isRunning);
     setIsRunning(false);
     if (intervalRef.current) {
       clearInterval(intervalRef.current);
       intervalRef.current = null;
-      console.log('⏸️ TIMER STOP: Interval cleared');
     }
   }, [isRunning]);
 
   const resetTimer = useCallback(() => {
-    console.log('🔄 TIMER RESET: Reset du timer demandé');
     stopTimer();
     setTimeRemaining(0);
     setTotalDuration(0);
