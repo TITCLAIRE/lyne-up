@@ -7,27 +7,96 @@ export const useVoiceManager = () => {
   const currentAudioRef = useRef(null);
   const isPlayingRef = useRef(false);
 
-  // Fonction générique pour obtenir le chemin audio d'une session
-  const getSessionAudioPath = (sessionId, filename) => {
+  // SYSTÈME VOCAL POUR SOS STRESS (SWITCH) - CONSERVÉ EXACTEMENT
+  const getSosAudioPath = (filename) => {
     const gender = voiceSettings.gender; // 'female' ou 'male'
+    return `/audio/sos-stress/${gender}/${filename}.mp3`;
+  };
+
+  // SYSTÈME VOCAL POUR SCAN CORPOREL - CONSERVÉ EXACTEMENT
+  const getScanAudioPath = (filename) => {
+    const gender = voiceSettings.gender; // 'female' ou 'male'
+    return `/audio/scan-corporel/${gender}/${filename}.mp3`;
+  };
+
+  // MAPPING EXACT DES FICHIERS SOS STRESS - NOMS RÉELS
+  const SOS_AUDIO_FILES = {
+    welcome: 'welcome',
+    breatheCalm: 'breathe-calm',
+    grounding: 'grounding',
+    breatheSoftly: 'breathe-softly',
+    breatheFresh: 'breathe-fresh',
+    stressRelease: 'stress-release',
+    breatheRelease: 'breathe-release',
+    centerPeace: 'center-peace',
+    completion: 'completion'
+  };
+
+  // MAPPING EXACT DES FICHIERS SCAN CORPOREL - NOMS RÉELS
+  const SCAN_AUDIO_FILES = {
+    welcome: 'welcome',
+    head: 'head',
+    face: 'face',
+    neck: 'neck',
+    chest: 'chest',
+    back: 'back',
+    abdomen: 'abdomen',
+    hips: 'hips',
+    thighs: 'thighs',
+    knees: 'knees',
+    calves: 'calves',
+    ankles: 'ankles',
+    feet: 'feet',
+    wholebody: 'wholebody',
+    breathing: 'breathing',
+    awareness: 'awareness',
+    presence: 'presence',
+    completion: 'completion'
+  };
+
+  // TEXTES DE FALLBACK SOS STRESS
+  const SOS_FALLBACK_TEXTS = {
+    welcome: "Bienvenue dans votre bulle de calme. Posez vos pieds bien à plat sur le sol. Détendez vos épaules.",
+    breatheCalm: "Inspirez le calme",
+    grounding: "Vos pieds touchent le sol. Vous êtes ancré, solide, stable.",
+    breatheSoftly: "Soufflez doucement",
+    breatheFresh: "Accueillez l'air frais",
+    stressRelease: "Le stress s'évapore à chaque souffle. Votre corps se détend profondément.",
+    breatheRelease: "Relâchez tout",
+    centerPeace: "Vous retrouvez votre centre. Tout va bien. Vous êtes en sécurité.",
+    completion: "Parfait. Vous avez retrouvé votre calme intérieur. Gardez cette sensation avec vous."
+  };
+
+  // TEXTES DE FALLBACK SCAN CORPOREL
+  const SCAN_FALLBACK_TEXTS = {
+    welcome: "Bienvenue dans cette séance de scan corporel. Installez-vous confortablement.",
+    head: "Portez votre attention sur le sommet de votre tête. Sentez cette zone se détendre.",
+    face: "Descendez vers votre visage. Relâchez votre front, vos sourcils, vos paupières.",
+    neck: "Votre cou et vos épaules se relâchent maintenant.",
+    chest: "Votre poitrine s'ouvre et se détend à chaque respiration.",
+    back: "Votre dos se détend vertèbre par vertèbre, du haut vers le bas.",
+    abdomen: "Votre ventre se gonfle et se dégonfle naturellement, sans effort.",
+    hips: "Vos hanches et votre bassin se relâchent complètement.",
+    thighs: "Vos cuisses se détendent profondément.",
+    knees: "Vos genoux se détendent. Sentez l'espace dans vos articulations.",
+    calves: "Vos mollets se relâchent entièrement.",
+    ankles: "Vos chevilles se détendent.",
+    feet: "Vos pieds sont maintenant complètement détendus et lourds.",
+    wholebody: "Une vague de bien-être parcourt maintenant tout votre corps.",
+    breathing: "Observez votre respiration, calme et régulière.",
+    awareness: "Prenez conscience de votre corps dans son ensemble.",
+    presence: "Restez dans cet état de relaxation profonde.",
+    completion: "Progressivement, reprenez conscience de votre environnement."
+  };
+
+  // Fonction générique pour obtenir le chemin audio d'une session (NOUVELLES SESSIONS)
+  const getSessionAudioPath = (sessionId, filename) => {
+    const gender = voiceSettings.gender;
     return `/audio/${sessionId}/${gender}/${filename}.mp3`;
   };
 
-  // Mapping des fichiers audio pour chaque session
+  // Mapping des fichiers audio pour les NOUVELLES sessions
   const SESSION_AUDIO_MAPPINGS = {
-    // SOS Stress (SWITCH) - déjà configuré
-    switch: {
-      welcome: 'welcome',
-      breatheCalm: 'breathe-calm',
-      grounding: 'grounding',
-      breatheSoftly: 'breathe-softly',
-      breatheFresh: 'breathe-fresh',
-      stressRelease: 'stress-release',
-      breatheRelease: 'breathe-release',
-      centerPeace: 'center-peace',
-      completion: 'completion'
-    },
-    
     // RESET (4/7/8)
     reset: {
       welcome: 'welcome',
@@ -40,11 +109,11 @@ export const useVoiceManager = () => {
     // PROGRESSIVE (3/3 → 4/4 → 5/5)
     progressive: {
       welcome: 'welcome',
-      phase1: 'phase1', // 3/3
+      phase1: 'phase1',
       transition1: 'transition1',
-      phase2: 'phase2', // 4/4
+      phase2: 'phase2',
       transition2: 'transition2',
-      phase3: 'phase3', // 5/5
+      phase3: 'phase3',
       completion: 'completion'
     },
     
@@ -63,28 +132,6 @@ export const useVoiceManager = () => {
       relax1: 'relax1',
       relax2: 'relax2',
       relax3: 'relax3',
-      completion: 'completion'
-    },
-    
-    // SCAN CORPOREL - déjà configuré
-    scan: {
-      welcome: 'welcome',
-      head: 'head',
-      face: 'face',
-      neck: 'neck',
-      chest: 'chest',
-      back: 'back',
-      abdomen: 'abdomen',
-      hips: 'hips',
-      thighs: 'thighs',
-      knees: 'knees',
-      calves: 'calves',
-      ankles: 'ankles',
-      feet: 'feet',
-      wholebody: 'wholebody',
-      breathing: 'breathing',
-      awareness: 'awareness',
-      presence: 'presence',
       completion: 'completion'
     },
     
@@ -113,21 +160,8 @@ export const useVoiceManager = () => {
     }
   };
 
-  // Textes de fallback pour toutes les sessions
+  // Textes de fallback pour les NOUVELLES sessions
   const SESSION_FALLBACK_TEXTS = {
-    // SOS Stress (SWITCH) - déjà configuré
-    switch: {
-      welcome: "Bienvenue dans votre bulle de calme. Posez vos pieds bien à plat sur le sol. Détendez vos épaules.",
-      breatheCalm: "Inspirez le calme",
-      grounding: "Vos pieds touchent le sol. Vous êtes ancré, solide, stable.",
-      breatheSoftly: "Soufflez doucement",
-      breatheFresh: "Accueillez l'air frais",
-      stressRelease: "Le stress s'évapore à chaque souffle. Votre corps se détend profondément.",
-      breatheRelease: "Relâchez tout",
-      centerPeace: "Vous retrouvez votre centre. Tout va bien. Vous êtes en sécurité.",
-      completion: "Parfait. Vous avez retrouvé votre calme intérieur. Gardez cette sensation avec vous."
-    },
-    
     // RESET
     reset: {
       welcome: "Bienvenue dans votre session RESET. Cette technique 4-7-8 va calmer votre système nerveux.",
@@ -164,28 +198,6 @@ export const useVoiceManager = () => {
       relax2: "Votre tension artérielle commence à diminuer. Votre cœur bat plus calmement.",
       relax3: "Vos muscles se relâchent progressivement. Vous vous sentez de plus en plus détendu.",
       completion: "Excellent ! Vous avez pris soin de votre bien-être."
-    },
-    
-    // SCAN CORPOREL - déjà configuré
-    scan: {
-      welcome: "Bienvenue dans cette séance de scan corporel. Installez-vous confortablement.",
-      head: "Portez votre attention sur le sommet de votre tête. Sentez cette zone se détendre.",
-      face: "Descendez vers votre visage. Relâchez votre front, vos sourcils, vos paupières.",
-      neck: "Votre cou et vos épaules se relâchent maintenant.",
-      chest: "Votre poitrine s'ouvre et se détend à chaque respiration.",
-      back: "Votre dos se détend vertèbre par vertèbre, du haut vers le bas.",
-      abdomen: "Votre ventre se gonfle et se dégonfle naturellement, sans effort.",
-      hips: "Vos hanches et votre bassin se relâchent complètement.",
-      thighs: "Vos cuisses se détendent profondément.",
-      knees: "Vos genoux se détendent. Sentez l'espace dans vos articulations.",
-      calves: "Vos mollets se relâchent entièrement.",
-      ankles: "Vos chevilles se détendent.",
-      feet: "Vos pieds sont maintenant complètement détendus et lourds.",
-      wholebody: "Une vague de bien-être parcourt maintenant tout votre corps.",
-      breathing: "Observez votre respiration, calme et régulière.",
-      awareness: "Prenez conscience de votre corps dans son ensemble.",
-      presence: "Restez dans cet état de relaxation profonde.",
-      completion: "Progressivement, reprenez conscience de votre environnement."
     },
     
     // MÉDITATIONS
@@ -327,7 +339,41 @@ export const useVoiceManager = () => {
     });
   };
 
-  // Fonction générique pour jouer un audio avec fallback
+  // Fonction pour jouer un audio SOS avec fallback - SYSTÈME ORIGINAL
+  const playSosAudio = async (audioKey) => {
+    try {
+      const audioPath = getSosAudioPath(SOS_AUDIO_FILES[audioKey]);
+      await playLocalAudio(audioPath);
+    } catch (error) {
+      const fallbackText = SOS_FALLBACK_TEXTS[audioKey];
+      if (fallbackText) {
+        try {
+          await speakWithSystemVoice(fallbackText);
+        } catch (fallbackError) {
+          // Silencieux
+        }
+      }
+    }
+  };
+
+  // Fonction pour jouer un audio SCAN avec fallback - SYSTÈME ORIGINAL
+  const playScanAudio = async (audioKey) => {
+    try {
+      const audioPath = getScanAudioPath(SCAN_AUDIO_FILES[audioKey]);
+      await playLocalAudio(audioPath);
+    } catch (error) {
+      const fallbackText = SCAN_FALLBACK_TEXTS[audioKey];
+      if (fallbackText) {
+        try {
+          await speakWithSystemVoice(fallbackText);
+        } catch (fallbackError) {
+          // Silencieux
+        }
+      }
+    }
+  };
+
+  // Fonction générique pour jouer un audio avec fallback (NOUVELLES SESSIONS)
   const playSessionAudio = async (sessionId, audioKey) => {
     try {
       const mapping = SESSION_AUDIO_MAPPINGS[sessionId];
@@ -338,19 +384,18 @@ export const useVoiceManager = () => {
       const audioPath = getSessionAudioPath(sessionId, mapping[audioKey]);
       await playLocalAudio(audioPath);
     } catch (error) {
-      // Fallback vers synthèse vocale
       const fallbackTexts = SESSION_FALLBACK_TEXTS[sessionId];
       if (fallbackTexts && fallbackTexts[audioKey]) {
         try {
           await speakWithSystemVoice(fallbackTexts[audioKey]);
         } catch (fallbackError) {
-          // Silencieux en cas d'erreur
+          // Silencieux
         }
       }
     }
   };
 
-  // Fonction principale pour parler (autres sessions)
+  // Fonction principale pour parler
   const speak = (text) => {
     if (!voiceSettings.enabled || !text.trim()) {
       return Promise.resolve();
@@ -359,7 +404,7 @@ export const useVoiceManager = () => {
     return speakWithSystemVoice(text);
   };
 
-  // Système vocal SOS Stress (SWITCH) - conservé tel quel
+  // Système vocal SOS Stress (SWITCH) - SYSTÈME ORIGINAL RESTAURÉ
   const startSosGuidance = () => {
     scheduledTimeoutsRef.current.forEach(timeout => clearTimeout(timeout));
     scheduledTimeoutsRef.current = [];
@@ -379,9 +424,46 @@ export const useVoiceManager = () => {
     sosTimings.forEach(({ time, audioKey }) => {
       const timeout = setTimeout(() => {
         if (isSessionActive) {
-          playSessionAudio('switch', audioKey);
+          playSosAudio(audioKey);
         }
       }, time);
+      
+      scheduledTimeoutsRef.current.push(timeout);
+    });
+  };
+
+  // Système vocal Scan Corporel - SYSTÈME ORIGINAL RESTAURÉ
+  const startScanGuidance = () => {
+    scheduledTimeoutsRef.current.forEach(timeout => clearTimeout(timeout));
+    scheduledTimeoutsRef.current = [];
+
+    const scanTimings = [
+      { time: 0, audioKey: 'welcome' },
+      { time: 30, audioKey: 'head' },
+      { time: 60, audioKey: 'face' },
+      { time: 90, audioKey: 'neck' },
+      { time: 120, audioKey: 'chest' },
+      { time: 150, audioKey: 'back' },
+      { time: 180, audioKey: 'abdomen' },
+      { time: 210, audioKey: 'hips' },
+      { time: 240, audioKey: 'thighs' },
+      { time: 255, audioKey: 'knees' },
+      { time: 270, audioKey: 'calves' },
+      { time: 285, audioKey: 'ankles' },
+      { time: 300, audioKey: 'feet' },
+      { time: 360, audioKey: 'wholebody' },
+      { time: 420, audioKey: 'breathing' },
+      { time: 480, audioKey: 'awareness' },
+      { time: 540, audioKey: 'presence' },
+      { time: 570, audioKey: 'completion' }
+    ];
+
+    scanTimings.forEach(({ time, audioKey }) => {
+      const timeout = setTimeout(() => {
+        if (isSessionActive) {
+          playScanAudio(audioKey);
+        }
+      }, time * 1000);
       
       scheduledTimeoutsRef.current.push(timeout);
     });
@@ -485,43 +567,6 @@ export const useVoiceManager = () => {
     });
   };
 
-  // Système vocal Scan Corporel - conservé tel quel
-  const startScanGuidance = () => {
-    scheduledTimeoutsRef.current.forEach(timeout => clearTimeout(timeout));
-    scheduledTimeoutsRef.current = [];
-
-    const scanTimings = [
-      { time: 0, audioKey: 'welcome' },
-      { time: 30, audioKey: 'head' },
-      { time: 60, audioKey: 'face' },
-      { time: 90, audioKey: 'neck' },
-      { time: 120, audioKey: 'chest' },
-      { time: 150, audioKey: 'back' },
-      { time: 180, audioKey: 'abdomen' },
-      { time: 210, audioKey: 'hips' },
-      { time: 240, audioKey: 'thighs' },
-      { time: 255, audioKey: 'knees' },
-      { time: 270, audioKey: 'calves' },
-      { time: 285, audioKey: 'ankles' },
-      { time: 300, audioKey: 'feet' },
-      { time: 360, audioKey: 'wholebody' },
-      { time: 420, audioKey: 'breathing' },
-      { time: 480, audioKey: 'awareness' },
-      { time: 540, audioKey: 'presence' },
-      { time: 570, audioKey: 'completion' }
-    ];
-
-    scanTimings.forEach(({ time, audioKey }) => {
-      const timeout = setTimeout(() => {
-        if (isSessionActive) {
-          playSessionAudio('scan', audioKey);
-        }
-      }, time * 1000);
-      
-      scheduledTimeoutsRef.current.push(timeout);
-    });
-  };
-
   // Système vocal Méditations
   const startMeditationGuidance = () => {
     scheduledTimeoutsRef.current.forEach(timeout => clearTimeout(timeout));
@@ -605,7 +650,7 @@ export const useVoiceManager = () => {
     });
   };
 
-  // Système vocal unifié - ÉTENDU
+  // Système vocal unifié - CORRIGÉ
   const startSessionGuidance = (coherenceSettings = null) => {
     if (!voiceSettings.enabled) {
       return;
@@ -613,7 +658,10 @@ export const useVoiceManager = () => {
 
     switch (currentSession) {
       case 'switch':
-        startSosGuidance();
+        startSosGuidance(); // SYSTÈME ORIGINAL
+        break;
+      case 'scan':
+        startScanGuidance(); // SYSTÈME ORIGINAL
         break;
       case 'reset':
         startResetGuidance();
@@ -626,9 +674,6 @@ export const useVoiceManager = () => {
         break;
       case 'seniors':
         startSeniorsGuidance();
-        break;
-      case 'scan':
-        startScanGuidance();
         break;
       case 'meditation':
         startMeditationGuidance();
@@ -693,9 +738,19 @@ export const useVoiceManager = () => {
     isProcessing: isPlayingRef.current,
     startSessionGuidance,
     startCoherenceGuidance,
-    playLocalAudio,
+    // Fonctions spécialisées pour SOS et SCAN
+    playSosAudio,
+    playScanAudio,
+    getSosAudioPath,
+    getScanAudioPath,
+    // Fonctions génériques pour nouvelles sessions
     playSessionAudio,
     getSessionAudioPath,
+    // Mappings et textes
+    SOS_AUDIO_FILES,
+    SCAN_AUDIO_FILES,
+    SOS_FALLBACK_TEXTS,
+    SCAN_FALLBACK_TEXTS,
     SESSION_AUDIO_MAPPINGS,
     SESSION_FALLBACK_TEXTS,
   };
