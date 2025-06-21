@@ -120,6 +120,30 @@ export const sessions = {
     }
   },
 
+  // NOUVEAU : Session libre (gérée par les paramètres freeSessionSettings)
+  free: {
+    name: 'SESSION LIBRE',
+    duration: 300, // Durée par défaut, sera remplacée par freeSessionSettings.duration
+    description: 'Rythme et durée personnalisables',
+    // Pattern par défaut, sera remplacé par les paramètres utilisateur
+    breathingPattern: {
+      inhale: 5,
+      hold: 0,
+      exhale: 5
+    },
+    guidance: {
+      start: "Session libre démarrée. Suivez votre rythme respiratoire personnalisé.",
+      inhale: ["Inspirez selon votre rythme", "Accueillez l'air", "Respirez à votre tempo"],
+      exhale: ["Expirez selon votre rythme", "Relâchez", "Soufflez à votre tempo"],
+      phases: [
+        "Vous contrôlez votre respiration. Maintenez ce rythme qui vous convient.",
+        "Votre corps s'adapte à votre rythme personnalisé. Continuez ainsi.",
+        "Vous maîtrisez parfaitement votre respiration personnalisée."
+      ],
+      end: "Session libre terminée. Vous avez maintenu votre rythme respiratoire personnalisé avec succès."
+    }
+  },
+
   scan: {
     name: 'SCAN CORPOREL',
     duration: 600, // 10 minutes
@@ -167,6 +191,9 @@ export const defaultBreathingPatterns = {
 
   // NOUVEAU : Module entraînement progressif - RYTHME INITIAL 3/3
   'progressive': { inhale: 3, hold: 0, exhale: 3 },
+
+  // NOUVEAU : Session libre - RYTHME PAR DÉFAUT 5/5 (sera remplacé par les paramètres utilisateur)
+  'free': { inhale: 5, hold: 0, exhale: 5 },
   
   // Méditations - Rythme équilibré
   'meditation': { inhale: 5, hold: 0, exhale: 5 },

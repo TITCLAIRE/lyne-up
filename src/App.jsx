@@ -6,6 +6,8 @@ import { ResultsScreen } from './components/screens/ResultsScreen';
 import { MeditationSelectionScreen } from './components/screens/MeditationSelectionScreen';
 import { CoherenceSelectionScreen } from './components/screens/CoherenceSelectionScreen';
 import { CoherenceSessionScreen } from './components/screens/CoherenceSessionScreen';
+import { FreeSessionSelectionScreen } from './components/screens/FreeSessionSelectionScreen';
+import { FreeSessionScreen } from './components/screens/FreeSessionScreen';
 import { SidePanel } from './components/SidePanel';
 import { useAppStore } from './store/appStore';
 import { useAudioManager } from './hooks/useAudioManager';
@@ -36,6 +38,10 @@ function App() {
         return <CoherenceSelectionScreen />;
       case 'coherenceSession':
         return <CoherenceSessionScreen />;
+      case 'freeSessionSelection':
+        return <FreeSessionSelectionScreen />;
+      case 'freeSession':
+        return <FreeSessionScreen />;
       default:
         console.log('⚠️ Écran non reconnu, retour à l\'accueil:', currentScreen);
         return <HomeScreen />;
