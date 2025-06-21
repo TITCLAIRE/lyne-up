@@ -14,7 +14,8 @@ export const CoherenceSessionScreen = () => {
     isSessionActive, 
     setSessionActive, 
     setCurrentScreen,
-    audioSettings 
+    audioSettings,
+    voiceSettings
   } = useAppStore();
   
   const { timeRemaining, progress, startTimer, stopTimer, resetTimer } = useSessionTimer();
@@ -58,9 +59,13 @@ export const CoherenceSessionScreen = () => {
       
       setSessionActive(true);
       
-      // Démarrer l'audio de cohérence cardiaque si activé
+      // MODIFICATION CLÉE : Utiliser la fréquence sélectionnée manuellement
       if (coherenceSettings.gongEnabled && !coherenceSettings.silentMode) {
-        startAudio('coherence'); // Toujours utiliser la fréquence 0.1Hz pour la cohérence
+        // Si une fréquence manuelle est sélectionnée, l'utiliser
+        // Sinon, utiliser la fréquence par défaut de la cohérence cardiaque
+        const selectedFrequency = audioSettings.frequency !== 'coherence' ? audioSettings.frequency : 'coherence';
+        console.log('🎵 FRÉQUENCE SÉLECTIONNÉE:', selectedFrequency);
+        startAudio(selectedFrequency);
       }
       
       // Démarrer le timer et la respiration avec la durée correcte
@@ -192,11 +197,14 @@ export const CoherenceSessionScreen = () => {
           </div>
         )}
 
-        {/* Fréquence audio active */}
+        {/* Fréquence audio active - MODIFIÉE pour afficher la fréquence sélectionnée */}
         {coherenceSettings.gongEnabled && !coherenceSettings.silentMode && (
           <div className="bg-white/10 rounded-lg p-2 mb-4">
             <p className="text-xs text-white/70">
-              🎵 Fréquence active : <span className="text-cyan-400 font-medium">Cohérence 0.1Hz</span>
+              🎵 Fréquence active : <span className="text-cyan-400 font-medium">{getCurrentFrequencyName()}</span>
+              {audioSettings.frequency !== 'coherence' && (
+                <span className="text-yellow-300 ml-2">• Fréquence manuelle sélectionnée</span>
+              )}
             </p>
           </div>
         )}
