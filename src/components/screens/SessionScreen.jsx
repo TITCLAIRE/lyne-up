@@ -33,6 +33,10 @@ export const SessionScreen = () => {
   // NOUVEAU : État pour le debug du pattern respiratoire
   const [debugPattern, setDebugPattern] = useState(null);
 
+  // NOUVEAU : État pour l'entraînement progressif
+  const [currentProgressivePhase, setCurrentProgressivePhase] = useState(0);
+  const [progressivePhaseChanged, setProgressivePhaseChanged] = useState(false);
+
   // Obtenir les données de session selon le type
   const getSessionData = () => {
     if (currentSession === 'meditation' && currentMeditation) {
@@ -70,6 +74,40 @@ export const SessionScreen = () => {
     }
   };
 
+  // NOUVEAU : Gestion de l'entraînement progressif
+  useEffect(() => {
+    if (currentSession === 'progressive' && isSessionActive && sessions.progressive?.progressivePhases) {
+      const elapsedTime = (sessionData?.duration || 180) - timeRemaining;
+      const phases = sessions.progressive.progressivePhases;
+      
+      // Trouver la phase actuelle
+      const currentPhase = phases.findIndex(phase => 
+        elapsedTime >= phase.startTime && elapsedTime < phase.endTime
+      );
+      
+      if (currentPhase !== -1 && currentPhase !== currentProgressivePhase) {
+        console.log(`📈 PROGRESSION: Passage à la phase ${currentPhase + 1}/${phases.length}`);
+        console.log(`📈 Nouveau pattern:`, phases[currentPhase].pattern);
+        
+        setCurrentProgressivePhase(currentPhase);
+        setProgressivePhaseChanged(true);
+        
+        // Changer le pattern respiratoire
+        const newPattern = phases[currentPhase].pattern;
+        console.log(`🫁 CHANGEMENT PATTERN PROGRESSIF:`, newPattern);
+        startBreathing(newPattern);
+        
+        // Annoncer le changement
+        if (voiceSettings.enabled && phases[currentPhase].announcement) {
+          speak(phases[currentPhase].announcement);
+        }
+        
+        // Mettre à jour le debug pattern
+        setDebugPattern(newPattern);
+      }
+    }
+  }, [timeRemaining, currentSession, isSessionActive, currentProgressivePhase, voiceSettings.enabled, speak, startBreathing, sessionData?.duration]);
+
   // Gérer les changements de phase pour le gong SEULEMENT
   useEffect(() => {
     if (isSessionActive && breathingState.phase !== 'idle' && breathingState.phase !== lastPhase) {
@@ -85,11 +123,13 @@ export const SessionScreen = () => {
     if (timeRemaining === 0 && isSessionActive && !sessionEnded) {
       setSessionEnded(true);
       
-      // Message de fin adapté aux enfants et RESET
+      // Message de fin adapté aux enfants, RESET et PROGRESSIVE
       if (currentSession === 'kids') {
         speak("Super ! Tu as fait de la vraie magie avec ta respiration. Tu peux être fier de toi, petit champion !");
       } else if (currentSession === 'reset') {
         speak("Magnifique. Votre système nerveux est maintenant apaisé. Cette technique 4-7-8 peut être utilisée à tout moment pour retrouver instantanément le calme.");
+      } else if (currentSession === 'progressive') {
+        speak("Excellent ! Vous avez progressé du rythme débutant 3/3 jusqu'au rythme de cohérence cardiaque 5/5. Votre capacité respiratoire s'améliore.");
       } else {
         speak("Session terminée. Félicitations pour cette pratique.");
       }
@@ -128,6 +168,12 @@ export const SessionScreen = () => {
       setSessionEnded(false);
       setVoiceSystemStarted(false);
       
+      // NOUVEAU : Reset pour l'entraînement progressif
+      if (currentSession === 'progressive') {
+        setCurrentProgressivePhase(0);
+        setProgressivePhaseChanged(false);
+      }
+      
       // Démarrer l'audio avec la fréquence par défaut de la session
       if (audioSettings.enabled) {
         startAudio();
@@ -155,6 +201,12 @@ export const SessionScreen = () => {
       setSessionEnded(false);
       setVoiceSystemStarted(false);
       setDebugPattern(null);
+      
+      // NOUVEAU : Reset pour l'entraînement progressif
+      if (currentSession === 'progressive') {
+        setCurrentProgressivePhase(0);
+        setProgressivePhaseChanged(false);
+      }
     }
   };
 
@@ -172,6 +224,13 @@ export const SessionScreen = () => {
     setSessionEnded(false);
     setVoiceSystemStarted(false);
     setDebugPattern(null);
+    
+    // NOUVEAU : Reset pour l'entraînement progressif
+    if (currentSession === 'progressive') {
+      setCurrentProgressivePhase(0);
+      setProgressivePhaseChanged(false);
+    }
+    
     setCurrentScreen('home');
   };
 
@@ -260,6 +319,31 @@ export const SessionScreen = () => {
           </div>
         )}
 
+        {/* NOUVEAU : Indicateur spécial pour ENTRAÎNEMENT PROGRESSIF */}
+        {currentSession === 'progressive' && (
+          <div className="bg-green-500/20 border border-green-500/30 rounded-lg p-3 mb-4">
+            <p className="text-sm text-green-200 mb-2">
+              📈 <strong>ENTRAÎNEMENT PROGRESSIF - PHASE {currentProgressivePhase + 1}/3 :</strong>
+            </p>
+            <div className="text-xs text-green-100/80 space-y-1">
+              <div>🎯 <strong>Phase actuelle :</strong> {
+                currentProgressivePhase === 0 ? 'Rythme 3/3 (Débutant)' :
+                currentProgressivePhase === 1 ? 'Rythme 4/4 (Intermédiaire)' :
+                'Rythme 5/5 (Cohérence cardiaque)'
+              }</div>
+              <div>⏱️ <strong>Progression :</strong> 
+                {currentProgressivePhase === 0 && ' 0-60s : Apprentissage doux'}
+                {currentProgressivePhase === 1 && ' 60-120s : Approfondissement'}
+                {currentProgressivePhase === 2 && ' 120-180s : Maîtrise'}
+              </div>
+              <div>🫁 <strong>Rythme actuel :</strong> {debugPattern?.inhale || 3}/{debugPattern?.exhale || 3}</div>
+              <div className="mt-2 text-yellow-200">
+                ✨ <strong>PROGRESSION AUTOMATIQUE ACTIVÉE</strong>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Indicateur spécial pour RESET - RYTHME 4/7/8 */}
         {currentSession === 'reset' && (
           <div className="bg-indigo-500/20 border border-indigo-500/30 rounded-lg p-3 mb-4">
@@ -307,6 +391,8 @@ export const SessionScreen = () => {
                 ? "Les sons magiques sont encore plus beaux avec des écouteurs !" 
                 : currentSession === 'reset'
                 ? "Pour une efficacité maximale de la technique 4-7-8, utilisez des écouteurs pour une immersion complète."
+                : currentSession === 'progressive'
+                ? "L'entraînement progressif est plus efficace avec des écouteurs pour bien entendre les changements de rythme."
                 : "Les sons binauraux nécessitent impérativement l'utilisation d'écouteurs stéréo pour créer l'effet de battement binaural entre les deux oreilles."
               }
             </p>
@@ -357,6 +443,8 @@ export const SessionScreen = () => {
                 ? 'bg-gradient-to-r from-pink-500 to-purple-500 text-white hover:from-pink-600 hover:to-purple-600'
                 : currentSession === 'reset'
                 ? 'bg-gradient-to-r from-indigo-500 to-purple-500 text-white hover:from-indigo-600 hover:to-purple-600'
+                : currentSession === 'progressive'
+                ? 'bg-gradient-to-r from-green-500 to-emerald-500 text-white hover:from-green-600 hover:to-emerald-600'
                 : 'bg-gradient-to-r from-blue-500 to-cyan-500 text-white hover:from-blue-600 hover:to-cyan-600'
           }`}
         >
@@ -365,7 +453,12 @@ export const SessionScreen = () => {
           ) : (
             <>
               {isSessionActive ? <Pause size={20} /> : <Play size={20} />}
-              {isSessionActive ? 'Pause' : (currentSession === 'kids' ? 'C\'est parti !' : currentSession === 'reset' ? 'Commencer RESET' : 'Commencer')}
+              {isSessionActive ? 'Pause' : (
+                currentSession === 'kids' ? 'C\'est parti !' : 
+                currentSession === 'reset' ? 'Commencer RESET' : 
+                currentSession === 'progressive' ? 'Commencer l\'entraînement' :
+                'Commencer'
+              )}
             </>
           )}
         </button>

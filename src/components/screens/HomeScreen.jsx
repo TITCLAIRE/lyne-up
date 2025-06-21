@@ -1,5 +1,5 @@
 import React from 'react';
-import { Heart, Target, Zap, Waves, Brain, Sparkles, Baby, RotateCcw } from 'lucide-react';
+import { Heart, Target, Zap, Waves, Brain, Sparkles, Baby, RotateCcw, TrendingUp } from 'lucide-react';
 import { useAppStore } from '../../store/appStore';
 
 // Sessions d'urgence et réalignement
@@ -11,6 +11,11 @@ const urgencyAndRealignmentSessions = [
 // NOUVEAU : Sessions pour enfants
 const kidsSessions = [
   { id: 'kids', icon: Baby, name: 'KIDS', time: '2min', color: 'from-pink-400 to-purple-400', baseline: 'Respiration magique pour les petits' },
+];
+
+// NOUVEAU : Sessions d'entraînement
+const trainingSessions = [
+  { id: 'progressive', icon: TrendingUp, name: 'ENTRAÎNEMENT PROGRESSIF', time: '3min', color: 'from-green-500 to-emerald-500', baseline: 'Progression 3/3 → 4/4 → 5/5' },
 ];
 
 // Sessions de voyage intérieur - NOMS EN CAPITALES
@@ -115,6 +120,42 @@ export const HomeScreen = () => {
                       🫁 Rythme 4/7/8
                     </div>
                   )}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* NOUVEAU : Section Entraînement */}
+      <div className="mb-8">
+        <div className="flex items-baseline gap-3 mb-4">
+          <h2 className="text-lg font-semibold flex items-center gap-2">
+            📈 Entraînement
+          </h2>
+          <span className="text-sm text-white/60 italic">progression guidée</span>
+        </div>
+        <div className="grid grid-cols-1 gap-3">
+          {trainingSessions.map((session) => {
+            const Icon = session.icon;
+            return (
+              <div
+                key={session.id}
+                onClick={() => handleSessionClick(session.id)}
+                className="bg-white/8 border border-white/15 rounded-2xl p-4 cursor-pointer hover:bg-white/12 transition-all duration-200 hover:scale-[1.02]"
+              >
+                <div className="flex items-center gap-4">
+                  <div className={`w-12 h-12 bg-gradient-to-r ${session.color} rounded-xl flex items-center justify-center`}>
+                    <Icon size={24} className="text-white" />
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="font-medium text-lg mb-1">{session.name}</h3>
+                    <p className="text-sm text-white/60 mb-1">{session.time}</p>
+                    <p className="text-sm text-white/50 italic">{session.baseline}</p>
+                    <div className="text-xs text-green-300 mt-1">
+                      🫁 3/3 → 4/4 → 5/5 • Progression automatique
+                    </div>
+                  </div>
                 </div>
               </div>
             );

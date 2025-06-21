@@ -75,8 +75,53 @@ export const sessions = {
     }
   },
 
+  // NOUVEAU : Module ENTRAÎNEMENT PROGRESSIF
+  progressive: {
+    name: 'ENTRAÎNEMENT PROGRESSIF',
+    duration: 180, // 3 minutes (1min + 1min + 1min)
+    description: 'Progression respiratoire guidée',
+    // Pattern initial - sera changé dynamiquement
+    breathingPattern: {
+      inhale: 3,  // Commence par 3/3
+      hold: 0,
+      exhale: 3
+    },
+    // Définition des phases progressives
+    progressivePhases: [
+      {
+        startTime: 0,    // 0-60s : Phase 1
+        endTime: 60,
+        pattern: { inhale: 3, hold: 0, exhale: 3 },
+        announcement: "Phase 1 : Rythme 3/3. Respirez doucement et naturellement."
+      },
+      {
+        startTime: 60,   // 60-120s : Phase 2
+        endTime: 120,
+        pattern: { inhale: 4, hold: 0, exhale: 4 },
+        announcement: "Phase 2 : Passage au rythme 4/4. Respirez un peu plus profondément."
+      },
+      {
+        startTime: 120,  // 120-180s : Phase 3
+        endTime: 180,
+        pattern: { inhale: 5, hold: 0, exhale: 5 },
+        announcement: "Phase 3 : Rythme 5/5. Respirez profondément et calmement."
+      }
+    ],
+    guidance: {
+      start: "Bienvenue dans votre entraînement progressif. Nous allons évoluer ensemble du rythme 3/3 vers le 5/5 en trois étapes d'une minute chacune.",
+      inhale: ["Inspirez en douceur", "Accueillez l'air", "Respirez calmement"],
+      exhale: ["Expirez lentement", "Relâchez", "Soufflez doucement"],
+      phases: [
+        "Première minute : Rythme 3/3. Laissez votre corps s'habituer à cette respiration douce.",
+        "Deuxième minute : Rythme 4/4. Votre respiration s'approfondit naturellement.",
+        "Troisième minute : Rythme 5/5. Vous maîtrisez maintenant la respiration de cohérence cardiaque."
+      ],
+      end: "Excellent ! Vous avez progressé du rythme débutant 3/3 jusqu'au rythme de cohérence cardiaque 5/5. Votre capacité respiratoire s'améliore."
+    }
+  },
+
   scan: {
-    name: 'Scan Corporel',
+    name: 'SCAN CORPOREL',
     duration: 600, // 10 minutes
     description: 'Relaxation profonde guidée de tout le corps',
     // NOUVEAU : Rythme respiratoire spécifique pour relaxation profonde
@@ -119,6 +164,9 @@ export const defaultBreathingPatterns = {
   
   // NOUVEAU : Module enfants - RYTHME 4/4 EXPLICITE
   'kids': { inhale: 4, hold: 0, exhale: 4 },
+
+  // NOUVEAU : Module entraînement progressif - RYTHME INITIAL 3/3
+  'progressive': { inhale: 3, hold: 0, exhale: 3 },
   
   // Méditations - Rythme équilibré
   'meditation': { inhale: 5, hold: 0, exhale: 5 },
@@ -156,6 +204,16 @@ export const getBreathingPattern = (sessionId, coherenceRhythm = null) => {
         console.log(`✅ KIDS PATTERN CORRECT: 4/4`);
       } else {
         console.error(`❌ KIDS PATTERN INCORRECT:`, pattern);
+      }
+    }
+
+    // VÉRIFICATION SPÉCIALE POUR PROGRESSIVE
+    if (sessionId === 'progressive') {
+      console.log(`📈 VÉRIFICATION PROGRESSIVE: Pattern initial = ${pattern.inhale}/${pattern.exhale}`);
+      if (pattern.inhale === 3 && pattern.exhale === 3) {
+        console.log(`✅ PROGRESSIVE PATTERN INITIAL CORRECT: 3/3`);
+      } else {
+        console.error(`❌ PROGRESSIVE PATTERN INITIAL INCORRECT:`, pattern);
       }
     }
     
@@ -212,6 +270,19 @@ export const getBreathingPattern = (sessionId, coherenceRhythm = null) => {
       // FORCER LE PATTERN 4/4 POUR KIDS
       console.log(`🔧 CORRECTION FORCÉE POUR KIDS: 4/4`);
       return { inhale: 4, hold: 0, exhale: 4 };
+    }
+  }
+
+  // VÉRIFICATION FINALE POUR PROGRESSIVE
+  if (sessionId === 'progressive') {
+    console.log(`📈 VÉRIFICATION FINALE PROGRESSIVE: Pattern par défaut = ${defaultPattern.inhale}/${defaultPattern.exhale}`);
+    if (defaultPattern.inhale === 3 && defaultPattern.exhale === 3) {
+      console.log(`✅ PROGRESSIVE DEFAULT PATTERN CORRECT: 3/3`);
+    } else {
+      console.error(`❌ PROGRESSIVE DEFAULT PATTERN INCORRECT:`, defaultPattern);
+      // FORCER LE PATTERN 3/3 POUR PROGRESSIVE
+      console.log(`🔧 CORRECTION FORCÉE POUR PROGRESSIVE: 3/3`);
+      return { inhale: 3, hold: 0, exhale: 3 };
     }
   }
   
