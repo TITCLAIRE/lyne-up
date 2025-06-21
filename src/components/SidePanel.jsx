@@ -153,14 +153,20 @@ export const SidePanel = () => {
                   className="w-full p-2 bg-white/10 border border-white/20 rounded-lg text-white text-sm"
                 >
                   <option value="coherence">0.1 Hz - Cohérence</option>
-                  <option value="528hz">528 Hz - Amour & Guérison</option>
-                  <option value="432hz">432 Hz - Harmonie Naturelle</option>
                   <option value="396hz">396 Hz - Libération</option>
+                  <option value="432hz">432 Hz - Harmonie Naturelle</option>
+                  <option value="528hz">528 Hz - Amour & Guérison</option>
                   <option value="639hz">639 Hz - Relations</option>
-                  <option value="theta">Ondes Theta (4-8Hz)</option>
-                  <option value="alpha">Ondes Alpha (8-13Hz)</option>
-                  <option value="beta">Ondes Beta (13-30Hz)</option>
-                  <option value="delta">Ondes Delta (0.5-4Hz)</option>
+                  <option value="741hz">741 Hz - Éveil de l'Intuition</option>
+                  <option value="852hz">852 Hz - Retour à l'Ordre Spirituel</option>
+                  <option value="174hz">174 Hz - Fréquence de la Terre</option>
+                  <option value="285hz">285 Hz - Régénération Cellulaire</option>
+                  <option value="theta">Ondes Theta (4.5Hz)</option>
+                  <option value="theta6">Ondes Theta (6Hz)</option>
+                  <option value="theta783">Ondes Theta (7.83Hz)</option>
+                  <option value="alpha">Ondes Alpha (10Hz)</option>
+                  <option value="beta">Ondes Beta (14Hz)</option>
+                  <option value="delta">Ondes Delta (2Hz)</option>
                   <option value="gamma">Ondes Gamma (30-100Hz)</option>
                 </select>
                 <p className="text-xs text-white/50 mt-1">

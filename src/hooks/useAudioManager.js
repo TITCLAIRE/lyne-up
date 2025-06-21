@@ -3,33 +3,52 @@ import { useAppStore } from '../store/appStore';
 
 const frequencies = {
   coherence: { base: 256, beat: 0.1, name: 'Cohérence 0.1Hz' },
-  '528hz': { base: 528, beat: 6, name: 'Amour & Guérison 528Hz' },
-  '432hz': { base: 432, beat: 8, name: 'Harmonie Naturelle 432Hz' },
   '396hz': { base: 396, beat: 5, name: 'Libération 396Hz' },
+  '432hz': { base: 432, beat: 8, name: 'Harmonie Naturelle 432Hz' },
+  '528hz': { base: 528, beat: 6, name: 'Amour & Guérison 528Hz' },
   '639hz': { base: 639, beat: 7, name: 'Relations 639Hz' },
-  theta: { base: 200, beat: 4, name: 'Ondes Theta (4-8Hz)' },
-  alpha: { base: 300, beat: 10, name: 'Ondes Alpha (8-13Hz)' },
-  beta: { base: 400, beat: 20, name: 'Ondes Beta (13-30Hz)' },
-  delta: { base: 150, beat: 2, name: 'Ondes Delta (0.5-4Hz)' },
+  '741hz': { base: 741, beat: 9, name: 'Éveil de l\'Intuition 741Hz' },
+  '852hz': { base: 852, beat: 10, name: 'Retour à l\'Ordre Spirituel 852Hz' },
+  '174hz': { base: 174, beat: 3, name: 'Fréquence de la Terre 174Hz' },
+  '285hz': { base: 285, beat: 4, name: 'Régénération Cellulaire 285Hz' },
+  theta: { base: 200, beat: 4.5, name: 'Ondes Theta (4.5Hz)' },
+  theta6: { base: 200, beat: 6, name: 'Ondes Theta (6Hz)' },
+  theta783: { base: 200, beat: 7.83, name: 'Ondes Theta (7.83Hz)' },
+  alpha: { base: 300, beat: 10, name: 'Ondes Alpha (10Hz)' },
+  beta: { base: 400, beat: 14, name: 'Ondes Beta (14Hz)' },
+  delta: { base: 150, beat: 2, name: 'Ondes Delta (2Hz)' },
   gamma: { base: 500, beat: 40, name: 'Ondes Gamma (30-100Hz)' },
 };
 
 const sessionFrequencies = {
-  switch: 'theta',    // SWITCH : Theta pour relaxation rapide
-  reset: 'delta',     // RESET : Delta pour relaxation profonde et sommeil
-  kids: 'alpha',      // KIDS : Alpha pour calme et concentration enfants
-  scan: 'delta',      // Scan Corporel : Delta pour relaxation profonde
-  coherence: 'coherence', // Cohérence cardiaque : 0,1 Hz
-  // Méditations
-  gratitude: '528hz',     // Gratitude : 528 Hz
-  confidence: 'beta',     // Confiance en Soi : Beta
-  love: '639hz',          // Amour Universel : 639 Hz
-  abundance: '528hz',     // Abondance : 528 Hz
-  attraction: '432hz',    // Loi d'Attraction : 432 Hz
-  sleep: 'delta',         // Sommeil Profond : Delta
+  // COHÉRENCE CARDIAQUE INTÉGRATIVE
+  coherence: 'coherence',        // 0.1 Hz
+
+  // URGENCE & RÉALIGNEMENT
+  switch: '396hz',               // 396 Hz - Libération
+  reset: 'theta',                // Ondes Theta 4.5 Hz
+
+  // INITIATION & PERFECTIONNEMENT
+  progressive: 'alpha',          // Ondes Alpha 10 Hz (TRAINING)
+  free: '432hz',                 // 432 Hz - Harmonie Naturelle (SESSION LIBRE)
+
+  // ESPACE ENFANTS & SENIORS
+  kids: '528hz',                 // 528 Hz - Amour & Guérison
+  seniors: 'theta783',           // Ondes Theta 7.83 Hz
+
+  // VOYAGE INTÉRIEUR
+  scan: 'theta6',                // Ondes Theta 6 Hz (SCAN CORPOREL)
+
+  // MÉDITATIONS THÉMATIQUES
+  gratitude: '528hz',            // 528 Hz (amour/reconnaissance)
+  abundance: '639hz',            // 639 Hz (ouverture/connexion)
+  love: '528hz',                 // 528 Hz (évident)
+  attraction: '432hz',           // 432 Hz (alignement universel)
+  confidence: 'beta',            // Ondes Beta 14 Hz (affirmation/action)
+  sleep: 'delta',                // Ondes Delta 2 Hz (sommeil réparateur)
 };
 
-export const useAudioManager = () => {
+export const useAudioManager =  () => {
   const { audioSettings, currentSession, currentMeditation } = useAppStore();
   const audioContextRef = useRef(null);
   const oscillatorsRef = useRef(null);
