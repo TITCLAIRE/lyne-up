@@ -1,5 +1,5 @@
 import React from 'react';
-import { Heart, Target, Zap, Waves, Brain, Sparkles, Baby, RotateCcw, TrendingUp, Settings } from 'lucide-react';
+import { Heart, Target, Zap, Waves, Brain, Sparkles, Baby, RotateCcw, TrendingUp, Settings, Users } from 'lucide-react';
 import { useAppStore } from '../../store/appStore';
 
 // Sessions d'urgence et réalignement
@@ -8,15 +8,16 @@ const urgencyAndRealignmentSessions = [
   { id: 'reset', icon: RotateCcw, name: 'RESET', time: '3min', color: 'from-indigo-500 to-purple-500', baseline: 'Crise de calme & Insomnie' },
 ];
 
-// NOUVEAU : Sessions d'initiation et perfectionnement
+// Sessions d'initiation et perfectionnement
 const initiationAndPerfectionSessions = [
   { id: 'progressive', icon: TrendingUp, name: 'TRAINING', time: '3min', color: 'from-green-500 to-emerald-500', baseline: 'Progression 3/3 → 4/4 → 5/5' },
   { id: 'freeSessionSelection', icon: Settings, name: 'SESSION LIBRE', time: '3-20min', color: 'from-purple-500 to-pink-500', baseline: 'Rythme et durée personnalisables' },
 ];
 
-// NOUVEAU : Sessions pour enfants
-const kidsSessions = [
+// Sessions pour enfants et seniors
+const ageSpecificSessions = [
   { id: 'kids', icon: Baby, name: 'KIDS', time: '2min', color: 'from-pink-400 to-purple-400', baseline: 'Respiration magique pour les petits' },
+  { id: 'seniors', icon: Users, name: 'SENIORS +', time: '5min', color: 'from-blue-400 to-cyan-400', baseline: 'Relaxation & baisse de la tension' },
 ];
 
 // Sessions de voyage intérieur - NOMS EN CAPITALES
@@ -94,7 +95,7 @@ export const HomeScreen = () => {
         </div>
       </div>
 
-      {/* NOUVEAU : Section Initiation & Perfectionnement - TRAINING et SESSION LIBRE côte à côte */}
+      {/* Section Initiation & Perfectionnement - TRAINING et SESSION LIBRE côte à côte */}
       <div className="mb-8">
         <div className="flex items-baseline gap-3 mb-4">
           <h2 className="text-lg font-semibold flex items-center gap-2">
@@ -135,16 +136,16 @@ export const HomeScreen = () => {
         </div>
       </div>
 
-      {/* NOUVEAU : Section Espace Enfants */}
+      {/* Section Espace Enfants & Seniors - KIDS et SENIORS + côte à côte */}
       <div className="mb-8">
         <div className="flex items-baseline gap-3 mb-4">
           <h2 className="text-lg font-semibold flex items-center gap-2">
-            👶 Espace Enfants
+            👥 Espace Enfants & Seniors
           </h2>
-          <span className="text-sm text-white/60 italic">respiration magique</span>
+          <span className="text-sm text-white/60 italic">adaptés par âge</span>
         </div>
-        <div className="grid grid-cols-1 gap-3">
-          {kidsSessions.map((session) => {
+        <div className="grid grid-cols-2 gap-3">
+          {ageSpecificSessions.map((session) => {
             const Icon = session.icon;
             return (
               <div
@@ -152,18 +153,23 @@ export const HomeScreen = () => {
                 onClick={() => handleSessionClick(session.id)}
                 className="bg-white/8 border border-white/15 rounded-2xl p-4 cursor-pointer hover:bg-white/12 transition-all duration-200 hover:scale-[1.02]"
               >
-                <div className="flex items-center gap-4">
-                  <div className={`w-12 h-12 bg-gradient-to-r ${session.color} rounded-xl flex items-center justify-center`}>
-                    <Icon size={24} className="text-white" />
+                <div className="text-center">
+                  <div className={`w-10 h-10 bg-gradient-to-r ${session.color} rounded-xl flex items-center justify-center mx-auto mb-2`}>
+                    <Icon size={20} className="text-white" />
                   </div>
-                  <div className="flex-1">
-                    <h3 className="font-medium text-lg mb-1">{session.name}</h3>
-                    <p className="text-sm text-white/60 mb-1">{session.time}</p>
-                    <p className="text-sm text-white/50 italic">{session.baseline}</p>
+                  <h3 className="font-medium text-sm mb-1">{session.name}</h3>
+                  <p className="text-xs text-white/60 mb-1">{session.time}</p>
+                  <p className="text-xs text-white/50 italic">{session.baseline}</p>
+                  {session.id === 'kids' && (
                     <div className="text-xs text-pink-300 mt-1">
                       🫁 Rythme 4/4 • Adapté aux enfants
                     </div>
-                  </div>
+                  )}
+                  {session.id === 'seniors' && (
+                    <div className="text-xs text-cyan-300 mt-1">
+                      🫁 Rythme 3/4 • Adapté aux seniors
+                    </div>
+                  )}
                 </div>
               </div>
             );

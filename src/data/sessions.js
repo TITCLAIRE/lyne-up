@@ -50,31 +50,6 @@ export const sessions = {
     }
   },
 
-  // NOUVEAU : Module KIDS pour les enfants - RYTHME 4/4 GARANTI
-  kids: {
-    name: 'KIDS',
-    duration: 120, // 2 minutes - Durée adaptée aux enfants
-    description: 'Respiration magique pour les petits',
-    // RYTHME 4/4 EXPLICITE ET GARANTI
-    breathingPattern: {
-      inhale: 4,  // 4 secondes inspiration
-      hold: 0,   // Pas de pause pour les enfants
-      exhale: 4  // 4 secondes expiration
-    },
-    guidance: {
-      start: "Salut petit champion ! On va faire de la respiration magique ensemble. Assieds-toi confortablement comme un petit bouddha.",
-      inhale: ["Inspire comme un ballon qui se gonfle", "Respire l'air magique", "Gonfle ton ventre comme un ballon"],
-      exhale: ["Souffle doucement comme le vent", "Laisse sortir l'air magique", "Dégonfle ton ballon tout doucement"],
-      phases: [
-        "Imagine que tu es un arbre avec des racines qui poussent dans le sol. Tu es fort et stable !",
-        "Maintenant tu es un nuage léger qui flotte dans le ciel. Tout ton corps devient tout doux.",
-        "Tu es un petit chat qui s'étire et qui se détend. Tes muscles deviennent tout mous.",
-        "Bravo ! Tu es maintenant calme et détendu comme un petit koala qui fait la sieste."
-      ],
-      end: "Super ! Tu as fait de la vraie magie avec ta respiration. Tu peux être fier de toi, petit champion !"
-    }
-  },
-
   // NOUVEAU : Module ENTRAÎNEMENT PROGRESSIF
   progressive: {
     name: 'ENTRAÎNEMENT PROGRESSIF',
@@ -144,6 +119,57 @@ export const sessions = {
     }
   },
 
+  // NOUVEAU : Module KIDS pour les enfants - RYTHME 4/4 GARANTI
+  kids: {
+    name: 'KIDS',
+    duration: 120, // 2 minutes - Durée adaptée aux enfants
+    description: 'Respiration magique pour les petits',
+    // RYTHME 4/4 EXPLICITE ET GARANTI
+    breathingPattern: {
+      inhale: 4,  // 4 secondes inspiration
+      hold: 0,   // Pas de pause pour les enfants
+      exhale: 4  // 4 secondes expiration
+    },
+    guidance: {
+      start: "Salut petit champion ! On va faire de la respiration magique ensemble. Assieds-toi confortablement comme un petit bouddha.",
+      inhale: ["Inspire comme un ballon qui se gonfle", "Respire l'air magique", "Gonfle ton ventre comme un ballon"],
+      exhale: ["Souffle doucement comme le vent", "Laisse sortir l'air magique", "Dégonfle ton ballon tout doucement"],
+      phases: [
+        "Imagine que tu es un arbre avec des racines qui poussent dans le sol. Tu es fort et stable !",
+        "Maintenant tu es un nuage léger qui flotte dans le ciel. Tout ton corps devient tout doux.",
+        "Tu es un petit chat qui s'étire et qui se détend. Tes muscles deviennent tout mous.",
+        "Bravo ! Tu es maintenant calme et détendu comme un petit koala qui fait la sieste."
+      ],
+      end: "Super ! Tu as fait de la vraie magie avec ta respiration. Tu peux être fier de toi, petit champion !"
+    }
+  },
+
+  // NOUVEAU : Module SENIORS + pour les plus de 70 ans - RYTHME 3/4
+  seniors: {
+    name: 'SENIORS +',
+    duration: 300, // 5 minutes
+    description: 'Relaxation & baisse de la tension',
+    // RYTHME 3/4 SPÉCIALEMENT ADAPTÉ AUX SENIORS
+    breathingPattern: {
+      inhale: 3,  // 3 secondes inspiration (plus doux)
+      hold: 0,   // Pas de pause pour éviter l'effort
+      exhale: 4  // 4 secondes expiration (favorise la relaxation)
+    },
+    guidance: {
+      start: "Bienvenue dans votre session de relaxation adaptée. Installez-vous confortablement dans votre fauteuil. Cette respiration douce va vous aider à vous détendre et à faire baisser votre tension.",
+      inhale: ["Inspirez doucement par le nez", "Accueillez l'air frais", "Respirez calmement"],
+      exhale: ["Expirez lentement par la bouche", "Relâchez toutes les tensions", "Soufflez en douceur"],
+      phases: [
+        "Cette respiration 3/4 est parfaitement adaptée à votre rythme. Laissez votre corps se détendre naturellement.",
+        "Votre tension artérielle commence à diminuer. Votre cœur bat plus calmement.",
+        "Vos muscles se relâchent progressivement. Vous vous sentez de plus en plus détendu.",
+        "Cette respiration apaise votre système nerveux. Vous retrouvez votre sérénité.",
+        "Continuez à respirer à ce rythme paisible. Votre corps vous remercie pour cette pause bienfaisante."
+      ],
+      end: "Excellent ! Vous avez pris soin de votre bien-être. Cette respiration douce peut être pratiquée à tout moment pour vous détendre et faire baisser votre tension."
+    }
+  },
+
   scan: {
     name: 'SCAN CORPOREL',
     duration: 600, // 10 minutes
@@ -189,6 +215,9 @@ export const defaultBreathingPatterns = {
   // NOUVEAU : Module enfants - RYTHME 4/4 EXPLICITE
   'kids': { inhale: 4, hold: 0, exhale: 4 },
 
+  // NOUVEAU : Module seniors - RYTHME 3/4 EXPLICITE
+  'seniors': { inhale: 3, hold: 0, exhale: 4 },
+
   // NOUVEAU : Module entraînement progressif - RYTHME INITIAL 3/3
   'progressive': { inhale: 3, hold: 0, exhale: 3 },
 
@@ -231,6 +260,16 @@ export const getBreathingPattern = (sessionId, coherenceRhythm = null) => {
         console.log(`✅ KIDS PATTERN CORRECT: 4/4`);
       } else {
         console.error(`❌ KIDS PATTERN INCORRECT:`, pattern);
+      }
+    }
+
+    // VÉRIFICATION SPÉCIALE POUR SENIORS
+    if (sessionId === 'seniors') {
+      console.log(`👴 VÉRIFICATION SENIORS: Pattern = ${pattern.inhale}/${pattern.exhale}`);
+      if (pattern.inhale === 3 && pattern.exhale === 4) {
+        console.log(`✅ SENIORS PATTERN CORRECT: 3/4`);
+      } else {
+        console.error(`❌ SENIORS PATTERN INCORRECT:`, pattern);
       }
     }
 
@@ -297,6 +336,19 @@ export const getBreathingPattern = (sessionId, coherenceRhythm = null) => {
       // FORCER LE PATTERN 4/4 POUR KIDS
       console.log(`🔧 CORRECTION FORCÉE POUR KIDS: 4/4`);
       return { inhale: 4, hold: 0, exhale: 4 };
+    }
+  }
+
+  // VÉRIFICATION FINALE POUR SENIORS
+  if (sessionId === 'seniors') {
+    console.log(`👴 VÉRIFICATION FINALE SENIORS: Pattern par défaut = ${defaultPattern.inhale}/${defaultPattern.exhale}`);
+    if (defaultPattern.inhale === 3 && defaultPattern.exhale === 4) {
+      console.log(`✅ SENIORS DEFAULT PATTERN CORRECT: 3/4`);
+    } else {
+      console.error(`❌ SENIORS DEFAULT PATTERN INCORRECT:`, defaultPattern);
+      // FORCER LE PATTERN 3/4 POUR SENIORS
+      console.log(`🔧 CORRECTION FORCÉE POUR SENIORS: 3/4`);
+      return { inhale: 3, hold: 0, exhale: 4 };
     }
   }
 

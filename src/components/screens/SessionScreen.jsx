@@ -147,13 +147,15 @@ export const SessionScreen = () => {
     if (timeRemaining === 0 && isSessionActive && !sessionEnded) {
       setSessionEnded(true);
       
-      // Message de fin adapté aux enfants, RESET et PROGRESSIVE
+      // Message de fin adapté aux enfants, RESET, PROGRESSIVE et SENIORS
       if (currentSession === 'kids') {
         speak("Super ! Tu as fait de la vraie magie avec ta respiration. Tu peux être fier de toi, petit champion !");
       } else if (currentSession === 'reset') {
         speak("Magnifique. Votre système nerveux est maintenant apaisé. Cette technique 4-7-8 peut être utilisée à tout moment pour retrouver instantanément le calme.");
       } else if (currentSession === 'progressive') {
         speak("Excellent ! Vous avez progressé du rythme débutant 3/3 jusqu'au rythme de cohérence cardiaque 5/5. Votre capacité respiratoire s'améliore.");
+      } else if (currentSession === 'seniors') {
+        speak("Excellent ! Vous avez pris soin de votre bien-être. Cette respiration douce peut être pratiquée à tout moment pour vous détendre et faire baisser votre tension.");
       } else {
         speak("Session terminée. Félicitations pour cette pratique.");
       }
@@ -410,6 +412,25 @@ export const SessionScreen = () => {
           </div>
         )}
 
+        {/* NOUVEAU : Indicateur spécial pour SENIORS - RYTHME 3/4 */}
+        {currentSession === 'seniors' && (
+          <div className="bg-cyan-500/20 border border-cyan-500/30 rounded-lg p-3 mb-4">
+            <p className="text-sm text-cyan-200 mb-2">
+              👴 <strong>MODULE SENIORS + - RYTHME 3/4 :</strong>
+            </p>
+            <div className="text-xs text-cyan-100/80 space-y-1">
+              <div>🫁 <strong>Inspiration :</strong> 3 secondes (doux et naturel)</div>
+              <div>💨 <strong>Expiration :</strong> 4 secondes (favorise la relaxation)</div>
+              <div>💖 <strong>Effet :</strong> Baisse de la tension artérielle</div>
+              <div>🎯 <strong>Usage :</strong> Relaxation adaptée aux seniors</div>
+              <div>🧘 <strong>Durée :</strong> 5 minutes de bien-être</div>
+              <div className="mt-2 text-yellow-200">
+                ✨ <strong>RESPIRATION ADAPTÉE AUX SENIORS</strong>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Indication importante sur les écouteurs */}
         <div className="bg-blue-500/20 border border-blue-500/30 rounded-xl p-3 mb-4 flex items-start gap-3">
           <Headphones size={20} className="text-blue-400 mt-0.5 flex-shrink-0" />
@@ -422,6 +443,8 @@ export const SessionScreen = () => {
                 ? "Pour une efficacité maximale de la technique 4-7-8, utilisez des écouteurs pour une immersion complète."
                 : currentSession === 'progressive'
                 ? "L'entraînement progressif est plus efficace avec des écouteurs pour bien entendre les changements de rythme."
+                : currentSession === 'seniors'
+                ? "Pour une relaxation optimale et une meilleure baisse de tension, utilisez des écouteurs pour une immersion complète."
                 : "Les sons binauraux nécessitent impérativement l'utilisation d'écouteurs stéréo pour créer l'effet de battement binaural entre les deux oreilles."
               }
             </p>
@@ -458,6 +481,17 @@ export const SessionScreen = () => {
         <div className="text-sm text-white/60 mt-2">
           Progression : {Math.round(progress)}%
         </div>
+        
+        {/* Debug pour SOS Stress */}
+        {currentSession === 'switch' && isSessionActive && (
+          <div className="mt-2 text-xs text-white/50 bg-black/20 rounded-lg p-2">
+            <div>Temps écoulé : {(sessionData?.duration || 90) - timeRemaining}s</div>
+            <div>Phase respiration : {breathingState.phase}</div>
+            <div className="text-green-300 mt-1">
+              ✅ Système vocal : TIMINGS CORRIGÉS
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Contrôles */}
@@ -474,6 +508,8 @@ export const SessionScreen = () => {
                 ? 'bg-gradient-to-r from-indigo-500 to-purple-500 text-white hover:from-indigo-600 hover:to-purple-600'
                 : currentSession === 'progressive'
                 ? 'bg-gradient-to-r from-green-500 to-emerald-500 text-white hover:from-green-600 hover:to-emerald-600'
+                : currentSession === 'seniors'
+                ? 'bg-gradient-to-r from-blue-400 to-cyan-500 text-white hover:from-blue-500 hover:to-cyan-600'
                 : 'bg-gradient-to-r from-blue-500 to-cyan-500 text-white hover:from-blue-600 hover:to-cyan-600'
           }`}
         >
@@ -486,6 +522,7 @@ export const SessionScreen = () => {
                 currentSession === 'kids' ? 'C\'est parti !' : 
                 currentSession === 'reset' ? 'Commencer RESET' : 
                 currentSession === 'progressive' ? 'Commencer l\'entraînement' :
+                currentSession === 'seniors' ? 'Commencer SENIORS +' :
                 'Commencer'
               )}
             </>
