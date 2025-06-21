@@ -41,7 +41,6 @@ export const SidePanel = () => {
 
   const handleVoiceGenderChange = (gender) => {
     updateVoiceSettings({ gender });
-    console.log(`🔄 Changement de voix vers: ${gender === 'female' ? 'Claire (premium)' : 'Thierry (premium)'}`);
   };
 
   return (
@@ -197,14 +196,6 @@ export const SidePanel = () => {
                 </button>
               </div>
 
-              {/* Statut des voix premium */}
-              <div className="bg-purple-500/20 border border-purple-500/30 rounded-lg p-3">
-                <div className="font-semibold mb-1 text-purple-200">🎵 Voix Premium Activées</div>
-                <div className="text-xs text-purple-100/80">
-                  Fichiers MP3 premium • Latence zéro • Fallback synthèse automatique
-                </div>
-              </div>
-
               <div>
                 <label className="block text-sm text-white/70 mb-2">Choix de la voix premium</label>
                 <div className="flex gap-2">
@@ -219,7 +210,6 @@ export const SidePanel = () => {
                     <div className="text-lg mb-1">🎵</div>
                     <div className="font-semibold">Claire</div>
                     <div className="text-xs text-white/70 mt-1">Voix Premium</div>
-                    <div className="text-xs text-pink-300 mt-1">/female/</div>
                   </button>
                   <button
                     onClick={() => handleVoiceGenderChange('male')}
@@ -232,7 +222,6 @@ export const SidePanel = () => {
                     <div className="text-lg mb-1">🎵</div>
                     <div className="font-semibold">Thierry</div>
                     <div className="text-xs text-white/70 mt-1">Voix Premium</div>
-                    <div className="text-xs text-blue-300 mt-1">/male/</div>
                   </button>
                 </div>
               </div>
@@ -254,20 +243,6 @@ export const SidePanel = () => {
                   {voiceSettings.volume >= 0.6 && voiceSettings.volume <= 0.7 && 
                     <span className="text-green-400 ml-1">✓ Optimal</span>
                   }
-                </div>
-              </div>
-
-              {/* Structure des fichiers premium */}
-              <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-3">
-                <p className="text-xs text-blue-200 mb-2">
-                  📁 <strong>Structure des fichiers premium :</strong>
-                </p>
-                <div className="text-xs text-blue-100/80 space-y-1 font-mono">
-                  <div>/audio/sos-stress/female/ → Claire</div>
-                  <div>/audio/sos-stress/male/ → Thierry</div>
-                  <div className="mt-2 text-yellow-200">
-                    ⚡ <strong>9 fichiers MP3 par voix</strong>
-                  </div>
                 </div>
               </div>
 
