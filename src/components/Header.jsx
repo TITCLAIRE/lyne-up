@@ -10,8 +10,8 @@ export const Header = () => {
       <div className="flex items-center gap-4 flex-1 min-w-0">
         <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 overflow-hidden bg-white/10 backdrop-blur-sm border border-white/20">
           <img 
-            src="/assets/logo.png" 
-            alt="Logo" 
+            src="/assets/ChatGPT Image 21 juin 2025, 18_14_03.png" 
+            alt="Instant Opportun Logo" 
             className="w-10 h-10 object-contain"
             onError={(e) => {
               const target = e.target;
@@ -26,14 +26,11 @@ export const Header = () => {
         </div>
         <div className="min-w-0 flex-1">
           <h1 className="text-2xl font-bold bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent truncate">
-            Lyne-Up
+            Instant Opportun
           </h1>
           <div className="flex flex-col">
-            <p className="text-xs text-white/70 truncate">
-              By L'Instant Opportun
-            </p>
             <p className="text-sm text-white/70 truncate">
-              Cohérence cardiaque intégrative
+              Cohérence Cardiaque Intégrative
             </p>
           </div>
         </div>

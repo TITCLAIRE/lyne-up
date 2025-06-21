@@ -98,8 +98,8 @@ export const CoherenceSessionScreen = () => {
         <div className="flex items-center justify-center gap-4 mb-4">
           <div className="w-12 h-12 rounded-xl flex items-center justify-center overflow-hidden bg-white/10 backdrop-blur-sm border border-white/20">
             <img 
-              src="/assets/logo.png" 
-              alt="Lyne-Up Logo" 
+              src="/assets/ChatGPT Image 21 juin 2025, 18_14_03.png" 
+              alt="Instant Opportun Logo" 
               className="w-10 h-10 object-contain"
               onError={(e) => {
                 const target = e.target;

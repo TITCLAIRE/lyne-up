@@ -1,19 +1,21 @@
-# 🧘‍♀️ Instant Opportun - Cohérence Cardiaque
+# 🧘‍♀️ Instant Opportun - Cohérence Cardiaque Intégrative
 
 Application web de cohérence cardiaque intégrative avec guidage vocal premium et sons binauraux thérapeutiques.
 
 ## ✨ Fonctionnalités
 
 ### 🎯 Sessions Guidées
-- **SOS Stress** (1min 30s) - Ancrage d'urgence avec timings parfaits
-- **Boost Focus** (3min) - Concentration laser optimisée
-- **Récup Express** (5min) - Régénération profonde
-- **Transition Fluide** (3min) - Navigation des changements
-- **Scan Corporel** (10min) - Relaxation profonde guidée
+- **SWITCH** (1min 45s) - Sérénité express avec timings parfaits
+- **RESET** (3min) - Technique 4/7/8 pour crise de calme et insomnie
+- **TRAINING** (3min) - Entraînement progressif 3/3 → 4/4 → 5/5
+- **SESSION LIBRE** (3-20min) - Rythme et durée personnalisables
+- **KIDS** (2min) - Respiration magique pour les enfants
+- **SENIORS +** (5min) - Relaxation adaptée aux seniors
+- **SCAN CORPOREL** (10min) - Relaxation profonde guidée
 
-### 💖 Cohérence Cardiaque
+### 💖 Cohérence Cardiaque Intégrative
 - Sessions de **3, 5 ou 15 minutes**
-- Rythmes **5/5** et **4/6** respiratoires
+- Rythmes respiratoires multiples : **5/5, 4/6, 4/4, 4/7/8, 6/2/6, 3/3/3**
 - Synchronisation parfaite avec guidage vocal
 - Fréquence **0.1Hz** optimale pour la cohérence
 
@@ -26,14 +28,14 @@ Application web de cohérence cardiaque intégrative avec guidage vocal premium 
 - **Sommeil Profond** - Préparez-vous au repos
 
 ### 🎤 Guidage Vocal Premium
-- **ElevenLabs** : Voix ultra-naturelles (Sarah & Josh)
-- **Voix système** : Fallback automatique
+- **Voix enregistrées** : Claire (féminine) & Thierry (masculine)
+- **Fallback intelligent** : Synthèse vocale française
 - **Synchronisation parfaite** avec la respiration
 - **Messages personnalisés** selon la session
 
 ### 🎵 Sons Thérapeutiques
 - **Sons binauraux** avec écouteurs stéréo
-- **Fréquences spécifiques** : 0.1Hz, 528Hz, 432Hz, etc.
+- **Fréquences spécifiques** : 0.1Hz, 396Hz, 432Hz, 528Hz, 639Hz, etc.
 - **Gong respiratoire** synchronisé
 - **Volumes optimisés** : Sons 20-30%, Voix 60-70%, Gong 10-20%
 
@@ -41,13 +43,12 @@ Application web de cohérence cardiaque intégrative avec guidage vocal premium 
 - **Design moderne** et intuitif
 - **PWA** installable comme app native
 - **Responsive** mobile et desktop
-- **Mode caméra** pour détection cardiaque (optionnel)
+- **Logo Instant Opportun** intégré
 
 ## 🚀 Déploiement
 
 ### Prérequis
 - Node.js 18+ et npm 9+
-- Compte [ElevenLabs](https://elevenlabs.io) (optionnel pour voix premium)
 
 ### Installation locale
 
@@ -59,23 +60,9 @@ cd instant-opportun
 # Installer les dépendances
 npm install
 
-# Configurer ElevenLabs (optionnel)
-cp .env.example .env
-# Éditer .env avec votre clé API ElevenLabs
-
 # Lancer en développement
 npm run dev
 ```
-
-### Configuration ElevenLabs
-
-1. **Créer un compte** sur [elevenlabs.io](https://elevenlabs.io) (gratuit)
-2. **Obtenir la clé API** : Settings → API Keys → Generate API Key
-3. **Ajouter dans .env** :
-   ```env
-   VITE_ELEVENLABS_API_KEY=sk_votre_cle_api_ici
-   ```
-4. **Redémarrer** l'application
 
 ### Déploiement Netlify
 
@@ -86,28 +73,24 @@ npm run dev
    - Build command: `npm run build`
    - Publish directory: `dist`
 
-3. **Variables d'environnement Netlify** :
-   - Site settings → Environment variables
-   - Ajouter : `VITE_ELEVENLABS_API_KEY` = votre clé API
-
-4. **Déployer** : Trigger deploy → Deploy site
+3. **Déployer** : Trigger deploy → Deploy site
 
 ## 🎯 Utilisation
 
 ### Sessions Rapides
-- **SOS Stress** : Ancrage immédiat en 90 secondes
-- **Focus** : Concentration optimale en 3 minutes
-- **Récup** : Recharge énergétique en 5 minutes
+- **SWITCH** : Sérénité express en 1min 45s
+- **RESET** : Technique 4/7/8 pour crise de calme
+- **TRAINING** : Entraînement progressif respiratoire
 
 ### Cohérence Cardiaque
-- Choisir durée (3/5/15 min) et rythme (5/5 ou 4/6)
+- Choisir durée (3/5/15 min) et rythme respiratoire
 - Suivre le guide respiratoire visuel
 - Écouter le guidage vocal synchronisé
 
-### Méditations
-- Sélectionner un thème selon vos besoins
-- Sessions de 5 à 10 minutes
-- Guidage vocal adapté au thème
+### Sessions Spécialisées
+- **KIDS** : Respiration magique adaptée aux enfants
+- **SENIORS +** : Relaxation douce pour les seniors
+- **SESSION LIBRE** : Personnalisation complète du rythme
 
 ### Paramètres Audio
 - **Sons binauraux** : Utiliser des écouteurs stéréo
@@ -116,37 +99,36 @@ npm run dev
 
 ## 🔧 Technologies
 
-- **React 18** + TypeScript
+- **React 18** + JavaScript
 - **Tailwind CSS** pour le design
 - **Zustand** pour la gestion d'état
-- **ElevenLabs API** pour la synthèse vocale premium
 - **Web Audio API** pour les sons binauraux
-- **MediaDevices API** pour la détection cardiaque
+- **Speech Synthesis API** pour les voix
 
 ## 📊 Fonctionnalités Avancées
 
-### Détection Biométrique
-- **Mode caméra** : Détection réelle du rythme cardiaque
-- **Mode simulation** : Affichage fixe pour démonstration
-- **Métriques** : FC, HRV, Cohérence, Rythme respiratoire
+### Voix Premium
+- **Fichiers audio enregistrés** : Claire & Thierry
+- **Fallback intelligent** : Synthèse vocale française
+- **Système hybride** : Premium + synthèse selon disponibilité
 
 ### PWA (Progressive Web App)
 - **Installation** sur écran d'accueil
 - **Mode hors-ligne** partiel
-- **Notifications** (futures versions)
+- **Interface native** sur mobile
 
 ### Optimisations
-- **Timings parfaits** pour SOS Stress
+- **Timings parfaits** pour toutes les sessions
 - **Synchronisation** voix/respiration
-- **Fallback automatique** si problème API
-- **Cache intelligent** des audios générés
+- **Fallback automatique** si problème
+- **Cache intelligent** des audios
 
 ## 🎵 Fréquences Thérapeutiques
 
 - **0.1 Hz** : Cohérence cardiaque optimale
-- **528 Hz** : Fréquence de l'amour et de la guérison
-- **432 Hz** : Harmonie naturelle
 - **396 Hz** : Libération des peurs
+- **432 Hz** : Harmonie naturelle
+- **528 Hz** : Fréquence de l'amour et de la guérison
 - **639 Hz** : Relations harmonieuses
 - **Ondes Theta/Alpha/Beta/Delta** : États de conscience
 
@@ -162,18 +144,15 @@ npm run dev
 - **Navigateurs** : Chrome, Firefox, Safari, Edge
 - **Mobiles** : iOS 12+, Android 8+
 - **Écouteurs** : Obligatoires pour sons binauraux
-- **Caméra** : Optionnelle pour détection cardiaque
 
 ## 🆘 Support
 
 ### Problèmes Courants
 - **Pas de son** : Vérifier autorisations navigateur
-- **ElevenLabs** : Vérifier clé API et quota
-- **Caméra** : Autoriser accès et utiliser lampe torche
+- **Voix** : Vérifier fichiers audio ou synthèse vocale
 
 ### Contact
 - **Issues** : [GitHub Issues](https://github.com/votre-username/instant-opportun/issues)
-- **Documentation** : [ElevenLabs Docs](https://docs.elevenlabs.io/)
 
 ## 📄 Licence
 
