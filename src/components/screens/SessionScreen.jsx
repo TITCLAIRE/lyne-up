@@ -57,6 +57,22 @@ export const SessionScreen = () => {
 
   const sessionData = getSessionData();
 
+  // Obtenir l'icône de session depuis la page d'accueil
+  const getSessionIcon = () => {
+    const sessionIcons = {
+      switch: '🎯',
+      reset: '🔄', 
+      progressive: '📈',
+      freeSessionSelection: '⚙️',
+      kids: '👶',
+      seniors: '👥',
+      scan: '🧠',
+      meditation: '✨'
+    };
+    
+    return sessionIcons[currentSession] || '🧘‍♀️';
+  };
+
   // Obtenir le pattern respiratoire
   const getCurrentBreathingPattern = () => {
     if (currentSession === 'coherence') {
@@ -248,20 +264,7 @@ export const SessionScreen = () => {
       <div className="text-center mb-6">
         <div className="flex items-center justify-center gap-4 mb-4">
           <div className="w-12 h-12 rounded-xl flex items-center justify-center overflow-hidden bg-white/10 backdrop-blur-sm border border-white/20">
-            <img 
-              src="/assets/ChatGPT Image 21 juin 2025, 18_14_03.png" 
-              alt="Instant Opportun Logo" 
-              className="w-10 h-10 object-contain"
-              onError={(e) => {
-                const target = e.target;
-                target.style.display = 'none';
-                const parent = target.parentElement;
-                if (parent) {
-                  parent.innerHTML = '<span class="text-2xl">🧘‍♀️</span>';
-                  parent.classList.add('bg-gradient-to-br', 'from-cyan-400', 'to-purple-500');
-                }
-              }}
-            />
+            <span className="text-2xl">{getSessionIcon()}</span>
           </div>
           <div>
             <h1 className="text-2xl font-bold">{sessionData.name}</h1>
