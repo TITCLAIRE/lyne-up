@@ -33,9 +33,10 @@ export const SessionScreen = () => {
   // NOUVEAU : État pour le debug du pattern respiratoire
   const [debugPattern, setDebugPattern] = useState(null);
 
-  // NOUVEAU : État pour l'entraînement progressif
+  // NOUVEAU : État pour l'entraînement progressif - CORRIGÉ
   const [currentProgressivePhase, setCurrentProgressivePhase] = useState(0);
   const [progressivePhaseChanged, setProgressivePhaseChanged] = useState(false);
+  const [lastProgressiveCheck, setLastProgressiveCheck] = useState(0);
 
   // Obtenir les données de session selon le type
   const getSessionData = () => {
@@ -74,39 +75,62 @@ export const SessionScreen = () => {
     }
   };
 
-  // NOUVEAU : Gestion de l'entraînement progressif
+  // NOUVEAU : Gestion de l'entraînement progressif - LOGIQUE CORRIGÉE
   useEffect(() => {
     if (currentSession === 'progressive' && isSessionActive && sessions.progressive?.progressivePhases) {
-      const elapsedTime = (sessionData?.duration || 180) - timeRemaining;
+      const totalDuration = sessionData?.duration || 180;
+      const elapsedTime = totalDuration - timeRemaining;
       const phases = sessions.progressive.progressivePhases;
       
-      // Trouver la phase actuelle
-      const currentPhase = phases.findIndex(phase => 
-        elapsedTime >= phase.startTime && elapsedTime < phase.endTime
-      );
+      console.log(`📈 PROGRESSIVE CHECK: Temps écoulé=${elapsedTime}s, Phase actuelle=${currentProgressivePhase}`);
       
-      if (currentPhase !== -1 && currentPhase !== currentProgressivePhase) {
-        console.log(`📈 PROGRESSION: Passage à la phase ${currentPhase + 1}/${phases.length}`);
-        console.log(`📈 Nouveau pattern:`, phases[currentPhase].pattern);
+      // Éviter les vérifications trop fréquentes
+      if (Math.abs(elapsedTime - lastProgressiveCheck) < 2) {
+        return;
+      }
+      setLastProgressiveCheck(elapsedTime);
+      
+      // Trouver la phase actuelle basée sur le temps écoulé
+      let newPhaseIndex = -1;
+      for (let i = 0; i < phases.length; i++) {
+        if (elapsedTime >= phases[i].startTime && elapsedTime < phases[i].endTime) {
+          newPhaseIndex = i;
+          break;
+        }
+      }
+      
+      console.log(`📈 PHASE CALCULÉE: ${newPhaseIndex} (temps: ${elapsedTime}s)`);
+      
+      // Si on a trouvé une nouvelle phase différente de l'actuelle
+      if (newPhaseIndex !== -1 && newPhaseIndex !== currentProgressivePhase) {
+        const newPhase = phases[newPhaseIndex];
+        console.log(`📈 CHANGEMENT DE PHASE: ${currentProgressivePhase} → ${newPhaseIndex}`);
+        console.log(`📈 Nouveau pattern:`, newPhase.pattern);
+        console.log(`📈 Timing: ${newPhase.startTime}s-${newPhase.endTime}s`);
         
-        setCurrentProgressivePhase(currentPhase);
+        setCurrentProgressivePhase(newPhaseIndex);
         setProgressivePhaseChanged(true);
         
-        // Changer le pattern respiratoire
-        const newPattern = phases[currentPhase].pattern;
-        console.log(`🫁 CHANGEMENT PATTERN PROGRESSIF:`, newPattern);
-        startBreathing(newPattern);
+        // Changer le pattern respiratoire IMMÉDIATEMENT
+        const newPattern = newPhase.pattern;
+        console.log(`🫁 APPLICATION NOUVEAU PATTERN:`, newPattern);
+        
+        // Arrêter l'ancienne animation et démarrer la nouvelle
+        stopBreathing();
+        setTimeout(() => {
+          startBreathing(newPattern);
+          setDebugPattern(newPattern);
+        }, 100);
         
         // Annoncer le changement
-        if (voiceSettings.enabled && phases[currentPhase].announcement) {
-          speak(phases[currentPhase].announcement);
+        if (voiceSettings.enabled && newPhase.announcement) {
+          setTimeout(() => {
+            speak(newPhase.announcement);
+          }, 500);
         }
-        
-        // Mettre à jour le debug pattern
-        setDebugPattern(newPattern);
       }
     }
-  }, [timeRemaining, currentSession, isSessionActive, currentProgressivePhase, voiceSettings.enabled, speak, startBreathing, sessionData?.duration]);
+  }, [timeRemaining, currentSession, isSessionActive, currentProgressivePhase, voiceSettings.enabled, speak, startBreathing, stopBreathing, sessionData?.duration, lastProgressiveCheck]);
 
   // Gérer les changements de phase pour le gong SEULEMENT
   useEffect(() => {
@@ -172,6 +196,8 @@ export const SessionScreen = () => {
       if (currentSession === 'progressive') {
         setCurrentProgressivePhase(0);
         setProgressivePhaseChanged(false);
+        setLastProgressiveCheck(0);
+        console.log('📈 RESET ENTRAÎNEMENT PROGRESSIF - Phase 0 (3/3)');
       }
       
       // Démarrer l'audio avec la fréquence par défaut de la session
@@ -206,6 +232,7 @@ export const SessionScreen = () => {
       if (currentSession === 'progressive') {
         setCurrentProgressivePhase(0);
         setProgressivePhaseChanged(false);
+        setLastProgressiveCheck(0);
       }
     }
   };
@@ -229,6 +256,7 @@ export const SessionScreen = () => {
     if (currentSession === 'progressive') {
       setCurrentProgressivePhase(0);
       setProgressivePhaseChanged(false);
+      setLastProgressiveCheck(0);
     }
     
     setCurrentScreen('home');
@@ -319,7 +347,7 @@ export const SessionScreen = () => {
           </div>
         )}
 
-        {/* NOUVEAU : Indicateur spécial pour ENTRAÎNEMENT PROGRESSIF */}
+        {/* NOUVEAU : Indicateur spécial pour ENTRAÎNEMENT PROGRESSIF - CORRIGÉ */}
         {currentSession === 'progressive' && (
           <div className="bg-green-500/20 border border-green-500/30 rounded-lg p-3 mb-4">
             <p className="text-sm text-green-200 mb-2">
@@ -331,12 +359,13 @@ export const SessionScreen = () => {
                 currentProgressivePhase === 1 ? 'Rythme 4/4 (Intermédiaire)' :
                 'Rythme 5/5 (Cohérence cardiaque)'
               }</div>
-              <div>⏱️ <strong>Progression :</strong> 
+              <div>⏱️ <strong>Timing :</strong> 
                 {currentProgressivePhase === 0 && ' 0-60s : Apprentissage doux'}
                 {currentProgressivePhase === 1 && ' 60-120s : Approfondissement'}
                 {currentProgressivePhase === 2 && ' 120-180s : Maîtrise'}
               </div>
-              <div>🫁 <strong>Rythme actuel :</strong> {debugPattern?.inhale || 3}/{debugPattern?.exhale || 3}</div>
+              <div>🫁 <strong>Rythme actuel :</strong> {breathingState.inhaleTime || debugPattern?.inhale || 3}/{breathingState.exhaleTime || debugPattern?.exhale || 3}</div>
+              <div>⏰ <strong>Temps écoulé :</strong> {(sessionData?.duration || 180) - timeRemaining}s</div>
               <div className="mt-2 text-yellow-200">
                 ✨ <strong>PROGRESSION AUTOMATIQUE ACTIVÉE</strong>
               </div>
