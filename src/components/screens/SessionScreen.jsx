@@ -1,5 +1,6 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { Play, Pause, Home, Headphones } from 'lucide-react';
+<parameter name="filePath">src/components/screens/SessionScreen.jsx</parameter>
+<parameter name="content">import React, { useEffect, useState, useRef } from 'react';
+import { Play, Pause, Home, Headphones, Target, RotateCcw, TrendingUp, Baby, Users, Brain, Sparkles } from 'lucide-react';
 import { useAppStore } from '../../store/appStore';
 import { BreathingGuide } from '../BreathingGuide';
 import { useSessionTimer } from '../../hooks/useSessionTimer';
@@ -56,6 +57,30 @@ export const SessionScreen = () => {
   };
 
   const sessionData = getSessionData();
+
+  // Obtenir l'icône correspondante à la session
+  const getSessionIcon = () => {
+    switch (currentSession) {
+      case 'switch':
+        return Target;
+      case 'reset':
+        return RotateCcw;
+      case 'progressive':
+        return TrendingUp;
+      case 'kids':
+        return Baby;
+      case 'seniors':
+        return Users;
+      case 'scan':
+        return Brain;
+      case 'meditation':
+        return Sparkles;
+      default:
+        return Target;
+    }
+  };
+
+  const SessionIcon = getSessionIcon();
 
   // Obtenir le pattern respiratoire
   const getCurrentBreathingPattern = () => {
@@ -248,20 +273,7 @@ export const SessionScreen = () => {
       <div className="text-center mb-6">
         <div className="flex items-center justify-center gap-4 mb-4">
           <div className="w-12 h-12 rounded-xl flex items-center justify-center overflow-hidden bg-white/10 backdrop-blur-sm border border-white/20">
-            <img 
-              src="/assets/ChatGPT Image 21 juin 2025, 18_14_03.png" 
-              alt="Instant Opportun Logo" 
-              className="w-10 h-10 object-contain"
-              onError={(e) => {
-                const target = e.target;
-                target.style.display = 'none';
-                const parent = target.parentElement;
-                if (parent) {
-                  parent.innerHTML = '<span class="text-2xl">🧘‍♀️</span>';
-                  parent.classList.add('bg-gradient-to-br', 'from-cyan-400', 'to-purple-500');
-                }
-              }}
-            />
+            <SessionIcon size={24} className="text-white" />
           </div>
           <div>
             <h1 className="text-2xl font-bold">{sessionData.name}</h1>
@@ -448,4 +460,5 @@ export const SessionScreen = () => {
       </div>
     </div>
   );
-};
+};</parameter>
+</invoke>
