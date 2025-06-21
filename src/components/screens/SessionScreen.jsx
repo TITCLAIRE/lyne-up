@@ -57,17 +57,17 @@ export const SessionScreen = () => {
 
   const sessionData = getSessionData();
 
-  // Obtenir l'icône de session depuis la page d'accueil
+  // Obtenir l'icône de session depuis la page d'accueil - VRAIES ICÔNES
   const getSessionIcon = () => {
     const sessionIcons = {
-      switch: '🎯',
-      reset: '🔄', 
-      progressive: '📈',
-      freeSessionSelection: '⚙️',
-      kids: '👶',
-      seniors: '👥',
-      scan: '🧠',
-      meditation: '✨'
+      switch: '🎯',      // Target (rouge-orange)
+      reset: '🔄',       // RotateCcw (indigo-purple) 
+      progressive: '📈', // TrendingUp (vert-emerald)
+      free: '⚙️',        // Settings (purple-pink)
+      kids: '😊',        // Baby (pink-purple) 
+      seniors: '👥',     // Users (blue-cyan)
+      scan: '🧠',        // Brain (indigo-purple)
+      meditation: '✨'   // Sparkles (pink-rose)
     };
     
     return sessionIcons[currentSession] || '🧘‍♀️';
@@ -323,7 +323,7 @@ export const SessionScreen = () => {
         {currentSession === 'kids' && (
           <div className="bg-pink-500/20 border border-pink-500/30 rounded-lg p-3 mb-4">
             <p className="text-sm text-pink-200 mb-2">
-              👶 <strong>MODE ENFANTS - RYTHME 4/4 :</strong>
+              😊 <strong>MODE ENFANTS - RYTHME 4/4 :</strong>
             </p>
             <div className="text-xs text-pink-100/80 space-y-1">
               <div>🎈 <strong>Inspiration :</strong> 4 secondes (gonfle ton ballon)</div>
@@ -340,7 +340,7 @@ export const SessionScreen = () => {
         {currentSession === 'seniors' && (
           <div className="bg-cyan-500/20 border border-cyan-500/30 rounded-lg p-3 mb-4">
             <p className="text-sm text-cyan-200 mb-2">
-              👴 <strong>MODULE SENIORS + - RYTHME 3/4 :</strong>
+              👥 <strong>MODULE SENIORS + - RYTHME 3/4 :</strong>
             </p>
             <div className="text-xs text-cyan-100/80 space-y-1">
               <div>🫁 <strong>Inspiration :</strong> 3 secondes (doux et naturel)</div>
