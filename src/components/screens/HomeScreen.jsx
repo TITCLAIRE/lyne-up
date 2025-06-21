@@ -4,7 +4,7 @@ import { useAppStore } from '../../store/appStore';
 
 // Sessions d'urgence et réalignement
 const urgencyAndRealignmentSessions = [
-  { id: 'switch', icon: Zap, name: 'SWITCH', time: '1min 45s', color: 'from-red-500 to-orange-500', baseline: 'Sérénité express' },
+  { id: 'switch', icon: Target, name: 'SWITCH', time: '1min 45s', color: 'from-red-500 to-orange-500', baseline: 'Sérénité express' },
   { id: 'reset', icon: RotateCcw, name: 'RESET', time: '3min', color: 'from-indigo-500 to-purple-500', baseline: 'Crise de calme & Insomnie' },
 ];
 
