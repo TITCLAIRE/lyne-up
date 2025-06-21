@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Play, Pause, Home, Headphones } from 'lucide-react';
+import { Play, Pause, Home, Headphones, Settings } from 'lucide-react';
 import { useAppStore } from '../../store/appStore';
 import { BreathingGuide } from '../BreathingGuide';
 import { useSessionTimer } from '../../hooks/useSessionTimer';
@@ -142,7 +142,7 @@ export const FreeSessionScreen = () => {
       <div className="text-center mb-6">
         <div className="flex items-center justify-center gap-4 mb-4">
           <div className="w-12 h-12 rounded-xl flex items-center justify-center overflow-hidden bg-white/10 backdrop-blur-sm border border-white/20">
-            <span className="text-2xl">⚙️</span>
+            <Settings size={24} className="text-white" />
           </div>
           <div>
             <h1 className="text-2xl font-bold">Session Libre</h1>

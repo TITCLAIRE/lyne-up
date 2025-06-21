@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Play, Pause, Home, Headphones } from 'lucide-react';
+import { Play, Pause, Home, Headphones, Target, RotateCcw, TrendingUp, Settings, Baby, Users, Brain, Sparkles, Heart } from 'lucide-react';
 import { useAppStore } from '../../store/appStore';
 import { BreathingGuide } from '../BreathingGuide';
 import { useSessionTimer } from '../../hooks/useSessionTimer';
@@ -57,21 +57,23 @@ export const SessionScreen = () => {
 
   const sessionData = getSessionData();
 
-  // Obtenir l'icône de session depuis la page d'accueil - VRAIES ICÔNES
+  // Obtenir l'icône de session depuis la page d'accueil - VRAIES ICÔNES LUCIDE
   const getSessionIcon = () => {
     const sessionIcons = {
-      switch: '🎯',      // Target (rouge-orange)
-      reset: '🔄',       // RotateCcw (indigo-purple) 
-      progressive: '📈', // TrendingUp (vert-emerald)
-      free: '⚙️',        // Settings (purple-pink)
-      kids: '😊',        // Baby (pink-purple) 
-      seniors: '👥',     // Users (blue-cyan)
-      scan: '🧠',        // Brain (indigo-purple)
-      meditation: '✨'   // Sparkles (pink-rose)
+      switch: Target,      // Target (rouge-orange)
+      reset: RotateCcw,    // RotateCcw (indigo-purple) 
+      progressive: TrendingUp, // TrendingUp (vert-emerald)
+      free: Settings,      // Settings (purple-pink)
+      kids: Baby,          // Baby (pink-purple) 
+      seniors: Users,      // Users (blue-cyan)
+      scan: Brain,         // Brain (indigo-purple)
+      meditation: Sparkles // Sparkles (pink-rose)
     };
     
-    return sessionIcons[currentSession] || '🧘‍♀️';
+    return sessionIcons[currentSession] || Heart;
   };
+
+  const SessionIcon = getSessionIcon();
 
   // Obtenir le pattern respiratoire
   const getCurrentBreathingPattern = () => {
@@ -264,7 +266,7 @@ export const SessionScreen = () => {
       <div className="text-center mb-6">
         <div className="flex items-center justify-center gap-4 mb-4">
           <div className="w-12 h-12 rounded-xl flex items-center justify-center overflow-hidden bg-white/10 backdrop-blur-sm border border-white/20">
-            <span className="text-2xl">{getSessionIcon()}</span>
+            <SessionIcon size={24} className="text-white" />
           </div>
           <div>
             <h1 className="text-2xl font-bold">{sessionData.name}</h1>
@@ -323,7 +325,7 @@ export const SessionScreen = () => {
         {currentSession === 'kids' && (
           <div className="bg-pink-500/20 border border-pink-500/30 rounded-lg p-3 mb-4">
             <p className="text-sm text-pink-200 mb-2">
-              😊 <strong>MODE ENFANTS - RYTHME 4/4 :</strong>
+              <Baby size={16} className="inline mr-1" /> <strong>MODE ENFANTS - RYTHME 4/4 :</strong>
             </p>
             <div className="text-xs text-pink-100/80 space-y-1">
               <div>🎈 <strong>Inspiration :</strong> 4 secondes (gonfle ton ballon)</div>
@@ -340,7 +342,7 @@ export const SessionScreen = () => {
         {currentSession === 'seniors' && (
           <div className="bg-cyan-500/20 border border-cyan-500/30 rounded-lg p-3 mb-4">
             <p className="text-sm text-cyan-200 mb-2">
-              👥 <strong>MODULE SENIORS + - RYTHME 3/4 :</strong>
+              <Users size={16} className="inline mr-1" /> <strong>MODULE SENIORS + - RYTHME 3/4 :</strong>
             </p>
             <div className="text-xs text-cyan-100/80 space-y-1">
               <div>🫁 <strong>Inspiration :</strong> 3 secondes (doux et naturel)</div>
