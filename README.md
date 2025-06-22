@@ -1,4 +1,4 @@
-# 🧘‍♀️ Instant Opportun - Cohérence Cardiaque Intégrative
+# 🧘‍♀️ L'Instant Opportun - Cohérence Cardiaque Intégrative
 
 Application web de cohérence cardiaque intégrative avec guidage vocal premium et sons binauraux thérapeutiques.
 
@@ -43,7 +43,7 @@ Application web de cohérence cardiaque intégrative avec guidage vocal premium 
 - **Design moderne** et intuitif
 - **PWA** installable comme app native
 - **Responsive** mobile et desktop
-- **Logo Instant Opportun** intégré
+- **Logo L'Instant Opportun** intégré
 
 ## 🚀 Déploiement
 
@@ -160,4 +160,4 @@ MIT License - Voir [LICENSE](LICENSE) pour plus de détails.
 
 ---
 
-**🧘‍♀️ Instant Opportun** - Transformez votre bien-être avec la cohérence cardiaque intégrative ✨
+**🧘‍♀️ L'Instant Opportun** - Transformez votre bien-être avec la cohérence cardiaque intégrative ✨

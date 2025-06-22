@@ -11,7 +11,7 @@ export const Header = () => {
         <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 overflow-hidden bg-white/10 backdrop-blur-sm border border-white/20">
           <img 
             src="/logo/ChatGPT Image 21 juin 2025, 18_14_03.png" 
-            alt="Instant Opportun Logo" 
+            alt="L'Instant Opportun Logo" 
             className="w-10 h-10 object-contain"
             onError={(e) => {
               const target = e.target;
@@ -26,7 +26,7 @@ export const Header = () => {
         </div>
         <div className="min-w-0 flex-1">
           <h1 className="text-2xl font-bold bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent truncate">
-            Instant Opportun
+            L'Instant Opportun
           </h1>
           <div className="flex flex-col">
             <p className="text-sm text-white/70 truncate">
