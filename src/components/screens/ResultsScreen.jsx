@@ -27,13 +27,13 @@ export const ResultsScreen = () => {
         <h1 className="text-3xl font-bold mb-2">Session complétée !</h1>
         <p className="text-white/70 mb-8">Félicitations pour cette pratique</p>
 
-        {/* Résultats */}
+        {/* Résultats simplifiés */}
         <div className="grid grid-cols-2 gap-4 mb-8">
           <div className="bg-white/10 rounded-2xl p-4">
             <div className="text-2xl font-bold text-green-400 mb-1">
               {biometricData.coherence}%
             </div>
-            <div className="text-sm text-white/70">Cohérence finale</div>
+            <div className="text-sm text-white/70">Cohérence estimée</div>
           </div>
           <div className="bg-white/10 rounded-2xl p-4">
             <div className="text-2xl font-bold text-blue-400 mb-1">
@@ -43,15 +43,15 @@ export const ResultsScreen = () => {
           </div>
           <div className="bg-white/10 rounded-2xl p-4">
             <div className="text-2xl font-bold text-purple-400 mb-1">
-              {biometricData.heartRate || '--'}
+              Excellent
             </div>
-            <div className="text-sm text-white/70">FC finale</div>
+            <div className="text-sm text-white/70">Qualité session</div>
           </div>
           <div className="bg-white/10 rounded-2xl p-4">
             <div className="text-2xl font-bold text-yellow-400 mb-1">
-              {biometricData.hrv || '--'}
+              Complet
             </div>
-            <div className="text-sm text-white/70">HRV finale</div>
+            <div className="text-sm text-white/70">Statut</div>
           </div>
         </div>
 

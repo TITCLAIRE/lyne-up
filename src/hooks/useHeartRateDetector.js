@@ -1,16 +1,16 @@
-// Hook simplifié - Plus de détection caméra
 import { useAppStore } from '../store/appStore';
 
 export const useHeartRateDetector = () => {
   const { updateBiometricData } = useAppStore();
 
-  // Fonction vide - Plus de détection
+  // Hook simplifié - Pas de détection caméra
   const startDetection = async () => {
-    console.log('📸 Détection caméra supprimée - Mode simplifié');
+    console.log('📊 Système de détection désactivé - Mode simplifié');
+    return Promise.resolve();
   };
 
   const stopDetection = () => {
-    console.log('📸 Système caméra désactivé');
+    console.log('📊 Système de détection arrêté');
   };
 
   return {

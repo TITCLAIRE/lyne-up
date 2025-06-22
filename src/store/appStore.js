@@ -40,7 +40,7 @@ export const useAppStore = create(
         silentMode: false,
       },
 
-      // NOUVEAU : Paramètres pour la session libre avec fréquence
+      // Paramètres pour la session libre avec fréquence
       freeSessionSettings: {
         inhaleTime: 5,    // Temps d'inspiration par défaut (5 secondes)
         exhaleTime: 5,    // Temps d'expiration par défaut (5 secondes)
@@ -50,10 +50,11 @@ export const useAppStore = create(
         silentMode: false,
       },
       
+      // Données biométriques simplifiées (sans caméra)
       biometricData: {
         heartRate: 0,
         hrv: 0,
-        coherence: 0,
+        coherence: 85, // Valeur par défaut positive
         breathingRate: 6.0,
       },
       
@@ -93,7 +94,7 @@ export const useAppStore = create(
           coherenceSettings: { ...state.coherenceSettings, ...settings }
         })),
 
-      // NOUVEAU : Action pour mettre à jour les paramètres de session libre
+      // Action pour mettre à jour les paramètres de session libre
       updateFreeSessionSettings: (settings) =>
         set((state) => ({
           freeSessionSettings: { ...state.freeSessionSettings, ...settings }
@@ -110,7 +111,7 @@ export const useAppStore = create(
         audioSettings: state.audioSettings,
         voiceSettings: state.voiceSettings,
         sessionSettings: state.sessionSettings,
-        freeSessionSettings: state.freeSessionSettings, // Persister les paramètres de session libre
+        freeSessionSettings: state.freeSessionSettings,
       }),
     }
   )
