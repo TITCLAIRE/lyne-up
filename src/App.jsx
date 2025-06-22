@@ -52,7 +52,7 @@ function App() {
     <div 
       className="min-h-screen text-white overflow-x-hidden"
       style={{
-        background: 'linear-gradient(135deg, #006994, #00bcd4, #4dd0e1, #006994)'
+        background: 'linear-gradient(135deg, #003366, #004488, #0055AA, #003366)'
       }}
     >
       <Header />
