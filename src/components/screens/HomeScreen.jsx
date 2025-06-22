@@ -4,26 +4,26 @@ import { useAppStore } from '../../store/appStore';
 
 // Sessions d'urgence et réalignement
 const urgencyAndRealignmentSessions = [
-  { id: 'switch', icon: Target, name: 'SWITCH', time: '1min 45s', color: 'from-red-500 to-orange-500', baseline: 'Sérénité express' },
-  { id: 'reset', icon: RotateCcw, name: 'RESET', time: '3min', color: 'from-indigo-500 to-purple-500', baseline: 'Crise de calme & Insomnie' },
+  { id: 'switch', icon: Target, name: 'SWITCH', time: '1min 45s', color: 'from-red-500 to-orange-500' },
+  { id: 'reset', icon: RotateCcw, name: 'RESET', time: '3min', color: 'from-indigo-500 to-purple-500' },
 ];
 
 // Sessions d'initiation et perfectionnement
 const initiationAndPerfectionSessions = [
-  { id: 'progressive', icon: TrendingUp, name: 'TRAINING', time: '3min', color: 'from-green-500 to-emerald-500', baseline: 'Progression 3/3 → 4/4 → 5/5' },
-  { id: 'freeSessionSelection', icon: Settings, name: 'SESSION LIBRE', time: '3-20min', color: 'from-purple-500 to-pink-500', baseline: 'Rythme et durée personnalisables' },
+  { id: 'progressive', icon: TrendingUp, name: 'TRAINING', time: '3min', color: 'from-green-500 to-emerald-500' },
+  { id: 'freeSessionSelection', icon: Settings, name: 'SESSION LIBRE', time: '3-20min', color: 'from-purple-500 to-pink-500' },
 ];
 
 // Sessions pour enfants et seniors
 const ageSpecificSessions = [
-  { id: 'kids', icon: Baby, name: 'KIDS', time: '2min', color: 'from-pink-400 to-purple-400', baseline: 'Respiration magique pour les petits' },
-  { id: 'seniors', icon: Users, name: 'SENIORS +', time: '5min', color: 'from-blue-400 to-cyan-400', baseline: 'Relaxation & baisse de la tension' },
+  { id: 'kids', icon: Baby, name: 'KIDS', time: '2min', color: 'from-pink-400 to-purple-400' },
+  { id: 'seniors', icon: Users, name: 'SENIORS +', time: '5min', color: 'from-blue-400 to-cyan-400' },
 ];
 
 // Sessions de voyage intérieur - NOMS EN CAPITALES
 const innerJourneySessions = [
-  { id: 'scan', icon: Brain, name: 'SCAN CORPOREL', time: '10min', color: 'from-indigo-500 to-purple-500', baseline: 'Relaxation profonde guidée' },
-  { id: 'meditation', icon: Sparkles, name: 'MÉDITATIONS', time: '5-10min', color: 'from-pink-500 to-rose-500', baseline: 'Thèmes personnalisés' },
+  { id: 'scan', icon: Brain, name: 'SCAN CORPOREL', time: '10min', color: 'from-indigo-500 to-purple-500' },
+  { id: 'meditation', icon: Sparkles, name: 'MÉDITATIONS', time: '5-10min', color: 'from-pink-500 to-rose-500' },
 ];
 
 export const HomeScreen = () => {
@@ -81,14 +81,7 @@ export const HomeScreen = () => {
                     <Icon size={20} className="text-white" />
                   </div>
                   <h3 className="font-medium text-sm mb-1">{session.name}</h3>
-                  <p className="text-xs text-white/60 mb-1">{session.time}</p>
-                  <p className="text-xs text-white/50 italic">{session.baseline}</p>
-                  {session.id === 'reset' && (
-                    <div className="text-xs text-indigo-300 mt-1 flex items-center justify-center gap-1">
-                      <Wind size={12} />
-                      Rythme 4/7/8
-                    </div>
-                  )}
+                  <p className="text-xs text-white/60">{session.time}</p>
                 </div>
               </div>
             );
@@ -118,20 +111,7 @@ export const HomeScreen = () => {
                     <Icon size={20} className="text-white" />
                   </div>
                   <h3 className="font-medium text-sm mb-1">{session.name}</h3>
-                  <p className="text-xs text-white/60 mb-1">{session.time}</p>
-                  <p className="text-xs text-white/50 italic">{session.baseline}</p>
-                  {session.id === 'progressive' && (
-                    <div className="text-xs text-green-300 mt-1 flex items-center justify-center gap-1">
-                      <Wind size={12} />
-                      3/3 → 4/4 → 5/5
-                    </div>
-                  )}
-                  {session.id === 'freeSessionSelection' && (
-                    <div className="text-xs text-purple-300 mt-1 flex items-center justify-center gap-1">
-                      <Wind size={12} />
-                      3-9s • 3-20min
-                    </div>
-                  )}
+                  <p className="text-xs text-white/60">{session.time}</p>
                 </div>
               </div>
             );
@@ -161,20 +141,7 @@ export const HomeScreen = () => {
                     <Icon size={20} className="text-white" />
                   </div>
                   <h3 className="font-medium text-sm mb-1">{session.name}</h3>
-                  <p className="text-xs text-white/60 mb-1">{session.time}</p>
-                  <p className="text-xs text-white/50 italic">{session.baseline}</p>
-                  {session.id === 'kids' && (
-                    <div className="text-xs text-pink-300 mt-1 flex items-center justify-center gap-1">
-                      <Wind size={12} />
-                      Rythme 4/4 • Adapté aux enfants
-                    </div>
-                  )}
-                  {session.id === 'seniors' && (
-                    <div className="text-xs text-cyan-300 mt-1 flex items-center justify-center gap-1">
-                      <Wind size={12} />
-                      Rythme 3/4 • Adapté aux seniors
-                    </div>
-                  )}
+                  <p className="text-xs text-white/60">{session.time}</p>
                 </div>
               </div>
             );
@@ -204,8 +171,7 @@ export const HomeScreen = () => {
                     <Icon size={20} className="text-white" />
                   </div>
                   <h3 className="font-medium text-sm mb-1">{session.name}</h3>
-                  <p className="text-xs text-white/60 mb-1">{session.time}</p>
-                  <p className="text-xs text-white/50 italic">{session.baseline}</p>
+                  <p className="text-xs text-white/60">{session.time}</p>
                 </div>
               </div>
             );
