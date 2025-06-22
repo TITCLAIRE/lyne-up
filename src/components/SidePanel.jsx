@@ -54,30 +54,30 @@ export const SidePanel = () => {
       />
 
       {/* Panel */}
-      <div className={`fixed top-0 right-0 h-full w-80 bg-slate-900/95 backdrop-blur-xl border-l border-white/10 transition-transform duration-300 z-50 overflow-y-auto ${
+      <div className={`fixed top-0 right-0 h-full w-80 bg-blue-900/95 backdrop-blur-xl border-l border-blue-700 transition-transform duration-300 z-50 overflow-y-auto shadow-xl ${
         menuOpen ? 'translate-x-0' : 'translate-x-full'
       }`}>
         <div className="p-5">
           {/* Header */}
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-semibold">Paramètres</h2>
+            <h2 className="text-xl font-semibold text-blue-100">Paramètres</h2>
             <button
               onClick={toggleMenu}
-              className="w-8 h-8 bg-white/10 rounded-lg flex items-center justify-center hover:bg-white/20 transition-colors"
+              className="w-8 h-8 bg-blue-900/50 rounded-lg flex items-center justify-center hover:bg-blue-800/50 transition-colors"
             >
-              <X size={16} />
+              <X size={16} className="text-blue-100" />
             </button>
           </div>
 
           {/* Audio */}
           <div className="mb-6">
-            <h3 className="text-lg font-medium mb-3 flex items-center gap-2">
+            <h3 className="text-lg font-medium mb-3 flex items-center gap-2 text-blue-100">
               <Volume2 size={18} />
               Sons thérapeutiques
             </h3>
-            <div className="bg-white/5 rounded-xl p-4 space-y-4">
+            <div className="bg-blue-900/50 border border-blue-700 rounded-xl p-4 space-y-4 shadow-md">
               <div className="flex justify-between items-center">
-                <span>Sons binauraux</span>
+                <span className="text-blue-100">Sons binauraux</span>
                 <button
                   onClick={handleAudioToggle}
                   className={`w-12 h-6 rounded-full transition-colors ${
@@ -91,7 +91,7 @@ export const SidePanel = () => {
               </div>
               
               <div className="flex justify-between items-center">
-                <span>Gong respiratoire</span>
+                <span className="text-blue-100">Gong respiratoire</span>
                 <button
                   onClick={handleGongToggle}
                   className={`w-12 h-6 rounded-full transition-colors ${
@@ -105,8 +105,8 @@ export const SidePanel = () => {
               </div>
 
               <div>
-                <label className="block text-sm text-white/70 mb-2">
-                  Volume sons binauraux <span className="text-xs text-white/50">(recommandé: 20-30%)</span>
+                <label className="block text-sm text-blue-200 mb-2">
+                  Volume sons binauraux <span className="text-xs text-blue-300">(recommandé: 20-30%)</span>
                 </label>
                 <input
                   type="range"
@@ -114,9 +114,9 @@ export const SidePanel = () => {
                   max="100"
                   value={audioSettings.volume * 100}
                   onChange={(e) => handleVolumeChange('music', parseInt(e.target.value))}
-                  className="w-full h-2 bg-white/20 rounded-lg appearance-none cursor-pointer"
+                  className="w-full h-2 bg-blue-800/50 rounded-lg appearance-none cursor-pointer"
                 />
-                <div className="text-xs text-white/60 mt-1">
+                <div className="text-xs text-blue-200 mt-1">
                   Actuel: {Math.round(audioSettings.volume * 100)}% 
                   {audioSettings.volume >= 0.2 && audioSettings.volume <= 0.3 && 
                     <span className="text-green-400 ml-1">✓ Optimal</span>
@@ -125,8 +125,8 @@ export const SidePanel = () => {
               </div>
 
               <div>
-                <label className="block text-sm text-white/70 mb-2">
-                  Volume gong <span className="text-xs text-white/50">(recommandé: 10-20%)</span>
+                <label className="block text-sm text-blue-200 mb-2">
+                  Volume gong <span className="text-xs text-blue-300">(recommandé: 10-20%)</span>
                 </label>
                 <input
                   type="range"
@@ -134,9 +134,9 @@ export const SidePanel = () => {
                   max="100"
                   value={audioSettings.gongVolume * 100}
                   onChange={(e) => handleVolumeChange('gong', parseInt(e.target.value))}
-                  className="w-full h-2 bg-white/20 rounded-lg appearance-none cursor-pointer"
+                  className="w-full h-2 bg-blue-800/50 rounded-lg appearance-none cursor-pointer"
                 />
-                <div className="text-xs text-white/60 mt-1">
+                <div className="text-xs text-blue-200 mt-1">
                   Actuel: {Math.round(audioSettings.gongVolume * 100)}%
                   {audioSettings.gongVolume >= 0.1 && audioSettings.gongVolume <= 0.2 && 
                     <span className="text-green-400 ml-1">✓ Optimal</span>
@@ -145,11 +145,11 @@ export const SidePanel = () => {
               </div>
 
               <div>
-                <label className="block text-sm text-white/70 mb-2">Fréquence manuelle</label>
+                <label className="block text-sm text-blue-200 mb-2">Fréquence manuelle</label>
                 <select
                   value={audioSettings.frequency}
                   onChange={(e) => handleFrequencyChange(e.target.value)}
-                  className="w-full p-2 bg-white/10 border border-white/20 rounded-lg text-white text-sm"
+                  className="w-full p-2 bg-blue-800/50 border border-blue-600 rounded-lg text-blue-100 text-sm"
                 >
                   <option value="coherence">0.1 Hz - Cohérence</option>
                   <option value="396hz">396 Hz - Libération</option>
@@ -168,7 +168,7 @@ export const SidePanel = () => {
                   <option value="delta">Ondes Delta (2Hz)</option>
                   <option value="gamma">Ondes Gamma (30-100Hz)</option>
                 </select>
-                <p className="text-xs text-white/50 mt-1">
+                <p className="text-xs text-blue-300 mt-1">
                   Note: Chaque session utilise sa fréquence optimale par défaut
                 </p>
               </div>
@@ -177,13 +177,13 @@ export const SidePanel = () => {
 
           {/* Voix Premium */}
           <div className="mb-6">
-            <h3 className="text-lg font-medium mb-3 flex items-center gap-2">
+            <h3 className="text-lg font-medium mb-3 flex items-center gap-2 text-blue-100">
               <Mic size={18} />
               Voix Premium
             </h3>
-            <div className="bg-white/5 rounded-xl p-4 space-y-4">
+            <div className="bg-blue-900/50 border border-blue-700 rounded-xl p-4 space-y-4 shadow-md">
               <div className="flex justify-between items-center">
-                <span>Guidage vocal</span>
+                <span className="text-blue-100">Guidage vocal</span>
                 <button
                   onClick={handleVoiceToggle}
                   className={`w-12 h-6 rounded-full transition-colors ${
@@ -197,38 +197,38 @@ export const SidePanel = () => {
               </div>
 
               <div>
-                <label className="block text-sm text-white/70 mb-2">Choix de la voix premium</label>
+                <label className="block text-sm text-blue-200 mb-2">Choix de la voix premium</label>
                 <div className="flex gap-2">
                   <button
                     onClick={() => handleVoiceGenderChange('female')}
                     className={`flex-1 py-3 px-3 rounded-lg text-sm font-medium transition-all ${
                       voiceSettings.gender === 'female'
                         ? 'bg-purple-500/30 border-2 border-purple-500/50'
-                        : 'bg-white/10 border-2 border-white/20'
+                        : 'bg-blue-800/50 border-2 border-blue-600'
                     }`}
                   >
                     <div className="text-lg mb-1">🎵</div>
-                    <div className="font-semibold">Claire</div>
-                    <div className="text-xs text-white/70 mt-1">Voix Premium</div>
+                    <div className="font-semibold text-blue-100">Claire</div>
+                    <div className="text-xs text-blue-200 mt-1">Voix Premium</div>
                   </button>
                   <button
                     onClick={() => handleVoiceGenderChange('male')}
                     className={`flex-1 py-3 px-3 rounded-lg text-sm font-medium transition-all ${
                       voiceSettings.gender === 'male'
                         ? 'bg-purple-500/30 border-2 border-purple-500/50'
-                        : 'bg-white/10 border-2 border-white/20'
+                        : 'bg-blue-800/50 border-2 border-blue-600'
                     }`}
                   >
                     <div className="text-lg mb-1">🎵</div>
-                    <div className="font-semibold">Thierry</div>
-                    <div className="text-xs text-white/70 mt-1">Voix Premium</div>
+                    <div className="font-semibold text-blue-100">Thierry</div>
+                    <div className="text-xs text-blue-200 mt-1">Voix Premium</div>
                   </button>
                 </div>
               </div>
 
               <div>
-                <label className="block text-sm text-white/70 mb-2">
-                  Volume voix <span className="text-xs text-white/50">(recommandé: 60-70%)</span>
+                <label className="block text-sm text-blue-200 mb-2">
+                  Volume voix <span className="text-xs text-blue-300">(recommandé: 60-70%)</span>
                 </label>
                 <input
                   type="range"
@@ -236,9 +236,9 @@ export const SidePanel = () => {
                   max="100"
                   value={voiceSettings.volume * 100}
                   onChange={(e) => handleVolumeChange('voice', parseInt(e.target.value))}
-                  className="w-full h-2 bg-white/20 rounded-lg appearance-none cursor-pointer"
+                  className="w-full h-2 bg-blue-800/50 rounded-lg appearance-none cursor-pointer"
                 />
-                <div className="text-xs text-white/60 mt-1">
+                <div className="text-xs text-blue-200 mt-1">
                   Actuel: {Math.round(voiceSettings.volume * 100)}%
                   {voiceSettings.volume >= 0.6 && voiceSettings.volume <= 0.7 && 
                     <span className="text-green-400 ml-1">✓ Optimal</span>
@@ -256,16 +256,16 @@ export const SidePanel = () => {
 
           {/* Installation */}
           <div className="mb-6">
-            <h3 className="text-lg font-medium mb-3 flex items-center gap-2">
+            <h3 className="text-lg font-medium mb-3 flex items-center gap-2 text-blue-100">
               <Smartphone size={18} />
               Installation
             </h3>
-            <div className="bg-white/5 rounded-xl p-4">
-              <button className="w-full bg-gradient-to-r from-green-500/20 to-emerald-500/20 border-2 border-green-500/40 rounded-xl p-3 flex items-center gap-3 hover:from-green-500/30 hover:to-emerald-500/30 transition-all">
-                <Download size={20} />
+            <div className="bg-blue-900/50 border border-blue-700 rounded-xl p-4 shadow-md">
+              <button className="w-full bg-gradient-to-r from-purple-500/20 to-pink-500/20 border-2 border-purple-500/40 rounded-xl p-3 flex items-center gap-3 hover:from-purple-500/30 hover:to-pink-500/30 transition-all">
+                <Download size={20} className="text-purple-300" />
                 <div className="text-left">
-                  <div className="font-medium text-sm">Installer l'app</div>
-                  <div className="text-xs text-white/70">Accès rapide depuis l'écran d'accueil</div>
+                  <div className="font-medium text-sm text-blue-100">Installer l'app</div>
+                  <div className="text-xs text-blue-200">Accès rapide depuis l'écran d'accueil</div>
                 </div>
               </button>
             </div>
