@@ -147,6 +147,7 @@ export const SessionScreen = () => {
   // Gérer la fin de session
   useEffect(() => {
     if (timeRemaining === 0 && isSessionActive && !sessionEnded) {
+      console.log('🏁 Session terminée:', currentSession);
       setSessionEnded(true);
       
       // Message de fin adapté aux différentes sessions
@@ -162,11 +163,16 @@ export const SessionScreen = () => {
         speak("Session terminée. Félicitations pour cette pratique.");
       }
       
+      // Arrêter l'audio et la respiration
+      stopAudio();
+      stopBreathing();
+      stopVoice();
+      
       setTimeout(() => {
         setCurrentScreen('results');
       }, 3000);
     }
-  }, [timeRemaining, isSessionActive, sessionEnded, setCurrentScreen, currentSession, speak]);
+  }, [timeRemaining, isSessionActive, sessionEnded, setCurrentScreen, currentSession, speak, stopAudio, stopBreathing, stopVoice]);
 
   // Démarrage vocal automatique
   useEffect(() => {
@@ -196,11 +202,13 @@ export const SessionScreen = () => {
       
       // Démarrer l'audio
       if (audioSettings.enabled) {
+        console.log('🎵 Démarrage audio session:', currentSession);
         startAudio();
       }
       
       // Démarrer le timer et la respiration
       const duration = sessionData?.duration || 180;
+      console.log('⏱️ Durée session:', duration, 'secondes');
       startTimer(duration);
       startBreathing(breathingPattern);
       

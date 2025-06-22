@@ -80,12 +80,17 @@ export const FreeSessionScreen = () => {
         speak("Session libre terminée. Vous avez maintenu votre rythme respiratoire personnalisé avec succès.");
       }
       
+      // Arrêter l'audio et la respiration
+      stopAudio();
+      stopBreathing();
+      stopVoice();
+      
       // Redirection automatique vers les résultats
       setTimeout(() => {
         setCurrentScreen('results');
       }, 3000);
     }
-  }, [timeRemaining, isSessionActive, sessionEnded, setCurrentScreen, freeSessionSettings.silentMode, speak]);
+  }, [timeRemaining, isSessionActive, sessionEnded, setCurrentScreen, freeSessionSettings.silentMode, speak, stopAudio, stopBreathing, stopVoice]);
 
   // DÉMARRAGE VOCAL AUTOMATIQUE - SYSTÈME SIMPLE POUR SESSION LIBRE
   useEffect(() => {
@@ -110,13 +115,15 @@ export const FreeSessionScreen = () => {
       setSessionEnded(false);
       setVoiceSystemStarted(false);
       
-      // Démarrer l'audio avec la fréquence sélectionnée
+      // Démarrer l'audio avec la fréquence sélectionnée - CORRECTION IMPORTANTE
       if (audioSettings.enabled && freeSessionSettings.gongEnabled && !freeSessionSettings.silentMode) {
+        console.log('🎵 Démarrage audio avec fréquence:', freeSessionSettings.frequency);
         startAudio(freeSessionSettings.frequency);
       }
       
       // Démarrer le timer avec la durée personnalisée
       const durationInSeconds = freeSessionSettings.duration * 60;
+      console.log('⏱️ Durée session:', durationInSeconds, 'secondes');
       startTimer(durationInSeconds);
       
       // Démarrer l'animation respiratoire avec le pattern personnalisé

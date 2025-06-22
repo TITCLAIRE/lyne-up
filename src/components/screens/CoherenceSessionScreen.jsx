@@ -43,20 +43,47 @@ export const CoherenceSessionScreen = () => {
     }
   }, [breathingState.phase, isSessionActive, lastPhase, coherenceSettings, playGong]);
 
+  // Gérer la fin de session
+  useEffect(() => {
+    if (timeRemaining === 0 && isSessionActive && !sessionEnded) {
+      console.log('🏁 Session cohérence cardiaque terminée');
+      setSessionEnded(true);
+      
+      // Message de fin
+      if (!coherenceSettings.silentMode) {
+        speak("Session de cohérence cardiaque terminée. Vous avez créé un état d'harmonie intérieure.");
+      }
+      
+      // Arrêter l'audio et la respiration
+      stopAudio();
+      stopBreathing();
+      stopVoice();
+      
+      // Redirection automatique vers les résultats
+      setTimeout(() => {
+        setCurrentScreen('results');
+      }, 3000);
+    }
+  }, [timeRemaining, isSessionActive, sessionEnded, setCurrentScreen, coherenceSettings.silentMode, speak, stopAudio, stopBreathing, stopVoice]);
+
   const handleToggleSession = () => {
     if (!isSessionActive) {
       const breathingPattern = getCoherenceBreathingPattern();
       
       setSessionActive(true);
+      setSessionEnded(false);
+      setVoiceSystemStarted(false);
       
-      // Utiliser la fréquence sélectionnée manuellement
+      // Utiliser la fréquence sélectionnée manuellement ou par défaut
       if (coherenceSettings.gongEnabled && !coherenceSettings.silentMode) {
         const selectedFrequency = audioSettings.frequency !== 'coherence' ? audioSettings.frequency : 'coherence';
+        console.log('🎵 Démarrage audio cohérence avec fréquence:', selectedFrequency);
         startAudio(selectedFrequency);
       }
       
       // Démarrer le timer et la respiration
       const durationInSeconds = (coherenceSettings.duration || 5) * 60;
+      console.log('⏱️ Durée session cohérence:', durationInSeconds, 'secondes');
       startTimer(durationInSeconds);
       startBreathing(breathingPattern);
       
@@ -71,6 +98,8 @@ export const CoherenceSessionScreen = () => {
       stopAudio();
       stopVoice();
       setLastPhase(null);
+      setSessionEnded(false);
+      setVoiceSystemStarted(false);
     }
   };
 
@@ -82,6 +111,8 @@ export const CoherenceSessionScreen = () => {
     stopVoice();
     resetTimer();
     setLastPhase(null);
+    setSessionEnded(false);
+    setVoiceSystemStarted(false);
     setCurrentScreen('home');
   };
 
@@ -162,10 +193,21 @@ export const CoherenceSessionScreen = () => {
       <div className="flex gap-3 justify-center">
         <button
           onClick={handleToggleSession}
-          className="flex-1 bg-gradient-to-r from-blue-500 to-cyan-500 text-white py-4 px-6 rounded-2xl font-semibold flex items-center justify-center gap-2 hover:from-blue-600 hover:to-cyan-600 transition-all duration-200"
+          disabled={sessionEnded}
+          className={`flex-1 py-4 px-6 rounded-2xl font-semibold flex items-center justify-center gap-2 transition-all duration-200 ${
+            sessionEnded 
+              ? 'bg-white/10 text-white/50 cursor-not-allowed'
+              : 'bg-gradient-to-r from-blue-500 to-cyan-500 text-white hover:from-blue-600 hover:to-cyan-600'
+          }`}
         >
-          {isSessionActive ? <Pause size={20} /> : <Play size={20} />}
-          {isSessionActive ? 'Pause' : 'Commencer'}
+          {sessionEnded ? (
+            <>Session terminée</>
+          ) : (
+            <>
+              {isSessionActive ? <Pause size={20} /> : <Play size={20} />}
+              {isSessionActive ? 'Pause' : 'Commencer'}
+            </>
+          )}
         </button>
         <button
           onClick={handleGoHome}

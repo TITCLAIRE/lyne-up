@@ -48,17 +48,24 @@ const sessionFrequencies = {
   sleep: 'delta',                // Ondes Delta 2 Hz (sommeil réparateur)
 };
 
-export const useAudioManager =  () => {
-  const { audioSettings, currentSession, currentMeditation } = useAppStore();
+export const useAudioManager = () => {
+  const { audioSettings, currentSession, currentMeditation, isSessionActive } = useAppStore();
   const audioContextRef = useRef(null);
   const oscillatorsRef = useRef(null);
   const gainNodeRef = useRef(null);
   const isPlayingRef = useRef(false);
+  const sessionStartTimeRef = useRef(null);
 
   const initAudioContext = () => {
     if (!audioContextRef.current) {
       audioContextRef.current = new (window.AudioContext || window.webkitAudioContext)();
     }
+    
+    // Reprendre le contexte audio s'il est suspendu
+    if (audioContextRef.current.state === 'suspended') {
+      audioContextRef.current.resume();
+    }
+    
     return audioContextRef.current;
   };
 
@@ -72,13 +79,20 @@ export const useAudioManager =  () => {
   const startAudio = (frequency) => {
     if (!audioSettings.enabled || isPlayingRef.current) return;
 
+    console.log('🎵 DÉMARRAGE AUDIO - Session:', currentSession, 'Fréquence:', frequency);
+    
     const selectedFrequency = frequency || getDefaultFrequency();
     const freq = frequencies[selectedFrequency];
-    if (!freq) return;
+    if (!freq) {
+      console.error('❌ Fréquence non trouvée:', selectedFrequency);
+      return;
+    }
 
     const audioContext = initAudioContext();
+    sessionStartTimeRef.current = Date.now();
 
     try {
+      // Créer les oscillateurs
       const oscillatorLeft = audioContext.createOscillator();
       const oscillatorRight = audioContext.createOscillator();
 
@@ -87,6 +101,7 @@ export const useAudioManager =  () => {
       oscillatorLeft.frequency.value = freq.base;
       oscillatorRight.frequency.value = freq.base + freq.beat;
 
+      // Créer les nœuds de gain et de panoramique
       const gainNode = audioContext.createGain();
       const pannerLeft = audioContext.createStereoPanner();
       const pannerRight = audioContext.createStereoPanner();
@@ -97,53 +112,97 @@ export const useAudioManager =  () => {
       const recommendedVolume = audioSettings.volume * 0.25;
       gainNode.gain.value = recommendedVolume;
 
+      // Connecter les nœuds
       oscillatorLeft.connect(pannerLeft);
       oscillatorRight.connect(pannerRight);
       pannerLeft.connect(gainNode);
       pannerRight.connect(gainNode);
       gainNode.connect(audioContext.destination);
 
+      // Fade in progressif
       gainNode.gain.setValueAtTime(0, audioContext.currentTime);
       gainNode.gain.linearRampToValueAtTime(recommendedVolume, audioContext.currentTime + 2);
 
+      // Démarrer les oscillateurs SANS LIMITE DE TEMPS
       oscillatorLeft.start();
       oscillatorRight.start();
 
+      // Stocker les références
       oscillatorsRef.current = { left: oscillatorLeft, right: oscillatorRight };
       gainNodeRef.current = gainNode;
       isPlayingRef.current = true;
 
-      console.log(`🎵 Audio démarré: ${freq.name} (${selectedFrequency})`);
+      console.log(`🎵 Audio démarré avec succès: ${freq.name} (${selectedFrequency})`);
+      console.log('🔊 Volume:', recommendedVolume, 'Base freq:', freq.base, 'Beat:', freq.beat);
+      
+      // Gestion des erreurs d'oscillateur
+      oscillatorLeft.onended = () => {
+        console.log('🔄 Oscillateur gauche terminé');
+      };
+      
+      oscillatorRight.onended = () => {
+        console.log('🔄 Oscillateur droit terminé');
+      };
+
     } catch (error) {
-      console.error('Erreur audio:', error);
+      console.error('❌ Erreur lors du démarrage audio:', error);
+      isPlayingRef.current = false;
     }
   };
 
   const stopAudio = () => {
-    if (!isPlayingRef.current || !oscillatorsRef.current || !gainNodeRef.current) return;
+    if (!isPlayingRef.current || !oscillatorsRef.current || !gainNodeRef.current) {
+      console.log('🔇 Aucun audio à arrêter');
+      return;
+    }
 
     const audioContext = audioContextRef.current;
-    if (!audioContext) return;
+    if (!audioContext) {
+      console.log('🔇 Pas de contexte audio');
+      return;
+    }
+
+    const sessionDuration = sessionStartTimeRef.current ? 
+      (Date.now() - sessionStartTimeRef.current) / 1000 : 0;
+    
+    console.log('🔇 ARRÊT AUDIO - Durée de session:', Math.round(sessionDuration), 'secondes');
 
     try {
+      // Fade out progressif
       gainNodeRef.current.gain.linearRampToValueAtTime(0, audioContext.currentTime + 1);
 
       setTimeout(() => {
         if (oscillatorsRef.current) {
-          oscillatorsRef.current.left.stop();
-          oscillatorsRef.current.right.stop();
+          try {
+            oscillatorsRef.current.left.stop();
+            oscillatorsRef.current.right.stop();
+          } catch (error) {
+            console.log('⚠️ Oscillateurs déjà arrêtés');
+          }
           oscillatorsRef.current = null;
         }
         gainNodeRef.current = null;
         isPlayingRef.current = false;
+        sessionStartTimeRef.current = null;
+        console.log('✅ Audio complètement arrêté');
       }, 1000);
     } catch (error) {
-      console.error('Erreur arrêt audio:', error);
+      console.error('❌ Erreur lors de l\'arrêt audio:', error);
+      // Force cleanup en cas d'erreur
+      oscillatorsRef.current = null;
+      gainNodeRef.current = null;
+      isPlayingRef.current = false;
+      sessionStartTimeRef.current = null;
     }
   };
 
   const playGong = (type = 'inhale') => {
-    if (!audioSettings.gongEnabled) return;
+    if (!audioSettings.gongEnabled) {
+      console.log('🔕 Gong désactivé');
+      return;
+    }
+
+    console.log('🔔 GONG:', type);
 
     const audioContext = initAudioContext();
     const now = audioContext.currentTime;
@@ -188,13 +247,39 @@ export const useAudioManager =  () => {
       osc1.stop(now + 3);
       osc2.stop(now + 3);
       osc3.stop(now + 3);
+
+      console.log('🔔 Gong joué avec succès');
     } catch (error) {
-      console.error('Erreur gong:', error);
+      console.error('❌ Erreur gong:', error);
     }
   };
 
+  // Surveiller l'état de la session pour maintenir l'audio
+  useEffect(() => {
+    if (isSessionActive && !isPlayingRef.current && audioSettings.enabled) {
+      console.log('🔄 Session active détectée, redémarrage audio si nécessaire');
+      // Redémarrer l'audio si la session est active mais l'audio arrêté
+      const frequency = getDefaultFrequency();
+      startAudio(frequency);
+    } else if (!isSessionActive && isPlayingRef.current) {
+      console.log('🔄 Session inactive détectée, arrêt audio');
+      stopAudio();
+    }
+  }, [isSessionActive, audioSettings.enabled]);
+
+  // Surveiller les changements de volume en temps réel
+  useEffect(() => {
+    if (isPlayingRef.current && gainNodeRef.current && audioContextRef.current) {
+      const newVolume = audioSettings.volume * 0.25;
+      gainNodeRef.current.gain.setValueAtTime(newVolume, audioContextRef.current.currentTime);
+      console.log('🔊 Volume mis à jour:', newVolume);
+    }
+  }, [audioSettings.volume]);
+
+  // Nettoyage à la destruction du composant
   useEffect(() => {
     return () => {
+      console.log('🧹 Nettoyage useAudioManager');
       stopAudio();
       if (audioContextRef.current) {
         audioContextRef.current.close();
