@@ -66,7 +66,6 @@ export const HomeScreen = () => {
             <Zap size={18} />
             Recentrage
           </h2>
-          <span className="text-sm text-white/60 italic">sessions guidées</span>
         </div>
         <div className="grid grid-cols-2 gap-3">
           {urgencyAndRealignmentSessions.map((session) => {
@@ -104,7 +103,6 @@ export const HomeScreen = () => {
             <TrendingUp size={18} />
             Évolution
           </h2>
-          <span className="text-sm text-white/60 italic">progression guidée</span>
         </div>
         <div className="grid grid-cols-2 gap-3">
           {initiationAndPerfectionSessions.map((session) => {
@@ -148,7 +146,6 @@ export const HomeScreen = () => {
             <Users size={18} />
             Famille
           </h2>
-          <span className="text-sm text-white/60 italic">adaptés par âge</span>
         </div>
         <div className="grid grid-cols-2 gap-3">
           {ageSpecificSessions.map((session) => {
@@ -192,7 +189,6 @@ export const HomeScreen = () => {
             <Heart size={18} />
             Présence
           </h2>
-          <span className="text-sm text-white/60 italic">sessions guidées</span>
         </div>
         <div className="grid grid-cols-2 gap-3">
           {innerJourneySessions.map((session) => {
