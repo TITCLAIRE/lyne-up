@@ -8,7 +8,7 @@ export const Header = () => {
   return (
     <header className="flex items-center justify-between p-5 relative z-10">
       <div className="flex items-center gap-4 flex-1 min-w-0">
-        <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 overflow-hidden bg-white/10 backdrop-blur-sm border border-white/20">
+        <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 overflow-hidden">
           <img 
             src="/logo/ChatGPT Image 21 juin 2025, 18_14_03.png" 
             alt="L'Instant Opportun Logo" 
