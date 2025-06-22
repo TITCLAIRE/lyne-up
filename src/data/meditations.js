@@ -1,7 +1,7 @@
 export const meditations = {
   gratitude: {
     name: 'Gratitude',
-    icon: '🙏',
+    icon: 'Hand',
     duration: 300, // 5 minutes
     description: 'Cultivez la reconnaissance',
     color: 'rgba(251, 191, 36, 0.2)',
@@ -23,7 +23,7 @@ export const meditations = {
 
   abundance: {
     name: 'Abondance',
-    icon: '💰',
+    icon: 'DollarSign',
     duration: 600, // 10 minutes
     description: 'Attirez la prospérité',
     color: 'rgba(34, 197, 94, 0.2)',
@@ -50,7 +50,7 @@ export const meditations = {
 
   love: {
     name: 'Amour Universel',
-    icon: '💗',
+    icon: 'Heart',
     duration: 480, // 8 minutes
     description: 'Ouvrez votre cœur',
     color: 'rgba(236, 72, 153, 0.2)',
@@ -75,7 +75,7 @@ export const meditations = {
 
   attraction: {
     name: 'Loi d\'Attraction',
-    icon: '🧲',
+    icon: 'Magnet',
     duration: 420, // 7 minutes
     description: 'Manifestez vos désirs',
     color: 'rgba(139, 92, 246, 0.2)',
@@ -99,7 +99,7 @@ export const meditations = {
 
   confidence: {
     name: 'Confiance en Soi',
-    icon: '💪',
+    icon: 'Armchair',
     duration: 360, // 6 minutes
     description: 'Renforcez votre pouvoir',
     color: 'rgba(59, 130, 246, 0.2)',
@@ -122,7 +122,7 @@ export const meditations = {
 
   sleep: {
     name: 'Sommeil Profond',
-    icon: '😴',
+    icon: 'Moon',
     duration: 600, // 10 minutes
     description: 'Préparez-vous au repos',
     color: 'rgba(99, 102, 241, 0.2)',

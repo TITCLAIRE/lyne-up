@@ -1,5 +1,5 @@
 import React from 'react';
-import { Home, Play } from 'lucide-react';
+import { Home, Play, Zap, Target, Heart, Scale, Smile, Gem, Waves } from 'lucide-react';
 import { useAppStore } from '../../store/appStore';
 
 export const CoherenceSelectionScreen = () => {
@@ -11,18 +11,18 @@ export const CoherenceSelectionScreen = () => {
   } = useAppStore();
 
   const durations = [
-    { value: 3, label: '3 min', icon: '⚡', desc: 'Rapide' },
-    { value: 5, label: '5 min', icon: '🎯', desc: 'Standard' },
-    { value: 15, label: '15 min', icon: '🧘', desc: 'Profond' },
+    { value: 3, label: '3 min', icon: Zap, desc: 'Rapide' },
+    { value: 5, label: '5 min', icon: Target, desc: 'Standard' },
+    { value: 15, label: '15 min', icon: Heart, desc: 'Profond' },
   ];
 
   const rhythms = [
-    { value: '5-5', label: 'Rythme 5/5', icon: '⚖️', desc: 'Équilibre classique' },
-    { value: '4-6', label: 'Rythme 4/6', icon: '😌', desc: 'Anti-stress' },
-    { value: '4-4', label: 'Rythme 4/4', icon: '🎯', desc: 'Simplicité' },
-    { value: '4-7-8', label: 'Rythme 4/7/8', icon: '🧘', desc: 'Relaxation profonde' },
-    { value: '6-2-6', label: 'Rythme 6/2/6', icon: '💎', desc: 'Cohérence avancée' },
-    { value: '3-3-3', label: 'Rythme 3/3/3', icon: '🌊', desc: 'Débutant' },
+    { value: '5-5', label: 'Rythme 5/5', icon: Scale, desc: 'Équilibre classique' },
+    { value: '4-6', label: 'Rythme 4/6', icon: Smile, desc: 'Anti-stress' },
+    { value: '4-4', label: 'Rythme 4/4', icon: Target, desc: 'Simplicité' },
+    { value: '4-7-8', label: 'Rythme 4/7/8', icon: Heart, desc: 'Relaxation profonde' },
+    { value: '6-2-6', label: 'Rythme 6/2/6', icon: Gem, desc: 'Cohérence avancée' },
+    { value: '3-3-3', label: 'Rythme 3/3/3', icon: Waves, desc: 'Débutant' },
   ];
 
   const handleDurationSelect = (duration) => {
@@ -70,51 +70,67 @@ export const CoherenceSelectionScreen = () => {
 
       {/* Sélection de durée */}
       <div className="mb-6">
-        <h3 className="text-lg font-semibold mb-3">⏱️ Durée de la session</h3>
+        <h3 className="text-lg font-semibold mb-3 flex items-center gap-2">
+          <Target size={18} />
+          Durée de la session
+        </h3>
         <div className="grid grid-cols-3 gap-3">
-          {durations.map((duration) => (
-            <div
-              key={duration.value}
-              onClick={() => handleDurationSelect(duration.value)}
-              className={`bg-white/8 border rounded-2xl p-3 cursor-pointer text-center transition-all duration-200 ${
-                coherenceSettings.duration === duration.value
-                  ? 'border-pink-500/50 bg-pink-500/20'
-                  : 'border-white/15 hover:bg-white/12'
-              }`}
-            >
-              <div className="text-2xl mb-1">{duration.icon}</div>
-              <div className="font-medium text-sm">{duration.label}</div>
-              <div className="text-xs text-white/60">{duration.desc}</div>
-            </div>
-          ))}
+          {durations.map((duration) => {
+            const IconComponent = duration.icon;
+            return (
+              <div
+                key={duration.value}
+                onClick={() => handleDurationSelect(duration.value)}
+                className={`bg-white/8 border rounded-2xl p-3 cursor-pointer text-center transition-all duration-200 ${
+                  coherenceSettings.duration === duration.value
+                    ? 'border-pink-500/50 bg-pink-500/20'
+                    : 'border-white/15 hover:bg-white/12'
+                }`}
+              >
+                <div className="flex justify-center mb-2">
+                  <IconComponent size={24} />
+                </div>
+                <div className="font-medium text-sm">{duration.label}</div>
+                <div className="text-xs text-white/60">{duration.desc}</div>
+              </div>
+            );
+          })}
         </div>
       </div>
 
       {/* Sélection de rythme */}
       <div className="mb-6">
-        <h3 className="text-lg font-semibold mb-3">🌬️ Rythme respiratoire</h3>
+        <h3 className="text-lg font-semibold mb-3 flex items-center gap-2">
+          <Waves size={18} />
+          Rythme respiratoire
+        </h3>
         <div className="grid grid-cols-3 gap-3">
-          {rhythms.map((rhythm) => (
-            <div
-              key={rhythm.value}
-              onClick={() => handleRhythmSelect(rhythm.value)}
-              className={`bg-white/8 border rounded-2xl p-3 cursor-pointer text-center transition-all duration-200 ${
-                coherenceSettings.rhythm === rhythm.value
-                  ? 'border-pink-500/50 bg-pink-500/20'
-                  : 'border-white/15 hover:bg-white/12'
-              }`}
-            >
-              <div className="text-2xl mb-1">{rhythm.icon}</div>
-              <div className="font-medium text-sm">{rhythm.label}</div>
-              <div className="text-xs text-white/60">{rhythm.desc}</div>
-            </div>
-          ))}
+          {rhythms.map((rhythm) => {
+            const IconComponent = rhythm.icon;
+            return (
+              <div
+                key={rhythm.value}
+                onClick={() => handleRhythmSelect(rhythm.value)}
+                className={`bg-white/8 border rounded-2xl p-3 cursor-pointer text-center transition-all duration-200 ${
+                  coherenceSettings.rhythm === rhythm.value
+                    ? 'border-pink-500/50 bg-pink-500/20'
+                    : 'border-white/15 hover:bg-white/12'
+                }`}
+              >
+                <div className="flex justify-center mb-2">
+                  <IconComponent size={24} />
+                </div>
+                <div className="font-medium text-sm">{rhythm.label}</div>
+                <div className="text-xs text-white/60">{rhythm.desc}</div>
+              </div>
+            );
+          })}
         </div>
       </div>
 
       {/* Options audio */}
       <div className="mb-8">
-        <h3 className="text-lg font-semibold mb-3">🔊 Options audio</h3>
+        <h3 className="text-lg font-semibold mb-3">Options audio</h3>
         <div className="bg-white/8 rounded-2xl p-4 space-y-4">
           <div className="flex justify-between items-center">
             <span>Fréquence sonore (0,1 Hz)</span>
@@ -151,7 +167,7 @@ export const CoherenceSelectionScreen = () => {
                   : 'bg-white/10 border-2 border-white/30 text-white/70'
               }`}
             >
-              {coherenceSettings.silentMode ? '🔊 Mode normal' : '🔇 Mode silencieux'}
+              {coherenceSettings.silentMode ? 'Mode normal' : 'Mode silencieux'}
             </button>
           </div>
         </div>

@@ -207,7 +207,6 @@ export const SidePanel = () => {
                         : 'bg-white/10 border-2 border-white/20'
                     }`}
                   >
-                    <div className="text-lg mb-1">🎵</div>
                     <div className="font-semibold">Claire</div>
                     <div className="text-xs text-white/70 mt-1">Voix Premium</div>
                   </button>
@@ -219,7 +218,6 @@ export const SidePanel = () => {
                         : 'bg-white/10 border-2 border-white/20'
                     }`}
                   >
-                    <div className="text-lg mb-1">🎵</div>
                     <div className="font-semibold">Thierry</div>
                     <div className="text-xs text-white/70 mt-1">Voix Premium</div>
                   </button>
@@ -248,7 +246,7 @@ export const SidePanel = () => {
 
               <div className="bg-green-500/10 border border-green-500/30 rounded-lg p-3">
                 <p className="text-xs text-green-200">
-                  🎵 <strong>Voix Premium :</strong> Vos fichiers MP3 premium avec fallback automatique vers synthèse vocale si fichier manquant.
+                  <strong>Voix Premium :</strong> Vos fichiers MP3 premium avec fallback automatique vers synthèse vocale si fichier manquant.
                 </p>
               </div>
             </div>

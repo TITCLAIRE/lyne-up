@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Play, Pause, Home, Headphones, Target, RotateCcw, TrendingUp, Settings, Baby, Users, Brain, Sparkles, Heart } from 'lucide-react';
+import { Play, Pause, Home, Headphones, Target, RotateCcw, TrendingUp, Settings, Baby, Users, Brain, Sparkles, Heart, Wind } from 'lucide-react';
 import { useAppStore } from '../../store/appStore';
 import { BreathingGuide } from '../BreathingGuide';
 import { useSessionTimer } from '../../hooks/useSessionTimer';
@@ -147,7 +147,7 @@ export const SessionScreen = () => {
   // Gérer la fin de session
   useEffect(() => {
     if (timeRemaining === 0 && isSessionActive && !sessionEnded) {
-      console.log('🏁 Session terminée:', currentSession);
+      console.log('Session terminée:', currentSession);
       setSessionEnded(true);
       
       // Message de fin adapté aux différentes sessions
@@ -202,13 +202,13 @@ export const SessionScreen = () => {
       
       // Démarrer l'audio
       if (audioSettings.enabled) {
-        console.log('🎵 Démarrage audio session:', currentSession);
+        console.log('Démarrage audio session:', currentSession);
         startAudio();
       }
       
       // Démarrer le timer et la respiration
       const duration = sessionData?.duration || 180;
-      console.log('⏱️ Durée session:', duration, 'secondes');
+      console.log('Durée session:', duration, 'secondes');
       startTimer(duration);
       startBreathing(breathingPattern);
       
@@ -288,23 +288,26 @@ export const SessionScreen = () => {
         {/* Indicateur spécial pour ENTRAÎNEMENT PROGRESSIF */}
         {currentSession === 'progressive' && (
           <div className="bg-green-500/20 border border-green-500/30 rounded-lg p-3 mb-4">
-            <p className="text-sm text-green-200 mb-2">
-              📈 <strong>ENTRAÎNEMENT PROGRESSIF - PHASE {currentProgressivePhase + 1}/3 :</strong>
+            <p className="text-sm text-green-200 mb-2 flex items-center justify-center gap-2">
+              <TrendingUp size={16} />
+              <strong>ENTRAÎNEMENT PROGRESSIF - PHASE {currentProgressivePhase + 1}/3 :</strong>
             </p>
             <div className="text-xs text-green-100/80 space-y-1">
-              <div>🎯 <strong>Phase actuelle :</strong> {
-                currentProgressivePhase === 0 ? 'Rythme 3/3 (Débutant)' :
-                currentProgressivePhase === 1 ? 'Rythme 4/4 (Intermédiaire)' :
-                'Rythme 5/5 (Cohérence cardiaque)'
-              }</div>
-              <div>⏱️ <strong>Timing :</strong> 
-                {currentProgressivePhase === 0 && ' 0-60s : Apprentissage doux'}
-                {currentProgressivePhase === 1 && ' 60-120s : Approfondissement'}
-                {currentProgressivePhase === 2 && ' 120-180s : Maîtrise'}
+              <div className="flex items-center justify-center gap-1">
+                <Target size={12} />
+                <strong>Phase actuelle :</strong> {
+                  currentProgressivePhase === 0 ? 'Rythme 3/3 (Débutant)' :
+                  currentProgressivePhase === 1 ? 'Rythme 4/4 (Intermédiaire)' :
+                  'Rythme 5/5 (Cohérence cardiaque)'
+                }
               </div>
-              <div>🫁 <strong>Rythme actuel :</strong> {breathingState.inhaleTime || 3}/{breathingState.exhaleTime || 3}</div>
-              <div className="mt-2 text-yellow-200">
-                ✨ <strong>PROGRESSION AUTOMATIQUE ACTIVÉE</strong>
+              <div className="flex items-center justify-center gap-1">
+                <Wind size={12} />
+                <strong>Rythme actuel :</strong> {breathingState.inhaleTime || 3}/{breathingState.exhaleTime || 3}
+              </div>
+              <div className="mt-2 text-yellow-200 flex items-center justify-center gap-1">
+                <Sparkles size={12} />
+                <strong>PROGRESSION AUTOMATIQUE ACTIVÉE</strong>
               </div>
             </div>
           </div>
@@ -313,17 +316,22 @@ export const SessionScreen = () => {
         {/* Indicateur spécial pour RESET - RYTHME 4/7/8 */}
         {currentSession === 'reset' && (
           <div className="bg-indigo-500/20 border border-indigo-500/30 rounded-lg p-3 mb-4">
-            <p className="text-sm text-indigo-200 mb-2">
-              🔄 <strong>MODULE RESET - RYTHME 4/7/8 :</strong>
+            <p className="text-sm text-indigo-200 mb-2 flex items-center justify-center gap-2">
+              <RotateCcw size={16} />
+              <strong>MODULE RESET - RYTHME 4/7/8 :</strong>
             </p>
             <div className="text-xs text-indigo-100/80 space-y-1">
-              <div>🫁 <strong>Inspiration :</strong> 4 secondes (par le nez)</div>
-              <div>⏸️ <strong>Rétention :</strong> 7 secondes (gardez l'air)</div>
-              <div>💨 <strong>Expiration :</strong> 8 secondes (par la bouche)</div>
-              <div>🧠 <strong>Effet :</strong> Active le système nerveux parasympathique</div>
-              <div>🎯 <strong>Usage :</strong> Crise de calme, insomnie, stress intense</div>
-              <div className="mt-2 text-yellow-200">
-                ✨ <strong>TECHNIQUE DU DR. ANDREW WEIL</strong>
+              <div className="flex items-center justify-center gap-1">
+                <Wind size={12} />
+                <strong>Inspiration :</strong> 4 secondes (par le nez)
+              </div>
+              <div className="flex items-center justify-center gap-1">
+                <Target size={12} />
+                <strong>Usage :</strong> Crise de calme, insomnie, stress intense
+              </div>
+              <div className="mt-2 text-yellow-200 flex items-center justify-center gap-1">
+                <Sparkles size={12} />
+                <strong>TECHNIQUE DU DR. ANDREW WEIL</strong>
               </div>
             </div>
           </div>
@@ -332,15 +340,18 @@ export const SessionScreen = () => {
         {/* Indicateur spécial pour KIDS - RYTHME 4/4 */}
         {currentSession === 'kids' && (
           <div className="bg-pink-500/20 border border-pink-500/30 rounded-lg p-3 mb-4">
-            <p className="text-sm text-pink-200 mb-2">
-              <Baby size={16} className="inline mr-1" /> <strong>MODE ENFANTS - RYTHME 4/4 :</strong>
+            <p className="text-sm text-pink-200 mb-2 flex items-center justify-center gap-2">
+              <Baby size={16} />
+              <strong>MODE ENFANTS - RYTHME 4/4 :</strong>
             </p>
             <div className="text-xs text-pink-100/80 space-y-1">
-              <div>🎈 <strong>Inspiration :</strong> 4 secondes (gonfle ton ballon)</div>
-              <div>🌸 <strong>Expiration :</strong> 4 secondes (souffle doucement)</div>
-              <div>🦄 <strong>Rythme :</strong> 4/4 (parfait pour les enfants)</div>
-              <div className="mt-2 text-yellow-200">
-                ✨ <strong>RESPIRATION MAGIQUE ACTIVÉE</strong>
+              <div className="flex items-center justify-center gap-1">
+                <Wind size={12} />
+                <strong>Rythme :</strong> 4/4 (parfait pour les enfants)
+              </div>
+              <div className="mt-2 text-yellow-200 flex items-center justify-center gap-1">
+                <Sparkles size={12} />
+                <strong>RESPIRATION MAGIQUE ACTIVÉE</strong>
               </div>
             </div>
           </div>
@@ -349,17 +360,22 @@ export const SessionScreen = () => {
         {/* Indicateur spécial pour SENIORS - RYTHME 3/4 */}
         {currentSession === 'seniors' && (
           <div className="bg-cyan-500/20 border border-cyan-500/30 rounded-lg p-3 mb-4">
-            <p className="text-sm text-cyan-200 mb-2">
-              <Users size={16} className="inline mr-1" /> <strong>MODULE SENIORS + - RYTHME 3/4 :</strong>
+            <p className="text-sm text-cyan-200 mb-2 flex items-center justify-center gap-2">
+              <Users size={16} />
+              <strong>MODULE SENIORS + - RYTHME 3/4 :</strong>
             </p>
             <div className="text-xs text-cyan-100/80 space-y-1">
-              <div>🫁 <strong>Inspiration :</strong> 3 secondes (doux et naturel)</div>
-              <div>💨 <strong>Expiration :</strong> 4 secondes (favorise la relaxation)</div>
-              <div>💖 <strong>Effet :</strong> Baisse de la tension artérielle</div>
-              <div>🎯 <strong>Usage :</strong> Relaxation adaptée aux seniors</div>
-              <div>🧘 <strong>Durée :</strong> 5 minutes de bien-être</div>
-              <div className="mt-2 text-yellow-200">
-                ✨ <strong>RESPIRATION ADAPTÉE AUX SENIORS</strong>
+              <div className="flex items-center justify-center gap-1">
+                <Wind size={12} />
+                <strong>Inspiration :</strong> 3 secondes (doux et naturel)
+              </div>
+              <div className="flex items-center justify-center gap-1">
+                <Heart size={12} />
+                <strong>Effet :</strong> Baisse de la tension artérielle
+              </div>
+              <div className="mt-2 text-yellow-200 flex items-center justify-center gap-1">
+                <Sparkles size={12} />
+                <strong>RESPIRATION ADAPTÉE AUX SENIORS</strong>
               </div>
             </div>
           </div>
@@ -388,8 +404,9 @@ export const SessionScreen = () => {
         {/* Fréquence audio active */}
         {audioSettings.enabled && (
           <div className="bg-white/10 rounded-lg p-2 mb-4">
-            <p className="text-xs text-white/70">
-              🎵 Fréquence active : <span className="text-cyan-400 font-medium">{getCurrentFrequencyName()}</span>
+            <p className="text-xs text-white/70 flex items-center justify-center gap-1">
+              <Waves size={12} />
+              Fréquence active : <span className="text-cyan-400 font-medium">{getCurrentFrequencyName()}</span>
             </p>
           </div>
         )}

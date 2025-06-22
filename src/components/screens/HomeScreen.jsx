@@ -1,5 +1,5 @@
 import React from 'react';
-import { Heart, Target, Zap, Waves, Brain, Sparkles, Baby, RotateCcw, TrendingUp, Settings, Users } from 'lucide-react';
+import { Heart, Target, Zap, Waves, Brain, Sparkles, Baby, RotateCcw, TrendingUp, Settings, Users, Wind } from 'lucide-react';
 import { useAppStore } from '../../store/appStore';
 
 // Sessions d'urgence et réalignement
@@ -30,7 +30,7 @@ export const HomeScreen = () => {
   const { setCurrentScreen, setCurrentSession } = useAppStore();
 
   const handleSessionClick = (sessionId) => {
-    console.log('🎯 Clic sur session:', sessionId);
+    console.log('Session sélectionnée:', sessionId);
     if (sessionId === 'meditation') {
       setCurrentScreen('meditationSelection');
     } else if (sessionId === 'freeSessionSelection') {
@@ -42,7 +42,7 @@ export const HomeScreen = () => {
   };
 
   const handleCoherenceClick = () => {
-    console.log('💖 Clic sur Cohérence Cardiaque Intégrative');
+    console.log('Cohérence Cardiaque Intégrative sélectionnée');
     setCurrentScreen('coherenceSelection');
   };
 
@@ -63,7 +63,8 @@ export const HomeScreen = () => {
       <div className="mb-8">
         <div className="flex items-baseline gap-3 mb-4">
           <h2 className="text-lg font-semibold flex items-center gap-2">
-            ⚡ Urgence & Réalignement
+            <Zap size={18} />
+            Urgence & Réalignement
           </h2>
           <span className="text-sm text-white/60 italic">sessions guidées</span>
         </div>
@@ -84,8 +85,9 @@ export const HomeScreen = () => {
                   <p className="text-xs text-white/60 mb-1">{session.time}</p>
                   <p className="text-xs text-white/50 italic">{session.baseline}</p>
                   {session.id === 'reset' && (
-                    <div className="text-xs text-indigo-300 mt-1">
-                      🫁 Rythme 4/7/8
+                    <div className="text-xs text-indigo-300 mt-1 flex items-center justify-center gap-1">
+                      <Wind size={12} />
+                      Rythme 4/7/8
                     </div>
                   )}
                 </div>
@@ -99,7 +101,8 @@ export const HomeScreen = () => {
       <div className="mb-8">
         <div className="flex items-baseline gap-3 mb-4">
           <h2 className="text-lg font-semibold flex items-center gap-2">
-            📈 Initiation & Perfectionnement
+            <TrendingUp size={18} />
+            Initiation & Perfectionnement
           </h2>
           <span className="text-sm text-white/60 italic">progression guidée</span>
         </div>
@@ -120,13 +123,15 @@ export const HomeScreen = () => {
                   <p className="text-xs text-white/60 mb-1">{session.time}</p>
                   <p className="text-xs text-white/50 italic">{session.baseline}</p>
                   {session.id === 'progressive' && (
-                    <div className="text-xs text-green-300 mt-1">
-                      🫁 3/3 → 4/4 → 5/5
+                    <div className="text-xs text-green-300 mt-1 flex items-center justify-center gap-1">
+                      <Wind size={12} />
+                      3/3 → 4/4 → 5/5
                     </div>
                   )}
                   {session.id === 'freeSessionSelection' && (
-                    <div className="text-xs text-purple-300 mt-1">
-                      🫁 3-9s • 3-20min
+                    <div className="text-xs text-purple-300 mt-1 flex items-center justify-center gap-1">
+                      <Wind size={12} />
+                      3-9s • 3-20min
                     </div>
                   )}
                 </div>
@@ -140,7 +145,8 @@ export const HomeScreen = () => {
       <div className="mb-8">
         <div className="flex items-baseline gap-3 mb-4">
           <h2 className="text-lg font-semibold flex items-center gap-2">
-            👥 Espace Enfants & Seniors
+            <Users size={18} />
+            Espace Enfants & Seniors
           </h2>
           <span className="text-sm text-white/60 italic">adaptés par âge</span>
         </div>
@@ -161,13 +167,15 @@ export const HomeScreen = () => {
                   <p className="text-xs text-white/60 mb-1">{session.time}</p>
                   <p className="text-xs text-white/50 italic">{session.baseline}</p>
                   {session.id === 'kids' && (
-                    <div className="text-xs text-pink-300 mt-1">
-                      🫁 Rythme 4/4 • Adapté aux enfants
+                    <div className="text-xs text-pink-300 mt-1 flex items-center justify-center gap-1">
+                      <Wind size={12} />
+                      Rythme 4/4 • Adapté aux enfants
                     </div>
                   )}
                   {session.id === 'seniors' && (
-                    <div className="text-xs text-cyan-300 mt-1">
-                      🫁 Rythme 3/4 • Adapté aux seniors
+                    <div className="text-xs text-cyan-300 mt-1 flex items-center justify-center gap-1">
+                      <Wind size={12} />
+                      Rythme 3/4 • Adapté aux seniors
                     </div>
                   )}
                 </div>
@@ -181,7 +189,8 @@ export const HomeScreen = () => {
       <div className="mb-6">
         <div className="flex items-baseline gap-3 mb-4">
           <h2 className="text-lg font-semibold flex items-center gap-2">
-            🧘‍♀️ Voyage Intérieur
+            <Heart size={18} />
+            Voyage Intérieur
           </h2>
           <span className="text-sm text-white/60 italic">sessions guidées</span>
         </div>

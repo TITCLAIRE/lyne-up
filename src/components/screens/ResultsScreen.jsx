@@ -1,5 +1,5 @@
 import React from 'react';
-import { Home, RotateCcw } from 'lucide-react';
+import { Home, RotateCcw, Award } from 'lucide-react';
 import { useAppStore } from '../../store/appStore';
 
 export const ResultsScreen = () => {
@@ -19,9 +19,8 @@ export const ResultsScreen = () => {
         {/* Icône de succès */}
         <div className="flex items-center justify-center gap-4 mb-6">
           <div className="w-16 h-16 bg-gradient-to-br from-cyan-400 to-purple-500 rounded-2xl flex items-center justify-center">
-            <span className="text-3xl">🧘‍♀️</span>
+            <Award size={32} className="text-white" />
           </div>
-          <div className="text-6xl">🎉</div>
         </div>
 
         <h1 className="text-3xl font-bold mb-2">Session complétée !</h1>

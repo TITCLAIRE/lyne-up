@@ -7,7 +7,6 @@ export const useBreathingAnimation = () => {
     progress: 0,
     counter: 0,
     instruction: 'Respirez naturellement',
-    emoji: '🧘‍♀️',
     inhaleTime: 5,
     holdTime: 0,
     exhaleTime: 5,
@@ -23,7 +22,7 @@ export const useBreathingAnimation = () => {
   const startBreathing = useCallback((rhythmOrPattern = '5-5') => {
     if (isRunningRef.current) return;
     
-    console.log('🫁 DÉMARRAGE RESPIRATION avec pattern:', rhythmOrPattern);
+    console.log('Démarrage respiration avec pattern:', rhythmOrPattern);
     
     isRunningRef.current = true;
     cycleStartRef.current = Date.now();
@@ -49,7 +48,7 @@ export const useBreathingAnimation = () => {
 
     const totalCycle = inhaleTime + holdTime + exhaleTime;
 
-    console.log('🫁 Paramètres respiratoires:', {
+    console.log('Paramètres respiratoires:', {
       inhale: inhaleTime / 1000,
       hold: holdTime / 1000,
       exhale: exhaleTime / 1000,
@@ -76,7 +75,6 @@ export const useBreathingAnimation = () => {
       let progress;
       let counter;
       let instruction;
-      let emoji;
       let timeUntilNextPhase = 0;
 
       if (cycleTime < inhaleTime) {
@@ -84,7 +82,6 @@ export const useBreathingAnimation = () => {
         progress = (cycleTime / inhaleTime) * 100;
         counter = Math.ceil((inhaleTime - cycleTime) / 1000);
         instruction = 'Inspirez';
-        emoji = '🌬️';
         timeUntilNextPhase = inhaleTime - cycleTime;
       } else if (holdTime > 0 && cycleTime < inhaleTime + holdTime) {
         phase = 'hold';
@@ -92,7 +89,6 @@ export const useBreathingAnimation = () => {
         progress = 100;
         counter = Math.ceil((holdTime - (cycleTime - inhaleTime)) / 1000);
         instruction = 'Retenez';
-        emoji = '⏸️';
         timeUntilNextPhase = (inhaleTime + holdTime) - cycleTime;
       } else {
         phase = 'exhale';
@@ -101,17 +97,16 @@ export const useBreathingAnimation = () => {
         progress = (1 - exhaleProgress) * 100;
         counter = Math.ceil((exhaleTime - (cycleTime - exhaleStart)) / 1000);
         instruction = 'Expirez';
-        emoji = '💨';
         timeUntilNextPhase = totalCycle - cycleTime;
       }
 
       progress = Math.max(0, Math.min(100, progress));
       counter = Math.max(1, counter);
 
-      // NOUVEAU : Détecter les changements de phase avec timing précis
+      // Détecter les changements de phase avec timing précis
       if (phase !== lastPhaseRef.current) {
-        console.log('🔄 CHANGEMENT DE PHASE:', lastPhaseRef.current, '→', phase);
-        console.log('⏰ Temps jusqu\'à la prochaine phase:', Math.round(timeUntilNextPhase), 'ms');
+        console.log('Changement de phase:', lastPhaseRef.current, '→', phase);
+        console.log('Temps jusqu\'à la prochaine phase:', Math.round(timeUntilNextPhase), 'ms');
         
         // Calculer la durée exacte de la phase actuelle
         let currentPhaseDuration;
@@ -123,7 +118,7 @@ export const useBreathingAnimation = () => {
           currentPhaseDuration = exhaleTime / 1000;
         }
         
-        console.log('⏱️ Durée phase actuelle:', currentPhaseDuration, 'secondes');
+        console.log('Durée phase actuelle:', currentPhaseDuration, 'secondes');
         
         lastPhaseRef.current = phase;
       }
@@ -133,12 +128,11 @@ export const useBreathingAnimation = () => {
         progress,
         counter,
         instruction,
-        emoji,
         inhaleTime: inhaleTime / 1000,
         holdTime: holdTime / 1000,
         exhaleTime: exhaleTime / 1000,
         currentPattern: rhythmOrPattern,
-        timeUntilNextPhase: Math.round(timeUntilNextPhase) // NOUVEAU : Temps jusqu'à la prochaine phase
+        timeUntilNextPhase: Math.round(timeUntilNextPhase)
       };
 
       setBreathingState(newState);
@@ -158,7 +152,7 @@ export const useBreathingAnimation = () => {
   }, [updateBreathingState]);
 
   const stopBreathing = useCallback(() => {
-    console.log('🛑 ARRÊT RESPIRATION');
+    console.log('Arrêt respiration');
     isRunningRef.current = false;
     lastPhaseRef.current = 'idle';
     
@@ -172,7 +166,6 @@ export const useBreathingAnimation = () => {
       progress: 0,
       counter: 0,
       instruction: 'Respirez naturellement',
-      emoji: '🧘‍♀️',
       inhaleTime: 5,
       holdTime: 0,
       exhaleTime: 5,

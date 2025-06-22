@@ -1,5 +1,5 @@
 import React from 'react';
-import { Home, Play, Minus, Plus, Music } from 'lucide-react';
+import { Home, Play, Minus, Plus, Music, Wind } from 'lucide-react';
 import { useAppStore } from '../../store/appStore';
 
 export const FreeSessionSelectionScreen = () => {
@@ -87,7 +87,10 @@ export const FreeSessionSelectionScreen = () => {
 
       {/* Configuration du rythme respiratoire */}
       <div className="mb-6">
-        <h3 className="text-lg font-semibold mb-4">🫁 Rythme respiratoire</h3>
+        <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+          <Wind size={18} />
+          Rythme respiratoire
+        </h3>
         
         {/* Temps d'inspiration */}
         <div className="bg-white/8 border border-white/15 rounded-2xl p-4 mb-4">
@@ -162,7 +165,7 @@ export const FreeSessionSelectionScreen = () => {
 
       {/* Configuration de la durée */}
       <div className="mb-6">
-        <h3 className="text-lg font-semibold mb-4">⏱️ Durée de la session</h3>
+        <h3 className="text-lg font-semibold mb-4">Durée de la session</h3>
         <div className="bg-white/8 border border-white/15 rounded-2xl p-4">
           <div className="flex items-center justify-between mb-3">
             <span className="font-medium">Durée totale</span>
@@ -192,7 +195,7 @@ export const FreeSessionSelectionScreen = () => {
         </div>
       </div>
 
-      {/* NOUVEAU : Sélection de fréquence */}
+      {/* Sélection de fréquence */}
       <div className="mb-6">
         <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
           <Music size={18} />
@@ -208,11 +211,11 @@ export const FreeSessionSelectionScreen = () => {
               onChange={(e) => handleFrequencyChange(e.target.value)}
               className="w-full p-3 bg-white/10 border border-white/20 rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500/50"
             >
-              <optgroup label="🎯 Cohérence cardiaque">
+              <optgroup label="Cohérence cardiaque">
                 <option value="coherence">0.1 Hz - Cohérence cardiaque</option>
               </optgroup>
               
-              <optgroup label="🎵 Fréquences de Solfège">
+              <optgroup label="Fréquences de Solfège">
                 <option value="174hz">174 Hz - Fréquence de la Terre</option>
                 <option value="285hz">285 Hz - Régénération cellulaire</option>
                 <option value="396hz">396 Hz - Libération des peurs</option>
@@ -223,7 +226,7 @@ export const FreeSessionSelectionScreen = () => {
                 <option value="852hz">852 Hz - Retour à l'ordre spirituel</option>
               </optgroup>
               
-              <optgroup label="🧠 Ondes cérébrales">
+              <optgroup label="Ondes cérébrales">
                 <option value="delta">Ondes Delta (2Hz) - Sommeil profond</option>
                 <option value="theta">Ondes Theta (4.5Hz) - Méditation profonde</option>
                 <option value="theta6">Ondes Theta (6Hz) - Créativité</option>
@@ -249,7 +252,7 @@ export const FreeSessionSelectionScreen = () => {
 
       {/* Options audio */}
       <div className="mb-8">
-        <h3 className="text-lg font-semibold mb-3">🔊 Options audio</h3>
+        <h3 className="text-lg font-semibold mb-3">Options audio</h3>
         <div className="bg-white/8 rounded-2xl p-4 space-y-4">
           <div className="flex justify-between items-center">
             <span>Sons binauraux</span>
@@ -273,7 +276,7 @@ export const FreeSessionSelectionScreen = () => {
                   : 'bg-white/10 border-2 border-white/30 text-white/70'
               }`}
             >
-              {freeSessionSettings.silentMode ? '🔊 Mode normal' : '🔇 Mode silencieux'}
+              {freeSessionSettings.silentMode ? 'Mode normal' : 'Mode silencieux'}
             </button>
           </div>
         </div>
@@ -282,7 +285,7 @@ export const FreeSessionSelectionScreen = () => {
       {/* Aperçu de la session */}
       <div className="mb-8">
         <div className="bg-gradient-to-r from-green-500/20 to-emerald-500/20 border border-green-500/30 rounded-xl p-4">
-          <h4 className="font-semibold mb-2">📊 Aperçu de votre session</h4>
+          <h4 className="font-semibold mb-2">Aperçu de votre session</h4>
           <div className="text-sm text-white/80 space-y-1">
             <div>• Rythme : {freeSessionSettings.inhaleTime}s inspiration / {freeSessionSettings.exhaleTime}s expiration</div>
             <div>• Durée : {freeSessionSettings.duration} minutes</div>

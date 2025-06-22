@@ -1,4 +1,5 @@
 import React from 'react';
+import { Wind, Star, Leaf } from 'lucide-react';
 
 export const BreathingGuide = ({ breathingState, isActive }) => {
   
@@ -72,6 +73,35 @@ export const BreathingGuide = ({ breathingState, isActive }) => {
     }
   };
 
+  // Obtenir l'icône selon la phase
+  const getPhaseIcon = () => {
+    const isKidsMode = breathingState.inhaleTime === 4 && breathingState.exhaleTime === 4;
+    
+    if (isKidsMode) {
+      switch (breathingState.phase) {
+        case 'inhale':
+          return <Wind size={24} className="text-pink-400" />;
+        case 'hold':
+          return <Star size={24} className="text-yellow-400" />;
+        case 'exhale':
+          return <Leaf size={24} className="text-green-400" />;
+        default:
+          return <Wind size={24} className="text-blue-400" />;
+      }
+    }
+    
+    switch (breathingState.phase) {
+      case 'inhale':
+        return <Wind size={24} className="text-cyan-400" />;
+      case 'hold':
+        return <Star size={24} className="text-purple-400" />;
+      case 'exhale':
+        return <Leaf size={24} className="text-pink-400" />;
+      default:
+        return <Wind size={24} className="text-white/60" />;
+    }
+  };
+
   const expansion = getCenterExpansion();
 
   // Détection automatique du mode enfants
@@ -80,9 +110,9 @@ export const BreathingGuide = ({ breathingState, isActive }) => {
   return (
     <div className="text-center mb-8">
       <div className="max-w-md mx-auto">
-        {/* Instruction avec emoji dynamique */}
+        {/* Instruction avec icône dynamique */}
         <div className="flex items-center justify-center gap-4 mb-8">
-          <span className="text-4xl">{breathingState.emoji}</span>
+          {getPhaseIcon()}
           <span className="text-xl font-medium">{breathingState.instruction}</span>
         </div>
 
@@ -120,7 +150,10 @@ export const BreathingGuide = ({ breathingState, isActive }) => {
               ? 'bg-cyan-500/30 border-2 border-cyan-500/50 text-white font-semibold' 
               : 'text-white/60 border-2 border-transparent'
           }`}>
-            {isKidsMode ? '🎈' : '🌬️'} Inspire ({breathingState.inhaleTime}s)
+            <div className="flex items-center gap-1">
+              <Wind size={16} />
+              Inspire ({breathingState.inhaleTime}s)
+            </div>
           </div>
           
           {breathingState.holdTime > 0 && (
@@ -129,7 +162,10 @@ export const BreathingGuide = ({ breathingState, isActive }) => {
                 ? 'bg-purple-500/30 border-2 border-purple-500/50 text-white font-semibold' 
                 : 'text-white/60 border-2 border-transparent'
             }`}>
-              {isKidsMode ? '⭐' : '⏸️'} Pause ({breathingState.holdTime}s)
+              <div className="flex items-center gap-1">
+                <Star size={16} />
+                Pause ({breathingState.holdTime}s)
+              </div>
             </div>
           )}
           
@@ -138,16 +174,19 @@ export const BreathingGuide = ({ breathingState, isActive }) => {
               ? 'bg-purple-500/30 border-2 border-purple-500/50 text-white font-semibold' 
               : 'text-white/60 border-2 border-transparent'
           }`}>
-            {isKidsMode ? '🌸' : '💨'} Expire ({breathingState.exhaleTime}s)
+            <div className="flex items-center gap-1">
+              <Leaf size={16} />
+              Expire ({breathingState.exhaleTime}s)
+            </div>
           </div>
         </div>
 
         {/* Indication visuelle du mouvement */}
         <div className="mt-4 text-xs text-white/50 text-center">
           {breathingState.phase === 'idle' && '• Centre de repos •'}
-          {breathingState.phase === 'inhale' && (isKidsMode ? '🎈 Ton ballon magique se gonfle 🎈' : '← Expansion depuis le centre →')}
-          {breathingState.phase === 'hold' && (isKidsMode ? '⭐ Garde l\'air magique dans ton ballon ⭐' : '• Rétention - Maintenez l\'air •')}
-          {breathingState.phase === 'exhale' && (isKidsMode ? '🌸 Laisse sortir l\'air tout doucement 🌸' : '→ Contraction progressive vers le centre ←')}
+          {breathingState.phase === 'inhale' && (isKidsMode ? 'Ton ballon magique se gonfle' : '← Expansion depuis le centre →')}
+          {breathingState.phase === 'hold' && (isKidsMode ? 'Garde l\'air magique dans ton ballon' : '• Rétention - Maintenez l\'air •')}
+          {breathingState.phase === 'exhale' && (isKidsMode ? 'Laisse sortir l\'air tout doucement' : '→ Contraction progressive vers le centre ←')}
         </div>
       </div>
     </div>
