@@ -1,4 +1,5 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
+import { useAudioManager } from './useAudioManager';
 
 export const useBreathingAnimation = () => {
   const [breathingState, setBreathingState] = useState({
@@ -16,6 +17,7 @@ export const useBreathingAnimation = () => {
   const intervalRef = useRef(null);
   const isRunningRef = useRef(false);
   const cycleStartRef = useRef(0);
+  const { updateBreathingState } = useAudioManager();
 
   const startBreathing = useCallback((rhythmOrPattern = '5-5') => {
     if (isRunningRef.current) return;
@@ -42,6 +44,15 @@ export const useBreathingAnimation = () => {
     }
 
     const totalCycle = inhaleTime + holdTime + exhaleTime;
+
+    // Informer le gestionnaire audio des paramètres respiratoires
+    const breathingParams = {
+      inhaleTime: inhaleTime / 1000,
+      holdTime: holdTime / 1000,
+      exhaleTime: exhaleTime / 1000,
+      phase: 'idle'
+    };
+    updateBreathingState(breathingParams);
 
     const updateState = () => {
       if (!isRunningRef.current) return;
@@ -82,7 +93,7 @@ export const useBreathingAnimation = () => {
       progress = Math.max(0, Math.min(100, progress));
       counter = Math.max(1, counter);
 
-      setBreathingState({
+      const newState = {
         phase,
         progress,
         counter,
@@ -92,12 +103,20 @@ export const useBreathingAnimation = () => {
         holdTime: holdTime / 1000,
         exhaleTime: exhaleTime / 1000,
         currentPattern: rhythmOrPattern
+      };
+
+      setBreathingState(newState);
+
+      // NOUVEAU : Mettre à jour l'état respiratoire pour le gestionnaire audio
+      updateBreathingState({
+        ...newState,
+        phase
       });
     };
 
     intervalRef.current = setInterval(updateState, 100);
     updateState();
-  }, []);
+  }, [updateBreathingState]);
 
   const stopBreathing = useCallback(() => {
     isRunningRef.current = false;
@@ -107,7 +126,7 @@ export const useBreathingAnimation = () => {
       intervalRef.current = null;
     }
     
-    setBreathingState({
+    const resetState = {
       phase: 'idle',
       progress: 0,
       counter: 0,
@@ -117,8 +136,13 @@ export const useBreathingAnimation = () => {
       holdTime: 0,
       exhaleTime: 5,
       currentPattern: null
-    });
-  }, []);
+    };
+    
+    setBreathingState(resetState);
+    
+    // Informer le gestionnaire audio de l'arrêt
+    updateBreathingState(resetState);
+  }, [updateBreathingState]);
 
   useEffect(() => {
     return () => {
