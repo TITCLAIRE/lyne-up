@@ -49,12 +49,7 @@ function App() {
   };
 
   return (
-    <div 
-      className="min-h-screen text-white overflow-x-hidden"
-      style={{
-        background: 'linear-gradient(135deg, #0a1f2e, #0e4d5c, #1a5c6b, #0e4d5c, #0a1f2e)'
-      }}
-    >
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 text-white overflow-x-hidden">
       <Header />
       <main className="relative">
         {renderScreen()}
