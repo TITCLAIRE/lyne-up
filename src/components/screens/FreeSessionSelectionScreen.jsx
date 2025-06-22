@@ -1,5 +1,5 @@
 import React from 'react';
-import { Home, Play, Minus, Plus } from 'lucide-react';
+import { Home, Play, Minus, Plus, Music } from 'lucide-react';
 import { useAppStore } from '../../store/appStore';
 
 export const FreeSessionSelectionScreen = () => {
@@ -25,6 +25,10 @@ export const FreeSessionSelectionScreen = () => {
     updateFreeSessionSettings({ duration: newDuration });
   };
 
+  const handleFrequencyChange = (frequency) => {
+    updateFreeSessionSettings({ frequency });
+  };
+
   const handleToggleGong = () => {
     updateFreeSessionSettings({ gongEnabled: !freeSessionSettings.gongEnabled });
   };
@@ -48,6 +52,31 @@ export const FreeSessionSelectionScreen = () => {
 
   const totalCycleTime = freeSessionSettings.inhaleTime + freeSessionSettings.exhaleTime;
   const cyclesPerMinute = Math.round(60 / totalCycleTime * 10) / 10;
+
+  // Liste des fréquences disponibles
+  const frequencies = [
+    { value: 'coherence', name: '0.1 Hz - Cohérence cardiaque', category: 'Cohérence' },
+    { value: '396hz', name: '396 Hz - Libération des peurs', category: 'Solfège' },
+    { value: '432hz', name: '432 Hz - Harmonie naturelle', category: 'Solfège' },
+    { value: '528hz', name: '528 Hz - Amour & Guérison', category: 'Solfège' },
+    { value: '639hz', name: '639 Hz - Relations harmonieuses', category: 'Solfège' },
+    { value: '741hz', name: '741 Hz - Éveil de l\'intuition', category: 'Solfège' },
+    { value: '852hz', name: '852 Hz - Retour à l\'ordre spirituel', category: 'Solfège' },
+    { value: '174hz', name: '174 Hz - Fréquence de la Terre', category: 'Solfège' },
+    { value: '285hz', name: '285 Hz - Régénération cellulaire', category: 'Solfège' },
+    { value: 'theta', name: 'Ondes Theta (4.5Hz) - Méditation profonde', category: 'Ondes cérébrales' },
+    { value: 'theta6', name: 'Ondes Theta (6Hz) - Créativité', category: 'Ondes cérébrales' },
+    { value: 'theta783', name: 'Ondes Theta (7.83Hz) - Résonance Schumann', category: 'Ondes cérébrales' },
+    { value: 'alpha', name: 'Ondes Alpha (10Hz) - Relaxation active', category: 'Ondes cérébrales' },
+    { value: 'beta', name: 'Ondes Beta (14Hz) - Concentration', category: 'Ondes cérébrales' },
+    { value: 'delta', name: 'Ondes Delta (2Hz) - Sommeil profond', category: 'Ondes cérébrales' },
+    { value: 'gamma', name: 'Ondes Gamma (30-100Hz) - Éveil supérieur', category: 'Ondes cérébrales' },
+  ];
+
+  const getFrequencyName = (value) => {
+    const freq = frequencies.find(f => f.value === value);
+    return freq ? freq.name : 'Cohérence cardiaque';
+  };
 
   return (
     <div className="px-5 pb-5">
@@ -163,6 +192,61 @@ export const FreeSessionSelectionScreen = () => {
         </div>
       </div>
 
+      {/* NOUVEAU : Sélection de fréquence */}
+      <div className="mb-6">
+        <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+          <Music size={18} />
+          Fréquence thérapeutique
+        </h3>
+        <div className="bg-white/8 border border-white/15 rounded-2xl p-4">
+          <div className="mb-3">
+            <label className="block text-sm font-medium text-white/80 mb-2">
+              Choisissez votre fréquence
+            </label>
+            <select
+              value={freeSessionSettings.frequency}
+              onChange={(e) => handleFrequencyChange(e.target.value)}
+              className="w-full p-3 bg-white/10 border border-white/20 rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500/50"
+            >
+              <optgroup label="🎯 Cohérence cardiaque">
+                <option value="coherence">0.1 Hz - Cohérence cardiaque</option>
+              </optgroup>
+              
+              <optgroup label="🎵 Fréquences de Solfège">
+                <option value="174hz">174 Hz - Fréquence de la Terre</option>
+                <option value="285hz">285 Hz - Régénération cellulaire</option>
+                <option value="396hz">396 Hz - Libération des peurs</option>
+                <option value="432hz">432 Hz - Harmonie naturelle</option>
+                <option value="528hz">528 Hz - Amour & Guérison</option>
+                <option value="639hz">639 Hz - Relations harmonieuses</option>
+                <option value="741hz">741 Hz - Éveil de l'intuition</option>
+                <option value="852hz">852 Hz - Retour à l'ordre spirituel</option>
+              </optgroup>
+              
+              <optgroup label="🧠 Ondes cérébrales">
+                <option value="delta">Ondes Delta (2Hz) - Sommeil profond</option>
+                <option value="theta">Ondes Theta (4.5Hz) - Méditation profonde</option>
+                <option value="theta6">Ondes Theta (6Hz) - Créativité</option>
+                <option value="theta783">Ondes Theta (7.83Hz) - Résonance Schumann</option>
+                <option value="alpha">Ondes Alpha (10Hz) - Relaxation active</option>
+                <option value="beta">Ondes Beta (14Hz) - Concentration</option>
+                <option value="gamma">Ondes Gamma (30-100Hz) - Éveil supérieur</option>
+              </optgroup>
+            </select>
+          </div>
+          
+          {/* Description de la fréquence sélectionnée */}
+          <div className="bg-gradient-to-r from-purple-500/10 to-blue-500/10 border border-purple-500/20 rounded-lg p-3">
+            <div className="text-sm text-purple-200 font-medium mb-1">
+              Fréquence sélectionnée :
+            </div>
+            <div className="text-xs text-white/70">
+              {getFrequencyName(freeSessionSettings.frequency)}
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Options audio */}
       <div className="mb-8">
         <h3 className="text-lg font-semibold mb-3">🔊 Options audio</h3>
@@ -203,6 +287,7 @@ export const FreeSessionSelectionScreen = () => {
             <div>• Rythme : {freeSessionSettings.inhaleTime}s inspiration / {freeSessionSettings.exhaleTime}s expiration</div>
             <div>• Durée : {freeSessionSettings.duration} minutes</div>
             <div>• Cycles totaux : ~{Math.round(freeSessionSettings.duration * cyclesPerMinute)}</div>
+            <div>• Fréquence : {getFrequencyName(freeSessionSettings.frequency)}</div>
             <div>• Audio : {freeSessionSettings.silentMode ? 'Mode silencieux' : 'Sons binauraux activés'}</div>
           </div>
         </div>

@@ -40,11 +40,12 @@ export const useAppStore = create(
         silentMode: false,
       },
 
-      // NOUVEAU : Paramètres pour la session libre
+      // NOUVEAU : Paramètres pour la session libre avec fréquence
       freeSessionSettings: {
         inhaleTime: 5,    // Temps d'inspiration par défaut (5 secondes)
         exhaleTime: 5,    // Temps d'expiration par défaut (5 secondes)
         duration: 5,      // Durée par défaut (5 minutes)
+        frequency: 'coherence', // Fréquence par défaut
         gongEnabled: true,
         silentMode: false,
       },

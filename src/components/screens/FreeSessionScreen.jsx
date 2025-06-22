@@ -35,6 +35,30 @@ export const FreeSessionScreen = () => {
     };
   };
 
+  // Obtenir le nom de la fréquence sélectionnée
+  const getSelectedFrequencyName = () => {
+    const frequencies = {
+      coherence: '0.1 Hz - Cohérence cardiaque',
+      '396hz': '396 Hz - Libération des peurs',
+      '432hz': '432 Hz - Harmonie naturelle',
+      '528hz': '528 Hz - Amour & Guérison',
+      '639hz': '639 Hz - Relations harmonieuses',
+      '741hz': '741 Hz - Éveil de l\'intuition',
+      '852hz': '852 Hz - Retour à l\'ordre spirituel',
+      '174hz': '174 Hz - Fréquence de la Terre',
+      '285hz': '285 Hz - Régénération cellulaire',
+      'theta': 'Ondes Theta (4.5Hz) - Méditation profonde',
+      'theta6': 'Ondes Theta (6Hz) - Créativité',
+      'theta783': 'Ondes Theta (7.83Hz) - Résonance Schumann',
+      'alpha': 'Ondes Alpha (10Hz) - Relaxation active',
+      'beta': 'Ondes Beta (14Hz) - Concentration',
+      'delta': 'Ondes Delta (2Hz) - Sommeil profond',
+      'gamma': 'Ondes Gamma (30-100Hz) - Éveil supérieur',
+    };
+    
+    return frequencies[freeSessionSettings.frequency] || 'Cohérence cardiaque';
+  };
+
   // Gérer les changements de phase pour le gong
   useEffect(() => {
     if (isSessionActive && breathingState.phase !== 'idle' && breathingState.phase !== lastPhase) {
@@ -71,11 +95,11 @@ export const FreeSessionScreen = () => {
       
       // Message de démarrage simple
       setTimeout(() => {
-        const message = `Session libre démarrée. Rythme ${freeSessionSettings.inhaleTime} secondes inspiration, ${freeSessionSettings.exhaleTime} secondes expiration. Durée : ${freeSessionSettings.duration} minutes.`;
+        const message = `Session libre démarrée. Rythme ${freeSessionSettings.inhaleTime} secondes inspiration, ${freeSessionSettings.exhaleTime} secondes expiration. Durée : ${freeSessionSettings.duration} minutes. Fréquence : ${getSelectedFrequencyName()}.`;
         speak(message);
       }, 1000);
     }
-  }, [isSessionActive, voiceSystemStarted, voiceSettings.enabled, freeSessionSettings, speak]);
+  }, [isSessionActive, voiceSystemStarted, voiceSettings.enabled, freeSessionSettings, speak, getSelectedFrequencyName]);
 
   const handleToggleSession = () => {
     if (!isSessionActive) {
@@ -86,9 +110,9 @@ export const FreeSessionScreen = () => {
       setSessionEnded(false);
       setVoiceSystemStarted(false);
       
-      // Démarrer l'audio avec la fréquence par défaut
+      // Démarrer l'audio avec la fréquence sélectionnée
       if (audioSettings.enabled && freeSessionSettings.gongEnabled && !freeSessionSettings.silentMode) {
-        startAudio('coherence'); // Utiliser la fréquence de cohérence par défaut
+        startAudio(freeSessionSettings.frequency);
       }
       
       // Démarrer le timer avec la durée personnalisée
@@ -163,7 +187,8 @@ export const FreeSessionScreen = () => {
             <div>💨 <strong>Expiration :</strong> {freeSessionSettings.exhaleTime} secondes</div>
             <div>⏱️ <strong>Durée totale :</strong> {freeSessionSettings.duration} minutes</div>
             <div>🔄 <strong>Cycles prévus :</strong> ~{Math.round(freeSessionSettings.duration * cyclesPerMinute)}</div>
-            <div>🎵 <strong>Audio :</strong> {freeSessionSettings.silentMode ? 'Mode silencieux' : 'Sons binauraux activés'}</div>
+            <div>🎵 <strong>Fréquence :</strong> {getSelectedFrequencyName()}</div>
+            <div>🔊 <strong>Audio :</strong> {freeSessionSettings.silentMode ? 'Mode silencieux' : 'Sons binauraux activés'}</div>
             <div className="mt-2 text-yellow-200">
               ✨ <strong>RYTHME PERSONNALISÉ ACTIF</strong>
             </div>
@@ -187,7 +212,7 @@ export const FreeSessionScreen = () => {
         {audioSettings.enabled && freeSessionSettings.gongEnabled && !freeSessionSettings.silentMode && (
           <div className="bg-white/10 rounded-lg p-2 mb-4">
             <p className="text-xs text-white/70">
-              🎵 Fréquence active : <span className="text-cyan-400 font-medium">{getCurrentFrequencyName()}</span>
+              🎵 Fréquence sélectionnée : <span className="text-cyan-400 font-medium">{getSelectedFrequencyName()}</span>
             </p>
           </div>
         )}
