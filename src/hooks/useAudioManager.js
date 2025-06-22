@@ -56,6 +56,7 @@ export const useAudioManager = () => {
   const isPlayingRef = useRef(false);
   const sessionStartTimeRef = useRef(null);
   const breathingStateRef = useRef({ phase: 'idle', inhaleTime: 5, exhaleTime: 5 });
+  const activeGongsRef = useRef(new Map()); // NOUVEAU : Tracker des gongs actifs
 
   const initAudioContext = () => {
     if (!audioContextRef.current) {
@@ -169,6 +170,24 @@ export const useAudioManager = () => {
     console.log('🔇 ARRÊT AUDIO - Durée de session:', Math.round(sessionDuration), 'secondes');
 
     try {
+      // Arrêter tous les gongs actifs
+      activeGongsRef.current.forEach((gongData, gongId) => {
+        console.log('🔇 Arrêt gong actif:', gongId);
+        if (gongData.gainNode) {
+          gongData.gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.1);
+        }
+        if (gongData.oscillators) {
+          gongData.oscillators.forEach(osc => {
+            try {
+              osc.stop(audioContext.currentTime + 0.1);
+            } catch (e) {
+              // Oscillateur déjà arrêté
+            }
+          });
+        }
+      });
+      activeGongsRef.current.clear();
+
       // Fade out progressif
       gainNodeRef.current.gain.linearRampToValueAtTime(0, audioContext.currentTime + 1);
 
@@ -194,10 +213,11 @@ export const useAudioManager = () => {
       gainNodeRef.current = null;
       isPlayingRef.current = false;
       sessionStartTimeRef.current = null;
+      activeGongsRef.current.clear();
     }
   };
 
-  // NOUVEAU : Fonction pour mettre à jour l'état respiratoire
+  // Fonction pour mettre à jour l'état respiratoire
   const updateBreathingState = (breathingState) => {
     breathingStateRef.current = breathingState;
   };
@@ -208,30 +228,58 @@ export const useAudioManager = () => {
       return;
     }
 
-    console.log('🔔 GONG CONTINU:', type, '- État respiratoire:', breathingStateRef.current);
-
     const audioContext = initAudioContext();
     const now = audioContext.currentTime;
-
-    // Calculer la durée du gong basée sur le cycle respiratoire
     const currentBreathing = breathingStateRef.current;
+
+    // NOUVEAU : Calculer la durée exacte jusqu'à la prochaine phase
     let gongDuration;
     
     if (type === 'inhale') {
-      // Le gong d'inspiration dure jusqu'au début de l'expiration
+      // Le gong d'inspiration dure jusqu'au début de l'expiration (inclut la pause)
       gongDuration = (currentBreathing.inhaleTime || 5) + (currentBreathing.holdTime || 0);
     } else if (type === 'exhale') {
       // Le gong d'expiration dure toute la durée de l'expiration
       gongDuration = currentBreathing.exhaleTime || 5;
+    } else if (type === 'hold') {
+      // Le gong de rétention dure toute la pause
+      gongDuration = currentBreathing.holdTime || 0;
     } else {
       // Durée par défaut
       gongDuration = 5;
     }
 
-    // Assurer une durée minimale et maximale raisonnable
-    gongDuration = Math.max(3, Math.min(gongDuration, 10));
+    // NOUVEAU : Utiliser la durée de phase actuelle si disponible
+    if (currentBreathing.currentPhaseDuration) {
+      gongDuration = currentBreathing.currentPhaseDuration;
+    }
 
-    console.log('🔔 Durée gong calculée:', gongDuration, 'secondes pour', type);
+    // Assurer une durée minimale et maximale raisonnable
+    gongDuration = Math.max(2, Math.min(gongDuration, 12));
+
+    console.log('🔔 GONG PARFAITEMENT SYNCHRONISÉ:', type);
+    console.log('⏱️ Durée calculée:', gongDuration, 'secondes');
+    console.log('🫁 État respiratoire:', currentBreathing);
+
+    // Arrêter le gong précédent de ce type s'il existe
+    const gongId = `gong-${type}`;
+    if (activeGongsRef.current.has(gongId)) {
+      const prevGong = activeGongsRef.current.get(gongId);
+      console.log('🔄 Arrêt du gong précédent:', gongId);
+      if (prevGong.gainNode) {
+        prevGong.gainNode.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+      }
+      if (prevGong.oscillators) {
+        prevGong.oscillators.forEach(osc => {
+          try {
+            osc.stop(now + 0.05);
+          } catch (e) {
+            // Oscillateur déjà arrêté
+          }
+        });
+      }
+      activeGongsRef.current.delete(gongId);
+    }
 
     try {
       const osc1 = audioContext.createOscillator();
@@ -259,14 +307,21 @@ export const useAudioManager = () => {
 
       const recommendedGongVolume = audioSettings.gongVolume * 0.15;
       
-      // NOUVEAU : Enveloppe sonore continue avec diminution progressive
+      // NOUVEAU : Enveloppe sonore continue PARFAITEMENT synchronisée
       gainNode.gain.setValueAtTime(0, now);
-      gainNode.gain.linearRampToValueAtTime(recommendedGongVolume, now + 0.05); // Attaque rapide
-      gainNode.gain.linearRampToValueAtTime(recommendedGongVolume * 0.8, now + 0.2); // Sustain initial
-      gainNode.gain.linearRampToValueAtTime(recommendedGongVolume * 0.6, now + gongDuration * 0.3); // Diminution graduelle
-      gainNode.gain.linearRampToValueAtTime(recommendedGongVolume * 0.4, now + gongDuration * 0.6); // Continue à diminuer
-      gainNode.gain.linearRampToValueAtTime(recommendedGongVolume * 0.2, now + gongDuration * 0.8); // Presque fini
-      gainNode.gain.exponentialRampToValueAtTime(0.001, now + gongDuration); // Fade out final
+      gainNode.gain.linearRampToValueAtTime(recommendedGongVolume, now + 0.03); // Attaque très rapide
+      gainNode.gain.linearRampToValueAtTime(recommendedGongVolume * 0.85, now + 0.1); // Sustain initial
+      
+      // Diminution progressive sur toute la durée de la phase
+      const fadeSteps = 8;
+      for (let i = 1; i <= fadeSteps; i++) {
+        const timePoint = now + (gongDuration * i / fadeSteps);
+        const volumePoint = recommendedGongVolume * (1 - (i / fadeSteps) * 0.7); // Diminue de 70% max
+        gainNode.gain.linearRampToValueAtTime(volumePoint, timePoint);
+      }
+      
+      // Fade out final qui se termine EXACTEMENT à la fin de la phase
+      gainNode.gain.exponentialRampToValueAtTime(0.001, now + gongDuration);
 
       // Connecter les nœuds
       osc1.connect(filter);
@@ -275,15 +330,29 @@ export const useAudioManager = () => {
       filter.connect(gainNode);
       gainNode.connect(audioContext.destination);
 
-      // Démarrer et programmer l'arrêt
+      // Démarrer et programmer l'arrêt EXACTEMENT à la fin de la phase
       osc1.start(now);
       osc2.start(now);
       osc3.start(now);
-      osc1.stop(now + gongDuration + 0.1); // Petit buffer pour éviter les coupures
-      osc2.stop(now + gongDuration + 0.1);
-      osc3.stop(now + gongDuration + 0.1);
+      osc1.stop(now + gongDuration);
+      osc2.stop(now + gongDuration);
+      osc3.stop(now + gongDuration);
 
-      console.log('🔔 Gong continu joué avec succès - Durée:', gongDuration, 's');
+      // Stocker les références du gong actif
+      activeGongsRef.current.set(gongId, {
+        gainNode,
+        oscillators: [osc1, osc2, osc3],
+        startTime: now,
+        duration: gongDuration
+      });
+
+      // Nettoyer automatiquement après la fin
+      setTimeout(() => {
+        activeGongsRef.current.delete(gongId);
+        console.log('🧹 Gong nettoyé:', gongId);
+      }, (gongDuration + 0.1) * 1000);
+
+      console.log('🔔 Gong parfaitement synchronisé joué - Durée exacte:', gongDuration, 's');
     } catch (error) {
       console.error('❌ Erreur gong:', error);
     }
@@ -326,7 +395,7 @@ export const useAudioManager = () => {
     startAudio,
     stopAudio,
     playGong,
-    updateBreathingState, // NOUVEAU : Exposer la fonction de mise à jour
+    updateBreathingState,
     isPlaying: isPlayingRef.current,
     getDefaultFrequency,
     getCurrentFrequencyName: () => {
