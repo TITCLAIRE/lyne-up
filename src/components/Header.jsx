@@ -10,7 +10,7 @@ export const Header = () => {
       <div className="flex items-center gap-4 flex-1 min-w-0">
         <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 overflow-hidden bg-white/10 backdrop-blur-sm border border-white/20">
           <img 
-            src="/assets/ChatGPT Image 21 juin 2025, 18_14_03.png" 
+            src="/logo/logo-instant-opportun.png" 
             alt="Instant Opportun Logo" 
             className="w-10 h-10 object-contain"
             onError={(e) => {
