@@ -59,12 +59,12 @@ export const HomeScreen = () => {
         </div>
       </div>
 
-      {/* Section Urgence & Réalignement - SWITCH et RESET côte à côte */}
+      {/* Section Recentrage - SWITCH et RESET côte à côte */}
       <div className="mb-8">
         <div className="flex items-baseline gap-3 mb-4">
           <h2 className="text-lg font-semibold flex items-center gap-2">
             <Zap size={18} />
-            Urgence & Réalignement
+            Recentrage
           </h2>
           <span className="text-sm text-white/60 italic">sessions guidées</span>
         </div>
@@ -97,12 +97,12 @@ export const HomeScreen = () => {
         </div>
       </div>
 
-      {/* Section Initiation & Perfectionnement - TRAINING et SESSION LIBRE côte à côte */}
+      {/* Section Évolution - TRAINING et SESSION LIBRE côte à côte */}
       <div className="mb-8">
         <div className="flex items-baseline gap-3 mb-4">
           <h2 className="text-lg font-semibold flex items-center gap-2">
             <TrendingUp size={18} />
-            Initiation & Perfectionnement
+            Évolution
           </h2>
           <span className="text-sm text-white/60 italic">progression guidée</span>
         </div>
@@ -141,12 +141,12 @@ export const HomeScreen = () => {
         </div>
       </div>
 
-      {/* Section Espace Enfants & Seniors - KIDS et SENIORS + côte à côte */}
+      {/* Section Famille - KIDS et SENIORS + côte à côte */}
       <div className="mb-8">
         <div className="flex items-baseline gap-3 mb-4">
           <h2 className="text-lg font-semibold flex items-center gap-2">
             <Users size={18} />
-            Espace Enfants & Seniors
+            Famille
           </h2>
           <span className="text-sm text-white/60 italic">adaptés par âge</span>
         </div>
@@ -185,12 +185,12 @@ export const HomeScreen = () => {
         </div>
       </div>
 
-      {/* Section Voyage Intérieur - NOMS EN CAPITALES */}
+      {/* Section Présence - NOMS EN CAPITALES */}
       <div className="mb-6">
         <div className="flex items-baseline gap-3 mb-4">
           <h2 className="text-lg font-semibold flex items-center gap-2">
             <Heart size={18} />
-            Voyage Intérieur
+            Présence
           </h2>
           <span className="text-sm text-white/60 italic">sessions guidées</span>
         </div>
