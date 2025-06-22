@@ -26,6 +26,15 @@ export const FreeSessionScreen = () => {
   const [sessionEnded, setSessionEnded] = useState(false);
   const [voiceSystemStarted, setVoiceSystemStarted] = useState(false);
 
+  // Créer le pattern respiratoire à partir des paramètres de session libre
+  const createFreeSessionPattern = () => {
+    return {
+      inhale: freeSessionSettings.inhaleTime,
+      hold: 0, // Pas de pause pour les sessions libres
+      exhale: freeSessionSettings.exhaleTime
+    };
+  };
+
   // Obtenir le nom de la fréquence sélectionnée
   const getSelectedFrequencyName = () => {
     const frequencies = {
@@ -48,15 +57,6 @@ export const FreeSessionScreen = () => {
     };
     
     return frequencies[freeSessionSettings.frequency] || 'Cohérence cardiaque';
-  };
-
-  // Créer le pattern respiratoire à partir des paramètres de session libre
-  const createFreeSessionPattern = () => {
-    return {
-      inhale: freeSessionSettings.inhaleTime,
-      hold: 0, // Pas de pause pour les sessions libres
-      exhale: freeSessionSettings.exhaleTime
-    };
   };
 
   // Gérer les changements de phase pour le gong
@@ -165,24 +165,24 @@ export const FreeSessionScreen = () => {
       {/* En-tête de session */}
       <div className="text-center mb-6">
         <div className="flex items-center justify-center gap-4 mb-4">
-          <div className="w-12 h-12 rounded-xl flex items-center justify-center overflow-hidden bg-blue-900/50 backdrop-blur-sm border border-blue-700 shadow-lg">
-            <Settings size={24} className="text-blue-100" />
+          <div className="w-12 h-12 rounded-xl flex items-center justify-center overflow-hidden bg-white/10 backdrop-blur-sm border border-white/20">
+            <Settings size={24} className="text-white" />
           </div>
           <div>
-            <h1 className="text-2xl font-bold text-blue-900">Session Libre</h1>
-            <p className="text-blue-700">Rythme {freeSessionSettings.inhaleTime}/{freeSessionSettings.exhaleTime} • {freeSessionSettings.duration} min</p>
-            <p className="text-sm text-blue-600">
+            <h1 className="text-2xl font-bold">Session Libre</h1>
+            <p className="text-white/70">Rythme {freeSessionSettings.inhaleTime}/{freeSessionSettings.exhaleTime} • {freeSessionSettings.duration} min</p>
+            <p className="text-sm text-white/50">
               {cyclesPerMinute} cycles/min • Cycle de {totalCycleTime}s
             </p>
           </div>
         </div>
 
         {/* Indicateur spécial pour Session Libre */}
-        <div className="bg-green-500/20 border border-blue-700 rounded-lg p-3 mb-4 shadow-md">
-          <p className="text-sm text-blue-100 mb-2">
+        <div className="bg-green-500/20 border border-green-500/30 rounded-lg p-3 mb-4">
+          <p className="text-sm text-green-200 mb-2">
             🎯 <strong>SESSION LIBRE PERSONNALISÉE :</strong>
           </p>
-          <div className="text-xs text-blue-200 space-y-1">
+          <div className="text-xs text-green-100/80 space-y-1">
             <div>🫁 <strong>Inspiration :</strong> {freeSessionSettings.inhaleTime} secondes</div>
             <div>💨 <strong>Expiration :</strong> {freeSessionSettings.exhaleTime} secondes</div>
             <div>⏱️ <strong>Durée totale :</strong> {freeSessionSettings.duration} minutes</div>
@@ -197,11 +197,11 @@ export const FreeSessionScreen = () => {
 
         {/* Indication importante sur les écouteurs */}
         {!freeSessionSettings.silentMode && (
-          <div className="bg-blue-900/50 border border-blue-700 rounded-xl p-3 mb-4 flex items-start gap-3 shadow-md">
+          <div className="bg-blue-500/20 border border-blue-500/30 rounded-xl p-3 mb-4 flex items-start gap-3">
             <Headphones size={20} className="text-blue-400 mt-0.5 flex-shrink-0" />
             <div className="text-left">
               <p className="text-sm text-blue-200 font-medium mb-1">Important :</p>
-              <p className="text-xs text-blue-300 leading-relaxed">
+              <p className="text-xs text-blue-100/80 leading-relaxed">
                 Les sons binauraux nécessitent impérativement l'utilisation d'écouteurs stéréo pour créer l'effet de battement binaural entre les deux oreilles.
               </p>
             </div>
@@ -210,8 +210,8 @@ export const FreeSessionScreen = () => {
 
         {/* Fréquence audio active */}
         {audioSettings.enabled && freeSessionSettings.gongEnabled && !freeSessionSettings.silentMode && (
-          <div className="bg-blue-900/50 border border-blue-700 rounded-lg p-2 mb-4 shadow-sm">
-            <p className="text-xs text-blue-200">
+          <div className="bg-white/10 rounded-lg p-2 mb-4">
+            <p className="text-xs text-white/70">
               🎵 Fréquence sélectionnée : <span className="text-cyan-400 font-medium">{getSelectedFrequencyName()}</span>
             </p>
           </div>
@@ -226,16 +226,16 @@ export const FreeSessionScreen = () => {
 
       {/* Timer et progression */}
       <div className="text-center mb-8">
-        <div className="text-5xl font-light mb-4 tracking-wider text-blue-900">
+        <div className="text-5xl font-light mb-4 tracking-wider">
           {formatTime(timeRemaining)}
         </div>
-        <div className="w-full max-w-sm mx-auto h-1 bg-blue-800/30 rounded-full overflow-hidden">
+        <div className="w-full max-w-sm mx-auto h-1 bg-white/20 rounded-full overflow-hidden">
           <div 
             className="h-full bg-gradient-to-r from-green-400 to-emerald-400 transition-all duration-1000"
             style={{ width: `${progress}%` }}
           />
         </div>
-        <div className="text-sm text-blue-600 mt-2">
+        <div className="text-sm text-white/60 mt-2">
           Progression : {Math.round(progress)}%
         </div>
       </div>
@@ -245,10 +245,10 @@ export const FreeSessionScreen = () => {
         <button
           onClick={handleToggleSession}
           disabled={sessionEnded}
-          className={`flex-1 py-4 px-6 rounded-2xl font-semibold flex items-center justify-center gap-2 transition-all duration-200 shadow-lg ${
+          className={`flex-1 py-4 px-6 rounded-2xl font-semibold flex items-center justify-center gap-2 transition-all duration-200 ${
             sessionEnded 
-              ? 'bg-blue-900/30 text-blue-300 cursor-not-allowed'
-              : 'bg-gradient-to-r from-purple-500 to-pink-500 text-white hover:from-purple-600 hover:to-pink-600'
+              ? 'bg-white/10 text-white/50 cursor-not-allowed'
+              : 'bg-gradient-to-r from-green-500 to-emerald-500 text-white hover:from-green-600 hover:to-emerald-600'
           }`}
         >
           {sessionEnded ? (
@@ -262,7 +262,7 @@ export const FreeSessionScreen = () => {
         </button>
         <button
           onClick={handleGoHome}
-          className="bg-blue-900/50 border-2 border-blue-700 text-blue-100 py-4 px-6 rounded-2xl font-semibold flex items-center justify-center gap-2 hover:bg-blue-800/50 transition-all duration-200 shadow-md"
+          className="bg-white/10 border-2 border-white/30 text-white py-4 px-6 rounded-2xl font-semibold flex items-center justify-center gap-2 hover:bg-white/20 transition-all duration-200"
         >
           <Home size={20} />
           Retour

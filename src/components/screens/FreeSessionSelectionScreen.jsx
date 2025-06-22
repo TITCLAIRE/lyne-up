@@ -81,79 +81,79 @@ export const FreeSessionSelectionScreen = () => {
   return (
     <div className="px-5 pb-5">
       <div className="text-center mb-6">
-        <h1 className="text-2xl font-bold mb-2 text-blue-900">Session Libre</h1>
-        <p className="text-blue-700">Personnalisez votre rythme respiratoire</p>
+        <h1 className="text-2xl font-bold mb-2">Session Libre</h1>
+        <p className="text-white/70">Personnalisez votre rythme respiratoire</p>
       </div>
 
       {/* Configuration du rythme respiratoire */}
       <div className="mb-6">
-        <h3 className="text-lg font-semibold mb-4 text-blue-900">🫁 Rythme respiratoire</h3>
+        <h3 className="text-lg font-semibold mb-4">🫁 Rythme respiratoire</h3>
         
         {/* Temps d'inspiration */}
-        <div className="bg-blue-900/50 border border-blue-700 rounded-2xl p-4 mb-4 shadow-md">
+        <div className="bg-white/8 border border-white/15 rounded-2xl p-4 mb-4">
           <div className="flex items-center justify-between mb-3">
-            <span className="font-medium text-blue-100">Inspiration</span>
+            <span className="font-medium">Inspiration</span>
             <div className="flex items-center gap-3">
               <button
                 onClick={() => handleInhaleTimeChange(-1)}
                 disabled={freeSessionSettings.inhaleTime <= 3}
-                className="w-8 h-8 bg-blue-800/50 border border-blue-600 rounded-lg flex items-center justify-center hover:bg-blue-700/50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-8 h-8 bg-white/10 border border-white/20 rounded-lg flex items-center justify-center hover:bg-white/20 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                <Minus size={16} className="text-blue-100" />
+                <Minus size={16} />
               </button>
-              <span className="text-2xl font-bold w-12 text-center text-blue-100">
+              <span className="text-2xl font-bold w-12 text-center">
                 {freeSessionSettings.inhaleTime}s
               </span>
               <button
                 onClick={() => handleInhaleTimeChange(1)}
                 disabled={freeSessionSettings.inhaleTime >= 9}
-                className="w-8 h-8 bg-blue-800/50 border border-blue-600 rounded-lg flex items-center justify-center hover:bg-blue-700/50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-8 h-8 bg-white/10 border border-white/20 rounded-lg flex items-center justify-center hover:bg-white/20 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                <Plus size={16} className="text-blue-100" />
+                <Plus size={16} />
               </button>
             </div>
           </div>
-          <div className="text-xs text-blue-200">
+          <div className="text-xs text-white/60">
             Durée de l'inspiration (3-9 secondes)
           </div>
         </div>
 
         {/* Temps d'expiration */}
-        <div className="bg-blue-900/50 border border-blue-700 rounded-2xl p-4 mb-4 shadow-md">
+        <div className="bg-white/8 border border-white/15 rounded-2xl p-4 mb-4">
           <div className="flex items-center justify-between mb-3">
-            <span className="font-medium text-blue-100">Expiration</span>
+            <span className="font-medium">Expiration</span>
             <div className="flex items-center gap-3">
               <button
                 onClick={() => handleExhaleTimeChange(-1)}
                 disabled={freeSessionSettings.exhaleTime <= 3}
-                className="w-8 h-8 bg-blue-800/50 border border-blue-600 rounded-lg flex items-center justify-center hover:bg-blue-700/50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-8 h-8 bg-white/10 border border-white/20 rounded-lg flex items-center justify-center hover:bg-white/20 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                <Minus size={16} className="text-blue-100" />
+                <Minus size={16} />
               </button>
-              <span className="text-2xl font-bold w-12 text-center text-blue-100">
+              <span className="text-2xl font-bold w-12 text-center">
                 {freeSessionSettings.exhaleTime}s
               </span>
               <button
                 onClick={() => handleExhaleTimeChange(1)}
                 disabled={freeSessionSettings.exhaleTime >= 9}
-                className="w-8 h-8 bg-blue-800/50 border border-blue-600 rounded-lg flex items-center justify-center hover:bg-blue-700/50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-8 h-8 bg-white/10 border border-white/20 rounded-lg flex items-center justify-center hover:bg-white/20 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                <Plus size={16} className="text-blue-100" />
+                <Plus size={16} />
               </button>
             </div>
           </div>
-          <div className="text-xs text-blue-200">
+          <div className="text-xs text-white/60">
             Durée de l'expiration (3-9 secondes)
           </div>
         </div>
 
         {/* Résumé du rythme */}
-        <div className="bg-gradient-to-r from-blue-500/20 to-purple-500/20 border border-blue-700 rounded-xl p-3 mb-4 shadow-md">
+        <div className="bg-gradient-to-r from-blue-500/20 to-purple-500/20 border border-blue-500/30 rounded-xl p-3 mb-4">
           <div className="text-center">
-            <div className="text-lg font-bold mb-1 text-blue-100">
+            <div className="text-lg font-bold mb-1">
               Rythme {freeSessionSettings.inhaleTime}/{freeSessionSettings.exhaleTime}
             </div>
-            <div className="text-sm text-blue-200">
+            <div className="text-sm text-white/70">
               {cyclesPerMinute} cycles par minute • Cycle de {totalCycleTime}s
             </div>
           </div>
@@ -162,31 +162,31 @@ export const FreeSessionSelectionScreen = () => {
 
       {/* Configuration de la durée */}
       <div className="mb-6">
-        <h3 className="text-lg font-semibold mb-4 text-blue-900">⏱️ Durée de la session</h3>
-        <div className="bg-blue-900/50 border border-blue-700 rounded-2xl p-4 shadow-md">
+        <h3 className="text-lg font-semibold mb-4">⏱️ Durée de la session</h3>
+        <div className="bg-white/8 border border-white/15 rounded-2xl p-4">
           <div className="flex items-center justify-between mb-3">
-            <span className="font-medium text-blue-100">Durée totale</span>
+            <span className="font-medium">Durée totale</span>
             <div className="flex items-center gap-3">
               <button
                 onClick={() => handleDurationChange(-1)}
                 disabled={freeSessionSettings.duration <= 3}
-                className="w-8 h-8 bg-blue-800/50 border border-blue-600 rounded-lg flex items-center justify-center hover:bg-blue-700/50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-8 h-8 bg-white/10 border border-white/20 rounded-lg flex items-center justify-center hover:bg-white/20 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                <Minus size={16} className="text-blue-100" />
+                <Minus size={16} />
               </button>
-              <span className="text-2xl font-bold w-16 text-center text-blue-100">
+              <span className="text-2xl font-bold w-16 text-center">
                 {freeSessionSettings.duration} min
               </span>
               <button
                 onClick={() => handleDurationChange(1)}
                 disabled={freeSessionSettings.duration >= 20}
-                className="w-8 h-8 bg-blue-800/50 border border-blue-600 rounded-lg flex items-center justify-center hover:bg-blue-700/50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-8 h-8 bg-white/10 border border-white/20 rounded-lg flex items-center justify-center hover:bg-white/20 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                <Plus size={16} className="text-blue-100" />
+                <Plus size={16} />
               </button>
             </div>
           </div>
-          <div className="text-xs text-blue-200">
+          <div className="text-xs text-white/60">
             Durée de la session (3-20 minutes)
           </div>
         </div>
@@ -194,19 +194,19 @@ export const FreeSessionSelectionScreen = () => {
 
       {/* NOUVEAU : Sélection de fréquence */}
       <div className="mb-6">
-        <h3 className="text-lg font-semibold mb-4 flex items-center gap-2 text-blue-900">
+        <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
           <Music size={18} />
           Fréquence thérapeutique
         </h3>
-        <div className="bg-blue-900/50 border border-blue-700 rounded-2xl p-4 shadow-md">
+        <div className="bg-white/8 border border-white/15 rounded-2xl p-4">
           <div className="mb-3">
-            <label className="block text-sm font-medium text-blue-100 mb-2">
+            <label className="block text-sm font-medium text-white/80 mb-2">
               Choisissez votre fréquence
             </label>
             <select
               value={freeSessionSettings.frequency}
               onChange={(e) => handleFrequencyChange(e.target.value)}
-              className="w-full p-3 bg-blue-800/50 border border-blue-600 rounded-xl text-blue-100 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500/50"
+              className="w-full p-3 bg-white/10 border border-white/20 rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500/50"
             >
               <optgroup label="🎯 Cohérence cardiaque">
                 <option value="coherence">0.1 Hz - Cohérence cardiaque</option>
@@ -240,7 +240,7 @@ export const FreeSessionSelectionScreen = () => {
             <div className="text-sm text-purple-200 font-medium mb-1">
               Fréquence sélectionnée :
             </div>
-            <div className="text-xs text-blue-200">
+            <div className="text-xs text-white/70">
               {getFrequencyName(freeSessionSettings.frequency)}
             </div>
           </div>
@@ -249,10 +249,10 @@ export const FreeSessionSelectionScreen = () => {
 
       {/* Options audio */}
       <div className="mb-8">
-        <h3 className="text-lg font-semibold mb-3 text-blue-900">🔊 Options audio</h3>
-        <div className="bg-blue-900/50 border border-blue-700 rounded-2xl p-4 space-y-4 shadow-md">
+        <h3 className="text-lg font-semibold mb-3">🔊 Options audio</h3>
+        <div className="bg-white/8 rounded-2xl p-4 space-y-4">
           <div className="flex justify-between items-center">
-            <span className="text-blue-100">Sons binauraux</span>
+            <span>Sons binauraux</span>
             <button
               onClick={handleToggleGong}
               className={`w-12 h-6 rounded-full transition-colors ${
@@ -270,7 +270,7 @@ export const FreeSessionSelectionScreen = () => {
               className={`px-4 py-2 rounded-xl font-medium transition-all ${
                 freeSessionSettings.silentMode
                   ? 'bg-pink-500/30 border-2 border-pink-500/50 text-white'
-                  : 'bg-blue-800/50 border-2 border-blue-600 text-blue-100'
+                  : 'bg-white/10 border-2 border-white/30 text-white/70'
               }`}
             >
               {freeSessionSettings.silentMode ? '🔊 Mode normal' : '🔇 Mode silencieux'}
@@ -281,9 +281,9 @@ export const FreeSessionSelectionScreen = () => {
 
       {/* Aperçu de la session */}
       <div className="mb-8">
-        <div className="bg-gradient-to-r from-green-500/20 to-emerald-500/20 border border-blue-700 rounded-xl p-4 shadow-md">
-          <h4 className="font-semibold mb-2 text-blue-100">📊 Aperçu de votre session</h4>
-          <div className="text-sm text-blue-200 space-y-1">
+        <div className="bg-gradient-to-r from-green-500/20 to-emerald-500/20 border border-green-500/30 rounded-xl p-4">
+          <h4 className="font-semibold mb-2">📊 Aperçu de votre session</h4>
+          <div className="text-sm text-white/80 space-y-1">
             <div>• Rythme : {freeSessionSettings.inhaleTime}s inspiration / {freeSessionSettings.exhaleTime}s expiration</div>
             <div>• Durée : {freeSessionSettings.duration} minutes</div>
             <div>• Cycles totaux : ~{Math.round(freeSessionSettings.duration * cyclesPerMinute)}</div>
@@ -297,14 +297,14 @@ export const FreeSessionSelectionScreen = () => {
       <div className="flex gap-3">
         <button
           onClick={handleStart}
-          className="flex-1 bg-gradient-to-r from-purple-500 to-pink-500 text-white py-4 px-6 rounded-2xl font-semibold flex items-center justify-center gap-2 hover:from-purple-600 hover:to-pink-600 transition-all duration-200 shadow-lg"
+          className="flex-1 bg-gradient-to-r from-green-500 to-emerald-500 text-white py-4 px-6 rounded-2xl font-semibold flex items-center justify-center gap-2 hover:from-green-600 hover:to-emerald-600 transition-all duration-200"
         >
           <Play size={20} />
           Commencer la session
         </button>
         <button
           onClick={handleGoHome}
-          className="bg-blue-900/50 border-2 border-blue-700 text-blue-100 py-4 px-6 rounded-2xl font-semibold flex items-center justify-center gap-2 hover:bg-blue-800/50 transition-all duration-200 shadow-md"
+          className="bg-white/10 border-2 border-white/30 text-white py-4 px-6 rounded-2xl font-semibold flex items-center justify-center gap-2 hover:bg-white/20 transition-all duration-200"
         >
           <Home size={20} />
           Retour

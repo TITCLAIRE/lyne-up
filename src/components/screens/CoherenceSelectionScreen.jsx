@@ -64,27 +64,27 @@ export const CoherenceSelectionScreen = () => {
   return (
     <div className="px-5 pb-5">
       <div className="text-center mb-6">
-        <h1 className="text-2xl font-bold mb-2 text-blue-900">Cohérence Cardiaque</h1>
-        <p className="text-blue-700">Recentrer le système nerveux</p>
+        <h1 className="text-2xl font-bold mb-2">Cohérence Cardiaque</h1>
+        <p className="text-white/70">Recentrer le système nerveux</p>
       </div>
 
       {/* Sélection de durée */}
       <div className="mb-6">
-        <h3 className="text-lg font-semibold mb-3 text-blue-900">⏱️ Durée de la session</h3>
+        <h3 className="text-lg font-semibold mb-3">⏱️ Durée de la session</h3>
         <div className="grid grid-cols-3 gap-3">
           {durations.map((duration) => (
             <div
               key={duration.value}
               onClick={() => handleDurationSelect(duration.value)}
-              className={`bg-blue-900/50 border rounded-2xl p-3 cursor-pointer text-center transition-all duration-200 shadow-md ${
+              className={`bg-white/8 border rounded-2xl p-3 cursor-pointer text-center transition-all duration-200 ${
                 coherenceSettings.duration === duration.value
                   ? 'border-pink-500/50 bg-pink-500/20'
-                  : 'border-blue-700 hover:bg-blue-800/50'
+                  : 'border-white/15 hover:bg-white/12'
               }`}
             >
               <div className="text-2xl mb-1">{duration.icon}</div>
-              <div className="font-medium text-sm text-blue-100">{duration.label}</div>
-              <div className="text-xs text-blue-200">{duration.desc}</div>
+              <div className="font-medium text-sm">{duration.label}</div>
+              <div className="text-xs text-white/60">{duration.desc}</div>
             </div>
           ))}
         </div>
@@ -92,21 +92,21 @@ export const CoherenceSelectionScreen = () => {
 
       {/* Sélection de rythme */}
       <div className="mb-6">
-        <h3 className="text-lg font-semibold mb-3 text-blue-900">🌬️ Rythme respiratoire</h3>
+        <h3 className="text-lg font-semibold mb-3">🌬️ Rythme respiratoire</h3>
         <div className="grid grid-cols-3 gap-3">
           {rhythms.map((rhythm) => (
             <div
               key={rhythm.value}
               onClick={() => handleRhythmSelect(rhythm.value)}
-              className={`bg-blue-900/50 border rounded-2xl p-3 cursor-pointer text-center transition-all duration-200 shadow-md ${
+              className={`bg-white/8 border rounded-2xl p-3 cursor-pointer text-center transition-all duration-200 ${
                 coherenceSettings.rhythm === rhythm.value
                   ? 'border-pink-500/50 bg-pink-500/20'
-                  : 'border-blue-700 hover:bg-blue-800/50'
+                  : 'border-white/15 hover:bg-white/12'
               }`}
             >
               <div className="text-2xl mb-1">{rhythm.icon}</div>
-              <div className="font-medium text-sm text-blue-100">{rhythm.label}</div>
-              <div className="text-xs text-blue-200">{rhythm.desc}</div>
+              <div className="font-medium text-sm">{rhythm.label}</div>
+              <div className="text-xs text-white/60">{rhythm.desc}</div>
             </div>
           ))}
         </div>
@@ -114,10 +114,10 @@ export const CoherenceSelectionScreen = () => {
 
       {/* Options audio */}
       <div className="mb-8">
-        <h3 className="text-lg font-semibold mb-3 text-blue-900">🔊 Options audio</h3>
-        <div className="bg-blue-900/50 border border-blue-700 rounded-2xl p-4 space-y-4 shadow-md">
+        <h3 className="text-lg font-semibold mb-3">🔊 Options audio</h3>
+        <div className="bg-white/8 rounded-2xl p-4 space-y-4">
           <div className="flex justify-between items-center">
-            <span className="text-blue-100">Fréquence sonore (0,1 Hz)</span>
+            <span>Fréquence sonore (0,1 Hz)</span>
             <button
               onClick={handleToggleGong}
               className={`w-12 h-6 rounded-full transition-colors ${
@@ -130,7 +130,7 @@ export const CoherenceSelectionScreen = () => {
             </button>
           </div>
           <div className="flex justify-between items-center">
-            <span className="text-blue-100">Gong de transition</span>
+            <span>Gong de transition</span>
             <button
               onClick={handleToggleTransition}
               className={`w-12 h-6 rounded-full transition-colors ${
@@ -148,7 +148,7 @@ export const CoherenceSelectionScreen = () => {
               className={`px-4 py-2 rounded-xl font-medium transition-all ${
                 coherenceSettings.silentMode
                   ? 'bg-pink-500/30 border-2 border-pink-500/50 text-white'
-                  : 'bg-blue-800/50 border-2 border-blue-600 text-blue-100'
+                  : 'bg-white/10 border-2 border-white/30 text-white/70'
               }`}
             >
               {coherenceSettings.silentMode ? '🔊 Mode normal' : '🔇 Mode silencieux'}
@@ -164,8 +164,8 @@ export const CoherenceSelectionScreen = () => {
           disabled={!canStart}
           className={`flex-1 py-4 px-6 rounded-2xl font-semibold flex items-center justify-center gap-2 transition-all duration-200 ${
             canStart
-              ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white hover:from-purple-600 hover:to-pink-600 shadow-lg'
-              : 'bg-blue-900/30 text-blue-300 cursor-not-allowed'
+              ? 'bg-gradient-to-r from-blue-500 to-cyan-500 text-white hover:from-blue-600 hover:to-cyan-600'
+              : 'bg-white/10 text-white/50 cursor-not-allowed'
           }`}
         >
           <Play size={20} />
@@ -173,7 +173,7 @@ export const CoherenceSelectionScreen = () => {
         </button>
         <button
           onClick={handleGoHome}
-          className="bg-blue-900/50 border-2 border-blue-700 text-blue-100 py-4 px-6 rounded-2xl font-semibold flex items-center justify-center gap-2 hover:bg-blue-800/50 transition-all duration-200 shadow-md"
+          className="bg-white/10 border-2 border-white/30 text-white py-4 px-6 rounded-2xl font-semibold flex items-center justify-center gap-2 hover:bg-white/20 transition-all duration-200"
         >
           <Home size={20} />
           Retour

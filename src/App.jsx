@@ -50,7 +50,7 @@ function App() {
 
   return (
     <div 
-      className="min-h-screen text-blue-950 overflow-x-hidden"
+      className="min-h-screen text-white overflow-x-hidden"
       style={{
         background: 'linear-gradient(135deg, #006994, #00bcd4, #4dd0e1, #006994)'
       }}
