@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Play, Pause, Home, Headphones, Target, RotateCcw, TrendingUp, Settings, Baby, Users, Brain, Sparkles, Heart, Wind } from 'lucide-react';
+import { Play, Pause, Home, Headphones, Target, RotateCcw, TrendingUp, Settings, Baby, Users, Brain, Sparkles, Heart, Wind, Waves } from 'lucide-react';
 import { useAppStore } from '../../store/appStore';
 import { BreathingGuide } from '../BreathingGuide';
 import { useSessionTimer } from '../../hooks/useSessionTimer';
