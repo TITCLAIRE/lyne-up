@@ -20,7 +20,7 @@ const ageSpecificSessions = [
   { id: 'seniors', icon: Users, name: 'SENIORS +', time: '5min', color: 'from-blue-400 to-cyan-400' },
 ];
 
-// Sessions de voyage intérieur - NOMS EN CAPITALES
+// Sessions de voyage intérieur
 const innerJourneySessions = [
   { id: 'scan', icon: Brain, name: 'SCAN CORPOREL', time: '10min', color: 'from-indigo-500 to-purple-500' },
   { id: 'meditation', icon: Sparkles, name: 'MÉDITATIONS', time: '5-10min', color: 'from-pink-500 to-rose-500' },
@@ -48,14 +48,14 @@ export const HomeScreen = () => {
 
   return (
     <div className="px-5 pb-5">
-      {/* Module Cohérence Cardiaque Intégrative principal - EN CAPITALES */}
+      {/* Module Cohérence Cardiaque Intégrative principal */}
       <div 
         onClick={handleCoherenceClick}
         className="bg-gradient-to-r from-pink-500/20 to-purple-500/20 border-2 border-pink-500/30 rounded-2xl p-6 mb-6 cursor-pointer hover:from-pink-500/30 hover:to-purple-500/30 transition-all duration-300 hover:scale-[1.02]"
       >
         <div className="text-center">
           <h2 className="text-xl font-semibold mb-2">COHÉRENCE CARDIAQUE INTÉGRATIVE</h2>
-          <p className="text-white/70">3 min - 5 min - 15 min<br />Pour recentrer le système nerveux</p>
+          <p className="text-white/70">3 min - 5 min - 15 min</p>
         </div>
       </div>
 
@@ -149,7 +149,7 @@ export const HomeScreen = () => {
         </div>
       </div>
 
-      {/* Section Présence - NOMS EN CAPITALES */}
+      {/* Section Présence */}
       <div className="mb-6">
         <div className="flex items-baseline gap-3 mb-4">
           <h2 className="text-lg font-semibold flex items-center gap-2">
