@@ -24,7 +24,7 @@ export const meditations = {
   abundance: {
     name: 'Abondance',
     icon: 'DollarSign',
-    duration: 600, // 10 minutes
+    duration: 320, // 5 minutes 20 secondes - DURÉE MISE À JOUR SELON VOS ENREGISTREMENTS
     description: 'Attirez la prospérité',
     color: 'rgba(34, 197, 94, 0.2)',
     borderColor: 'rgba(34, 197, 94, 0.3)',
@@ -76,7 +76,7 @@ export const meditations = {
   attraction: {
     name: 'Loi d\'Attraction',
     icon: 'Magnet',
-    duration: 320, // 5 minutes 20 secondes - DURÉE MISE À JOUR
+    duration: 420, // 7 minutes - DURÉE STANDARD POUR SYNTHÈSE VOCALE
     description: 'Manifestez vos désirs',
     color: 'rgba(139, 92, 246, 0.2)',
     borderColor: 'rgba(139, 92, 246, 0.3)',
