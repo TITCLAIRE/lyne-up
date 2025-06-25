@@ -60,7 +60,7 @@ export const useVoiceManager = () => {
     completion: 'completion'
   };
 
-  // MAPPING DES FICHIERS MÉDITATION ABONDANCE - 19 SÉQUENCES (VOS ENREGISTREMENTS)
+  // MAPPING DES FICHIERS MÉDITATION ABONDANCE - VOS ENREGISTREMENTS AVEC PRÉFIXE ABUNDANCE
   const ABUNDANCE_AUDIO_FILES = {
     introduction: 'abundance-introduction',
     rhythmStart: 'abundance-rhythm-start',
@@ -83,7 +83,7 @@ export const useVoiceManager = () => {
     completion: 'abundance-completion'
   };
 
-  // MAPPING DES FICHIERS MÉDITATION LOI D'ATTRACTION - 19 SÉQUENCES (SYNTHÈSE VOCALE)
+  // MAPPING DES FICHIERS MÉDITATION LOI D'ATTRACTION - SYNTHÈSE VOCALE
   const ATTRACTION_AUDIO_FILES = {
     introduction: 'attraction-introduction',
     rhythmStart: 'attraction-rhythm-start',
@@ -141,7 +141,7 @@ export const useVoiceManager = () => {
     completion: "Progressivement, reprenez conscience de votre environnement."
   };
 
-  // TEXTES DE FALLBACK MÉDITATION ABONDANCE - 19 SÉQUENCES
+  // TEXTES DE FALLBACK MÉDITATION ABONDANCE - VOS ENREGISTREMENTS
   const ABUNDANCE_FALLBACK_TEXTS = {
     introduction: "Bienvenue dans cette méditation de l'abondance. Installez-vous confortablement et ouvrez-vous à la prospérité infinie de l'univers.",
     rhythmStart: "Inspirez profondément par le nez pendant 5 secondes... Expirez doucement par la bouche pendant 5 secondes...",
@@ -164,7 +164,7 @@ export const useVoiceManager = () => {
     completion: "Doucement, prenez une respiration plus profonde. Remerciez-vous pour ce moment de connexion à l'abondance. Quand vous êtes prêt, ouvrez les yeux, en gardant cette vibration de prospérité avec vous. L'abondance est en marche. Ayez confiance."
   };
 
-  // TEXTES DE FALLBACK MÉDITATION LOI D'ATTRACTION - 19 SÉQUENCES (SYNTHÈSE VOCALE)
+  // TEXTES DE FALLBACK MÉDITATION LOI D'ATTRACTION - SYNTHÈSE VOCALE
   const ATTRACTION_FALLBACK_TEXTS = {
     introduction: "Bienvenue dans cette méditation de cohérence cardiaque intégrative sur la loi de l'attraction. Installez-vous confortablement, le dos droit, les pieds bien ancrés au sol. Fermez doucement les yeux et prenez conscience de votre respiration naturelle. Durant les prochaines minutes, vous allez harmoniser votre cœur, votre corps et votre esprit pour manifester vos désirs les plus profonds. Commençons par établir le rythme de la cohérence cardiaque.",
     rhythmStart: "Inspirez profondément par le nez pendant 5 secondes... Expirez doucement par la bouche pendant 5 secondes...",
@@ -328,7 +328,7 @@ export const useVoiceManager = () => {
       const timeout = setTimeout(() => {
         isPlayingRef.current = false;
         reject(new Error(`Fichier audio non trouvé: ${audioPath}`));
-      }, 3000);
+      }, 5000);
 
       audio.oncanplaythrough = () => {
         clearTimeout(timeout);
@@ -461,7 +461,7 @@ export const useVoiceManager = () => {
     }
   };
 
-  // Fonction pour jouer un audio MÉDITATION avec fallback
+  // Fonction pour jouer un audio MÉDITATION avec fallback - SYSTÈME CORRIGÉ
   const playMeditationAudio = async (meditationType, audioKey) => {
     try {
       let audioFiles, fallbackTexts;
@@ -470,11 +470,11 @@ export const useVoiceManager = () => {
       if (meditationType === 'abundance') {
         audioFiles = ABUNDANCE_AUDIO_FILES;
         fallbackTexts = ABUNDANCE_FALLBACK_TEXTS;
-        console.log(`🎵 Lecture audio ABONDANCE premium: ${audioKey} (vos enregistrements)`);
+        console.log(`🎵 TENTATIVE LECTURE ABONDANCE: ${audioKey} - Fichier: ${audioFiles[audioKey]}`);
       } else if (meditationType === 'attraction') {
         audioFiles = ATTRACTION_AUDIO_FILES;
         fallbackTexts = ATTRACTION_FALLBACK_TEXTS;
-        console.log(`🗣️ Synthèse vocale LOI D'ATTRACTION: ${audioKey} (pas d'enregistrements)`);
+        console.log(`🗣️ SYNTHÈSE DIRECTE LOI D'ATTRACTION: ${audioKey} (pas d'enregistrements)`);
         // Pour la Loi d'Attraction, on va directement en synthèse vocale
         throw new Error('Pas de fichiers enregistrés pour Loi d\'Attraction');
       } else {
@@ -484,10 +484,11 @@ export const useVoiceManager = () => {
       }
 
       const audioPath = getMeditationAudioPath(meditationType, audioFiles[audioKey]);
+      console.log(`🎵 TENTATIVE LECTURE AUDIO LOCAL: ${audioPath}`);
       await playLocalAudio(audioPath);
-      console.log(`✅ Audio MÉDITATION premium terminé: ${audioKey} (${meditationType})`);
+      console.log(`✅ AUDIO ABONDANCE PREMIUM TERMINÉ: ${audioKey} (${meditationType})`);
     } catch (error) {
-      console.log(`🔄 Fallback synthèse MÉDITATION pour: ${audioKey} - Raison: ${error.message}`);
+      console.log(`🔄 FALLBACK SYNTHÈSE MÉDITATION pour: ${audioKey} - Raison: ${error.message}`);
       
       // Sélectionner les bons textes de fallback
       let fallbackTexts;
@@ -503,10 +504,11 @@ export const useVoiceManager = () => {
       const fallbackText = fallbackTexts[audioKey];
       if (fallbackText) {
         try {
+          console.log(`🗣️ SYNTHÈSE VOCALE MÉDITATION: "${fallbackText.substring(0, 50)}..."`);
           await speakWithSystemVoice(fallbackText);
-          console.log(`✅ Fallback MÉDITATION réussi: ${audioKey} (${meditationType})`);
+          console.log(`✅ FALLBACK MÉDITATION RÉUSSI: ${audioKey} (${meditationType})`);
         } catch (fallbackError) {
-          console.log(`❌ Fallback MÉDITATION échoué: ${audioKey} (${meditationType})`);
+          console.log(`❌ FALLBACK MÉDITATION ÉCHOUÉ: ${audioKey} (${meditationType})`);
         }
       }
     }
@@ -611,8 +613,31 @@ export const useVoiceManager = () => {
   // Système vocal Méditation ABONDANCE - VOS ENREGISTREMENTS AVEC TIMINGS EXACTS
   const startAbundanceGuidance = () => {
     console.log('💰 DÉMARRAGE MÉDITATION ABONDANCE - Vos enregistrements de Claire');
+    console.log('🔍 TEST DES FICHIERS AUDIO ABONDANCE...');
+    
     scheduledTimeoutsRef.current.forEach(timeout => clearTimeout(timeout));
     scheduledTimeoutsRef.current = [];
+
+    // TEST IMMÉDIAT DES FICHIERS AUDIO ABONDANCE
+    const testFiles = async () => {
+      console.log('🔍 VÉRIFICATION DES FICHIERS ABONDANCE:');
+      for (const [key, filename] of Object.entries(ABUNDANCE_AUDIO_FILES)) {
+        const audioPath = getMeditationAudioPath('abundance', filename);
+        try {
+          const response = await fetch(audioPath, { method: 'HEAD' });
+          if (response.ok) {
+            console.log(`✅ ${audioPath} (${response.status})`);
+          } else {
+            console.log(`❌ ${audioPath} (${response.status})`);
+          }
+        } catch (error) {
+          console.log(`❌ ${audioPath} (erreur réseau)`);
+        }
+      }
+    };
+
+    // Lancer le test des fichiers
+    testFiles();
 
     // TIMINGS EXACTS basés sur vos enregistrements de Claire pour l'ABONDANCE
     const abundanceTimings = [
