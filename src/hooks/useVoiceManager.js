@@ -532,13 +532,13 @@ export const useVoiceManager = () => {
     });
   };
 
-  // NOUVEAU : Système vocal Méditation Loi d'Attraction - 19 SÉQUENCES OPTIMISÉES
+  // NOUVEAU : Système vocal Méditation Loi d'Attraction - TIMINGS EXACTS CORRIGÉS
   const startAttractionGuidance = () => {
-    console.log('🎯 DÉMARRAGE MÉDITATION LOI D\'ATTRACTION - 19 séquences optimisées');
+    console.log('🎯 DÉMARRAGE MÉDITATION LOI D\'ATTRACTION - Timings exacts de Claire');
     scheduledTimeoutsRef.current.forEach(timeout => clearTimeout(timeout));
     scheduledTimeoutsRef.current = [];
 
-    // Timings optimisés pour la méditation Loi d'Attraction (7 minutes) - 19 séquences
+    // TIMINGS EXACTS basés sur les enregistrements de Claire
     const attractionTimings = [
       { time: 0, audioKey: 'introduction' },
       { time: 30000, audioKey: 'rhythmStart' },
@@ -554,19 +554,19 @@ export const useVoiceManager = () => {
       { time: 118000, audioKey: 'universe' },
       { time: 125000, audioKey: 'cocreateBreath' },
       { time: 135000, audioKey: 'gratitudeBreath' },
-      { time: 145000, audioKey: 'manifestationCycle' }, // Cycle long de 155s
-      { time: 300000, audioKey: 'anchor' },
-      { time: 318000, audioKey: 'alignment' },
-      { time: 328000, audioKey: 'compass' },
-      { time: 333000, audioKey: 'completion' }
+      { time: 145000, audioKey: 'manifestationCycle' }, // Cycle de 2min exactement
+      { time: 265000, audioKey: 'anchor' }, // 265s = 145s + 120s
+      { time: 283000, audioKey: 'alignment' }, // 283s = 265s + 18s
+      { time: 293000, audioKey: 'compass' }, // 293s = 283s + 10s
+      { time: 298000, audioKey: 'completion' } // 298s = 293s + 5s
     ];
 
-    console.log(`🎵 Programmation de ${attractionTimings.length} séquences vocales optimisées pour Loi d'Attraction`);
+    console.log(`🎵 Programmation de ${attractionTimings.length} séquences vocales avec timings exacts`);
 
     attractionTimings.forEach(({ time, audioKey }) => {
       const timeout = setTimeout(() => {
         if (isSessionActive && currentMeditation === 'attraction') {
-          console.log(`🎤 ${time/1000}s: ${audioKey} - Loi d'Attraction (optimisé)`);
+          console.log(`🎤 ${time/1000}s: ${audioKey} - Loi d'Attraction (timing exact)`);
           playMeditationAudio('attraction', audioKey);
         }
       }, time);
@@ -574,7 +574,7 @@ export const useVoiceManager = () => {
       scheduledTimeoutsRef.current.push(timeout);
     });
 
-    console.log(`✅ ${attractionTimings.length} timeouts programmés pour la méditation Loi d'Attraction optimisée`);
+    console.log(`✅ ${attractionTimings.length} timeouts programmés avec les timings exacts de Claire`);
   };
 
   // Système vocal RESET

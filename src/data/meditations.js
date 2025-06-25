@@ -76,7 +76,7 @@ export const meditations = {
   attraction: {
     name: 'Loi d\'Attraction',
     icon: 'Magnet',
-    duration: 420, // 7 minutes
+    duration: 320, // 5 minutes 20 secondes - DURÉE MISE À JOUR
     description: 'Manifestez vos désirs',
     color: 'rgba(139, 92, 246, 0.2)',
     borderColor: 'rgba(139, 92, 246, 0.3)',

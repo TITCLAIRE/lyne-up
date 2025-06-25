@@ -1,4 +1,5 @@
-// 🎯 TIMING OPTIMISÉ MÉDITATION LOI D'ATTRACTION - 19 SÉQUENCES
+// 🎯 TIMING EXACT MÉDITATION LOI D'ATTRACTION - 19 SÉQUENCES
+// Basé sur les enregistrements réels de Claire
 
 export const attractionTimingsOptimized = [
   { time: 0, audioKey: 'introduction', duration: 30 },
@@ -15,11 +16,11 @@ export const attractionTimingsOptimized = [
   { time: 118000, audioKey: 'universe', duration: 7 },
   { time: 125000, audioKey: 'cocreateBreath', duration: 10 },
   { time: 135000, audioKey: 'gratitudeBreath', duration: 10 },
-  { time: 145000, audioKey: 'manifestationCycle', duration: 155 }, // Cycle long
-  { time: 300000, audioKey: 'anchor', duration: 18 },
-  { time: 318000, audioKey: 'alignment', duration: 10 },
-  { time: 328000, audioKey: 'compass', duration: 5 },
-  { time: 333000, audioKey: 'completion', duration: 21 }
+  { time: 145000, audioKey: 'manifestationCycle', duration: 120 }, // DURÉE RÉELLE : 2min exactement
+  { time: 265000, audioKey: 'anchor', duration: 18 }, // 265s = 145s + 120s
+  { time: 283000, audioKey: 'alignment', duration: 10 }, // 283s = 265s + 18s
+  { time: 293000, audioKey: 'compass', duration: 5 }, // 293s = 283s + 10s
+  { time: 298000, audioKey: 'completion', duration: 22 } // 298s = 293s + 5s, fin à 320s (5min 20s)
 ];
 
 // Mapping des fichiers audio
@@ -44,3 +45,6 @@ export const ATTRACTION_AUDIO_FILES = {
   compass: 'attraction-compass',
   completion: 'attraction-completion'
 };
+
+// Durée totale de la méditation : 5 minutes 20 secondes (320 secondes)
+export const TOTAL_MEDITATION_DURATION = 320;
