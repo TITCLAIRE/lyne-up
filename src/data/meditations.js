@@ -22,16 +22,16 @@ export const meditations = {
   },
 
   abundance: {
-    name: 'Abondance',
+    name: 'Abondance & Attraction',
     icon: 'DollarSign',
-    duration: 600, // 10 minutes - DURÉE MISE À JOUR
-    description: 'Attirez la prospérité',
+    duration: 600, // 10 minutes
+    description: 'Attirez la prospérité et manifestez vos désirs',
     color: 'rgba(34, 197, 94, 0.2)',
     borderColor: 'rgba(34, 197, 94, 0.3)',
     guidance: {
-      start: "Méditation de l'abondance. Ouvrez-vous à la prospérité infinie de l'univers.",
-      inhale: ["Inspirez l'abondance", "Accueillez la prospérité", "Recevez la richesse"],
-      exhale: ["Expirez les limitations", "Libérez les blocages", "Lâchez la pénurie"],
+      start: "Méditation de l'abondance et de l'attraction. Ouvrez-vous à la prospérité infinie de l'univers et alignez-vous avec vos désirs les plus profonds.",
+      inhale: ["Inspirez l'abondance", "Accueillez la prospérité", "Attirez vos désirs"],
+      exhale: ["Expirez les limitations", "Libérez les blocages", "Lâchez la résistance"],
       phases: [
         "Vous méritez l'abondance sous toutes ses formes. Sentez cette vérité dans chaque cellule de votre corps.",
         "L'argent est une énergie qui circule librement vers vous. Vous êtes un aimant à prospérité.",
@@ -44,7 +44,7 @@ export const meditations = {
         "Vous vibrez maintenant à la fréquence de la prospérité. Les opportunités affluent vers vous.",
         "Cette abondance est votre état naturel. Vous y retournez maintenant avec confiance et sérénité."
       ],
-      end: "L'abondance est maintenant activée dans votre vie. Restez ouvert aux opportunités."
+      end: "L'abondance et l'attraction sont maintenant activées dans votre vie. Restez ouvert aux opportunités."
     }
   },
 
@@ -70,30 +70,6 @@ export const meditations = {
         "Cet amour universel vous revient multiplié. Vous êtes aimé au-delà de toute mesure."
       ],
       end: "Votre cœur est grand ouvert. L'amour que vous avez partagé vous revient multiplié."
-    }
-  },
-
-  attraction: {
-    name: 'Loi d\'Attraction',
-    icon: 'Magnet',
-    duration: 420, // 7 minutes - DURÉE STANDARD POUR SYNTHÈSE VOCALE
-    description: 'Manifestez vos désirs',
-    color: 'rgba(139, 92, 246, 0.2)',
-    borderColor: 'rgba(139, 92, 246, 0.3)',
-    guidance: {
-      start: "Activez la loi d'attraction. Alignez vos vibrations avec vos désirs les plus profonds.",
-      inhale: ["Inspirez vos désirs", "Attirez le positif", "Magnétisez vos rêves"],
-      exhale: ["Expirez les doutes", "Libérez les peurs", "Lâchez la résistance"],
-      phases: [
-        "Clarifiez votre intention. Qu'est-ce que vous désirez vraiment attirer dans votre vie ?",
-        "Ressentez maintenant comme si votre désir était déjà réalisé. Vivez cette joie.",
-        "Votre énergie s'aligne parfaitement avec ce que vous voulez manifester.",
-        "L'univers conspire en votre faveur. Tout s'organise pour votre plus grand bien.",
-        "Lâchez le comment. Faites confiance au processus de manifestation.",
-        "Vous êtes un puissant créateur. Votre réalité se transforme selon vos pensées.",
-        "La gratitude accélère la manifestation. Remerciez pour ce qui vient."
-      ],
-      end: "Vos vibrations sont alignées. La manifestation est en cours."
     }
   },
 

@@ -1,12 +1,11 @@
 import React from 'react';
-import { Home, Hand, DollarSign, Heart, Magnet, Armchair, Moon } from 'lucide-react';
+import { Home, Hand, DollarSign, Heart, Armchair, Moon } from 'lucide-react';
 import { useAppStore } from '../../store/appStore';
 
 const meditations = [
   { id: 'gratitude', name: 'Gratitude', icon: Hand, duration: 5, desc: 'Cultivez la reconnaissance', color: 'from-yellow-500/20 to-orange-500/20' },
-  { id: 'abundance', name: 'Abondance', icon: DollarSign, duration: 10, desc: 'Attirez la prospérité', color: 'from-green-500/20 to-emerald-500/20' },
+  { id: 'abundance', name: 'Abondance & Attraction', icon: DollarSign, duration: 10, desc: 'Attirez la prospérité et manifestez vos désirs', color: 'from-green-500/20 to-emerald-500/20' },
   { id: 'love', name: 'Amour Universel', icon: Heart, duration: 8, desc: 'Ouvrez votre cœur', color: 'from-pink-500/20 to-rose-500/20' },
-  { id: 'attraction', name: 'Loi d\'Attraction', icon: Magnet, duration: 7, desc: 'Manifestez vos désirs', color: 'from-purple-500/20 to-indigo-500/20' },
   { id: 'confidence', name: 'Confiance en Soi', icon: Armchair, duration: 6, desc: 'Renforcez votre pouvoir', color: 'from-blue-500/20 to-cyan-500/20' },
   { id: 'sleep', name: 'Sommeil Profond', icon: Moon, duration: 10, desc: 'Préparez-vous au repos', color: 'from-indigo-500/20 to-purple-500/20' },
 ];

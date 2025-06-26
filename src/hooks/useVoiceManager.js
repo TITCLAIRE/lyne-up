@@ -60,7 +60,7 @@ export const useVoiceManager = () => {
     completion: 'completion'
   };
 
-  // MAPPING DES FICHIERS MÉDITATION ABONDANCE - VOS ENREGISTREMENTS AVEC PRÉFIXE ABUNDANCE
+  // MAPPING DES FICHIERS MÉDITATION ABONDANCE & ATTRACTION - VOS ENREGISTREMENTS
   const ABUNDANCE_AUDIO_FILES = {
     introduction: 'abundance-introduction',
     rhythmStart: 'abundance-rhythm-start',
@@ -81,29 +81,6 @@ export const useVoiceManager = () => {
     alignment: 'abundance-alignment',
     compass: 'abundance-compass',
     completion: 'abundance-completion'
-  };
-
-  // MAPPING DES FICHIERS MÉDITATION LOI D'ATTRACTION - SYNTHÈSE VOCALE
-  const ATTRACTION_AUDIO_FILES = {
-    introduction: 'attraction-introduction',
-    rhythmStart: 'attraction-rhythm-start',
-    energyBreath: 'attraction-energy-breath',
-    abundanceBreath: 'attraction-abundance-breath',
-    coherence: 'attraction-coherence',
-    visualize: 'attraction-visualize',
-    realizationBreath: 'attraction-realization-breath',
-    cellularBreath: 'attraction-cellular-breath',
-    amplify: 'attraction-amplify',
-    worthyBreath: 'attraction-worthy-breath',
-    joyBreath: 'attraction-joy-breath',
-    universe: 'attraction-universe',
-    cocreateBreath: 'attraction-cocreate-breath',
-    gratitudeBreath: 'attraction-gratitude-breath',
-    manifestationCycle: 'attraction-manifestation-cycle',
-    anchor: 'attraction-anchor',
-    alignment: 'attraction-alignment',
-    compass: 'attraction-compass',
-    completion: 'attraction-completion'
   };
 
   // TEXTES DE FALLBACK SOS STRESS
@@ -141,50 +118,27 @@ export const useVoiceManager = () => {
     completion: "Progressivement, reprenez conscience de votre environnement."
   };
 
-  // TEXTES DE FALLBACK MÉDITATION ABONDANCE - VOS ENREGISTREMENTS
+  // TEXTES DE FALLBACK MÉDITATION ABONDANCE & ATTRACTION - VOS ENREGISTREMENTS
   const ABUNDANCE_FALLBACK_TEXTS = {
-    introduction: "Bienvenue dans cette méditation de l'abondance. Installez-vous confortablement et ouvrez-vous à la prospérité infinie de l'univers.",
+    introduction: "Bienvenue dans cette méditation de l'abondance et de l'attraction. Installez-vous confortablement et ouvrez-vous à la prospérité infinie de l'univers tout en alignant vos vibrations avec vos désirs les plus profonds.",
     rhythmStart: "Inspirez profondément par le nez pendant 5 secondes... Expirez doucement par la bouche pendant 5 secondes...",
-    energyBreath: "Inspirez... l'énergie d'abondance vous remplit... Expirez... libérez toute limitation...",
-    abundanceBreath: "Inspirez... accueillez la prospérité... Expirez... laissez partir la pénurie...",
-    coherence: "Votre cœur entre en cohérence avec la fréquence de l'abondance universelle.",
-    visualize: "Visualisez maintenant votre vie idéale d'abondance. Voyez-vous vivre dans la joie et la générosité.",
-    realizationBreath: "Inspirez... voyez votre prospérité comme déjà réalisée... Expirez... ressentez la gratitude...",
-    cellularBreath: "Inspirez... imprégnez chaque cellule de cette abondance... Expirez... rayonnez cette richesse...",
-    amplify: "Votre cœur cohérent amplifie votre pouvoir d'attraction de l'abondance.",
-    worthyBreath: "Inspirez... Je mérite l'abondance... Expirez... J'attire naturellement la prospérité...",
-    joyBreath: "Inspirez... sentez la joie de l'abondance... Expirez... ancrez cette richesse...",
-    universe: "L'univers est infiniment abondant. Votre vibration attire la prospérité sous toutes ses formes.",
-    cocreateBreath: "Inspirez... Je co-crée l'abondance avec l'univers... Expirez... Tout s'organise pour ma prospérité...",
-    gratitudeBreath: "Inspirez... amplifiez la gratitude pour vos richesses... Expirez... diffusez cette abondance...",
-    manifestationCycle: "Continuez ce rythme de respiration consciente. À chaque inspiration, vous attirez l'abondance. À chaque expiration, vous lâchez prise avec confiance. Votre cœur cohérent est un aimant puissant qui attire la prospérité sous toutes ses formes. Inspirez l'abondance... Expirez la gratitude... Inspirez la richesse... Expirez la joie... Vous êtes un canal d'abondance infinie. L'univers vous comble de ses bienfaits. Chaque respiration vous connecte davantage à cette source inépuisable de prospérité.",
-    anchor: "Continuez à respirer en cohérence cardiaque, sachant que l'abondance coule vers vous. Inspirez... ancrez cette vibration de prospérité... Expirez... laissez-la imprégner votre être...",
-    alignment: "Inspirez... Je suis aligné avec l'abondance... Expirez... Je lâche prise avec confiance...",
-    compass: "Votre cœur cohérent est votre boussole vers la prospérité infinie.",
-    completion: "Doucement, prenez une respiration plus profonde. Remerciez-vous pour ce moment de connexion à l'abondance. Quand vous êtes prêt, ouvrez les yeux, en gardant cette vibration de prospérité avec vous. L'abondance est en marche. Ayez confiance."
-  };
-
-  // TEXTES DE FALLBACK MÉDITATION LOI D'ATTRACTION - SYNTHÈSE VOCALE
-  const ATTRACTION_FALLBACK_TEXTS = {
-    introduction: "Bienvenue dans cette méditation de cohérence cardiaque intégrative sur la loi de l'attraction. Installez-vous confortablement, le dos droit, les pieds bien ancrés au sol. Fermez doucement les yeux et prenez conscience de votre respiration naturelle. Durant les prochaines minutes, vous allez harmoniser votre cœur, votre corps et votre esprit pour manifester vos désirs les plus profonds. Commençons par établir le rythme de la cohérence cardiaque.",
-    rhythmStart: "Inspirez profondément par le nez pendant 5 secondes... Expirez doucement par la bouche pendant 5 secondes...",
-    energyBreath: "Inspirez... l'univers vous remplit d'énergie positive... Expirez... libérez toute tension...",
-    abundanceBreath: "Inspirez... accueillez l'abondance... Expirez... laissez partir les doutes...",
-    coherence: "Votre cœur entre en cohérence, créant un champ magnétique puissant autour de vous.",
-    visualize: "Maintenant, tout en gardant ce rythme respiratoire, visualisez clairement ce que vous désirez manifester.",
-    realizationBreath: "Inspirez... voyez votre désir comme déjà réalisé... Expirez... ressentez la gratitude...",
-    cellularBreath: "Inspirez... imprégnez chaque cellule de cette vision... Expirez... rayonnez cette énergie...",
-    amplify: "Votre cœur cohérent amplifie votre pouvoir de manifestation.",
-    worthyBreath: "Inspirez... Je suis digne de recevoir... Expirez... J'attire naturellement ce qui est bon pour moi...",
-    joyBreath: "Inspirez... sentez la joie de la réalisation... Expirez... ancrez cette certitude...",
-    universe: "L'univers conspire en votre faveur. Votre vibration attire ce qui lui correspond.",
-    cocreateBreath: "Inspirez... Je co-crée avec l'univers... Expirez... Tout se met en place parfaitement...",
-    gratitudeBreath: "Inspirez... amplifiez le sentiment de gratitude... Expirez... diffusez votre lumière...",
-    manifestationCycle: "Continuez ce rythme de respiration consciente. À chaque inspiration, vous attirez vos désirs. À chaque expiration, vous lâchez prise avec confiance. Votre cœur cohérent est un aimant puissant qui attire l'abondance sous toutes ses formes.",
-    anchor: "Continuez à respirer en cohérence cardiaque, sachant que votre désir est en route vers vous. Inspirez... ancrez cette vibration élevée... Expirez... laissez-la imprégner votre être...",
-    alignment: "Inspirez... Je suis aligné avec mes désirs... Expirez... Je lâche prise avec confiance...",
-    compass: "Votre cœur cohérent est votre boussole vers l'abondance.",
-    completion: "Doucement, prenez une respiration plus profonde. Remerciez-vous pour ce moment de connexion et de création. Quand vous êtes prêt, ouvrez les yeux, en gardant cette vibration élevée avec vous. La manifestation est en marche. Ayez confiance."
+    energyBreath: "Inspirez... l'énergie d'abondance et de manifestation vous remplit... Expirez... libérez toute limitation et résistance...",
+    abundanceBreath: "Inspirez... accueillez la prospérité et vos désirs... Expirez... laissez partir la pénurie et les doutes...",
+    coherence: "Votre cœur entre en cohérence avec la fréquence de l'abondance universelle et de la manifestation.",
+    visualize: "Visualisez maintenant votre vie idéale d'abondance et vos désirs manifestés. Voyez-vous vivre dans la joie, la générosité et l'accomplissement.",
+    realizationBreath: "Inspirez... voyez votre prospérité et vos désirs comme déjà réalisés... Expirez... ressentez la gratitude profonde...",
+    cellularBreath: "Inspirez... imprégnez chaque cellule de cette abondance et de cette manifestation... Expirez... rayonnez cette richesse et cette réalisation...",
+    amplify: "Votre cœur cohérent amplifie votre pouvoir d'attraction de l'abondance et de manifestation de vos désirs.",
+    worthyBreath: "Inspirez... Je mérite l'abondance et mes désirs... Expirez... J'attire naturellement la prospérité et la manifestation...",
+    joyBreath: "Inspirez... sentez la joie de l'abondance et de la réalisation... Expirez... ancrez cette richesse et cette manifestation...",
+    universe: "L'univers est infiniment abondant et conspire en votre faveur. Votre vibration attire la prospérité et manifeste vos désirs sous toutes leurs formes.",
+    cocreateBreath: "Inspirez... Je co-crée l'abondance et mes désirs avec l'univers... Expirez... Tout s'organise pour ma prospérité et ma manifestation...",
+    gratitudeBreath: "Inspirez... amplifiez la gratitude pour vos richesses et vos réalisations... Expirez... diffusez cette abondance et cette joie...",
+    manifestationCycle: "Continuez ce rythme de respiration consciente. À chaque inspiration, vous attirez l'abondance et vos désirs. À chaque expiration, vous lâchez prise avec confiance. Votre cœur cohérent est un aimant puissant qui attire la prospérité et manifeste vos rêves sous toutes leurs formes. Inspirez l'abondance... Expirez la gratitude... Inspirez vos désirs... Expirez la confiance... Vous êtes un canal d'abondance infinie et de manifestation parfaite. L'univers vous comble de ses bienfaits et exauce vos souhaits les plus chers. Chaque respiration vous connecte davantage à cette source inépuisable de prospérité et de réalisation.",
+    anchor: "Continuez à respirer en cohérence cardiaque, sachant que l'abondance et vos désirs coulent vers vous. Inspirez... ancrez cette vibration de prospérité et de manifestation... Expirez... laissez-la imprégner votre être...",
+    alignment: "Inspirez... Je suis aligné avec l'abondance et mes désirs... Expirez... Je lâche prise avec confiance...",
+    compass: "Votre cœur cohérent est votre boussole vers la prospérité infinie et la manifestation parfaite.",
+    completion: "Doucement, prenez une respiration plus profonde. Remerciez-vous pour ce moment de connexion à l'abondance et à la manifestation. Quand vous êtes prêt, ouvrez les yeux, en gardant cette vibration de prospérité et de réalisation avec vous. L'abondance et la manifestation sont en marche. Ayez confiance."
   };
 
   // Fonction générique pour obtenir le chemin audio d'une session (NOUVELLES SESSIONS)
@@ -461,32 +415,24 @@ export const useVoiceManager = () => {
     }
   };
 
-  // Fonction pour jouer un audio MÉDITATION avec fallback - SYSTÈME CORRIGÉ
+  // Fonction pour jouer un audio MÉDITATION avec fallback - SYSTÈME UNIFIÉ
   const playMeditationAudio = async (meditationType, audioKey) => {
     try {
-      let audioFiles, fallbackTexts;
-      
-      // SÉLECTION DES FICHIERS SELON LE TYPE DE MÉDITATION
+      // Pour la méditation "abundance" (maintenant Abondance & Attraction)
       if (meditationType === 'abundance') {
-        audioFiles = ABUNDANCE_AUDIO_FILES;
-        fallbackTexts = ABUNDANCE_FALLBACK_TEXTS;
-        console.log(`🎵 TENTATIVE LECTURE ABONDANCE: ${audioKey} - Fichier: ${audioFiles[audioKey]}`);
-      } else if (meditationType === 'attraction') {
-        audioFiles = ATTRACTION_AUDIO_FILES;
-        fallbackTexts = ATTRACTION_FALLBACK_TEXTS;
-        console.log(`🗣️ SYNTHÈSE DIRECTE LOI D'ATTRACTION: ${audioKey} (pas d'enregistrements)`);
-        // Pour la Loi d'Attraction, on va directement en synthèse vocale
-        throw new Error('Pas de fichiers enregistrés pour Loi d\'Attraction');
+        const audioFiles = ABUNDANCE_AUDIO_FILES;
+        const fallbackTexts = ABUNDANCE_FALLBACK_TEXTS;
+        console.log(`🎵 TENTATIVE LECTURE ABONDANCE & ATTRACTION: ${audioKey} - Fichier: ${audioFiles[audioKey]}`);
+        
+        const audioPath = getMeditationAudioPath(meditationType, audioFiles[audioKey]);
+        console.log(`🎵 TENTATIVE LECTURE AUDIO LOCAL: ${audioPath}`);
+        await playLocalAudio(audioPath);
+        console.log(`✅ AUDIO ABONDANCE & ATTRACTION PREMIUM TERMINÉ: ${audioKey}`);
       } else {
         // Autres méditations - synthèse vocale par défaut
         console.log(`🗣️ Synthèse vocale méditation: ${audioKey} (${meditationType})`);
         throw new Error('Pas de fichiers enregistrés pour cette méditation');
       }
-
-      const audioPath = getMeditationAudioPath(meditationType, audioFiles[audioKey]);
-      console.log(`🎵 TENTATIVE LECTURE AUDIO LOCAL: ${audioPath}`);
-      await playLocalAudio(audioPath);
-      console.log(`✅ AUDIO ABONDANCE PREMIUM TERMINÉ: ${audioKey} (${meditationType})`);
     } catch (error) {
       console.log(`🔄 FALLBACK SYNTHÈSE MÉDITATION pour: ${audioKey} - Raison: ${error.message}`);
       
@@ -494,8 +440,6 @@ export const useVoiceManager = () => {
       let fallbackTexts;
       if (meditationType === 'abundance') {
         fallbackTexts = ABUNDANCE_FALLBACK_TEXTS;
-      } else if (meditationType === 'attraction') {
-        fallbackTexts = ATTRACTION_FALLBACK_TEXTS;
       } else {
         // Texte générique pour autres méditations
         fallbackTexts = { [audioKey]: `Méditation ${meditationType} - ${audioKey}` };
@@ -610,19 +554,19 @@ export const useVoiceManager = () => {
     });
   };
 
-  // Système vocal Méditation ABONDANCE - TIMING ADAPTÉ POUR 10 MINUTES AVEC DEBUG RENFORCÉ
+  // Système vocal Méditation ABONDANCE & ATTRACTION - TIMING ADAPTÉ POUR 10 MINUTES
   const startAbundanceGuidance = () => {
-    console.log('💰 DÉMARRAGE MÉDITATION ABONDANCE - 10 MINUTES avec pauses d\'assimilation');
-    console.log('🔍 TEST DES FICHIERS AUDIO ABONDANCE...');
+    console.log('💰 DÉMARRAGE MÉDITATION ABONDANCE & ATTRACTION - 10 MINUTES avec pauses d\'assimilation');
+    console.log('🔍 TEST DES FICHIERS AUDIO ABONDANCE & ATTRACTION...');
     console.log('🎯 Session active:', isSessionActive);
     console.log('🎯 Méditation actuelle:', currentMeditation);
     
     scheduledTimeoutsRef.current.forEach(timeout => clearTimeout(timeout));
     scheduledTimeoutsRef.current = [];
 
-    // TEST IMMÉDIAT DES FICHIERS AUDIO ABONDANCE
+    // TEST IMMÉDIAT DES FICHIERS AUDIO ABONDANCE & ATTRACTION
     const testFiles = async () => {
-      console.log('🔍 VÉRIFICATION DES FICHIERS ABONDANCE:');
+      console.log('🔍 VÉRIFICATION DES FICHIERS ABONDANCE & ATTRACTION:');
       for (const [key, filename] of Object.entries(ABUNDANCE_AUDIO_FILES)) {
         const audioPath = getMeditationAudioPath('abundance', filename);
         try {
@@ -664,11 +608,11 @@ export const useVoiceManager = () => {
       { time: 568000, audioKey: 'completion' }         // 568s - Pause 15s + fin (22s) = 590s total
     ];
 
-    console.log(`🎵 Programmation de ${abundanceTimings.length} séquences vocales ABONDANCE - 10 MINUTES avec pauses d'assimilation`);
+    console.log(`🎵 Programmation de ${abundanceTimings.length} séquences vocales ABONDANCE & ATTRACTION - 10 MINUTES avec pauses d'assimilation`);
 
     abundanceTimings.forEach(({ time, audioKey }, index) => {
       const timeout = setTimeout(() => {
-        console.log(`🎤 SÉQUENCE ${index + 1}/${abundanceTimings.length} - ${time/1000}s: ${audioKey} - ABONDANCE 10min`);
+        console.log(`🎤 SÉQUENCE ${index + 1}/${abundanceTimings.length} - ${time/1000}s: ${audioKey} - ABONDANCE & ATTRACTION 10min`);
         console.log(`🔍 Session active au moment du déclenchement:`, isSessionActive);
         console.log(`🔍 Méditation actuelle au moment du déclenchement:`, currentMeditation);
         
@@ -686,53 +630,8 @@ export const useVoiceManager = () => {
       console.log(`⏰ Timeout ${index + 1} programmé pour ${time/1000}s (${audioKey})`);
     });
 
-    console.log(`✅ ${abundanceTimings.length} timeouts programmés pour la méditation ABONDANCE 10 MINUTES avec pauses d'assimilation`);
+    console.log(`✅ ${abundanceTimings.length} timeouts programmés pour la méditation ABONDANCE & ATTRACTION 10 MINUTES avec pauses d'assimilation`);
     console.log(`📊 Timeouts stockés:`, scheduledTimeoutsRef.current.length);
-  };
-
-  // Système vocal Méditation LOI D'ATTRACTION - SYNTHÈSE VOCALE UNIQUEMENT
-  const startAttractionGuidance = () => {
-    console.log('🎯 DÉMARRAGE MÉDITATION LOI D\'ATTRACTION - Synthèse vocale uniquement');
-    scheduledTimeoutsRef.current.forEach(timeout => clearTimeout(timeout));
-    scheduledTimeoutsRef.current = [];
-
-    // TIMINGS STANDARDS pour la Loi d'Attraction (synthèse vocale)
-    const attractionTimings = [
-      { time: 0, audioKey: 'introduction' },
-      { time: 30000, audioKey: 'rhythmStart' },
-      { time: 40000, audioKey: 'energyBreath' },
-      { time: 50000, audioKey: 'abundanceBreath' },
-      { time: 60000, audioKey: 'coherence' },
-      { time: 65000, audioKey: 'visualize' },
-      { time: 73000, audioKey: 'realizationBreath' },
-      { time: 83000, audioKey: 'cellularBreath' },
-      { time: 93000, audioKey: 'amplify' },
-      { time: 98000, audioKey: 'worthyBreath' },
-      { time: 108000, audioKey: 'joyBreath' },
-      { time: 118000, audioKey: 'universe' },
-      { time: 125000, audioKey: 'cocreateBreath' },
-      { time: 135000, audioKey: 'gratitudeBreath' },
-      { time: 145000, audioKey: 'manifestationCycle' }, // Cycle standard
-      { time: 300000, audioKey: 'anchor' },
-      { time: 318000, audioKey: 'alignment' },
-      { time: 328000, audioKey: 'compass' },
-      { time: 333000, audioKey: 'completion' }
-    ];
-
-    console.log(`🗣️ Programmation de ${attractionTimings.length} séquences vocales LOI D'ATTRACTION en synthèse`);
-
-    attractionTimings.forEach(({ time, audioKey }) => {
-      const timeout = setTimeout(() => {
-        if (isSessionActive && currentMeditation === 'attraction') {
-          console.log(`🎤 ${time/1000}s: ${audioKey} - LOI D'ATTRACTION (synthèse vocale)`);
-          playMeditationAudio('attraction', audioKey);
-        }
-      }, time);
-      
-      scheduledTimeoutsRef.current.push(timeout);
-    });
-
-    console.log(`✅ ${attractionTimings.length} timeouts programmés pour la méditation LOI D'ATTRACTION en synthèse`);
   };
 
   // Système vocal RESET
@@ -833,17 +732,14 @@ export const useVoiceManager = () => {
     });
   };
 
-  // Système vocal Méditations - SYSTÈME UNIFIÉ CORRIGÉ
+  // Système vocal Méditations - SYSTÈME UNIFIÉ
   const startMeditationGuidance = () => {
     console.log('🧘 DÉMARRAGE MÉDITATION - Type:', currentMeditation);
     console.log('🔍 État session:', { isSessionActive, currentSession, currentMeditation });
     
     if (currentMeditation === 'abundance') {
-      console.log('🎯 Lancement méditation ABONDANCE');
+      console.log('🎯 Lancement méditation ABONDANCE & ATTRACTION');
       startAbundanceGuidance(); // VOS ENREGISTREMENTS - 10 MINUTES
-    } else if (currentMeditation === 'attraction') {
-      console.log('🎯 Lancement méditation LOI D\'ATTRACTION');
-      startAttractionGuidance(); // SYNTHÈSE VOCALE
     } else {
       console.log('🎯 Lancement méditation générique pour:', currentMeditation);
       // Pour les autres méditations, utiliser un système générique
@@ -929,7 +825,7 @@ export const useVoiceManager = () => {
     });
   };
 
-  // Système vocal unifié - CORRIGÉ
+  // Système vocal unifié
   const startSessionGuidance = (coherenceSettings = null) => {
     if (!voiceSettings.enabled) {
       console.log('🔇 Guidage vocal désactivé');
@@ -966,7 +862,7 @@ export const useVoiceManager = () => {
         break;
       case 'meditation':
         console.log('🎯 Démarrage guidage MÉDITATION');
-        startMeditationGuidance(); // SYSTÈME MÉDITATIONS CORRIGÉ
+        startMeditationGuidance(); // SYSTÈME MÉDITATIONS UNIFIÉ
         break;
       case 'coherence':
         console.log('🎯 Démarrage guidage COHÉRENCE');
@@ -1047,8 +943,7 @@ export const useVoiceManager = () => {
     // Fonctions spécialisées pour MÉDITATIONS
     playMeditationAudio,
     getMeditationAudioPath,
-    startAbundanceGuidance, // VOS ENREGISTREMENTS - 10 MINUTES
-    startAttractionGuidance, // SYNTHÈSE VOCALE
+    startAbundanceGuidance, // VOS ENREGISTREMENTS - 10 MINUTES (maintenant Abondance & Attraction)
     // Fonctions génériques pour nouvelles sessions
     playSessionAudio,
     getSessionAudioPath,
@@ -1058,10 +953,8 @@ export const useVoiceManager = () => {
     SOS_FALLBACK_TEXTS,
     SCAN_FALLBACK_TEXTS,
     // Mappings et textes MÉDITATIONS
-    ABUNDANCE_AUDIO_FILES, // VOS ENREGISTREMENTS
-    ATTRACTION_AUDIO_FILES, // SYNTHÈSE VOCALE
+    ABUNDANCE_AUDIO_FILES, // VOS ENREGISTREMENTS (maintenant Abondance & Attraction)
     ABUNDANCE_FALLBACK_TEXTS,
-    ATTRACTION_FALLBACK_TEXTS,
     SESSION_AUDIO_MAPPINGS,
     SESSION_FALLBACK_TEXTS,
   };
