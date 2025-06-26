@@ -83,6 +83,21 @@ export const useVoiceManager = () => {
     completion: 'abundance-completion'
   };
 
+  // MAPPING DES FICHIERS MÉDITATION GRATITUDE
+  const GRATITUDE_AUDIO_FILES = {
+    installation: 'gratitude-installation',
+    coherenceSetup: 'gratitude-coherence-setup',
+    breathingHeart: 'gratitude-breathing-heart',
+    gratitudeAwakening: 'gratitude-awakening',
+    firstGratitude: 'gratitude-first',
+    lovedOnes: 'gratitude-loved-ones',
+    bodyGratitude: 'gratitude-body',
+    natureExpansion: 'gratitude-nature',
+    energyAnchoring: 'gratitude-anchoring',
+    integration: 'gratitude-integration',
+    conclusion: 'gratitude-conclusion'
+  };
+
   // TEXTES DE FALLBACK SOS STRESS
   const SOS_FALLBACK_TEXTS = {
     welcome: "Bienvenue dans votre bulle de calme. Posez vos pieds bien à plat sur le sol. Détendez vos épaules.",
@@ -139,6 +154,21 @@ export const useVoiceManager = () => {
     alignment: "Inspirez... Je suis aligné avec l'abondance et mes désirs... Expirez... Je lâche prise avec confiance...",
     compass: "Votre cœur cohérent est votre boussole vers la prospérité infinie et la manifestation parfaite.",
     completion: "Doucement, prenez une respiration plus profonde. Remerciez-vous pour ce moment de connexion à l'abondance et à la manifestation. Quand vous êtes prêt, ouvrez les yeux, en gardant cette vibration de prospérité et de réalisation avec vous. L'abondance et la manifestation sont en marche. Ayez confiance."
+  };
+
+  // TEXTES DE FALLBACK MÉDITATION GRATITUDE
+  const GRATITUDE_FALLBACK_TEXTS = {
+    installation: "Bienvenue dans cette méditation de gratitude. Installez-vous confortablement, le dos droit, les pieds bien ancrés au sol. Fermez doucement les yeux et prenez conscience de votre respiration naturelle. Pendant les prochaines minutes, vous allez cultiver la reconnaissance et ouvrir votre cœur à l'abondance qui vous entoure déjà.",
+    coherenceSetup: "Commençons par établir un rythme respiratoire apaisant. Inspirez profondément par le nez pendant 5 secondes... Expirez doucement par la bouche pendant 5 secondes... Continuez ce rythme tranquille. À chaque inspiration, accueillez l'énergie de gratitude. À chaque expiration, diffusez cette reconnaissance.",
+    breathingHeart: "Portez maintenant votre attention sur votre cœur. Imaginez que vous respirez directement par le centre de votre poitrine. À chaque inspiration, votre cœur s'emplit de lumière dorée. À chaque expiration, cette lumière s'étend dans tout votre corps. Sentez votre cœur s'ouvrir, s'adoucir, s'épanouir.",
+    gratitudeAwakening: "Éveillez maintenant le sentiment de gratitude. Commencez simplement, par les choses les plus évidentes : l'air que vous respirez, la vie qui coule en vous, le confort de l'endroit où vous êtes. Ressentez la chaleur de la reconnaissance s'éveiller dans votre cœur. C'est une énergie douce et puissante à la fois.",
+    firstGratitude: "Inspirez... et pensez à une chose pour laquelle vous êtes profondément reconnaissant aujourd'hui. Expirez... et laissez cette gratitude rayonner. Inspirez... accueillez pleinement ce sentiment de reconnaissance. Expirez... et sentez comme il nourrit votre être. La gratitude est une porte vers l'abondance.",
+    lovedOnes: "Élargissez maintenant votre gratitude vers les personnes qui enrichissent votre vie. Visualisez le visage d'un être cher. Ressentez la reconnaissance pour sa présence dans votre existence. Envoyez-lui silencieusement votre gratitude. Remarquez comme ce sentiment approfondit votre connexion.",
+    bodyGratitude: "Dirigez maintenant votre gratitude vers votre corps, ce véhicule extraordinaire qui vous permet de vivre chaque expérience. Remerciez votre cœur qui bat sans relâche, vos poumons qui vous donnent le souffle, vos sens qui vous permettent de goûter la richesse de la vie. Ressentez une profonde reconnaissance pour ce temple vivant.",
+    natureExpansion: "Élargissez encore votre gratitude vers la nature et l'univers. Remerciez le soleil qui vous réchauffe, l'eau qui vous désaltère, la terre qui vous nourrit. Ressentez votre connexion avec toute forme de vie. Nous faisons tous partie d'un grand tout, et la gratitude renforce ce lien sacré.",
+    energyAnchoring: "Ancrez maintenant cette énergie de gratitude dans chaque cellule de votre corps. À chaque inspiration, cette reconnaissance s'enracine plus profondément en vous. À chaque expiration, elle devient une partie intégrante de votre être. La gratitude transforme ce que vous avez en suffisance. Vous êtes comblé de bienfaits.",
+    integration: "Intégrez pleinement cette énergie de gratitude. Laissez-la rayonner à travers vous, transformant votre perception du monde. Chaque jour est une opportunité de cultiver cette reconnaissance qui ouvre votre cœur à l'abondance.",
+    conclusion: "Doucement, prenez une respiration plus profonde. Remerciez-vous pour ce moment de connexion. Quand vous êtes prêt, ouvrez les yeux, en gardant cette gratitude vivante en vous. Merci."
   };
 
   // Fonction générique pour obtenir le chemin audio d'une session (NOUVELLES SESSIONS)
@@ -418,21 +448,27 @@ export const useVoiceManager = () => {
   // Fonction pour jouer un audio MÉDITATION avec fallback - SYSTÈME UNIFIÉ
   const playMeditationAudio = async (meditationType, audioKey) => {
     try {
-      // Pour la méditation "abundance" (maintenant Abondance & Attraction)
+      let audioFiles, fallbackTexts;
+      
+      // SÉLECTION DES FICHIERS SELON LE TYPE DE MÉDITATION
       if (meditationType === 'abundance') {
-        const audioFiles = ABUNDANCE_AUDIO_FILES;
-        const fallbackTexts = ABUNDANCE_FALLBACK_TEXTS;
+        audioFiles = ABUNDANCE_AUDIO_FILES;
+        fallbackTexts = ABUNDANCE_FALLBACK_TEXTS;
         console.log(`🎵 TENTATIVE LECTURE ABONDANCE & ATTRACTION: ${audioKey} - Fichier: ${audioFiles[audioKey]}`);
-        
-        const audioPath = getMeditationAudioPath(meditationType, audioFiles[audioKey]);
-        console.log(`🎵 TENTATIVE LECTURE AUDIO LOCAL: ${audioPath}`);
-        await playLocalAudio(audioPath);
-        console.log(`✅ AUDIO ABONDANCE & ATTRACTION PREMIUM TERMINÉ: ${audioKey}`);
+      } else if (meditationType === 'gratitude') {
+        audioFiles = GRATITUDE_AUDIO_FILES;
+        fallbackTexts = GRATITUDE_FALLBACK_TEXTS;
+        console.log(`🎵 TENTATIVE LECTURE GRATITUDE: ${audioKey} - Fichier: ${audioFiles[audioKey]}`);
       } else {
         // Autres méditations - synthèse vocale par défaut
         console.log(`🗣️ Synthèse vocale méditation: ${audioKey} (${meditationType})`);
         throw new Error('Pas de fichiers enregistrés pour cette méditation');
       }
+
+      const audioPath = getMeditationAudioPath(meditationType, audioFiles[audioKey]);
+      console.log(`🎵 TENTATIVE LECTURE AUDIO LOCAL: ${audioPath}`);
+      await playLocalAudio(audioPath);
+      console.log(`✅ AUDIO MÉDITATION PREMIUM TERMINÉ: ${audioKey} (${meditationType})`);
     } catch (error) {
       console.log(`🔄 FALLBACK SYNTHÈSE MÉDITATION pour: ${audioKey} - Raison: ${error.message}`);
       
@@ -440,6 +476,8 @@ export const useVoiceManager = () => {
       let fallbackTexts;
       if (meditationType === 'abundance') {
         fallbackTexts = ABUNDANCE_FALLBACK_TEXTS;
+      } else if (meditationType === 'gratitude') {
+        fallbackTexts = GRATITUDE_FALLBACK_TEXTS;
       } else {
         // Texte générique pour autres méditations
         fallbackTexts = { [audioKey]: `Méditation ${meditationType} - ${audioKey}` };
@@ -634,6 +672,78 @@ export const useVoiceManager = () => {
     console.log(`📊 Timeouts stockés:`, scheduledTimeoutsRef.current.length);
   };
 
+  // Système vocal Méditation GRATITUDE - 5 MINUTES
+  const startGratitudeGuidance = () => {
+    console.log('🙏 DÉMARRAGE MÉDITATION GRATITUDE - 5 MINUTES');
+    console.log('🔍 TEST DES FICHIERS AUDIO GRATITUDE...');
+    console.log('🎯 Session active:', isSessionActive);
+    console.log('🎯 Méditation actuelle:', currentMeditation);
+    
+    scheduledTimeoutsRef.current.forEach(timeout => clearTimeout(timeout));
+    scheduledTimeoutsRef.current = [];
+
+    // TEST IMMÉDIAT DES FICHIERS AUDIO GRATITUDE
+    const testFiles = async () => {
+      console.log('🔍 VÉRIFICATION DES FICHIERS GRATITUDE:');
+      for (const [key, filename] of Object.entries(GRATITUDE_AUDIO_FILES)) {
+        const audioPath = getMeditationAudioPath('gratitude', filename);
+        try {
+          const response = await fetch(audioPath, { method: 'HEAD' });
+          if (response.ok) {
+            console.log(`✅ ${audioPath} (${response.status})`);
+          } else {
+            console.log(`❌ ${audioPath} (${response.status})`);
+          }
+        } catch (error) {
+          console.log(`❌ ${audioPath} (erreur réseau)`);
+        }
+      }
+    };
+
+    // Lancer le test des fichiers
+    testFiles();
+
+    // TIMINGS POUR 5 MINUTES (300 secondes)
+    const gratitudeTimings = [
+      { time: 0, audioKey: 'installation' },         // 0s - Installation - premier paragraphe
+      { time: 30000, audioKey: 'coherenceSetup' },   // 30s - Mise en place cohérence cardiaque
+      { time: 60000, audioKey: 'breathingHeart' },   // 60s - Approfondissement respiration cœur
+      { time: 90000, audioKey: 'gratitudeAwakening' }, // 90s - Éveil gratitude simple
+      { time: 120000, audioKey: 'firstGratitude' },  // 120s - Respiration avec première gratitude
+      { time: 150000, audioKey: 'lovedOnes' },       // 150s - Expansion vers personne chère
+      { time: 180000, audioKey: 'bodyGratitude' },   // 180s - Gratitude pour le corps
+      { time: 210000, audioKey: 'natureExpansion' }, // 210s - Élargissement nature/univers
+      { time: 240000, audioKey: 'energyAnchoring' }, // 240s - Ancrage de l'énergie
+      { time: 270000, audioKey: 'integration' },     // 270s - Intégration et rayonnement
+      { time: 285000, audioKey: 'conclusion' }       // 285s - Conclusion et retour
+    ];
+
+    console.log(`🎵 Programmation de ${gratitudeTimings.length} séquences vocales GRATITUDE - 5 MINUTES`);
+
+    gratitudeTimings.forEach(({ time, audioKey }, index) => {
+      const timeout = setTimeout(() => {
+        console.log(`🎤 SÉQUENCE ${index + 1}/${gratitudeTimings.length} - ${time/1000}s: ${audioKey} - GRATITUDE 5min`);
+        console.log(`🔍 Session active au moment du déclenchement:`, isSessionActive);
+        console.log(`🔍 Méditation actuelle au moment du déclenchement:`, currentMeditation);
+        
+        if (isSessionActive && currentMeditation === 'gratitude') {
+          console.log(`🎤 DÉCLENCHEMENT EFFECTIF: ${audioKey}`);
+          playMeditationAudio('gratitude', audioKey);
+        } else {
+          console.log(`❌ DÉCLENCHEMENT ANNULÉ: Session inactive ou méditation différente`);
+          console.log(`   - isSessionActive: ${isSessionActive}`);
+          console.log(`   - currentMeditation: ${currentMeditation}`);
+        }
+      }, time);
+      
+      scheduledTimeoutsRef.current.push(timeout);
+      console.log(`⏰ Timeout ${index + 1} programmé pour ${time/1000}s (${audioKey})`);
+    });
+
+    console.log(`✅ ${gratitudeTimings.length} timeouts programmés pour la méditation GRATITUDE 5 MINUTES`);
+    console.log(`📊 Timeouts stockés:`, scheduledTimeoutsRef.current.length);
+  };
+
   // Système vocal RESET
   const startResetGuidance = () => {
     scheduledTimeoutsRef.current.forEach(timeout => clearTimeout(timeout));
@@ -740,6 +850,9 @@ export const useVoiceManager = () => {
     if (currentMeditation === 'abundance') {
       console.log('🎯 Lancement méditation ABONDANCE & ATTRACTION');
       startAbundanceGuidance(); // VOS ENREGISTREMENTS - 10 MINUTES
+    } else if (currentMeditation === 'gratitude') {
+      console.log('🎯 Lancement méditation GRATITUDE');
+      startGratitudeGuidance(); // NOUVELLE MÉDITATION - 5 MINUTES
     } else {
       console.log('🎯 Lancement méditation générique pour:', currentMeditation);
       // Pour les autres méditations, utiliser un système générique
@@ -944,6 +1057,7 @@ export const useVoiceManager = () => {
     playMeditationAudio,
     getMeditationAudioPath,
     startAbundanceGuidance, // VOS ENREGISTREMENTS - 10 MINUTES (maintenant Abondance & Attraction)
+    startGratitudeGuidance, // NOUVELLE MÉDITATION - 5 MINUTES
     // Fonctions génériques pour nouvelles sessions
     playSessionAudio,
     getSessionAudioPath,
@@ -954,7 +1068,9 @@ export const useVoiceManager = () => {
     SCAN_FALLBACK_TEXTS,
     // Mappings et textes MÉDITATIONS
     ABUNDANCE_AUDIO_FILES, // VOS ENREGISTREMENTS (maintenant Abondance & Attraction)
+    GRATITUDE_AUDIO_FILES, // NOUVELLE MÉDITATION GRATITUDE
     ABUNDANCE_FALLBACK_TEXTS,
+    GRATITUDE_FALLBACK_TEXTS,
     SESSION_AUDIO_MAPPINGS,
     SESSION_FALLBACK_TEXTS,
   };
