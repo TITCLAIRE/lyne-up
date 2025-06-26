@@ -157,7 +157,7 @@ export const useVoiceManager = () => {
     universe: "L'univers est infiniment abondant. Votre vibration attire la prospérité sous toutes ses formes.",
     cocreateBreath: "Inspirez... Je co-crée l'abondance avec l'univers... Expirez... Tout s'organise pour ma prospérité...",
     gratitudeBreath: "Inspirez... amplifiez la gratitude pour vos richesses... Expirez... diffusez cette abondance...",
-    manifestationCycle: "Continuez ce rythme de respiration consciente. À chaque inspiration, vous attirez l'abondance. À chaque expiration, vous lâchez prise avec confiance. Votre cœur cohérent est un aimant puissant qui attire la prospérité sous toutes ses formes.",
+    manifestationCycle: "Continuez ce rythme de respiration consciente. À chaque inspiration, vous attirez l'abondance. À chaque expiration, vous lâchez prise avec confiance. Votre cœur cohérent est un aimant puissant qui attire la prospérité sous toutes ses formes. Inspirez l'abondance... Expirez la gratitude... Inspirez la richesse... Expirez la joie... Vous êtes un canal d'abondance infinie. L'univers vous comble de ses bienfaits. Chaque respiration vous connecte davantage à cette source inépuisable de prospérité.",
     anchor: "Continuez à respirer en cohérence cardiaque, sachant que l'abondance coule vers vous. Inspirez... ancrez cette vibration de prospérité... Expirez... laissez-la imprégner votre être...",
     alignment: "Inspirez... Je suis aligné avec l'abondance... Expirez... Je lâche prise avec confiance...",
     compass: "Votre cœur cohérent est votre boussole vers la prospérité infinie.",
@@ -610,10 +610,12 @@ export const useVoiceManager = () => {
     });
   };
 
-  // Système vocal Méditation ABONDANCE - TIMING ADAPTÉ POUR 10 MINUTES
+  // Système vocal Méditation ABONDANCE - TIMING ADAPTÉ POUR 10 MINUTES AVEC DEBUG RENFORCÉ
   const startAbundanceGuidance = () => {
     console.log('💰 DÉMARRAGE MÉDITATION ABONDANCE - 10 MINUTES avec pauses d\'assimilation');
     console.log('🔍 TEST DES FICHIERS AUDIO ABONDANCE...');
+    console.log('🎯 Session active:', isSessionActive);
+    console.log('🎯 Méditation actuelle:', currentMeditation);
     
     scheduledTimeoutsRef.current.forEach(timeout => clearTimeout(timeout));
     scheduledTimeoutsRef.current = [];
@@ -664,18 +666,28 @@ export const useVoiceManager = () => {
 
     console.log(`🎵 Programmation de ${abundanceTimings.length} séquences vocales ABONDANCE - 10 MINUTES avec pauses d'assimilation`);
 
-    abundanceTimings.forEach(({ time, audioKey }) => {
+    abundanceTimings.forEach(({ time, audioKey }, index) => {
       const timeout = setTimeout(() => {
+        console.log(`🎤 SÉQUENCE ${index + 1}/${abundanceTimings.length} - ${time/1000}s: ${audioKey} - ABONDANCE 10min`);
+        console.log(`🔍 Session active au moment du déclenchement:`, isSessionActive);
+        console.log(`🔍 Méditation actuelle au moment du déclenchement:`, currentMeditation);
+        
         if (isSessionActive && currentMeditation === 'abundance') {
-          console.log(`🎤 ${time/1000}s: ${audioKey} - ABONDANCE 10min (vos enregistrements)`);
+          console.log(`🎤 DÉCLENCHEMENT EFFECTIF: ${audioKey}`);
           playMeditationAudio('abundance', audioKey);
+        } else {
+          console.log(`❌ DÉCLENCHEMENT ANNULÉ: Session inactive ou méditation différente`);
+          console.log(`   - isSessionActive: ${isSessionActive}`);
+          console.log(`   - currentMeditation: ${currentMeditation}`);
         }
       }, time);
       
       scheduledTimeoutsRef.current.push(timeout);
+      console.log(`⏰ Timeout ${index + 1} programmé pour ${time/1000}s (${audioKey})`);
     });
 
     console.log(`✅ ${abundanceTimings.length} timeouts programmés pour la méditation ABONDANCE 10 MINUTES avec pauses d'assimilation`);
+    console.log(`📊 Timeouts stockés:`, scheduledTimeoutsRef.current.length);
   };
 
   // Système vocal Méditation LOI D'ATTRACTION - SYNTHÈSE VOCALE UNIQUEMENT
@@ -824,12 +836,16 @@ export const useVoiceManager = () => {
   // Système vocal Méditations - SYSTÈME UNIFIÉ CORRIGÉ
   const startMeditationGuidance = () => {
     console.log('🧘 DÉMARRAGE MÉDITATION - Type:', currentMeditation);
+    console.log('🔍 État session:', { isSessionActive, currentSession, currentMeditation });
     
     if (currentMeditation === 'abundance') {
+      console.log('🎯 Lancement méditation ABONDANCE');
       startAbundanceGuidance(); // VOS ENREGISTREMENTS - 10 MINUTES
     } else if (currentMeditation === 'attraction') {
+      console.log('🎯 Lancement méditation LOI D\'ATTRACTION');
       startAttractionGuidance(); // SYNTHÈSE VOCALE
     } else {
+      console.log('🎯 Lancement méditation générique pour:', currentMeditation);
       // Pour les autres méditations, utiliser un système générique
       scheduledTimeoutsRef.current.forEach(timeout => clearTimeout(timeout));
       scheduledTimeoutsRef.current = [];
@@ -916,42 +932,54 @@ export const useVoiceManager = () => {
   // Système vocal unifié - CORRIGÉ
   const startSessionGuidance = (coherenceSettings = null) => {
     if (!voiceSettings.enabled) {
+      console.log('🔇 Guidage vocal désactivé');
       return;
     }
 
     console.log('🎯 DÉMARRAGE GUIDAGE VOCAL - Session:', currentSession, 'Méditation:', currentMeditation);
+    console.log('🔍 État complet:', { isSessionActive, currentSession, currentMeditation, voiceSettings });
 
     switch (currentSession) {
       case 'switch':
+        console.log('🎯 Démarrage guidage SOS Stress');
         startSosGuidance(); // SYSTÈME ORIGINAL
         break;
       case 'scan':
+        console.log('🎯 Démarrage guidage Scan Corporel');
         startScanGuidance(); // SYSTÈME ORIGINAL
         break;
       case 'reset':
+        console.log('🎯 Démarrage guidage RESET');
         startResetGuidance();
         break;
       case 'progressive':
+        console.log('🎯 Démarrage guidage PROGRESSIVE');
         startProgressiveGuidance();
         break;
       case 'kids':
+        console.log('🎯 Démarrage guidage KIDS');
         startKidsGuidance();
         break;
       case 'seniors':
+        console.log('🎯 Démarrage guidage SENIORS');
         startSeniorsGuidance();
         break;
       case 'meditation':
+        console.log('🎯 Démarrage guidage MÉDITATION');
         startMeditationGuidance(); // SYSTÈME MÉDITATIONS CORRIGÉ
         break;
       case 'coherence':
+        console.log('🎯 Démarrage guidage COHÉRENCE');
         if (coherenceSettings) {
           startCoherenceGuidance(coherenceSettings);
         }
         break;
       case 'free':
+        console.log('🎯 Démarrage guidage SESSION LIBRE');
         startFreeSessionGuidance();
         break;
       default:
+        console.log('🎯 Session non reconnue, guidage générique');
         speak("Session démarrée. Suivez le guide respiratoire.");
         break;
     }
@@ -960,10 +988,16 @@ export const useVoiceManager = () => {
   // Arrêter tout
   const stop = () => {
     console.log('🔇 ARRÊT COMPLET DU SYSTÈME VOCAL');
-    scheduledTimeoutsRef.current.forEach(timeout => clearTimeout(timeout));
+    console.log('📊 Timeouts à annuler:', scheduledTimeoutsRef.current.length);
+    
+    scheduledTimeoutsRef.current.forEach((timeout, index) => {
+      console.log(`❌ Annulation timeout ${index + 1}`);
+      clearTimeout(timeout);
+    });
     scheduledTimeoutsRef.current = [];
     
     if (currentAudioRef.current) {
+      console.log('🔇 Arrêt audio en cours');
       currentAudioRef.current.pause();
       currentAudioRef.current = null;
     }
@@ -972,6 +1006,7 @@ export const useVoiceManager = () => {
     
     try {
       speechSynthesis.cancel();
+      console.log('🔇 Synthèse vocale annulée');
     } catch (error) {
       // Silencieux
     }
