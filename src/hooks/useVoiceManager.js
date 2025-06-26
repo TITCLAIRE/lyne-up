@@ -610,9 +610,9 @@ export const useVoiceManager = () => {
     });
   };
 
-  // Système vocal Méditation ABONDANCE - VOS ENREGISTREMENTS AVEC TIMINGS EXACTS
+  // Système vocal Méditation ABONDANCE - TIMING ADAPTÉ POUR 10 MINUTES
   const startAbundanceGuidance = () => {
-    console.log('💰 DÉMARRAGE MÉDITATION ABONDANCE - Vos enregistrements de Claire');
+    console.log('💰 DÉMARRAGE MÉDITATION ABONDANCE - 10 MINUTES avec pauses d\'assimilation');
     console.log('🔍 TEST DES FICHIERS AUDIO ABONDANCE...');
     
     scheduledTimeoutsRef.current.forEach(timeout => clearTimeout(timeout));
@@ -639,35 +639,35 @@ export const useVoiceManager = () => {
     // Lancer le test des fichiers
     testFiles();
 
-    // TIMINGS EXACTS basés sur vos enregistrements de Claire pour l'ABONDANCE
+    // NOUVEAUX TIMINGS POUR 10 MINUTES (600 secondes) avec pauses d'assimilation
     const abundanceTimings = [
-      { time: 0, audioKey: 'introduction' },
-      { time: 30000, audioKey: 'rhythmStart' },
-      { time: 40000, audioKey: 'energyBreath' },
-      { time: 50000, audioKey: 'abundanceBreath' },
-      { time: 60000, audioKey: 'coherence' },
-      { time: 65000, audioKey: 'visualize' },
-      { time: 73000, audioKey: 'realizationBreath' },
-      { time: 83000, audioKey: 'cellularBreath' },
-      { time: 93000, audioKey: 'amplify' },
-      { time: 98000, audioKey: 'worthyBreath' },
-      { time: 108000, audioKey: 'joyBreath' },
-      { time: 118000, audioKey: 'universe' },
-      { time: 125000, audioKey: 'cocreateBreath' },
-      { time: 135000, audioKey: 'gratitudeBreath' },
-      { time: 145000, audioKey: 'manifestationCycle' }, // Cycle de 2min exactement
-      { time: 265000, audioKey: 'anchor' }, // 265s = 145s + 120s
-      { time: 283000, audioKey: 'alignment' }, // 283s = 265s + 18s
-      { time: 293000, audioKey: 'compass' }, // 293s = 283s + 10s
-      { time: 298000, audioKey: 'completion' } // 298s = 293s + 5s
+      { time: 0, audioKey: 'introduction' },           // 0s - Introduction (30s)
+      { time: 45000, audioKey: 'rhythmStart' },        // 45s - Pause 15s + rythme (10s)
+      { time: 70000, audioKey: 'energyBreath' },       // 70s - Pause 15s + énergie (10s)
+      { time: 95000, audioKey: 'abundanceBreath' },    // 95s - Pause 15s + abondance (10s)
+      { time: 120000, audioKey: 'coherence' },         // 120s - Pause 15s + cohérence (5s)
+      { time: 140000, audioKey: 'visualize' },         // 140s - Pause 15s + visualisation (8s)
+      { time: 163000, audioKey: 'realizationBreath' }, // 163s - Pause 15s + réalisation (10s)
+      { time: 188000, audioKey: 'cellularBreath' },    // 188s - Pause 15s + cellulaire (10s)
+      { time: 213000, audioKey: 'amplify' },           // 213s - Pause 15s + amplification (5s)
+      { time: 233000, audioKey: 'worthyBreath' },      // 233s - Pause 15s + mérite (10s)
+      { time: 258000, audioKey: 'joyBreath' },         // 258s - Pause 15s + joie (10s)
+      { time: 283000, audioKey: 'universe' },          // 283s - Pause 15s + univers (7s)
+      { time: 305000, audioKey: 'cocreateBreath' },    // 305s - Pause 15s + co-création (10s)
+      { time: 330000, audioKey: 'gratitudeBreath' },   // 330s - Pause 15s + gratitude (10s)
+      { time: 355000, audioKey: 'manifestationCycle' }, // 355s - Cycle de manifestation (120s)
+      { time: 490000, audioKey: 'anchor' },            // 490s - Ancrage (18s)
+      { time: 523000, audioKey: 'alignment' },         // 523s - Pause 15s + alignement (10s)
+      { time: 548000, audioKey: 'compass' },           // 548s - Pause 15s + boussole (5s)
+      { time: 568000, audioKey: 'completion' }         // 568s - Pause 15s + fin (22s) = 590s total
     ];
 
-    console.log(`🎵 Programmation de ${abundanceTimings.length} séquences vocales ABONDANCE avec vos enregistrements`);
+    console.log(`🎵 Programmation de ${abundanceTimings.length} séquences vocales ABONDANCE - 10 MINUTES avec pauses d'assimilation`);
 
     abundanceTimings.forEach(({ time, audioKey }) => {
       const timeout = setTimeout(() => {
         if (isSessionActive && currentMeditation === 'abundance') {
-          console.log(`🎤 ${time/1000}s: ${audioKey} - ABONDANCE (vos enregistrements)`);
+          console.log(`🎤 ${time/1000}s: ${audioKey} - ABONDANCE 10min (vos enregistrements)`);
           playMeditationAudio('abundance', audioKey);
         }
       }, time);
@@ -675,7 +675,7 @@ export const useVoiceManager = () => {
       scheduledTimeoutsRef.current.push(timeout);
     });
 
-    console.log(`✅ ${abundanceTimings.length} timeouts programmés pour la méditation ABONDANCE avec vos enregistrements`);
+    console.log(`✅ ${abundanceTimings.length} timeouts programmés pour la méditation ABONDANCE 10 MINUTES avec pauses d'assimilation`);
   };
 
   // Système vocal Méditation LOI D'ATTRACTION - SYNTHÈSE VOCALE UNIQUEMENT
@@ -826,7 +826,7 @@ export const useVoiceManager = () => {
     console.log('🧘 DÉMARRAGE MÉDITATION - Type:', currentMeditation);
     
     if (currentMeditation === 'abundance') {
-      startAbundanceGuidance(); // VOS ENREGISTREMENTS
+      startAbundanceGuidance(); // VOS ENREGISTREMENTS - 10 MINUTES
     } else if (currentMeditation === 'attraction') {
       startAttractionGuidance(); // SYNTHÈSE VOCALE
     } else {
@@ -1012,7 +1012,7 @@ export const useVoiceManager = () => {
     // Fonctions spécialisées pour MÉDITATIONS
     playMeditationAudio,
     getMeditationAudioPath,
-    startAbundanceGuidance, // VOS ENREGISTREMENTS
+    startAbundanceGuidance, // VOS ENREGISTREMENTS - 10 MINUTES
     startAttractionGuidance, // SYNTHÈSE VOCALE
     // Fonctions génériques pour nouvelles sessions
     playSessionAudio,
