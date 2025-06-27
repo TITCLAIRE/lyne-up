@@ -303,6 +303,8 @@ export const useVoiceManager = () => {
     }
     
     return new Promise((resolve, reject) => {
+      console.log('🎵 TENTATIVE LECTURE AUDIO: ' + audioPath);
+      
       const audio = new Audio(audioPath);
       audio.volume = voiceSettings.volume;
       audio.preload = 'auto';
@@ -311,14 +313,17 @@ export const useVoiceManager = () => {
 
       const timeout = setTimeout(() => {
         isPlayingRef.current = false;
+        console.log('⚠️ TIMEOUT: Fichier audio non chargé après 5s: ' + audioPath);
         reject(new Error(`Fichier audio non trouvé: ${audioPath}`));
       }, 5000);
 
       audio.oncanplaythrough = () => {
         clearTimeout(timeout);
+        console.log('✅ AUDIO PRÊT À JOUER: ' + audioPath);
       };
 
       audio.onended = () => {
+        console.log('✅ AUDIO TERMINÉ: ' + audioPath);
         currentAudioRef.current = null;
         isPlayingRef.current = false;
         resolve();
@@ -326,14 +331,17 @@ export const useVoiceManager = () => {
 
       audio.onerror = (e) => {
         clearTimeout(timeout);
+        console.log('❌ ERREUR LECTURE AUDIO: ' + audioPath + ' - Code: ' + (audio.error ? audio.error.code : 'inconnu'));
         currentAudioRef.current = null;
         isPlayingRef.current = false;
         reject(new Error(`Erreur lecture fichier: ${audioPath}`));
       };
 
       audio.play().then(() => {
+        console.log('🔊 LECTURE DÉMARRÉE: ' + audioPath);
         clearTimeout(timeout);
       }).catch((playError) => {
+        console.log('❌ ERREUR PLAY(): ' + audioPath + ' - ' + playError.message);
         clearTimeout(timeout);
         isPlayingRef.current = false;
         reject(playError);
@@ -356,10 +364,12 @@ export const useVoiceManager = () => {
 
     return new Promise((resolve, reject) => {
       if (!window.speechSynthesis) {
+        console.log('❌ Speech Synthesis non supporté par ce navigateur');
         reject(new Error('Speech Synthesis non supporté'));
         return;
       }
 
+      console.log('🗣️ SYNTHÈSE VOCALE: "' + text.substring(0, 50) + '..."');
       speechSynthesis.cancel();
       isPlayingRef.current = true;
       
@@ -389,11 +399,13 @@ export const useVoiceManager = () => {
         }
 
         utterance.onend = () => {
+          console.log('✅ SYNTHÈSE VOCALE TERMINÉE');
           isPlayingRef.current = false;
           resolve();
         };
 
         utterance.onerror = (event) => {
+          console.log('❌ ERREUR SYNTHÈSE VOCALE: ' + event.error);
           isPlayingRef.current = false;
           resolve();
         };
@@ -465,8 +477,23 @@ export const useVoiceManager = () => {
         throw new Error('Pas de fichiers enregistrés pour cette méditation');
       }
 
+      // Vérification préalable du fichier audio
       const audioPath = getMeditationAudioPath(meditationType, audioFiles[audioKey]);
       console.log(`🎵 TENTATIVE LECTURE AUDIO LOCAL: ${audioPath}`);
+      
+      // Vérifier si le fichier existe avant de tenter de le lire
+      try {
+        const response = await fetch(audioPath, { method: 'HEAD' });
+        if (!response.ok) {
+          console.log(`❌ FICHIER NON TROUVÉ: ${audioPath} (${response.status})`);
+          throw new Error(`Fichier non trouvé: ${audioPath} (${response.status})`);
+        }
+        console.log(`✅ FICHIER TROUVÉ: ${audioPath} (${response.status})`);
+      } catch (fetchError) {
+        console.log(`❌ ERREUR FETCH: ${audioPath} - ${fetchError.message}`);
+        throw fetchError;
+      }
+      
       await playLocalAudio(audioPath);
       console.log(`✅ AUDIO MÉDITATION PREMIUM TERMINÉ: ${audioKey} (${meditationType})`);
     } catch (error) {
