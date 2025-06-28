@@ -592,157 +592,129 @@ export const useVoiceManager = () => {
     });
   };
 
-  // Système vocal Méditation ABONDANCE & ATTRACTION - TIMING ADAPTÉ POUR 10 MINUTES
+  // Système vocal Méditation ABONDANCE & ATTRACTION - TIMING CORRIGÉ POUR 10 MINUTES
   const startAbundanceGuidance = () => {
-    console.log('💰 DÉMARRAGE MÉDITATION ABONDANCE & ATTRACTION - 10 MINUTES avec pauses d\'assimilation');
-    console.log('🔍 TEST DES FICHIERS AUDIO ABONDANCE & ATTRACTION...');
-    console.log('🎯 Session active:', isSessionActive);
-    console.log('🎯 Méditation actuelle:', currentMeditation);
-    
-    scheduledTimeoutsRef.current.forEach(timeout => clearTimeout(timeout));
-    scheduledTimeoutsRef.current = [];
-
-    // TEST IMMÉDIAT DES FICHIERS AUDIO ABONDANCE & ATTRACTION
-    const testFiles = async () => {
-      console.log('🔍 VÉRIFICATION DES FICHIERS ABONDANCE & ATTRACTION:');
-      for (const [key, filename] of Object.entries(ABUNDANCE_AUDIO_FILES)) {
-        const audioPath = getMeditationAudioPath('abundance', filename);
-        try {
-          const response = await fetch(audioPath, { method: 'HEAD' });
-          if (response.ok) {
-            console.log(`✅ ${audioPath} (${response.status})`);
-          } else {
-            console.log(`❌ ${audioPath} (${response.status})`);
-          }
-        } catch (error) {
-          console.log(`❌ ${audioPath} (erreur réseau)`);
-        }
-      }
-    };
-
-    // Lancer le test des fichiers
-    testFiles();
-
-    // NOUVEAUX TIMINGS POUR 10 MINUTES (600 secondes) avec pauses d'assimilation
-    const abundanceTimings = [
-      { time: 0, audioKey: 'introduction' },           // 0s - Introduction (30s)
-      { time: 45000, audioKey: 'rhythmStart' },        // 45s - Pause 15s + rythme (10s)
-      { time: 70000, audioKey: 'energyBreath' },       // 70s - Pause 15s + énergie (10s)
-      { time: 95000, audioKey: 'abundanceBreath' },    // 95s - Pause 15s + abondance (10s)
-      { time: 120000, audioKey: 'coherence' },         // 120s - Pause 15s + cohérence (5s)
-      { time: 140000, audioKey: 'visualize' },         // 140s - Pause 15s + visualisation (8s)
-      { time: 163000, audioKey: 'realizationBreath' }, // 163s - Pause 15s + réalisation (10s)
-      { time: 188000, audioKey: 'cellularBreath' },    // 188s - Pause 15s + cellulaire (10s)
-      { time: 213000, audioKey: 'amplify' },           // 213s - Pause 15s + amplification (5s)
-      { time: 233000, audioKey: 'worthyBreath' },      // 233s - Pause 15s + mérite (10s)
-      { time: 258000, audioKey: 'joyBreath' },         // 258s - Pause 15s + joie (10s)
-      { time: 283000, audioKey: 'universe' },          // 283s - Pause 15s + univers (7s)
-      { time: 305000, audioKey: 'cocreateBreath' },    // 305s - Pause 15s + co-création (10s)
-      { time: 330000, audioKey: 'gratitudeBreath' },   // 330s - Pause 15s + gratitude (10s)
-      { time: 355000, audioKey: 'manifestationCycle' }, // 355s - Cycle de manifestation (120s)
-      { time: 490000, audioKey: 'anchor' },            // 490s - Ancrage (18s)
-      { time: 523000, audioKey: 'alignment' },         // 523s - Pause 15s + alignement (10s)
-      { time: 548000, audioKey: 'compass' },           // 548s - Pause 15s + boussole (5s)
-      { time: 568000, audioKey: 'completion' }         // 568s - Pause 15s + fin (22s) = 590s total
-    ];
-
-    console.log(`🎵 Programmation de ${abundanceTimings.length} séquences vocales ABONDANCE & ATTRACTION - 10 MINUTES avec pauses d'assimilation`);
-
-    abundanceTimings.forEach(({ time, audioKey }, index) => {
-      const timeout = setTimeout(() => {
-        console.log(`🎤 SÉQUENCE ${index + 1}/${abundanceTimings.length} - ${time/1000}s: ${audioKey} - ABONDANCE & ATTRACTION 10min`);
-        console.log(`🔍 Session active au moment du déclenchement:`, isSessionActive);
-        console.log(`🔍 Méditation actuelle au moment du déclenchement:`, currentMeditation);
-        
-        if (isSessionActive && currentMeditation === 'abundance') {
-          console.log(`🎤 DÉCLENCHEMENT EFFECTIF: ${audioKey}`);
-          playMeditationAudio('abundance', audioKey);
-        } else {
-          console.log(`❌ DÉCLENCHEMENT ANNULÉ: Session inactive ou méditation différente`);
-          console.log(`   - isSessionActive: ${isSessionActive}`);
-          console.log(`   - currentMeditation: ${currentMeditation}`);
-        }
-      }, time);
-      
-      scheduledTimeoutsRef.current.push(timeout);
-      console.log(`⏰ Timeout ${index + 1} programmé pour ${time/1000}s (${audioKey})`);
-    });
-
-    console.log(`✅ ${abundanceTimings.length} timeouts programmés pour la méditation ABONDANCE & ATTRACTION 10 MINUTES avec pauses d'assimilation`);
-    console.log(`📊 Timeouts stockés:`, scheduledTimeoutsRef.current.length);
-  };
-
-  // Système vocal Méditation GRATITUDE - 5 MINUTES - CORRIGÉ
-  const startGratitudeGuidance = () => {
-    console.log('🙏 DÉMARRAGE MÉDITATION GRATITUDE - 5 MINUTES');
-    console.log('🔍 TEST DES FICHIERS AUDIO GRATITUDE...');
-    console.log('🎯 Session active:', isSessionActive);
-    console.log('🎯 Méditation actuelle:', currentMeditation);
+    console.log('💰 DÉMARRAGE MÉDITATION ABONDANCE & ATTRACTION - 10 MINUTES - TIMING CORRIGÉ');
+    console.log('🔍 État session au démarrage:', { isSessionActive, currentSession, currentMeditation });
     
     // Annuler tous les timeouts précédents
     scheduledTimeoutsRef.current.forEach(timeout => clearTimeout(timeout));
     scheduledTimeoutsRef.current = [];
 
-    // TEST IMMÉDIAT DES FICHIERS AUDIO GRATITUDE
-    const testFiles = async () => {
-      console.log('🔍 VÉRIFICATION DES FICHIERS GRATITUDE:');
-      for (const [key, filename] of Object.entries(GRATITUDE_AUDIO_FILES)) {
-        const audioPath = getMeditationAudioPath('gratitude', filename);
-        try {
-          const response = await fetch(audioPath, { method: 'HEAD' });
-          if (response.ok) {
-            console.log(`✅ ${audioPath} (${response.status})`);
-          } else {
-            console.log(`❌ ${audioPath} (${response.status})`);
-          }
-        } catch (error) {
-          console.log(`❌ ${audioPath} (erreur réseau)`);
-        }
-      }
-    };
-
-    // Lancer le test des fichiers
-    testFiles();
-
-    // TIMINGS POUR 5 MINUTES (300 secondes) - CORRIGÉ
-    const gratitudeTimings = [
-      { time: 0, audioKey: 'installation' },         // 0s - Installation - premier paragraphe
-      { time: 30000, audioKey: 'coherenceSetup' },   // 30s - Mise en place cohérence cardiaque
-      { time: 60000, audioKey: 'breathingHeart' },   // 60s - Approfondissement respiration cœur
-      { time: 90000, audioKey: 'gratitudeAwakening' }, // 90s - Éveil gratitude simple
-      { time: 120000, audioKey: 'firstGratitude' },  // 120s - Respiration avec première gratitude
-      { time: 150000, audioKey: 'lovedOnes' },       // 150s - Expansion vers personne chère
-      { time: 180000, audioKey: 'bodyGratitude' },   // 180s - Gratitude pour le corps
-      { time: 210000, audioKey: 'natureExpansion' }, // 210s - Élargissement nature/univers
-      { time: 240000, audioKey: 'energyAnchoring' }, // 240s - Ancrage de l'énergie
-      { time: 270000, audioKey: 'integration' },     // 270s - Intégration et rayonnement
-      { time: 285000, audioKey: 'conclusion' }       // 285s - Conclusion et retour
+    // TIMINGS CORRIGÉS POUR 10 MINUTES (600 secondes)
+    const abundanceTimings = [
+      { time: 0, audioKey: 'introduction' },           // 0s - Introduction (30s)
+      { time: 30000, audioKey: 'rhythmStart' },        // 30s - Rythme (10s)
+      { time: 50000, audioKey: 'energyBreath' },       // 50s - Énergie (10s)
+      { time: 70000, audioKey: 'abundanceBreath' },    // 70s - Abondance (10s)
+      { time: 90000, audioKey: 'coherence' },          // 90s - Cohérence (5s)
+      { time: 105000, audioKey: 'visualize' },         // 105s - Visualisation (8s)
+      { time: 123000, audioKey: 'realizationBreath' }, // 123s - Réalisation (10s)
+      { time: 143000, audioKey: 'cellularBreath' },    // 143s - Cellulaire (10s)
+      { time: 163000, audioKey: 'amplify' },           // 163s - Amplification (5s)
+      { time: 178000, audioKey: 'worthyBreath' },      // 178s - Mérite (10s)
+      { time: 198000, audioKey: 'joyBreath' },         // 198s - Joie (10s)
+      { time: 218000, audioKey: 'universe' },          // 218s - Univers (7s)
+      { time: 235000, audioKey: 'cocreateBreath' },    // 235s - Co-création (10s)
+      { time: 255000, audioKey: 'gratitudeBreath' },   // 255s - Gratitude (10s)
+      { time: 275000, audioKey: 'manifestationCycle' }, // 275s - Cycle de manifestation (240s)
+      { time: 515000, audioKey: 'anchor' },            // 515s - Ancrage (18s)
+      { time: 543000, audioKey: 'alignment' },         // 543s - Alignement (10s)
+      { time: 563000, audioKey: 'compass' },           // 563s - Boussole (5s)
+      { time: 578000, audioKey: 'completion' }         // 578s - Fin (22s) = 600s total
     ];
 
-    console.log(`🎵 Programmation de ${gratitudeTimings.length} séquences vocales GRATITUDE - 5 MINUTES`);
+    console.log(`🎵 Programmation de ${abundanceTimings.length} séquences vocales ABONDANCE & ATTRACTION - 10 MINUTES CORRIGÉ`);
 
-    // Programmer chaque séquence audio avec son propre timeout
-    gratitudeTimings.forEach(({ time, audioKey }, index) => {
+    // Programmer chaque séquence audio avec vérification renforcée
+    abundanceTimings.forEach(({ time, audioKey }, index) => {
       const timeout = setTimeout(() => {
-        console.log(`🎤 SÉQUENCE ${index + 1}/${gratitudeTimings.length} - ${time/1000}s: ${audioKey} - GRATITUDE 5min`);
-        console.log(`🔍 Session active au moment du déclenchement:`, isSessionActive);
-        console.log(`🔍 Méditation actuelle au moment du déclenchement:`, currentMeditation);
+        console.log(`🎤 SÉQUENCE ${index + 1}/${abundanceTimings.length} - ${time/1000}s: ${audioKey} - ABONDANCE & ATTRACTION`);
+        console.log(`🔍 Vérification état session:`, { 
+          isSessionActive, 
+          currentSession, 
+          currentMeditation,
+          timeoutStillValid: scheduledTimeoutsRef.current.includes(timeout)
+        });
         
-        if (isSessionActive && currentMeditation === 'gratitude') {
-          console.log(`🎤 DÉCLENCHEMENT EFFECTIF: ${audioKey}`);
-          playMeditationAudio('gratitude', audioKey);
+        // VÉRIFICATION RENFORCÉE
+        if (isSessionActive && currentSession === 'meditation' && currentMeditation === 'abundance') {
+          console.log(`🎤 DÉCLENCHEMENT EFFECTIF ABONDANCE: ${audioKey}`);
+          playMeditationAudio('abundance', audioKey);
         } else {
-          console.log(`❌ DÉCLENCHEMENT ANNULÉ: Session inactive ou méditation différente`);
-          console.log(`   - isSessionActive: ${isSessionActive}`);
-          console.log(`   - currentMeditation: ${currentMeditation}`);
+          console.log(`❌ DÉCLENCHEMENT ANNULÉ ABONDANCE:`, {
+            isSessionActive,
+            currentSession,
+            currentMeditation,
+            expected: { currentSession: 'meditation', currentMeditation: 'abundance' }
+          });
         }
       }, time);
       
       scheduledTimeoutsRef.current.push(timeout);
-      console.log(`⏰ Timeout ${index + 1} programmé pour ${time/1000}s (${audioKey})`);
+      console.log(`⏰ Timeout ABONDANCE ${index + 1} programmé pour ${time/1000}s (${audioKey})`);
     });
 
-    console.log(`✅ ${gratitudeTimings.length} timeouts programmés pour la méditation GRATITUDE 5 MINUTES`);
+    console.log(`✅ ${abundanceTimings.length} timeouts programmés pour ABONDANCE & ATTRACTION 10 MINUTES`);
+    console.log(`📊 Timeouts stockés:`, scheduledTimeoutsRef.current.length);
+  };
+
+  // Système vocal Méditation GRATITUDE - 5 MINUTES - TIMING CORRIGÉ
+  const startGratitudeGuidance = () => {
+    console.log('🙏 DÉMARRAGE MÉDITATION GRATITUDE - 5 MINUTES - TIMING CORRIGÉ');
+    console.log('🔍 État session au démarrage:', { isSessionActive, currentSession, currentMeditation });
+    
+    // Annuler tous les timeouts précédents
+    scheduledTimeoutsRef.current.forEach(timeout => clearTimeout(timeout));
+    scheduledTimeoutsRef.current = [];
+
+    // TIMINGS CORRIGÉS POUR 5 MINUTES (300 secondes)
+    const gratitudeTimings = [
+      { time: 0, audioKey: 'installation' },         // 0s - Installation (30s)
+      { time: 30000, audioKey: 'coherenceSetup' },   // 30s - Cohérence (30s)
+      { time: 60000, audioKey: 'breathingHeart' },   // 60s - Respiration cœur (30s)
+      { time: 90000, audioKey: 'gratitudeAwakening' }, // 90s - Éveil gratitude (30s)
+      { time: 120000, audioKey: 'firstGratitude' },  // 120s - Première gratitude (30s)
+      { time: 150000, audioKey: 'lovedOnes' },       // 150s - Êtres chers (30s)
+      { time: 180000, audioKey: 'bodyGratitude' },   // 180s - Corps (30s)
+      { time: 210000, audioKey: 'natureExpansion' }, // 210s - Nature (30s)
+      { time: 240000, audioKey: 'energyAnchoring' }, // 240s - Ancrage (30s)
+      { time: 270000, audioKey: 'integration' },     // 270s - Intégration (15s)
+      { time: 285000, audioKey: 'conclusion' }       // 285s - Conclusion (15s) = 300s total
+    ];
+
+    console.log(`🎵 Programmation de ${gratitudeTimings.length} séquences vocales GRATITUDE - 5 MINUTES CORRIGÉ`);
+
+    // Programmer chaque séquence audio avec vérification renforcée
+    gratitudeTimings.forEach(({ time, audioKey }, index) => {
+      const timeout = setTimeout(() => {
+        console.log(`🎤 SÉQUENCE ${index + 1}/${gratitudeTimings.length} - ${time/1000}s: ${audioKey} - GRATITUDE`);
+        console.log(`🔍 Vérification état session:`, { 
+          isSessionActive, 
+          currentSession, 
+          currentMeditation,
+          timeoutStillValid: scheduledTimeoutsRef.current.includes(timeout)
+        });
+        
+        // VÉRIFICATION RENFORCÉE
+        if (isSessionActive && currentSession === 'meditation' && currentMeditation === 'gratitude') {
+          console.log(`🎤 DÉCLENCHEMENT EFFECTIF GRATITUDE: ${audioKey}`);
+          playMeditationAudio('gratitude', audioKey);
+        } else {
+          console.log(`❌ DÉCLENCHEMENT ANNULÉ GRATITUDE:`, {
+            isSessionActive,
+            currentSession,
+            currentMeditation,
+            expected: { currentSession: 'meditation', currentMeditation: 'gratitude' }
+          });
+        }
+      }, time);
+      
+      scheduledTimeoutsRef.current.push(timeout);
+      console.log(`⏰ Timeout GRATITUDE ${index + 1} programmé pour ${time/1000}s (${audioKey})`);
+    });
+
+    console.log(`✅ ${gratitudeTimings.length} timeouts programmés pour GRATITUDE 5 MINUTES`);
     console.log(`📊 Timeouts stockés:`, scheduledTimeoutsRef.current.length);
   };
 
@@ -844,17 +816,17 @@ export const useVoiceManager = () => {
     });
   };
 
-  // Système vocal Méditations - SYSTÈME UNIFIÉ
+  // Système vocal Méditations - SYSTÈME UNIFIÉ CORRIGÉ
   const startMeditationGuidance = () => {
     console.log('🧘 DÉMARRAGE MÉDITATION - Type:', currentMeditation);
-    console.log('🔍 État session:', { isSessionActive, currentSession, currentMeditation });
+    console.log('🔍 État session complet:', { isSessionActive, currentSession, currentMeditation });
     
     if (currentMeditation === 'abundance') {
-      console.log('🎯 Lancement méditation ABONDANCE & ATTRACTION');
+      console.log('🎯 Lancement méditation ABONDANCE & ATTRACTION - 10 MINUTES');
       startAbundanceGuidance(); // VOS ENREGISTREMENTS - 10 MINUTES
     } else if (currentMeditation === 'gratitude') {
-      console.log('🎯 Lancement méditation GRATITUDE');
-      startGratitudeGuidance(); // NOUVELLE MÉDITATION - 5 MINUTES
+      console.log('🎯 Lancement méditation GRATITUDE - 5 MINUTES');
+      startGratitudeGuidance(); // MÉDITATION GRATITUDE - 5 MINUTES
     } else {
       console.log('🎯 Lancement méditation générique pour:', currentMeditation);
       // Pour les autres méditations, utiliser un système générique
@@ -977,7 +949,7 @@ export const useVoiceManager = () => {
         break;
       case 'meditation':
         console.log('🎯 Démarrage guidage MÉDITATION');
-        startMeditationGuidance(); // SYSTÈME MÉDITATIONS UNIFIÉ
+        startMeditationGuidance(); // SYSTÈME MÉDITATIONS UNIFIÉ CORRIGÉ
         break;
       case 'coherence':
         console.log('🎯 Démarrage guidage COHÉRENCE');
@@ -1059,7 +1031,7 @@ export const useVoiceManager = () => {
     playMeditationAudio,
     getMeditationAudioPath,
     startAbundanceGuidance, // VOS ENREGISTREMENTS - 10 MINUTES (maintenant Abondance & Attraction)
-    startGratitudeGuidance, // NOUVELLE MÉDITATION - 5 MINUTES
+    startGratitudeGuidance, // MÉDITATION GRATITUDE - 5 MINUTES
     // Fonctions génériques pour nouvelles sessions
     playSessionAudio,
     getSessionAudioPath,
@@ -1070,7 +1042,7 @@ export const useVoiceManager = () => {
     SCAN_FALLBACK_TEXTS,
     // Mappings et textes MÉDITATIONS
     ABUNDANCE_AUDIO_FILES, // VOS ENREGISTREMENTS (maintenant Abondance & Attraction)
-    GRATITUDE_AUDIO_FILES, // NOUVELLE MÉDITATION GRATITUDE
+    GRATITUDE_AUDIO_FILES, // MÉDITATION GRATITUDE
     ABUNDANCE_FALLBACK_TEXTS,
     GRATITUDE_FALLBACK_TEXTS,
     SESSION_AUDIO_MAPPINGS,
