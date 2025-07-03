@@ -10,7 +10,7 @@ export const useAppStore = create(
       currentSession: null,
       currentMeditation: null,
       isSessionActive: false,
-      hasOnboarded: false, // Nouvelle variable pour le parcours de lancement
+      hasOnboarded: false, // FORCÉ À FALSE pour afficher les pages de lancement
       
       sessionSettings: {
         duration: 180,
@@ -123,7 +123,8 @@ export const useAppStore = create(
         voiceSettings: state.voiceSettings,
         sessionSettings: state.sessionSettings,
         freeSessionSettings: state.freeSessionSettings,
-        hasOnboarded: state.hasOnboarded, // Persister l'état d'onboarding
+        // IMPORTANT: Ne pas persister hasOnboarded pour forcer l'affichage des pages de lancement
+        // hasOnboarded: state.hasOnboarded, // Commenté pour forcer l'affichage
       }),
     }
   )
