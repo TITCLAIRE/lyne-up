@@ -24,7 +24,7 @@ export const CoherenceSessionScreen = () => {
   const { timeRemaining, progress, startTimer, stopTimer, resetTimer } = useSessionTimer();
   const { breathingState, startBreathing, stopBreathing } = useBreathingAnimation();
   const { startAudio, stopAudio, playGong, getCurrentFrequencyName } = useAudioManager();
-  const { speak, stop: stopVoice, startCoherenceGuidance } = useVoiceManager();
+  const { speak, stop: stopVoice, startSessionGuidance } = useVoiceManager();
 
   const [lastPhase, setLastPhase] = useState(null);
   const [sessionEnded, setSessionEnded] = useState(false);
@@ -103,7 +103,7 @@ export const CoherenceSessionScreen = () => {
       
       // Démarrage du guidage vocal spécialisé pour la cohérence cardiaque
       if (!currentSettings.silentMode) {
-        startCoherenceGuidance(currentSettings);
+        startSessionGuidance(currentSettings);
       }
     } else {
       setSessionActive(false);
