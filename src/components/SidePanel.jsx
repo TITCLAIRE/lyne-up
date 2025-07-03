@@ -1,5 +1,5 @@
 import React from 'react';
-import { X, Volume2, Mic, Download, Smartphone } from 'lucide-react';
+import { X, Volume2, Mic, Download, Smartphone, RotateCcw } from 'lucide-react';
 import { useAppStore } from '../store/appStore';
 
 export const SidePanel = () => {
@@ -9,7 +9,8 @@ export const SidePanel = () => {
     audioSettings,
     updateAudioSettings,
     voiceSettings,
-    updateVoiceSettings
+    updateVoiceSettings,
+    resetOnboarding
   } = useAppStore();
 
   const handleAudioToggle = () => {
@@ -41,6 +42,11 @@ export const SidePanel = () => {
 
   const handleVoiceGenderChange = (gender) => {
     updateVoiceSettings({ gender });
+  };
+
+  const handleResetOnboarding = () => {
+    resetOnboarding();
+    toggleMenu();
   };
 
   return (
@@ -264,6 +270,26 @@ export const SidePanel = () => {
                 <div className="text-left">
                   <div className="font-medium text-sm">Installer l'app</div>
                   <div className="text-xs text-white/70">Accès rapide depuis l'écran d'accueil</div>
+                </div>
+              </button>
+            </div>
+          </div>
+
+          {/* Section Debug/Test */}
+          <div className="mb-6">
+            <h3 className="text-lg font-medium mb-3 flex items-center gap-2">
+              <RotateCcw size={18} />
+              Test & Debug
+            </h3>
+            <div className="bg-white/5 rounded-xl p-4">
+              <button 
+                onClick={handleResetOnboarding}
+                className="w-full bg-gradient-to-r from-orange-500/20 to-red-500/20 border-2 border-orange-500/40 rounded-xl p-3 flex items-center gap-3 hover:from-orange-500/30 hover:to-red-500/30 transition-all"
+              >
+                <RotateCcw size={20} />
+                <div className="text-left">
+                  <div className="font-medium text-sm">Revoir les pages de lancement</div>
+                  <div className="text-xs text-white/70">Réinitialise l'onboarding pour tester</div>
                 </div>
               </button>
             </div>

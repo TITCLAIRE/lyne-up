@@ -79,6 +79,12 @@ export const useAppStore = create(
         set({ hasOnboarded: onboarded });
       },
       
+      // Nouvelle action pour réinitialiser l'onboarding (utile pour les tests)
+      resetOnboarding: () => {
+        console.log('🔄 STORE: Réinitialisation de l\'onboarding');
+        set({ hasOnboarded: false });
+      },
+      
       updateSessionSettings: (settings) => 
         set((state) => ({
           sessionSettings: { ...state.sessionSettings, ...settings }
