@@ -8,6 +8,7 @@ import { CoherenceSelectionScreen } from './components/screens/CoherenceSelectio
 import { CoherenceSessionScreen } from './components/screens/CoherenceSessionScreen';
 import { FreeSessionSelectionScreen } from './components/screens/FreeSessionSelectionScreen';
 import { FreeSessionScreen } from './components/screens/FreeSessionScreen';
+import { LaunchScreen } from './components/screens/LaunchScreen';
 import { SidePanel } from './components/SidePanel';
 import { useAppStore } from './store/appStore';
 import { useAudioManager } from './hooks/useAudioManager';
@@ -15,12 +16,17 @@ import { useVoiceManager } from './hooks/useVoiceManager';
 import { useHeartRateDetector } from './hooks/useHeartRateDetector';
 
 function App() {
-  const { currentScreen } = useAppStore();
+  const { currentScreen, hasOnboarded } = useAppStore();
   
   // Initialiser les gestionnaires - RETOUR AU SYSTÈME CLASSIQUE
   useAudioManager();
   useVoiceManager(); // Système vocal classique restauré
   useHeartRateDetector();
+
+  // Si l'utilisateur n'a pas encore fait l'onboarding, afficher les pages de lancement
+  if (!hasOnboarded) {
+    return <LaunchScreen />;
+  }
 
   const renderScreen = () => {
     console.log('🔄 Navigation - Écran actuel:', currentScreen);

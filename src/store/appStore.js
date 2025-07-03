@@ -10,6 +10,7 @@ export const useAppStore = create(
       currentSession: null,
       currentMeditation: null,
       isSessionActive: false,
+      hasOnboarded: false, // Nouvelle variable pour le parcours de lancement
       
       sessionSettings: {
         duration: 180,
@@ -73,6 +74,10 @@ export const useAppStore = create(
         console.log('▶️ STORE: Session active:', active);
         set({ isSessionActive: active });
       },
+      setHasOnboarded: (onboarded) => {
+        console.log('🎯 STORE: Onboarding terminé:', onboarded);
+        set({ hasOnboarded: onboarded });
+      },
       
       updateSessionSettings: (settings) => 
         set((state) => ({
@@ -112,6 +117,7 @@ export const useAppStore = create(
         voiceSettings: state.voiceSettings,
         sessionSettings: state.sessionSettings,
         freeSessionSettings: state.freeSessionSettings,
+        hasOnboarded: state.hasOnboarded, // Persister l'état d'onboarding
       }),
     }
   )
