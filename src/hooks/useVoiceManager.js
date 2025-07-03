@@ -171,122 +171,24 @@ export const useVoiceManager = () => {
     conclusion: "Doucement, prenez une respiration plus profonde. Remerciez-vous pour ce moment de connexion. Quand vous êtes prêt, ouvrez les yeux, en gardant cette gratitude vivante en vous. Merci."
   };
 
-  // Fonction générique pour obtenir le chemin audio d'une session (NOUVELLES SESSIONS)
-  const getSessionAudioPath = (sessionId, filename) => {
-    const gender = voiceSettings.gender;
-    return `/audio/${sessionId}/${gender}/${filename}.mp3`;
+  // TEXTES DE FALLBACK POUR RESET (4/7/8)
+  const RESET_FALLBACK_TEXTS = {
+    welcome: "Bienvenue dans votre session RESET. Cette technique 4-7-8 va calmer votre système nerveux et préparer votre corps au repos profond. Installez-vous confortablement.",
+    phase1: "Inspirez par le nez pendant 4 secondes. Remplissez vos poumons calmement.",
+    phase2: "Cette respiration 4-7-8 active votre système nerveux parasympathique, celui du repos et de la récupération.",
+    phase3: "Chaque cycle vous emmène plus profondément dans un état de calme. Votre rythme cardiaque ralentit naturellement.",
+    completion: "Magnifique. Votre système nerveux est maintenant apaisé. Cette technique 4-7-8 peut être utilisée à tout moment pour retrouver instantanément le calme."
   };
 
-  // Mapping des fichiers audio pour les NOUVELLES sessions
-  const SESSION_AUDIO_MAPPINGS = {
-    // RESET (4/7/8)
-    reset: {
-      welcome: 'welcome',
-      phase1: 'phase1',
-      phase2: 'phase2',
-      phase3: 'phase3',
-      completion: 'completion'
-    },
-    
-    // PROGRESSIVE (3/3 → 4/4 → 5/5)
-    progressive: {
-      welcome: 'welcome',
-      phase1: 'phase1',
-      transition1: 'transition1',
-      phase2: 'phase2',
-      transition2: 'transition2',
-      phase3: 'phase3',
-      completion: 'completion'
-    },
-    
-    // KIDS
-    kids: {
-      welcome: 'welcome',
-      breathe1: 'breathe1',
-      breathe2: 'breathe2',
-      breathe3: 'breathe3',
-      completion: 'completion'
-    },
-    
-    // SENIORS
-    seniors: {
-      welcome: 'welcome',
-      relax1: 'relax1',
-      relax2: 'relax2',
-      relax3: 'relax3',
-      completion: 'completion'
-    },
-    
-    // COHÉRENCE CARDIAQUE
-    coherence: {
-      welcome: 'welcome',
-      midSession: 'mid-session',
-      finalMinute: 'final-minute',
-      completion: 'completion'
-    },
-    
-    // SESSION LIBRE
-    free: {
-      welcome: 'welcome',
-      guidance: 'guidance',
-      completion: 'completion'
-    }
-  };
-
-  // Textes de fallback pour les NOUVELLES sessions
-  const SESSION_FALLBACK_TEXTS = {
-    // RESET
-    reset: {
-      welcome: "Bienvenue dans votre session RESET. Cette technique 4-7-8 va calmer votre système nerveux.",
-      phase1: "Inspirez par le nez pendant 4 secondes. Remplissez vos poumons calmement.",
-      phase2: "Retenez votre souffle pendant 7 secondes. Gardez l'air précieux en vous.",
-      phase3: "Expirez lentement pendant 8 secondes. Relâchez tout par la bouche.",
-      completion: "Magnifique. Votre système nerveux est maintenant apaisé."
-    },
-    
-    // PROGRESSIVE
-    progressive: {
-      welcome: "Bienvenue dans votre entraînement progressif. Nous allons évoluer du rythme 3/3 vers le 5/5.",
-      phase1: "Phase 1 : Rythme 3/3. Respirez doucement et naturellement.",
-      transition1: "Passage au rythme 4/4. Respirez un peu plus profondément.",
-      phase2: "Phase 2 : Rythme 4/4. Votre respiration s'approfondit naturellement.",
-      transition2: "Passage au rythme 5/5. Respirez profondément et calmement.",
-      phase3: "Phase 3 : Rythme 5/5. Vous maîtrisez maintenant la cohérence cardiaque.",
-      completion: "Excellent ! Vous avez progressé du rythme débutant 3/3 jusqu'au rythme 5/5."
-    },
-    
-    // KIDS
-    kids: {
-      welcome: "Salut petit champion ! On va faire de la respiration magique ensemble.",
-      breathe1: "Inspire comme un ballon qui se gonfle. Respire l'air magique.",
-      breathe2: "Imagine que tu es un arbre avec des racines. Tu es fort et stable !",
-      breathe3: "Tu es un petit chat qui s'étire et qui se détend.",
-      completion: "Super ! Tu as fait de la vraie magie avec ta respiration."
-    },
-    
-    // SENIORS
-    seniors: {
-      welcome: "Bienvenue dans votre session de relaxation adaptée. Cette respiration douce va vous aider.",
-      relax1: "Cette respiration 3/4 est parfaitement adaptée à votre rythme.",
-      relax2: "Votre tension artérielle commence à diminuer. Votre cœur bat plus calmement.",
-      relax3: "Vos muscles se relâchent progressivement. Vous vous sentez de plus en plus détendu.",
-      completion: "Excellent ! Vous avez pris soin de votre bien-être."
-    },
-    
-    // COHÉRENCE CARDIAQUE
-    coherence: {
-      welcome: "Session de cohérence cardiaque démarrée. Respirez calmement et suivez le guide visuel.",
-      midSession: "Vous êtes dans un excellent rythme. Continuez à respirer calmement.",
-      finalMinute: "Dernière minute de votre session. Maintenez ce rythme apaisant.",
-      completion: "Session de cohérence cardiaque terminée. Vous avez créé un état d'harmonie intérieure."
-    },
-    
-    // SESSION LIBRE
-    free: {
-      welcome: "Session libre démarrée. Suivez votre rythme respiratoire personnalisé.",
-      guidance: "Vous contrôlez votre respiration. Maintenez ce rythme qui vous convient.",
-      completion: "Session libre terminée. Vous avez maintenu votre rythme personnalisé avec succès."
-    }
+  // TEXTES DE FALLBACK POUR PROGRESSIVE (3/3 → 4/4 → 5/5)
+  const PROGRESSIVE_FALLBACK_TEXTS = {
+    welcome: "Bienvenue dans votre entraînement progressif. Nous allons évoluer ensemble du rythme 3/3 vers le 5/5 en trois étapes d'une minute chacune.",
+    phase1: "Phase 1 : Rythme 3/3. Laissez votre corps s'habituer à cette respiration douce.",
+    transition1: "Passage au rythme 4/4. Votre respiration s'approfondit naturellement.",
+    phase2: "Phase 2 : Rythme 4/4. Respirez un peu plus profondément.",
+    transition2: "Passage au rythme 5/5. Respirez profondément et calmement.",
+    phase3: "Phase 3 : Rythme 5/5. Vous maîtrisez maintenant la respiration de cohérence cardiaque.",
+    completion: "Excellent ! Vous avez progressé du rythme débutant 3/3 jusqu'au rythme de cohérence cardiaque 5/5. Votre capacité respiratoire s'améliore."
   };
 
   // Fonction pour jouer un fichier audio local avec retry
@@ -496,23 +398,45 @@ export const useVoiceManager = () => {
     }
   };
 
-  // Fonction générique pour jouer un audio avec fallback (NOUVELLES SESSIONS)
-  const playSessionAudio = async (sessionId, audioKey) => {
+  // Fonction pour jouer un audio RESET avec fallback
+  const playResetAudio = async (audioKey) => {
     try {
-      const mapping = SESSION_AUDIO_MAPPINGS[sessionId];
-      if (!mapping || !mapping[audioKey]) {
-        throw new Error(`Mapping non trouvé pour ${sessionId}.${audioKey}`);
-      }
-
-      const audioPath = getSessionAudioPath(sessionId, mapping[audioKey]);
+      // Essayer d'abord les fichiers premium (si vous les avez)
+      const audioPath = `/audio/reset/${voiceSettings.gender}/${audioKey}.mp3`;
+      console.log(`🎵 Tentative lecture RESET premium: ${audioPath}`);
       await playLocalAudio(audioPath);
+      console.log(`✅ Audio RESET premium terminé: ${audioKey}`);
     } catch (error) {
-      const fallbackTexts = SESSION_FALLBACK_TEXTS[sessionId];
-      if (fallbackTexts && fallbackTexts[audioKey]) {
+      console.log(`🔄 Fallback synthèse RESET pour: ${audioKey} - Raison: ${error.message}`);
+      const fallbackText = RESET_FALLBACK_TEXTS[audioKey];
+      if (fallbackText) {
         try {
-          await speakWithSystemVoice(fallbackTexts[audioKey]);
+          await speakWithSystemVoice(fallbackText);
+          console.log(`✅ Fallback RESET réussi: ${audioKey}`);
         } catch (fallbackError) {
-          // Silencieux
+          console.log(`❌ Fallback RESET échoué: ${audioKey}`);
+        }
+      }
+    }
+  };
+
+  // Fonction pour jouer un audio PROGRESSIVE avec fallback
+  const playProgressiveAudio = async (audioKey) => {
+    try {
+      // Essayer d'abord les fichiers premium (si vous les avez)
+      const audioPath = `/audio/progressive/${voiceSettings.gender}/${audioKey}.mp3`;
+      console.log(`🎵 Tentative lecture PROGRESSIVE premium: ${audioPath}`);
+      await playLocalAudio(audioPath);
+      console.log(`✅ Audio PROGRESSIVE premium terminé: ${audioKey}`);
+    } catch (error) {
+      console.log(`🔄 Fallback synthèse PROGRESSIVE pour: ${audioKey} - Raison: ${error.message}`);
+      const fallbackText = PROGRESSIVE_FALLBACK_TEXTS[audioKey];
+      if (fallbackText) {
+        try {
+          await speakWithSystemVoice(fallbackText);
+          console.log(`✅ Fallback PROGRESSIVE réussi: ${audioKey}`);
+        } catch (fallbackError) {
+          console.log(`❌ Fallback PROGRESSIVE échoué: ${audioKey}`);
         }
       }
     }
@@ -529,6 +453,8 @@ export const useVoiceManager = () => {
 
   // Système vocal SOS Stress (SWITCH) - SYSTÈME ORIGINAL RESTAURÉ
   const startSosGuidance = () => {
+    console.log('🚨 DÉMARRAGE GUIDAGE SOS STRESS (SWITCH) - TIMING CORRIGÉ');
+    
     scheduledTimeoutsRef.current.forEach(timeout => clearTimeout(timeout));
     scheduledTimeoutsRef.current = [];
 
@@ -541,55 +467,139 @@ export const useVoiceManager = () => {
       { time: 58000, audioKey: 'stressRelease' },
       { time: 67000, audioKey: 'breatheRelease' },
       { time: 78000, audioKey: 'centerPeace' },
-      { time: 82000, audioKey: 'completion' }
+      { time: 85000, audioKey: 'completion' }
     ];
 
-    sosTimings.forEach(({ time, audioKey }) => {
+    console.log(`🎵 Programmation de ${sosTimings.length} séquences vocales SOS STRESS`);
+
+    sosTimings.forEach(({ time, audioKey }, index) => {
       const timeout = setTimeout(() => {
-        if (isSessionActive) {
+        console.log(`🎤 SÉQUENCE SOS ${index + 1}/${sosTimings.length} - ${time/1000}s: ${audioKey}`);
+        if (isSessionActive && currentSession === 'switch') {
           playSosAudio(audioKey);
+        } else {
+          console.log(`❌ Session non active ou changée: ${currentSession}`);
         }
       }, time);
       
       scheduledTimeoutsRef.current.push(timeout);
     });
+
+    console.log(`✅ ${sosTimings.length} timeouts programmés pour SOS STRESS`);
   };
 
   // Système vocal Scan Corporel - SYSTÈME ORIGINAL RESTAURÉ
   const startScanGuidance = () => {
+    console.log('🧘 DÉMARRAGE GUIDAGE SCAN CORPOREL - TIMING CORRIGÉ');
+    
     scheduledTimeoutsRef.current.forEach(timeout => clearTimeout(timeout));
     scheduledTimeoutsRef.current = [];
 
     const scanTimings = [
       { time: 0, audioKey: 'welcome' },
-      { time: 30, audioKey: 'head' },
-      { time: 60, audioKey: 'face' },
-      { time: 90, audioKey: 'neck' },
-      { time: 120, audioKey: 'chest' },
-      { time: 150, audioKey: 'back' },
-      { time: 180, audioKey: 'abdomen' },
-      { time: 210, audioKey: 'hips' },
-      { time: 240, audioKey: 'thighs' },
-      { time: 255, audioKey: 'knees' },
-      { time: 270, audioKey: 'calves' },
-      { time: 285, audioKey: 'ankles' },
-      { time: 300, audioKey: 'feet' },
-      { time: 360, audioKey: 'wholebody' },
-      { time: 420, audioKey: 'breathing' },
-      { time: 480, audioKey: 'awareness' },
-      { time: 540, audioKey: 'presence' },
-      { time: 570, audioKey: 'completion' }
+      { time: 30000, audioKey: 'head' },
+      { time: 60000, audioKey: 'face' },
+      { time: 90000, audioKey: 'neck' },
+      { time: 120000, audioKey: 'chest' },
+      { time: 150000, audioKey: 'back' },
+      { time: 180000, audioKey: 'abdomen' },
+      { time: 210000, audioKey: 'hips' },
+      { time: 240000, audioKey: 'thighs' },
+      { time: 255000, audioKey: 'knees' },
+      { time: 270000, audioKey: 'calves' },
+      { time: 285000, audioKey: 'ankles' },
+      { time: 300000, audioKey: 'feet' },
+      { time: 360000, audioKey: 'wholebody' },
+      { time: 420000, audioKey: 'breathing' },
+      { time: 480000, audioKey: 'awareness' },
+      { time: 540000, audioKey: 'presence' },
+      { time: 570000, audioKey: 'completion' }
     ];
 
-    scanTimings.forEach(({ time, audioKey }) => {
+    console.log(`🎵 Programmation de ${scanTimings.length} séquences vocales SCAN CORPOREL`);
+
+    scanTimings.forEach(({ time, audioKey }, index) => {
       const timeout = setTimeout(() => {
-        if (isSessionActive) {
+        console.log(`🎤 SÉQUENCE SCAN ${index + 1}/${scanTimings.length} - ${time/1000}s: ${audioKey}`);
+        if (isSessionActive && currentSession === 'scan') {
           playScanAudio(audioKey);
+        } else {
+          console.log(`❌ Session non active ou changée: ${currentSession}`);
         }
-      }, time * 1000);
+      }, time);
       
       scheduledTimeoutsRef.current.push(timeout);
     });
+
+    console.log(`✅ ${scanTimings.length} timeouts programmés pour SCAN CORPOREL`);
+  };
+
+  // Système vocal RESET - CORRIGÉ
+  const startResetGuidance = () => {
+    console.log('🔄 DÉMARRAGE GUIDAGE RESET (4/7/8) - TIMING CORRIGÉ');
+    
+    scheduledTimeoutsRef.current.forEach(timeout => clearTimeout(timeout));
+    scheduledTimeoutsRef.current = [];
+
+    const resetTimings = [
+      { time: 1000, audioKey: 'welcome' },
+      { time: 15000, audioKey: 'phase1' },
+      { time: 60000, audioKey: 'phase2' },
+      { time: 120000, audioKey: 'phase3' },
+      { time: 170000, audioKey: 'completion' }
+    ];
+
+    console.log(`🎵 Programmation de ${resetTimings.length} séquences vocales RESET`);
+
+    resetTimings.forEach(({ time, audioKey }, index) => {
+      const timeout = setTimeout(() => {
+        console.log(`🎤 SÉQUENCE RESET ${index + 1}/${resetTimings.length} - ${time/1000}s: ${audioKey}`);
+        if (isSessionActive && currentSession === 'reset') {
+          playResetAudio(audioKey);
+        } else {
+          console.log(`❌ Session non active ou changée: ${currentSession}`);
+        }
+      }, time);
+      
+      scheduledTimeoutsRef.current.push(timeout);
+    });
+
+    console.log(`✅ ${resetTimings.length} timeouts programmés pour RESET`);
+  };
+
+  // Système vocal PROGRESSIVE - CORRIGÉ
+  const startProgressiveGuidance = () => {
+    console.log('📈 DÉMARRAGE GUIDAGE PROGRESSIVE (3/3→4/4→5/5) - TIMING CORRIGÉ');
+    
+    scheduledTimeoutsRef.current.forEach(timeout => clearTimeout(timeout));
+    scheduledTimeoutsRef.current = [];
+
+    const progressiveTimings = [
+      { time: 1000, audioKey: 'welcome' },
+      { time: 5000, audioKey: 'phase1' },
+      { time: 58000, audioKey: 'transition1' },
+      { time: 62000, audioKey: 'phase2' },
+      { time: 118000, audioKey: 'transition2' },
+      { time: 122000, audioKey: 'phase3' },
+      { time: 175000, audioKey: 'completion' }
+    ];
+
+    console.log(`🎵 Programmation de ${progressiveTimings.length} séquences vocales PROGRESSIVE`);
+
+    progressiveTimings.forEach(({ time, audioKey }, index) => {
+      const timeout = setTimeout(() => {
+        console.log(`🎤 SÉQUENCE PROGRESSIVE ${index + 1}/${progressiveTimings.length} - ${time/1000}s: ${audioKey}`);
+        if (isSessionActive && currentSession === 'progressive') {
+          playProgressiveAudio(audioKey);
+        } else {
+          console.log(`❌ Session non active ou changée: ${currentSession}`);
+        }
+      }, time);
+      
+      scheduledTimeoutsRef.current.push(timeout);
+    });
+
+    console.log(`✅ ${progressiveTimings.length} timeouts programmés pour PROGRESSIVE`);
   };
 
   // Système vocal Méditation ABONDANCE & ATTRACTION - TIMING CORRIGÉ POUR 10 MINUTES
@@ -718,104 +728,6 @@ export const useVoiceManager = () => {
     console.log(`📊 Timeouts stockés:`, scheduledTimeoutsRef.current.length);
   };
 
-  // Système vocal RESET
-  const startResetGuidance = () => {
-    scheduledTimeoutsRef.current.forEach(timeout => clearTimeout(timeout));
-    scheduledTimeoutsRef.current = [];
-
-    const resetTimings = [
-      { time: 1000, audioKey: 'welcome' },
-      { time: 15000, audioKey: 'phase1' },
-      { time: 45000, audioKey: 'phase2' },
-      { time: 90000, audioKey: 'phase3' },
-      { time: 170000, audioKey: 'completion' }
-    ];
-
-    resetTimings.forEach(({ time, audioKey }) => {
-      const timeout = setTimeout(() => {
-        if (isSessionActive) {
-          playSessionAudio('reset', audioKey);
-        }
-      }, time);
-      
-      scheduledTimeoutsRef.current.push(timeout);
-    });
-  };
-
-  // Système vocal PROGRESSIVE
-  const startProgressiveGuidance = () => {
-    scheduledTimeoutsRef.current.forEach(timeout => clearTimeout(timeout));
-    scheduledTimeoutsRef.current = [];
-
-    const progressiveTimings = [
-      { time: 1000, audioKey: 'welcome' },
-      { time: 5000, audioKey: 'phase1' },
-      { time: 58000, audioKey: 'transition1' },
-      { time: 62000, audioKey: 'phase2' },
-      { time: 118000, audioKey: 'transition2' },
-      { time: 122000, audioKey: 'phase3' },
-      { time: 175000, audioKey: 'completion' }
-    ];
-
-    progressiveTimings.forEach(({ time, audioKey }) => {
-      const timeout = setTimeout(() => {
-        if (isSessionActive) {
-          playSessionAudio('progressive', audioKey);
-        }
-      }, time);
-      
-      scheduledTimeoutsRef.current.push(timeout);
-    });
-  };
-
-  // Système vocal KIDS
-  const startKidsGuidance = () => {
-    scheduledTimeoutsRef.current.forEach(timeout => clearTimeout(timeout));
-    scheduledTimeoutsRef.current = [];
-
-    const kidsTimings = [
-      { time: 1000, audioKey: 'welcome' },
-      { time: 15000, audioKey: 'breathe1' },
-      { time: 45000, audioKey: 'breathe2' },
-      { time: 75000, audioKey: 'breathe3' },
-      { time: 115000, audioKey: 'completion' }
-    ];
-
-    kidsTimings.forEach(({ time, audioKey }) => {
-      const timeout = setTimeout(() => {
-        if (isSessionActive) {
-          playSessionAudio('kids', audioKey);
-        }
-      }, time);
-      
-      scheduledTimeoutsRef.current.push(timeout);
-    });
-  };
-
-  // Système vocal SENIORS
-  const startSeniorsGuidance = () => {
-    scheduledTimeoutsRef.current.forEach(timeout => clearTimeout(timeout));
-    scheduledTimeoutsRef.current = [];
-
-    const seniorsTimings = [
-      { time: 1000, audioKey: 'welcome' },
-      { time: 30000, audioKey: 'relax1' },
-      { time: 120000, audioKey: 'relax2' },
-      { time: 210000, audioKey: 'relax3' },
-      { time: 290000, audioKey: 'completion' }
-    ];
-
-    seniorsTimings.forEach(({ time, audioKey }) => {
-      const timeout = setTimeout(() => {
-        if (isSessionActive) {
-          playSessionAudio('seniors', audioKey);
-        }
-      }, time);
-      
-      scheduledTimeoutsRef.current.push(timeout);
-    });
-  };
-
   // Système vocal Méditations - SYSTÈME UNIFIÉ CORRIGÉ
   const startMeditationGuidance = () => {
     console.log('🧘 DÉMARRAGE MÉDITATION - Type:', currentMeditation);
@@ -853,66 +765,7 @@ export const useVoiceManager = () => {
     }
   };
 
-  // Système vocal Cohérence Cardiaque
-  const startCoherenceGuidance = (coherenceSettings) => {
-    scheduledTimeoutsRef.current.forEach(timeout => clearTimeout(timeout));
-    scheduledTimeoutsRef.current = [];
-
-    if (!voiceSettings.enabled || coherenceSettings.silentMode) {
-      return;
-    }
-
-    const durationMs = coherenceSettings.duration * 60 * 1000;
-    const midSessionTime = Math.floor(durationMs * 0.4);
-    const finalMinuteTime = durationMs - 60000;
-
-    const coherenceTimings = [
-      { time: 2000, audioKey: 'welcome' },
-      { time: midSessionTime, audioKey: 'midSession' },
-      { time: finalMinuteTime, audioKey: 'finalMinute' }
-    ];
-
-    if (coherenceSettings.duration >= 2) {
-      coherenceTimings.push({ 
-        time: durationMs - 5000, 
-        audioKey: 'completion'
-      });
-    }
-
-    coherenceTimings.forEach(({ time, audioKey }) => {
-      const timeout = setTimeout(() => {
-        if (isSessionActive) {
-          playSessionAudio('coherence', audioKey);
-        }
-      }, time);
-      
-      scheduledTimeoutsRef.current.push(timeout);
-    });
-  };
-
-  // Système vocal Session Libre
-  const startFreeSessionGuidance = () => {
-    scheduledTimeoutsRef.current.forEach(timeout => clearTimeout(timeout));
-    scheduledTimeoutsRef.current = [];
-
-    const freeTimings = [
-      { time: 1000, audioKey: 'welcome' },
-      { time: 60000, audioKey: 'guidance' },
-      { time: 290000, audioKey: 'completion' }
-    ];
-
-    freeTimings.forEach(({ time, audioKey }) => {
-      const timeout = setTimeout(() => {
-        if (isSessionActive) {
-          playSessionAudio('free', audioKey);
-        }
-      }, time);
-      
-      scheduledTimeoutsRef.current.push(timeout);
-    });
-  };
-
-  // Système vocal unifié
+  // Système vocal unifié - CORRIGÉ AVEC TOUS LES MAPPINGS
   const startSessionGuidance = (coherenceSettings = null) => {
     if (!voiceSettings.enabled) {
       console.log('🔇 Guidage vocal désactivé');
@@ -924,7 +777,7 @@ export const useVoiceManager = () => {
 
     switch (currentSession) {
       case 'switch':
-        console.log('🎯 Démarrage guidage SOS Stress');
+        console.log('🎯 Démarrage guidage SOS Stress (SWITCH)');
         startSosGuidance(); // SYSTÈME ORIGINAL
         break;
       case 'scan':
@@ -933,19 +786,19 @@ export const useVoiceManager = () => {
         break;
       case 'reset':
         console.log('🎯 Démarrage guidage RESET');
-        startResetGuidance();
+        startResetGuidance(); // CORRIGÉ
         break;
       case 'progressive':
         console.log('🎯 Démarrage guidage PROGRESSIVE');
-        startProgressiveGuidance();
+        startProgressiveGuidance(); // CORRIGÉ
         break;
       case 'kids':
         console.log('🎯 Démarrage guidage KIDS');
-        startKidsGuidance();
+        speak("Salut petit champion ! On va faire de la respiration magique ensemble.");
         break;
       case 'seniors':
         console.log('🎯 Démarrage guidage SENIORS');
-        startSeniorsGuidance();
+        speak("Bienvenue dans votre session de relaxation adaptée. Cette respiration douce va vous aider.");
         break;
       case 'meditation':
         console.log('🎯 Démarrage guidage MÉDITATION');
@@ -953,13 +806,11 @@ export const useVoiceManager = () => {
         break;
       case 'coherence':
         console.log('🎯 Démarrage guidage COHÉRENCE');
-        if (coherenceSettings) {
-          startCoherenceGuidance(coherenceSettings);
-        }
+        speak("Session de cohérence cardiaque démarrée. Respirez calmement et suivez le guide visuel.");
         break;
       case 'free':
         console.log('🎯 Démarrage guidage SESSION LIBRE');
-        startFreeSessionGuidance();
+        speak("Session libre démarrée. Suivez votre rythme respiratoire personnalisé.");
         break;
       default:
         console.log('🎯 Session non reconnue, guidage générique');
@@ -1021,7 +872,6 @@ export const useVoiceManager = () => {
     stop,
     isProcessing: isPlayingRef.current,
     startSessionGuidance,
-    startCoherenceGuidance,
     // Fonctions spécialisées pour SOS et SCAN
     playSosAudio,
     playScanAudio,
@@ -1032,9 +882,11 @@ export const useVoiceManager = () => {
     getMeditationAudioPath,
     startAbundanceGuidance, // VOS ENREGISTREMENTS - 10 MINUTES (maintenant Abondance & Attraction)
     startGratitudeGuidance, // MÉDITATION GRATITUDE - 5 MINUTES
-    // Fonctions génériques pour nouvelles sessions
-    playSessionAudio,
-    getSessionAudioPath,
+    // Fonctions pour RESET et PROGRESSIVE
+    playResetAudio,
+    playProgressiveAudio,
+    startResetGuidance,
+    startProgressiveGuidance,
     // Mappings et textes
     SOS_AUDIO_FILES,
     SCAN_AUDIO_FILES,
@@ -1045,7 +897,8 @@ export const useVoiceManager = () => {
     GRATITUDE_AUDIO_FILES, // MÉDITATION GRATITUDE
     ABUNDANCE_FALLBACK_TEXTS,
     GRATITUDE_FALLBACK_TEXTS,
-    SESSION_AUDIO_MAPPINGS,
-    SESSION_FALLBACK_TEXTS,
+    // Mappings et textes RESET/PROGRESSIVE
+    RESET_FALLBACK_TEXTS,
+    PROGRESSIVE_FALLBACK_TEXTS,
   };
 };
