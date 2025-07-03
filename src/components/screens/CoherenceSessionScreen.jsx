@@ -101,9 +101,11 @@ export const CoherenceSessionScreen = () => {
       startTimer(durationInSeconds);
       startBreathing(breathingPattern);
       
-      // Démarrage du guidage vocal spécialisé pour la cohérence cardiaque
-      if (!currentSettings.silentMode) {
-        startSessionGuidance(currentSettings);
+      // Démarrage du guidage vocal pour la session
+      if (!currentSettings.silentMode && voiceSettings.enabled) {
+        console.log('🎤 Démarrage guidage vocal pour cohérence cardiaque');
+        // Utiliser startSessionGuidance au lieu de startCoherenceGuidance
+        startSessionGuidance();
       }
     } else {
       setSessionActive(false);
