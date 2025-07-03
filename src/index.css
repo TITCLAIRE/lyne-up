@@ -104,3 +104,248 @@
   transform: translate(-50%, -50%);
   z-index: 10;
 }
+
+/* ===== ANIMATIONS POUR LES PAGES DE LANCEMENT ===== */
+
+/* Animation de flottement pour le logo principal */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px) scale(1);
+  }
+  50% {
+    transform: translateY(-8px) scale(1.02);
+  }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* Animation de lueur pour le logo */
+@keyframes glow {
+  0%, 100% {
+    filter: brightness(1) drop-shadow(0 0 5px rgba(34, 211, 238, 0.3));
+  }
+  50% {
+    filter: brightness(1.1) drop-shadow(0 0 15px rgba(34, 211, 238, 0.6));
+  }
+}
+
+.animate-glow {
+  animation: glow 2s ease-in-out infinite;
+}
+
+/* Animations de pulsation pour les cercles de respiration */
+@keyframes pulse-slow {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.3;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.5;
+  }
+}
+
+@keyframes pulse-medium {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.4;
+  }
+  50% {
+    transform: scale(1.15);
+    opacity: 0.6;
+  }
+}
+
+@keyframes pulse-fast {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.5;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 0.7;
+  }
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 4s ease-in-out infinite;
+}
+
+.animate-pulse-medium {
+  animation: pulse-medium 3s ease-in-out infinite;
+}
+
+.animate-pulse-fast {
+  animation: pulse-fast 2s ease-in-out infinite;
+}
+
+/* Animation de pulsation douce pour les icônes */
+@keyframes pulse-gentle {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+.animate-pulse-gentle {
+  animation: pulse-gentle 2s ease-in-out infinite;
+}
+
+/* Animations des particules flottantes */
+@keyframes float-particle-1 {
+  0%, 100% {
+    transform: translate(0, 0) rotate(0deg);
+    opacity: 0.6;
+  }
+  25% {
+    transform: translate(10px, -15px) rotate(90deg);
+    opacity: 1;
+  }
+  50% {
+    transform: translate(-5px, -25px) rotate(180deg);
+    opacity: 0.8;
+  }
+  75% {
+    transform: translate(-15px, -10px) rotate(270deg);
+    opacity: 0.4;
+  }
+}
+
+@keyframes float-particle-2 {
+  0%, 100% {
+    transform: translate(0, 0) rotate(0deg);
+    opacity: 0.5;
+  }
+  33% {
+    transform: translate(-12px, 20px) rotate(120deg);
+    opacity: 0.9;
+  }
+  66% {
+    transform: translate(8px, 15px) rotate(240deg);
+    opacity: 0.7;
+  }
+}
+
+@keyframes float-particle-3 {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.4;
+  }
+  50% {
+    transform: translate(15px, -20px) scale(1.5);
+    opacity: 0.8;
+  }
+}
+
+@keyframes float-particle-4 {
+  0%, 100% {
+    transform: translate(0, 0) rotate(0deg);
+    opacity: 0.6;
+  }
+  40% {
+    transform: translate(-10px, -18px) rotate(144deg);
+    opacity: 1;
+  }
+  80% {
+    transform: translate(12px, -8px) rotate(288deg);
+    opacity: 0.3;
+  }
+}
+
+.animate-float-particle-1 {
+  animation: float-particle-1 6s ease-in-out infinite;
+}
+
+.animate-float-particle-2 {
+  animation: float-particle-2 5s ease-in-out infinite;
+}
+
+.animate-float-particle-3 {
+  animation: float-particle-3 7s ease-in-out infinite;
+}
+
+.animate-float-particle-4 {
+  animation: float-particle-4 4s ease-in-out infinite;
+}
+
+/* Animations d'entrée pour le contenu */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slide-in {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slide-in-left {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slide-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.8s ease-out forwards;
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.8s ease-out forwards;
+}
+
+.animate-slide-in {
+  animation: slide-in 0.6s ease-out forwards;
+}
+
+.animate-slide-in-left {
+  animation: slide-in-left 0.6s ease-out forwards;
+  opacity: 0;
+  animation-fill-mode: forwards;
+}
+
+.animate-slide-in-up {
+  animation: slide-in-up 0.6s ease-out forwards;
+  opacity: 0;
+  animation-fill-mode: forwards;
+}
