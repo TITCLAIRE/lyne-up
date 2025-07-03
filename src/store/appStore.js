@@ -10,7 +10,12 @@ export const useAppStore = create(
       currentSession: null,
       currentMeditation: null,
       isSessionActive: false,
-      hasOnboarded: false, // FORCÉ À FALSE pour afficher les pages de lancement
+      
+      // NOUVEAU : États pour le parcours utilisateur
+      showLaunchScreen: true, // Toujours afficher les pages de lancement
+      isTrialMode: false, // Mode session d'essai
+      isAuthenticated: false, // État d'authentification
+      userProfile: null, // Profil utilisateur
       
       sessionSettings: {
         duration: 180,
@@ -36,6 +41,15 @@ export const useAppStore = create(
       coherenceSettings: {
         duration: null,
         rhythm: null,
+        gongEnabled: true,
+        transitionEnabled: true,
+        silentMode: false,
+      },
+
+      // NOUVEAU : Paramètres pour la session d'essai
+      trialCoherenceSettings: {
+        duration: 5, // 5 minutes fixe
+        rhythm: '5-5', // Par défaut 5/5
         gongEnabled: true,
         transitionEnabled: true,
         silentMode: false,
@@ -74,15 +88,42 @@ export const useAppStore = create(
         console.log('▶️ STORE: Session active:', active);
         set({ isSessionActive: active });
       },
-      setHasOnboarded: (onboarded) => {
-        console.log('🎯 STORE: Onboarding terminé:', onboarded);
-        set({ hasOnboarded: onboarded });
+      
+      // NOUVELLES ACTIONS pour le parcours utilisateur
+      completeLaunchScreen: () => {
+        console.log('🎯 STORE: Pages de lancement terminées');
+        set({ showLaunchScreen: false });
       },
       
-      // Nouvelle action pour réinitialiser l'onboarding (utile pour les tests)
-      resetOnboarding: () => {
-        console.log('🔄 STORE: Réinitialisation de l\'onboarding');
-        set({ hasOnboarded: false });
+      startTrialMode: () => {
+        console.log('🎯 STORE: Démarrage mode essai');
+        set({ isTrialMode: true, currentScreen: 'trialCoherenceSelection' });
+      },
+      
+      completeTrialSession: () => {
+        console.log('🎯 STORE: Session d\'essai terminée');
+        set({ isTrialMode: false, currentScreen: 'auth' });
+      },
+      
+      setAuthenticated: (authenticated, userProfile = null) => {
+        console.log('🔐 STORE: Authentification:', authenticated);
+        set({ 
+          isAuthenticated: authenticated, 
+          userProfile,
+          currentScreen: authenticated ? 'home' : 'auth'
+        });
+      },
+      
+      // Action pour réinitialiser complètement l'application (utile pour les tests)
+      resetApp: () => {
+        console.log('🔄 STORE: Réinitialisation complète de l\'application');
+        set({ 
+          showLaunchScreen: true,
+          isTrialMode: false,
+          isAuthenticated: false,
+          userProfile: null,
+          currentScreen: 'home'
+        });
       },
       
       updateSessionSettings: (settings) => 
@@ -105,6 +146,12 @@ export const useAppStore = create(
           coherenceSettings: { ...state.coherenceSettings, ...settings }
         })),
 
+      // NOUVELLE ACTION pour les paramètres de session d'essai
+      updateTrialCoherenceSettings: (settings) =>
+        set((state) => ({
+          trialCoherenceSettings: { ...state.trialCoherenceSettings, ...settings }
+        })),
+
       // Action pour mettre à jour les paramètres de session libre
       updateFreeSessionSettings: (settings) =>
         set((state) => ({
@@ -123,8 +170,9 @@ export const useAppStore = create(
         voiceSettings: state.voiceSettings,
         sessionSettings: state.sessionSettings,
         freeSessionSettings: state.freeSessionSettings,
-        // IMPORTANT: Ne pas persister hasOnboarded pour forcer l'affichage des pages de lancement
-        // hasOnboarded: state.hasOnboarded, // Commenté pour forcer l'affichage
+        trialCoherenceSettings: state.trialCoherenceSettings,
+        // IMPORTANT: Ne pas persister les états d'authentification et de lancement
+        // pour garantir que l'application redémarre toujours avec les pages de lancement
       }),
     }
   )

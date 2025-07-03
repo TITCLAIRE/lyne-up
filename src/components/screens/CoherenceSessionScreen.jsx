@@ -11,11 +11,14 @@ import { getBreathingPattern } from '../../data/sessions';
 export const CoherenceSessionScreen = () => {
   const { 
     coherenceSettings,
+    trialCoherenceSettings,
     isSessionActive, 
     setSessionActive, 
     setCurrentScreen,
     audioSettings,
-    voiceSettings
+    voiceSettings,
+    isTrialMode,
+    completeTrialSession
   } = useAppStore();
   
   const { timeRemaining, progress, startTimer, stopTimer, resetTimer } = useSessionTimer();
@@ -27,31 +30,37 @@ export const CoherenceSessionScreen = () => {
   const [sessionEnded, setSessionEnded] = useState(false);
   const [voiceSystemStarted, setVoiceSystemStarted] = useState(false);
 
+  // Utiliser les paramètres appropriés selon le mode
+  const currentSettings = isTrialMode ? trialCoherenceSettings : coherenceSettings;
+
   // Obtenir le pattern respiratoire pour la cohérence cardiaque
   const getCoherenceBreathingPattern = () => {
-    const pattern = getBreathingPattern('coherence', coherenceSettings.rhythm);
+    const pattern = getBreathingPattern('coherence', currentSettings.rhythm);
     return pattern;
   };
 
   // Gérer les changements de phase pour le gong
   useEffect(() => {
     if (isSessionActive && breathingState.phase !== 'idle' && breathingState.phase !== lastPhase) {
-      if (lastPhase !== null && coherenceSettings.transitionEnabled && !coherenceSettings.silentMode) {
+      if (lastPhase !== null && currentSettings.transitionEnabled && !currentSettings.silentMode) {
         playGong(breathingState.phase);
       }
       setLastPhase(breathingState.phase);
     }
-  }, [breathingState.phase, isSessionActive, lastPhase, coherenceSettings, playGong]);
+  }, [breathingState.phase, isSessionActive, lastPhase, currentSettings, playGong]);
 
   // Gérer la fin de session
   useEffect(() => {
     if (timeRemaining === 0 && isSessionActive && !sessionEnded) {
-      console.log('🏁 Session cohérence cardiaque terminée');
+      console.log('🏁 Session cohérence cardiaque terminée - Mode essai:', isTrialMode);
       setSessionEnded(true);
       
       // Message de fin
-      if (!coherenceSettings.silentMode) {
-        speak("Session de cohérence cardiaque terminée. Vous avez créé un état d'harmonie intérieure.");
+      if (!currentSettings.silentMode) {
+        const endMessage = isTrialMode 
+          ? "Félicitations ! Vous avez terminé votre session d'essai de cohérence cardiaque. Vous avez créé un état d'harmonie intérieure."
+          : "Session de cohérence cardiaque terminée. Vous avez créé un état d'harmonie intérieure.";
+        speak(endMessage);
       }
       
       // Arrêter l'audio et la respiration
@@ -59,12 +68,17 @@ export const CoherenceSessionScreen = () => {
       stopBreathing();
       stopVoice();
       
-      // Redirection automatique vers les résultats
+      // Redirection selon le mode
       setTimeout(() => {
-        setCurrentScreen('results');
+        if (isTrialMode) {
+          console.log('🎯 Fin de session d\'essai - Redirection vers résultats d\'essai');
+          setCurrentScreen('results'); // TrialResultsScreen sera affiché automatiquement
+        } else {
+          setCurrentScreen('results');
+        }
       }, 3000);
     }
-  }, [timeRemaining, isSessionActive, sessionEnded, setCurrentScreen, coherenceSettings.silentMode, speak, stopAudio, stopBreathing, stopVoice]);
+  }, [timeRemaining, isSessionActive, sessionEnded, setCurrentScreen, currentSettings.silentMode, speak, stopAudio, stopBreathing, stopVoice, isTrialMode]);
 
   const handleToggleSession = () => {
     if (!isSessionActive) {
@@ -75,21 +89,21 @@ export const CoherenceSessionScreen = () => {
       setVoiceSystemStarted(false);
       
       // Utiliser la fréquence sélectionnée manuellement ou par défaut
-      if (coherenceSettings.gongEnabled && !coherenceSettings.silentMode) {
+      if (currentSettings.gongEnabled && !currentSettings.silentMode) {
         const selectedFrequency = audioSettings.frequency !== 'coherence' ? audioSettings.frequency : 'coherence';
         console.log('🎵 Démarrage audio cohérence avec fréquence:', selectedFrequency);
         startAudio(selectedFrequency);
       }
       
       // Démarrer le timer et la respiration
-      const durationInSeconds = (coherenceSettings.duration || 5) * 60;
+      const durationInSeconds = (currentSettings.duration || 5) * 60;
       console.log('⏱️ Durée session cohérence:', durationInSeconds, 'secondes');
       startTimer(durationInSeconds);
       startBreathing(breathingPattern);
       
       // Démarrage du guidage vocal spécialisé pour la cohérence cardiaque
-      if (!coherenceSettings.silentMode) {
-        startCoherenceGuidance(coherenceSettings);
+      if (!currentSettings.silentMode) {
+        startCoherenceGuidance(currentSettings);
       }
     } else {
       setSessionActive(false);
@@ -113,7 +127,13 @@ export const CoherenceSessionScreen = () => {
     setLastPhase(null);
     setSessionEnded(false);
     setVoiceSystemStarted(false);
-    setCurrentScreen('home');
+    
+    if (isTrialMode) {
+      // En mode essai, retourner à la sélection d'essai
+      setCurrentScreen('trialCoherenceSelection');
+    } else {
+      setCurrentScreen('home');
+    }
   };
 
   const formatTime = (seconds) => {
@@ -127,22 +147,42 @@ export const CoherenceSessionScreen = () => {
       {/* En-tête */}
       <div className="text-center mb-6">
         <div className="flex items-center justify-center gap-4 mb-4">
-          <div className="w-12 h-12 rounded-xl flex items-center justify-center overflow-hidden bg-white/10 backdrop-blur-sm border border-white/20">
-            <Heart size={24} className="text-white" />
+          <div className={`w-12 h-12 rounded-xl flex items-center justify-center overflow-hidden backdrop-blur-sm border ${
+            isTrialMode 
+              ? 'bg-green-500/20 border-green-500/30' 
+              : 'bg-white/10 border-white/20'
+          }`}>
+            <Heart size={24} className={isTrialMode ? 'text-green-400' : 'text-white'} />
           </div>
           <div>
-            <h1 className="text-2xl font-bold">Cohérence Cardiaque</h1>
+            <h1 className={`text-2xl font-bold ${
+              isTrialMode 
+                ? 'bg-gradient-to-r from-green-400 to-emerald-400 bg-clip-text text-transparent' 
+                : ''
+            }`}>
+              {isTrialMode ? 'Session d\'Essai Gratuite' : 'Cohérence Cardiaque'}
+            </h1>
             <p className="text-white/70">
-              {coherenceSettings.duration} min - Rythme {coherenceSettings.rhythm}
+              {currentSettings.duration} min - Rythme {currentSettings.rhythm}
             </p>
             <p className="text-sm text-white/50">
-              Durée totale : {coherenceSettings.duration}:00
+              Durée totale : {currentSettings.duration}:00
             </p>
           </div>
         </div>
 
+        {/* Message spécial pour la session d'essai */}
+        {isTrialMode && (
+          <div className="bg-gradient-to-r from-green-500/10 to-emerald-500/10 border border-green-500/20 rounded-xl p-4 mb-4">
+            <p className="text-sm text-green-200 font-medium mb-1">🎁 Session d'essai en cours</p>
+            <p className="text-xs text-green-100/80">
+              Découvrez les bienfaits de la cohérence cardiaque avec cette session complète de 5 minutes.
+            </p>
+          </div>
+        )}
+
         {/* Indication importante sur les écouteurs */}
-        {!coherenceSettings.silentMode && (
+        {!currentSettings.silentMode && (
           <div className="bg-blue-500/20 border border-blue-500/30 rounded-xl p-3 mb-4 flex items-start gap-3">
             <Headphones size={20} className="text-blue-400 mt-0.5 flex-shrink-0" />
             <div className="text-left">
@@ -155,7 +195,7 @@ export const CoherenceSessionScreen = () => {
         )}
 
         {/* Fréquence audio active */}
-        {coherenceSettings.gongEnabled && !coherenceSettings.silentMode && (
+        {currentSettings.gongEnabled && !currentSettings.silentMode && (
           <div className="bg-white/10 rounded-lg p-2 mb-4">
             <p className="text-xs text-white/70">
               🎵 Fréquence active : <span className="text-cyan-400 font-medium">{getCurrentFrequencyName()}</span>
@@ -180,7 +220,11 @@ export const CoherenceSessionScreen = () => {
         </div>
         <div className="w-full max-w-sm mx-auto h-1 bg-white/20 rounded-full overflow-hidden">
           <div 
-            className="h-full bg-gradient-to-r from-cyan-400 to-purple-400 transition-all duration-1000"
+            className={`h-full transition-all duration-1000 ${
+              isTrialMode 
+                ? 'bg-gradient-to-r from-green-400 to-emerald-400' 
+                : 'bg-gradient-to-r from-cyan-400 to-purple-400'
+            }`}
             style={{ width: `${progress}%` }}
           />
         </div>
@@ -197,7 +241,9 @@ export const CoherenceSessionScreen = () => {
           className={`flex-1 py-4 px-6 rounded-2xl font-semibold flex items-center justify-center gap-2 transition-all duration-200 ${
             sessionEnded 
               ? 'bg-white/10 text-white/50 cursor-not-allowed'
-              : 'bg-gradient-to-r from-blue-500 to-cyan-500 text-white hover:from-blue-600 hover:to-cyan-600'
+              : isTrialMode
+                ? 'bg-gradient-to-r from-green-500 to-emerald-500 text-white hover:from-green-600 hover:to-emerald-600'
+                : 'bg-gradient-to-r from-blue-500 to-cyan-500 text-white hover:from-blue-600 hover:to-cyan-600'
           }`}
         >
           {sessionEnded ? (

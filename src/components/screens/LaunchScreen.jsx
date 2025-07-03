@@ -4,7 +4,7 @@ import { useAppStore } from '../../store/appStore';
 
 export const LaunchScreen = () => {
   const [currentStep, setCurrentStep] = useState(0);
-  const { setHasOnboarded, setCurrentScreen, updateVoiceSettings } = useAppStore();
+  const { completeLaunchScreen, startTrialMode, updateVoiceSettings } = useAppStore();
 
   const handleNext = () => {
     if (currentStep < 2) {
@@ -12,9 +12,10 @@ export const LaunchScreen = () => {
     }
   };
 
-  const handleStart = () => {
-    setHasOnboarded(true);
-    setCurrentScreen('home');
+  const handleStartTrial = () => {
+    console.log('🎯 Démarrage de la session d\'essai');
+    completeLaunchScreen();
+    startTrialMode();
   };
 
   const handleVoiceSelection = (gender) => {
@@ -66,7 +67,7 @@ export const LaunchScreen = () => {
             
             <div className="bg-gradient-to-r from-cyan-500/10 to-purple-500/10 border border-cyan-500/20 rounded-xl p-4 animate-slide-in">
               <p className="text-sm text-cyan-200 font-medium mb-2">✨ Votre transformation commence ici</p>
-              <p className="text-xs text-white/70">
+              <p className="text-xs text-white/70 leading-relaxed">
                 Quelques minutes par jour suffisent pour retrouver calme, clarté et équilibre intérieur.
               </p>
             </div>
@@ -205,6 +206,19 @@ export const LaunchScreen = () => {
               </div>
             </div>
           </div>
+
+          {/* Nouveau message pour la session d'essai */}
+          <div className="bg-gradient-to-r from-green-500/10 to-emerald-500/10 border border-green-500/20 rounded-xl p-4 mt-6 animate-slide-in-up" style={{animationDelay: '0.4s'}}>
+            <div className="flex items-start gap-3">
+              <Play size={20} className="text-green-400 mt-0.5 flex-shrink-0" />
+              <div>
+                <p className="text-sm text-green-200 font-medium mb-1">Prochaine étape :</p>
+                <p className="text-xs text-white/70">
+                  Découvrez la cohérence cardiaque avec une session d'essai gratuite de 5 minutes.
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
       )
     }
@@ -262,7 +276,7 @@ export const LaunchScreen = () => {
           {currentStep < 2 ? (
             <div className="flex gap-3">
               <button
-                onClick={handleStart}
+                onClick={handleStartTrial}
                 className="flex-1 bg-white/10 border-2 border-white/30 text-white py-4 px-6 rounded-2xl font-semibold hover:bg-white/20 transition-all duration-200"
               >
                 Passer
@@ -277,11 +291,11 @@ export const LaunchScreen = () => {
             </div>
           ) : (
             <button
-              onClick={handleStart}
+              onClick={handleStartTrial}
               className="w-full bg-gradient-to-r from-green-500 to-emerald-500 text-white py-4 px-6 rounded-2xl font-semibold flex items-center justify-center gap-2 hover:from-green-600 hover:to-emerald-600 transition-all duration-200"
             >
               <Play size={20} />
-              Commencer Mon Voyage
+              Commencer Ma Session d'Essai
             </button>
           )}
         </div>

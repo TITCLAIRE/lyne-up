@@ -9,6 +9,9 @@ import { CoherenceSessionScreen } from './components/screens/CoherenceSessionScr
 import { FreeSessionSelectionScreen } from './components/screens/FreeSessionSelectionScreen';
 import { FreeSessionScreen } from './components/screens/FreeSessionScreen';
 import { LaunchScreen } from './components/screens/LaunchScreen';
+import { TrialCoherenceSelectionScreen } from './components/screens/TrialCoherenceSelectionScreen';
+import { TrialResultsScreen } from './components/screens/TrialResultsScreen';
+import { AuthScreen } from './components/screens/AuthScreen';
 import { SidePanel } from './components/SidePanel';
 import { useAppStore } from './store/appStore';
 import { useAudioManager } from './hooks/useAudioManager';
@@ -16,20 +19,25 @@ import { useVoiceManager } from './hooks/useVoiceManager';
 import { useHeartRateDetector } from './hooks/useHeartRateDetector';
 
 function App() {
-  const { currentScreen, hasOnboarded } = useAppStore();
+  const { 
+    currentScreen, 
+    showLaunchScreen, 
+    isTrialMode, 
+    isAuthenticated 
+  } = useAppStore();
   
-  // Initialiser les gestionnaires - RETOUR AU SYSTÈME CLASSIQUE
+  // Initialiser les gestionnaires
   useAudioManager();
-  useVoiceManager(); // Système vocal classique restauré
+  useVoiceManager();
   useHeartRateDetector();
 
-  // Si l'utilisateur n'a pas encore fait l'onboarding, afficher les pages de lancement
-  if (!hasOnboarded) {
+  // Si l'utilisateur n'a pas encore terminé les pages de lancement
+  if (showLaunchScreen) {
     return <LaunchScreen />;
   }
 
   const renderScreen = () => {
-    console.log('🔄 Navigation - Écran actuel:', currentScreen);
+    console.log('🔄 Navigation - Écran actuel:', currentScreen, 'Trial:', isTrialMode, 'Auth:', isAuthenticated);
     
     switch (currentScreen) {
       case 'home':
@@ -37,7 +45,7 @@ function App() {
       case 'session':
         return <SessionScreen />;
       case 'results':
-        return <ResultsScreen />;
+        return isTrialMode ? <TrialResultsScreen /> : <ResultsScreen />;
       case 'meditationSelection':
         return <MeditationSelectionScreen />;
       case 'coherenceSelection':
@@ -48,6 +56,10 @@ function App() {
         return <FreeSessionSelectionScreen />;
       case 'freeSession':
         return <FreeSessionScreen />;
+      case 'trialCoherenceSelection':
+        return <TrialCoherenceSelectionScreen />;
+      case 'auth':
+        return <AuthScreen />;
       default:
         console.log('⚠️ Écran non reconnu, retour à l\'accueil:', currentScreen);
         return <HomeScreen />;
