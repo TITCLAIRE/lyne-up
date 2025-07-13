@@ -417,3 +417,24 @@
   font-size: 0.9rem;
   opacity: 0.8;
 }
+
+/* Styles pour la routine du jour */
+.routine-card {
+  padding: 30px;
+  margin: 20px auto;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.05);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+  max-width: 500px;
+  text-align: center;
+}
+.routine-card h2 {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+.routine-card p {
+  color: rgba(255,255,255,0.8);
+}
+.routine-session h3 {
+  margin: 20px 0 10px;
+}
