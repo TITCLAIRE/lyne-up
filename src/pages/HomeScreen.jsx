@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Heart, Sparkles, BookOpen } from 'lucide-react';
+import { Heart, Sparkles, BookOpen, UserCircle } from 'lucide-react';
 
 export default function HomeScreen() {
   return (
@@ -16,6 +16,10 @@ export default function HomeScreen() {
 
         <Link to="/sessions/guidees" className="home-card bg-gradient-to-r from-blue-500/20 to-cyan-500/20 border-2 border-blue-500/30">
           <div className="flex flex-col items-center justify-center h-full p-6 text-center">
+            <div className="relative mb-4">
+              <Heart size={36} className="text-blue-400" />
+              <UserCircle size={20} className="absolute -bottom-1 -right-1 text-cyan-400" />
+            </div>
             <h2 className="text-xl font-bold mb-2">Cohérence Cardiaque Guidée</h2>
             <span className="text-white/70">Détente, concentration, sommeil</span>
           </div>
