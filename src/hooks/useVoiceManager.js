@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { useAppStore } from '../store/appStore';
-import { generateSpeech } from '../services/elevenLabsService';
+import { generateSpeech, checkElevenLabsService, checkElevenLabsQuota } from '../services/elevenLabsService';
 
 export const useVoiceManager = () => {
   const { voiceSettings, currentSession, isSessionActive, currentMeditation } = useAppStore();
@@ -325,7 +325,7 @@ export const useVoiceManager = () => {
   // Fonction pour parler avec ElevenLabs via Netlify Function
   const speakWithElevenLabs = async (text) => {
     if (isPlayingRef.current) {
-      console.log('🔊 Attente fin audio en cours avant ElevenLabs');
+      console.log('🔊 Attente fin audio en cours avant ElevenLabs - Texte:', text.substring(0, 30));
       return new Promise((resolve, reject) => {
         const checkInterval = setInterval(() => {
           if (!isPlayingRef.current) {
@@ -338,16 +338,17 @@ export const useVoiceManager = () => {
 
     return new Promise(async (resolve, reject) => {
       try {
-        console.log(`🎤 ELEVENLABS: Génération audio pour "${text.substring(0, 30)}..."`);
+        console.log(`🎤 ELEVENLABS: Génération audio pour "${text.substring(0, 30)}..." (${voiceSettings.gender})`);
         isPlayingRef.current = true;
         
         // Appeler le service ElevenLabs
         const result = await generateSpeech(text, voiceSettings.gender);
         
         if (!result.success) {
-          console.log(`❌ ELEVENLABS ÉCHEC: ${result.error}`);
+          console.error(`❌ ELEVENLABS ÉCHEC: ${result.error}`);
           isPlayingRef.current = false;
           // Fallback vers la synthèse vocale du navigateur
+          console.log(`🔄 FALLBACK vers synthèse vocale système pour: "${text.substring(0, 30)}..."`);
           return speakWithSystemVoice(text).then(resolve).catch(reject);
         }
         
@@ -368,7 +369,7 @@ export const useVoiceManager = () => {
           console.error('❌ ELEVENLABS: Erreur lecture audio', e);
           currentAudioRef.current = null;
           isPlayingRef.current = false;
-          
+          console.log(`🔄 FALLBACK après erreur de lecture pour: "${text.substring(0, 30)}..."`);
           // Fallback vers la synthèse vocale du navigateur
           speakWithSystemVoice(text).then(resolve).catch(reject);
         };
@@ -376,10 +377,18 @@ export const useVoiceManager = () => {
         // Jouer l'audio
         await audio.play();
         console.log('▶️ ELEVENLABS: Lecture démarrée');
+        
+        // Vérifier le quota restant après utilisation
+        checkElevenLabsQuota().then(result => {
+          if (result.success) {
+            console.log(`📊 Quota ElevenLabs: ${result.quota.charactersUsed}/${result.quota.charactersLimit} caractères utilisés`);
+          }
+        });
+        
       } catch (error) {
         console.error('❌ ELEVENLABS: Exception', error);
         isPlayingRef.current = false;
-        
+        console.log(`🔄 FALLBACK après exception pour: "${text.substring(0, 30)}..."`);
         // Fallback vers la synthèse vocale du navigateur
         speakWithSystemVoice(text).then(resolve).catch(reject);
       }
@@ -526,7 +535,7 @@ export const useVoiceManager = () => {
   // Fonction principale pour parler
   const speak = (text) => {
     if (!voiceSettings.enabled || !text.trim()) {
-      console.log('🔇 Voix désactivée ou texte vide:', { enabled: voiceSettings.enabled, text });
+      console.log('🔇 Voix désactivée ou texte vide:', { enabled: voiceSettings.enabled, textLength: text?.length || 0 });
       return Promise.resolve();
     }
 
@@ -559,6 +568,18 @@ export const useVoiceManager = () => {
     // Utiliser ElevenLabs si activé, sinon utiliser la synthèse vocale du navigateur
     if (voiceSettings.useElevenLabs) {
       console.log('🎤 Utilisation d\'ElevenLabs pour la synthèse vocale');
+      // Vérifier d'abord si ElevenLabs est disponible
+      return checkElevenLabsService().then(available => {
+        if (available) {
+          return speakWithElevenLabs(text);
+        } else {
+          console.log('🔄 ElevenLabs non disponible, fallback vers synthèse vocale système');
+          return speakWithSystemVoice(text);
+        }
+      }).catch(error => {
+        console.error('❌ Erreur lors de la vérification ElevenLabs:', error);
+        return speakWithSystemVoice(text);
+      });
       return speakWithElevenLabs(text);
     } else {
       console.log('🎤 Utilisation de la synthèse vocale du navigateur');
@@ -964,21 +985,60 @@ export const useVoiceManager = () => {
   // Initialisation
   useEffect(() => {
     const initVoices = () => {
-      const voices = speechSynthesis.getVoices();
-      
-      const claire = voices.find(v => v.name.includes('Claire'));
-      const thierry = voices.find(v => v.name.includes('Thierry'));
+      try {
+        const voices = speechSynthesis.getVoices();
+        console.log('🎤 Voix disponibles:', voices.length);
+        
+        // Rechercher les voix françaises
+        const frenchVoices = voices.filter(v => v.lang.startsWith('fr'));
+        console.log('🎤 Voix françaises:', frenchVoices.length);
+        
+        if (frenchVoices.length > 0) {
+          console.log('🎤 Voix françaises disponibles:', frenchVoices.map(v => v.name).join(', '));
+        }
+      } catch (error) {
+        console.error('❌ Erreur lors de l\'initialisation des voix:', error);
+      }
     };
 
-    if (speechSynthesis.getVoices().length === 0) {
-      speechSynthesis.addEventListener('voiceschanged', initVoices);
-    } else {
-      initVoices();
+    try {
+      if (typeof speechSynthesis !== 'undefined') {
+        if (speechSynthesis.getVoices().length === 0) {
+          console.log('🎤 Attente du chargement des voix...');
+          speechSynthesis.addEventListener('voiceschanged', initVoices);
+        } else {
+          initVoices();
+        }
+      } else {
+        console.warn('⚠️ API Speech Synthesis non disponible dans ce navigateur');
+      }
+      
+      // Vérifier si ElevenLabs est disponible
+      if (voiceSettings.useElevenLabs) {
+        checkElevenLabsService().then(available => {
+          console.log(`🎤 ElevenLabs disponible: ${available ? 'Oui' : 'Non'}`);
+          if (available) {
+            checkElevenLabsQuota().then(result => {
+              if (result.success) {
+                console.log(`📊 Quota ElevenLabs: ${result.quota.charactersUsed}/${result.quota.charactersLimit} caractères utilisés`);
+              }
+            });
+          }
+        });
+      }
+    } catch (error) {
+      console.error('❌ Erreur lors de l\'initialisation du gestionnaire vocal:', error);
     }
 
     return () => {
       stop();
-      speechSynthesis.removeEventListener('voiceschanged', initVoices);
+      try {
+        if (typeof speechSynthesis !== 'undefined') {
+          speechSynthesis.removeEventListener('voiceschanged', initVoices);
+        }
+      } catch (error) {
+        console.error('❌ Erreur lors du nettoyage du gestionnaire vocal:', error);
+      }
     };
   }, [currentSession]);
 
@@ -986,6 +1046,8 @@ export const useVoiceManager = () => {
     speak,
     stop,
     isProcessing: isPlayingRef.current,
+    checkElevenLabsService,
+    checkElevenLabsQuota,
     speakWithElevenLabs,
     startSessionGuidance,
     // Fonctions spécialisées pour SOS et SCAN
