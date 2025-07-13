@@ -325,7 +325,7 @@ export const useVoiceManager = () => {
   // Fonction pour parler avec ElevenLabs via Netlify Function
   const speakWithElevenLabs = async (text) => {
     if (isPlayingRef.current) {
-      console.log('🔊 Attente fin audio en cours avant ElevenLabs - Texte:', text.substring(0, 30));
+      console.log('🔊 Attente fin audio en cours avant ElevenLabs DIRECT - Texte:', text.substring(0, 30));
       return new Promise((resolve, reject) => {
         const checkInterval = setInterval(() => {
           if (!isPlayingRef.current) {
@@ -338,7 +338,7 @@ export const useVoiceManager = () => {
 
     return new Promise(async (resolve, reject) => {
       try {
-        console.log(`🎤 ELEVENLABS: Génération audio pour "${text.substring(0, 30)}..." (${voiceSettings.gender})`);
+        console.log(`🎤 ELEVENLABS DIRECT: Génération audio pour "${text.substring(0, 30)}..." (${voiceSettings.gender})`);
         isPlayingRef.current = true;
         
         // Appeler le service ElevenLabs
@@ -347,8 +347,8 @@ export const useVoiceManager = () => {
         if (!result.success) {
           console.error(`❌ ELEVENLABS ÉCHEC: ${result.error}`);
           isPlayingRef.current = false;
-          // Fallback vers la synthèse vocale du navigateur
-          console.log(`🔄 FALLBACK vers synthèse vocale système pour: "${text.substring(0, 30)}..."`);
+          // Fallback vers la synthèse vocale du navigateur avec message d'erreur
+          console.log(`🔄 FALLBACK vers synthèse vocale système pour: "${text.substring(0, 30)}..." - Erreur: ${result.error}`);
           return speakWithSystemVoice(text).then(resolve).catch(reject);
         }
         
@@ -359,14 +359,14 @@ export const useVoiceManager = () => {
         audio.volume = voiceSettings.volume;
         
         audio.onended = () => {
-          console.log('✅ ELEVENLABS: Audio terminé');
+          console.log('✅ ELEVENLABS DIRECT: Audio terminé');
           currentAudioRef.current = null;
           isPlayingRef.current = false;
           resolve();
         };
         
         audio.onerror = (e) => {
-          console.error('❌ ELEVENLABS: Erreur lecture audio', e);
+          console.error('❌ ELEVENLABS DIRECT: Erreur lecture audio', e);
           currentAudioRef.current = null;
           isPlayingRef.current = false;
           console.log(`🔄 FALLBACK après erreur de lecture pour: "${text.substring(0, 30)}..."`);
@@ -376,7 +376,7 @@ export const useVoiceManager = () => {
         
         // Jouer l'audio
         await audio.play();
-        console.log('▶️ ELEVENLABS: Lecture démarrée');
+        console.log('▶️ ELEVENLABS DIRECT: Lecture démarrée');
         
         // Vérifier le quota restant après utilisation
         checkElevenLabsQuota().then(result => {
@@ -386,7 +386,7 @@ export const useVoiceManager = () => {
         });
         
       } catch (error) {
-        console.error('❌ ELEVENLABS: Exception', error);
+        console.error('❌ ELEVENLABS DIRECT: Exception', error);
         isPlayingRef.current = false;
         console.log(`🔄 FALLBACK après exception pour: "${text.substring(0, 30)}..."`);
         // Fallback vers la synthèse vocale du navigateur
@@ -569,11 +569,11 @@ export const useVoiceManager = () => {
     if (voiceSettings.useElevenLabs) {
       console.log('🎤 Utilisation d\'ElevenLabs pour la synthèse vocale');
       // Vérifier d'abord si ElevenLabs est disponible
-      return checkElevenLabsService().then(available => {
-        if (available) {
+      return checkElevenLabsService().then(result => {
+        if (result.success) {
           return speakWithElevenLabs(text);
         } else {
-          console.log('🔄 ElevenLabs non disponible, fallback vers synthèse vocale système');
+          console.log(`🔄 ElevenLabs non disponible: ${result.error}, fallback vers synthèse vocale système`);
           return speakWithSystemVoice(text);
         }
       }).catch(error => {

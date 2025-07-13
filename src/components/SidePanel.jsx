@@ -71,15 +71,20 @@ export const SidePanel = () => {
   // Vérifier le statut d'ElevenLabs
   const checkElevenLabsStatusAndQuota = async () => {
     setIsCheckingStatus(true);
+    setElevenLabsStatus('checking');
     try {
-      const isAvailable = await checkElevenLabsService();
-      setElevenLabsStatus(isAvailable ? 'available' : 'unavailable');
+      const result = await checkElevenLabsService();
+      setElevenLabsStatus(result.success ? 'available' : 'unavailable');
       
-      if (isAvailable) {
+      if (result.success) {
         const quotaResult = await checkElevenLabsQuota();
         if (quotaResult.success) {
           setElevenLabsQuota(quotaResult.quota);
+        } else {
+          console.error('Erreur quota:', quotaResult.error);
         }
+      } else {
+        console.error('Erreur statut:', result.error);
       }
     } catch (error) {
       console.error('Erreur lors de la vérification du statut ElevenLabs:', error);
@@ -378,8 +383,9 @@ export const SidePanel = () => {
                     
                     {elevenLabsStatus === 'unavailable' && (
                       <div className="text-xs text-red-200 pl-6">
-                        <p>Vérifiez votre clé API dans le fichier .env</p>
-                        <p>Format: VITE_ELEVENLABS_API_KEY=sk_votre_clé</p>
+                        <p>Vérifiez votre clé API dans le fichier .env.</p>
+                        <p>Format: VITE_ELEVENLABS_API_KEY=sk_votre_clé.</p>
+                        <p>Assurez-vous que "Text to Speech" est activé dans les paramètres de votre clé API.</p>
                       </div>
                     )}
                     
@@ -388,6 +394,7 @@ export const SidePanel = () => {
                         onClick={checkElevenLabsStatusAndQuota}
                         className="text-xs bg-white/10 hover:bg-white/20 transition-colors px-2 py-1 rounded"
                         disabled={isCheckingStatus}
+                        title="Vérifier la connexion à ElevenLabs"
                       >
                         {isCheckingStatus ? 'Vérification...' : 'Vérifier le statut'}
                       </button>
