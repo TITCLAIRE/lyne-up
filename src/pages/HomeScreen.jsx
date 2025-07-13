@@ -1,13 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Heart, Sparkles, BookOpen, UserCircle } from 'lucide-react';
-import RoutineDuJour from '../components/RoutineDuJour';
 
 export default function HomeScreen() {
   return (
     <div className="px-5 pb-5">
-      <RoutineDuJour />
-      
       <div className="grid gap-6">
         <Link to="/intro/libre" className="home-card bg-gradient-to-r from-pink-500/20 to-purple-500/20 border-2 border-pink-500/30">
           <div className="flex flex-col items-center justify-center h-full p-6 text-center">
