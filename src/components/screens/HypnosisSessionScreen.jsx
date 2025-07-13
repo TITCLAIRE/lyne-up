@@ -227,6 +227,14 @@ export const HypnosisSessionScreen = () => {
     }
   };
 
+  // Force l'affichage de la fréquence correcte pour le sommeil
+  const getDisplayFrequency = () => {
+    if (currentSession === 'sleep') {
+      return 'Ondes Delta (2Hz)';
+    }
+    return getCurrentFrequencyName();
+  };
+
   return (
     <div className="px-5 pb-5">
       {/* En-tête de session */}
@@ -278,7 +286,7 @@ export const HypnosisSessionScreen = () => {
         <div className="bg-white/10 rounded-lg p-2 mb-4">
           <p className="text-xs text-white/70 flex items-center justify-center gap-1">
             <Wind size={12} />
-            Fréquence active : <span className="text-indigo-400 font-medium">{getCurrentFrequencyName()}</span>
+            Fréquence active : <span className="text-indigo-400 font-medium">{getDisplayFrequency()}</span>
           </p>
         </div>
       </div>
