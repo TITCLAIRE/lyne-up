@@ -49,10 +49,10 @@ export const hypnosisSessions = {
       exhale: ["Expirez lentement… 6… 5… 4… 3… 2… 1…", "Relâchez toute tension… 6… 5… 4… 3… 2… 1…", "Laissez-vous aller… 6… 5… 4… 3… 2… 1…"],
       phases: [
         // Phase 1: Introduction + Respiration guidée (0-3 min)
-        "Inspirez doucement… 4… 3… 2… 1… Expirez lentement… 6… 5… 4… 3… 2… 1… Chaque respiration vous rapproche d'un état de calme… Votre corps se relâche… votre esprit ralentit… Rien à faire… juste respirer… et vous laisser porter…",
+        "Bienvenue dans cette séance de sommeil profond. Allongez-vous confortablement… Fermez doucement les yeux… Et laissez-vous guider par votre souffle… Inspirez doucement… 4… 3… 2… 1… Expirez lentement… 6… 5… 4… 3… 2… 1… Chaque respiration vous rapproche d'un état de calme… Votre corps se relâche… votre esprit ralentit… Rien à faire… juste respirer… et vous laisser porter…",
         
         // Phase 2: Approfondissement hypnotique (3-5 min)
-        "Et maintenant… laissez votre respiration revenir à son propre rythme… tranquillement… sans chercher à la contrôler… Juste la laisser faire… naturellement… comme le va-et-vient d'une vague… Imaginez maintenant que votre corps repose sur un lit de nuages… Flottant dans un ciel paisible… À chaque respiration… vous vous enfoncez doucement… plus profondément… plus calmement… Votre corps devient lourd… Comme s'il s'endormait avant vous… Et c'est très bien ainsi…",
+        "Suivez le guide - Respirez en mode 4/6… Imaginez maintenant que votre corps repose sur un lit de nuages… Flottant dans un ciel paisible… À chaque respiration… vous vous enfoncez doucement… plus profondément… plus calmement… Votre corps devient lourd… Comme s'il s'endormait avant vous… Et c'est très bien ainsi…",
         
         // Phase 3: Suggestions hypnotiques ciblées sommeil (5-9 min)
         "Votre respiration est lente… tranquille… naturelle… Et votre esprit… glisse… dans un sommeil réparateur… Tout ce dont vous n'avez plus besoin… s'éloigne… Vos pensées deviennent floues… comme des bulles qui flottent et disparaissent… Chaque cellule de votre corps se régénère… Votre lit est un cocon de douceur… sécurisant… Vous êtes parfaitement en sécurité… Votre sommeil est profond… continu… sans interruption… Et demain… vous vous réveillerez pleinement reposé(e)… serein(e)…",
