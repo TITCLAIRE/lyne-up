@@ -230,7 +230,8 @@ export const useAudioManager = () => {
 
     // Vérifier si on est dans une phase d'hypnose où le gong est désactivé
     if (breathingStateRef.current.disableGong) {
-      console.log('🔕 Gong désactivé pour cette phase d'hypnose');
+      console.log('🔕 Gong désactivé pour cette phase d\'hypnose');
+      )
       return;
     }
 
