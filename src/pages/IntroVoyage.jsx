@@ -4,7 +4,7 @@ import { Sparkles } from 'lucide-react'; // Import Sparkles icon
 export default function IntroVoyage() {
   return (
     <div className="intro-screen">
-      <div className="icon">
+      <div className="icon animate-pulse-gentle">
         <Sparkles size={64} className="text-purple-400" /> {/* Using Lucide icon */}
       </div>
       <h1>Un voyage intérieur commence ici.</h1>

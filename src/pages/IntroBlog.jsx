@@ -10,7 +10,7 @@ export default function IntroBlog() {
 
   return (
     <div className="intro-screen">
-      <div className="icon">
+      <div className="icon animate-pulse-gentle">
         <BookOpen size={64} className="text-green-400" /> {/* Using Lucide icon */}
       </div>
       <h1>Redirection vers le blog...</h1>

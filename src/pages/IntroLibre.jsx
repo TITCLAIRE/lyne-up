@@ -4,7 +4,7 @@ import { Heart } from 'lucide-react'; // Import Heart icon
 export default function IntroLibre() {
   return (
     <div className="intro-screen">
-      <div className="icon">
+      <div className="icon animate-pulse-gentle">
         <Heart size={64} className="text-pink-400" /> {/* Using Lucide icon */}
       </div>
       <h1>Respirez. C’est vous qui guidez.</h1>

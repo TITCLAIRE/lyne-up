@@ -4,7 +4,7 @@ import { UserCircle } from 'lucide-react'; // Import UserCircle icon
 export default function IntroGuidee() {
   return (
     <div className="intro-screen">
-      <div className="icon">
+      <div className="icon animate-pulse-gentle">
         <UserCircle size={64} className="text-blue-400" /> {/* Using Lucide icon */}
       </div>
       <h1>Laissez-vous guider.</h1>
