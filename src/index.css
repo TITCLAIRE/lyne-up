@@ -92,6 +92,47 @@
   font-weight: bold;
 }
 
+/* Styles pour les pages d'introduction */
+.intro-screen {
+  text-align: center;
+  padding: 40px 20px;
+  max-width: 500px;
+  margin: auto;
+  min-height: calc(100vh - 120px); /* Adjust based on header/footer height */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.intro-screen .icon {
+  font-size: 64px; /* Fallback for emoji, Lucide icons will scale with size prop */
+  margin-bottom: 20px;
+}
+.intro-screen h1 {
+  font-size: 24px;
+  margin-bottom: 15px;
+  color: white; /* Ensure title is visible */
+}
+.intro-screen p {
+  font-size: 16px;
+  margin-bottom: 30px;
+  color: rgba(255,255,255,0.8);
+}
+.btn-primary {
+  display: inline-block;
+  padding: 14px 24px;
+  background: linear-gradient(45deg, #3b82f6, #1d4ed8);
+  color: white;
+  border-radius: 30px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(59, 130, 246, 0.4);
+}
 /* Point central de référence */
 .center-point {
   position: absolute;

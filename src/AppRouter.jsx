@@ -18,6 +18,10 @@ import Meditations from './pages/voyage/Meditations';
 import Hypnoses from './pages/voyage/Hypnoses';
 
 // Pages de session
+import IntroLibre from './pages/IntroLibre';
+import IntroGuidee from './pages/IntroGuidee';
+import IntroVoyage from './pages/IntroVoyage';
+import IntroBlog from './pages/IntroBlog';
 import GuidedSessionRunner from './pages/sessions/GuidedSessionRunner';
 import CoherenceSessionRunner from './pages/sessions/CoherenceSessionRunner';
 import FreeSessionRunner from './pages/sessions/FreeSessionRunner';
@@ -39,6 +43,10 @@ export default function AppRouter() {
         {/* Routes principales avec layout */}
         <Route path="/" element={<AppLayout />}>
           <Route index element={<HomeScreen />} />
+        <Route path="/intro/libre" element={<IntroLibre />} />
+        <Route path="/intro/guidees" element={<IntroGuidee />} />
+        <Route path="/intro/voyage" element={<IntroVoyage />} />
+        <Route path="/intro/blog" element={<IntroBlog />} />
           
           {/* Section libre */}
           <Route path="sessions/libre" element={<SessionLibre />} />
