@@ -1,4 +1,64 @@
 export const hypnosisSessions = {
+  addiction: {
+    name: 'LIBÉRATION D\'UNE ADDICTION',
+    duration: 600, // 10 minutes
+    description: 'Se Libérer d\'une Addiction (sucre, tabac…)',
+    breathingPattern: { inhale: 4, hold: 0, exhale: 6 },
+    frequency: '396hz', // Fréquence 396 Hz - libération des dépendances
+    phases: [
+      {
+        name: 'introduction',
+        startTime: 0,
+        endTime: 180, // 3 minutes
+        type: 'guided-breathing',
+        guidedBreathing: true,
+        gongEnabled: true
+      },
+      {
+        name: 'transition',
+        startTime: 180,
+        endTime: 300, // 5 minutes (2 min de transition)
+        type: 'deepening',
+        guidedBreathing: false,
+        gongEnabled: false
+      },
+      {
+        name: 'suggestions',
+        startTime: 300,
+        endTime: 540, // 9 minutes (4 min de suggestions)
+        type: 'suggestions',
+        guidedBreathing: false,
+        gongEnabled: false
+      },
+      {
+        name: 'cloture',
+        startTime: 540,
+        endTime: 600, // 10 minutes (1 min de clôture)
+        type: 'closure',
+        guidedBreathing: false,
+        gongEnabled: false
+      }
+    ],
+    guidance: {
+      start: "Bienvenue dans cette séance pour retrouver votre liberté intérieure. Aujourd'hui, vous commencez à vous détacher de ce qui vous enchaîne. Avec bienveillance et puissance.",
+      inhale: ["Inspirez profondément... 4... 3... 2... 1...", "Accueillez la force... 4... 3... 2... 1...", "Inspirez la liberté... 4... 3... 2... 1..."],
+      exhale: ["Expirez longuement... 6... 5... 4... 3... 2... 1...", "Relâchez la dépendance... 6... 5... 4... 3... 2... 1...", "Libérez-vous... 6... 5... 4... 3... 2... 1..."],
+      phases: [
+        // Phase 1: Introduction + Respiration guidée (0-3 min)
+        "À chaque respiration, votre corps se calme et une sensation de force tranquille s'installe en vous. Ce besoin, cette compulsion, vous pouvez l'observer, le reconnaître, sans y répondre. Vous êtes déjà en train de reprendre le contrôle, en douceur.",
+        
+        // Phase 2: Respiration naturelle + Approfondissement (3-5 min)
+        "Et maintenant, laissez votre respiration revenir à son rythme naturel, sans effort, fluide, libre. Visualisez cette habitude comme une ancienne attache, une corde qui vous liait. Et imaginez que cette corde se détache, se relâche, se dissout. Ce lien n'a plus de pouvoir sur vous, vous êtes en train de vous en libérer, profondément, durablement.",
+        
+        // Phase 3: Suggestions hypnotiques ciblées (5-9 min)
+        "Vous êtes capable de dire non. Parce que vous dites oui à votre santé, à votre énergie, à votre liberté. Ce besoin est une illusion, et votre volonté réelle plus forte que lui. Vous pouvez accueillir les émotions sans les fuir, vous pouvez apaiser les tensions sans compenser. Vous respirez, et à chaque respiration, vous vous détachez davantage. Vous êtes libre de choisir, et vous choisissez ce qui vous élève, ce qui vous respecte, ce qui vous nourrit. À chaque inspiration : confiance. À chaque expiration : libération. Ce que vous laissez partir ne vous manque pas. Car ce que vous gagnez est bien plus précieux.",
+        
+        // Phase 4: Clôture + ancrage positif (9-10 min)
+        "Revenez à vous avec cette sensation de victoire intérieure. Vous êtes plus fort(e) que cette habitude. Et chaque jour vous le prouve davantage. Bougez doucement votre corps. Respirez plus profondément."
+      ],
+      end: "Et quand vous serez prêt(e), ouvrez les yeux, libre, ancré(e), fier(e) de vous. Votre transformation est en marche."
+    }
+  },
   stress: {
     name: 'LIBÉRER LE STRESS AIGU',
     duration: 600, // 10 minutes

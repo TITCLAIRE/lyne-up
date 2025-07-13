@@ -4,6 +4,16 @@ import { useAppStore } from '../../store/appStore';
 
 const hypnosisSessions = [
   { 
+    id: 'addiction', 
+    name: 'Libération d\'une Addiction', 
+    icon: Cookie, 
+    duration: 10, 
+    desc: 'Sucre, tabac, écrans...', 
+    color: 'from-amber-500/20 to-yellow-500/20',
+    borderColor: 'border-amber-500/30',
+    isPremium: false
+  },
+  { 
     id: 'stress', 
     name: 'Libérer le Stress Aigu', 
     icon: Zap, 
@@ -34,26 +44,6 @@ const hypnosisSessions = [
     isPremium: false
   },
   { 
-    id: 'stress', 
-    name: 'Gestion du Stress', 
-    icon: Brain, 
-    duration: 10, 
-    desc: 'Anxiété & Stress', 
-    color: 'from-blue-500/20 to-cyan-500/20',
-    borderColor: 'border-blue-500/30',
-    isPremium: true
-  },
-  { 
-    id: 'cravings', 
-    name: 'Libération Compulsions', 
-    icon: Cookie, 
-    duration: 10, 
-    desc: 'Sucre, tabac, écrans...', 
-    color: 'from-amber-500/20 to-yellow-500/20',
-    borderColor: 'border-amber-500/30',
-    isPremium: true
-  },
-  { 
     id: 'confidence', 
     name: 'Confiance & Résilience', 
     icon: Shield, 
@@ -61,6 +51,16 @@ const hypnosisSessions = [
     desc: 'Renforcement mental', 
     color: 'from-green-500/20 to-emerald-500/20',
     borderColor: 'border-green-500/30',
+    isPremium: true
+  },
+  { 
+    id: 'sleep', 
+    name: 'Sommeil Profond', 
+    icon: Moon, 
+    duration: 10, 
+    desc: 'Sommeil Profond et Réparateur', 
+    color: 'from-indigo-500/20 to-purple-500/20',
+    borderColor: 'border-indigo-500/30',
     isPremium: true
   },
 ];
