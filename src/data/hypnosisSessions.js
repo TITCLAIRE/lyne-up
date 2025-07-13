@@ -1,4 +1,64 @@
 export const hypnosisSessions = {
+  stress: {
+    name: 'LIBÉRER LE STRESS AIGU',
+    duration: 600, // 10 minutes
+    description: 'Libérer le Stress en Quelques Minutes',
+    breathingPattern: { inhale: 4, hold: 0, exhale: 6 },
+    frequency: '528hz', // Fréquence 528 Hz - régulation émotionnelle, équilibre
+    phases: [
+      {
+        name: 'introduction',
+        startTime: 0,
+        endTime: 180, // 3 minutes
+        type: 'guided-breathing',
+        guidedBreathing: true,
+        gongEnabled: true
+      },
+      {
+        name: 'transition',
+        startTime: 180,
+        endTime: 300, // 5 minutes (2 min de transition)
+        type: 'deepening',
+        guidedBreathing: false,
+        gongEnabled: false
+      },
+      {
+        name: 'suggestions',
+        startTime: 300,
+        endTime: 540, // 9 minutes (4 min de suggestions)
+        type: 'suggestions',
+        guidedBreathing: false,
+        gongEnabled: false
+      },
+      {
+        name: 'cloture',
+        startTime: 540,
+        endTime: 600, // 10 minutes (1 min de clôture)
+        type: 'closure',
+        guidedBreathing: false,
+        gongEnabled: false
+      }
+    ],
+    guidance: {
+      start: "Bienvenue dans cet espace de calme. Vous êtes au bon endroit… pour retrouver votre équilibre.",
+      inhale: ["Inspirez lentement… 4… 3… 2… 1…", "Accueillez le calme… 4… 3… 2… 1…", "Respirez profondément… 4… 3… 2… 1…"],
+      exhale: ["Expirez plus longuement… 6… 5… 4… 3… 2… 1…", "Relâchez le stress… 6… 5… 4… 3… 2… 1…", "Libérez les tensions… 6… 5… 4… 3… 2… 1…"],
+      phases: [
+        // Phase 1: Introduction + Respiration guidée (0-3 min)
+        "À chaque souffle, le stress quitte doucement votre corps… comme une vapeur qui s'échappe… Laissez vos épaules descendre… votre ventre se détendre… et vos pensées ralentir… Le corps se relâche… le mental s'apaise… tout devient plus léger…",
+        
+        // Phase 2: Respiration libre + Approfondissement (3-5 min)
+        "Et maintenant… laissez votre respiration trouver son propre rythme… Naturellement… sans rien forcer… Imaginez que vous êtes assis(e) au bord d'un lac calme… Chaque vaguelette emporte vos tensions… Le stress coule hors de vous… comme un fleuve qui emporte ce dont vous n'avez plus besoin… Votre cœur bat calmement… Votre esprit devient plus clair… et votre corps retrouve un sentiment de sécurité…",
+        
+        // Phase 3: Suggestions hypnotiques ciblées stress (5-9 min)
+        "Vous êtes ici et maintenant… dans un espace paisible… où rien n'est urgent… où tout est simple… Votre corps sait comment se détendre… Et il le fait… maintenant… Le stress est une vague… vous la laissez passer… sans y résister… À chaque respiration… vous gagnez en recul… en calme… en lucidité… Votre respiration vous ancre… comme les racines d'un arbre solide… Vous êtes centré(e)… aligné(e)… en sécurité. Tout ce dont vous avez besoin… est déjà en vous.",
+        
+        // Phase 4: Clôture et retour à la clarté (9-10 min)
+        "Respirez plus profondément maintenant… Prenez une bonne inspiration… et sentez cette énergie nouvelle vous remplir… Bougez doucement vos doigts… vos épaules… votre cou…"
+      ],
+      end: "Et quand vous serez prêt(e)… ouvrez les yeux… plus calme… plus clair(e)… plus serein(e)… Le stress s'est éloigné… et vous avez retrouvé votre centre."
+    }
+  },
   pain: {
     name: 'SOULAGER LA DOULEUR',
     duration: 600, // 10 minutes

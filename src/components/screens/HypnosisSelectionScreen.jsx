@@ -4,6 +4,16 @@ import { useAppStore } from '../../store/appStore';
 
 const hypnosisSessions = [
   { 
+    id: 'stress', 
+    name: 'Libérer le Stress Aigu', 
+    icon: Zap, 
+    duration: 10, 
+    desc: 'Retrouver calme et équilibre', 
+    color: 'from-green-500/20 to-teal-500/20',
+    borderColor: 'border-green-500/30',
+    isPremium: false
+  },
+  { 
     id: 'pain', 
     name: 'Soulager la Douleur', 
     icon: Flame, 
@@ -21,16 +31,6 @@ const hypnosisSessions = [
     desc: 'Récupération profonde en 10 min', 
     color: 'from-blue-500/20 to-cyan-500/20',
     borderColor: 'border-blue-500/30',
-    isPremium: false
-  },
-  { 
-    id: 'sleep', 
-    name: 'Sommeil Profond', 
-    icon: Moon, 
-    duration: 10, 
-    desc: 'Sommeil Profond et Réparateur', 
-    color: 'from-indigo-500/20 to-purple-500/20',
-    borderColor: 'border-indigo-500/30',
     isPremium: false
   },
   { 
