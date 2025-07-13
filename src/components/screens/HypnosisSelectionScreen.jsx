@@ -4,6 +4,16 @@ import { useAppStore } from '../../store/appStore';
 
 const hypnosisSessions = [
   { 
+    id: 'sieste', 
+    name: 'Sieste Relaxante', 
+    icon: Moon, 
+    duration: 10, 
+    desc: 'Récupération profonde en 10 min', 
+    color: 'from-blue-500/20 to-cyan-500/20',
+    borderColor: 'border-blue-500/30',
+    isPremium: false
+  },
+  { 
     id: 'sleep', 
     name: 'Sommeil Profond', 
     icon: Moon, 

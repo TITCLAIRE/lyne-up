@@ -1,4 +1,64 @@
 export const hypnosisSessions = {
+  sieste: {
+    name: 'SIESTE RELAXANTE',
+    duration: 600, // 10 minutes
+    description: 'Récupération profonde en 10 minutes',
+    breathingPattern: { inhale: 4, hold: 0, exhale: 6 },
+    frequency: 'alpha', // Ondes Alpha (10 Hz)
+    phases: [
+      {
+        name: 'introduction',
+        startTime: 0,
+        endTime: 180, // 3 minutes
+        type: 'guided-breathing',
+        guidedBreathing: true,
+        gongEnabled: true
+      },
+      {
+        name: 'transition',
+        startTime: 180,
+        endTime: 300, // 5 minutes (2 min de transition)
+        type: 'deepening',
+        guidedBreathing: false,
+        gongEnabled: false
+      },
+      {
+        name: 'suggestions',
+        startTime: 300,
+        endTime: 540, // 9 minutes (4 min de suggestions)
+        type: 'suggestions',
+        guidedBreathing: false,
+        gongEnabled: false
+      },
+      {
+        name: 'cloture',
+        startTime: 540,
+        endTime: 600, // 10 minutes (1 min de clôture)
+        type: 'closure',
+        guidedBreathing: false,
+        gongEnabled: false
+      }
+    ],
+    guidance: {
+      start: "Bienvenue dans cette parenthèse de détente. Installez-vous confortablement… Et laissez-vous guider vers un état de repos profond…",
+      inhale: ["Inspirez lentement… 4… 3… 2… 1…", "Inspirez profondément… 4… 3… 2… 1…", "Accueillez l'air… 4… 3… 2… 1…"],
+      exhale: ["Expirez doucement… 6… 5… 4… 3… 2… 1…", "Relâchez tout… 6… 5… 4… 3… 2… 1…", "Laissez aller… 6… 5… 4… 3… 2… 1…"],
+      phases: [
+        // Phase 1: Introduction + Respiration guidée (0-3 min)
+        "À chaque souffle, vous relâchez un peu plus… Le corps se détend… Le mental ralentit… Rien à faire, rien à forcer… Juste respirer… et s'abandonner au calme…",
+        
+        // Phase 2: Transition vers respiration naturelle + Approfondissement (3-5 min)
+        "Et maintenant… laissez votre respiration revenir à son propre rythme… tranquillement… sans chercher à la contrôler… Juste la laisser faire… naturellement… comme le va-et-vient d'une vague… Imaginez que vous êtes allongé(e)… dans un hamac suspendu entre deux arbres… La lumière est douce… l'air tiède… Et vous vous balancez doucement… À chaque mouvement… votre corps devient plus lourd… plus détendu… comme si le hamac absorbait toute fatigue… Votre esprit s'ouvre à un silence intérieur… apaisant… nourrissant… régénérant…",
+        
+        // Phase 3: Suggestions pour récupération profonde (5-9 min)
+        "Chaque minute passée ici équivaut à une heure de repos profond… Votre corps recharge ses batteries… Vos cellules se régénèrent… Tous les bruits extérieurs glissent au loin… Votre mental flotte… dans un espace de douceur et de paix… Vous êtes à l'abri… serein(e)… parfaitement détendu(e)… Le calme entre dans vos épaules… dans votre ventre… dans votre cœur… Votre respiration devient le rythme de votre énergie retrouvée…",
+        
+        // Phase 4: Retour à la conscience (9-10 min)
+        "Dans un instant… vous allez revenir à vous, parfaitement reposé(e)… plein(e) de clarté… et d'énergie douce… Commencez par bouger légèrement vos doigts… puis vos pieds… Respirez plus profondément…"
+      ],
+      end: "Et quand vous vous sentirez prêt(e)… ouvrez les yeux… avec le sourire… vous êtes calme, centré(e), disponible pour la suite de votre journée."
+    }
+  },
   sleep: {
     name: 'SOMMEIL PROFOND',
     duration: 600, // 10 minutes
