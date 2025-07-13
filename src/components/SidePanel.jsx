@@ -2,7 +2,6 @@ import React from 'react';
 import { X, Volume2, Mic, Download, Smartphone, RotateCcw, CloudLightning, Play, Check, AlertTriangle } from 'lucide-react';
 import { useAppStore } from '../store/appStore';
 import { useVoiceManager } from '../hooks/useVoiceManager';
-import { checkElevenLabsService, checkElevenLabsQuota } from '../services/elevenLabsService';
 
 export const SidePanel = () => {
   const { 
@@ -16,13 +15,8 @@ export const SidePanel = () => {
   } = useAppStore();
 
   // Importer le hook useVoiceManager pour tester les voix
-  const { speak, speakWithElevenLabs, speakWithSystemVoice } = useVoiceManager();
+  const { speak } = useVoiceManager();
   
-  // États pour le statut ElevenLabs
-  const [elevenLabsStatus, setElevenLabsStatus] = React.useState('unknown');
-  const [elevenLabsQuota, setElevenLabsQuota] = React.useState(null);
-  const [isCheckingStatus, setIsCheckingStatus] = React.useState(false);
-
   const handleAudioToggle = () => {
     updateAudioSettings({ enabled: !audioSettings.enabled });
   };
@@ -54,52 +48,10 @@ export const SidePanel = () => {
     updateVoiceSettings({ gender });
   };
 
-  const handleElevenLabsToggle = () => {
-    updateVoiceSettings({ useElevenLabs: !voiceSettings.useElevenLabs });
-  };
-
   // Fonction pour tester la voix de synthèse
   const handleTestSynthesisVoice = () => {
     speak("Ceci est un test de la voix de synthèse. Votre application fonctionne correctement.");
   };
-  
-  // Fonction pour tester la voix ElevenLabs
-  const handleTestElevenLabsVoice = () => {
-    speakWithElevenLabs("Ceci est un test de la voix premium ElevenLabs. Votre API est correctement configurée.");
-  };
-  
-  // Vérifier le statut d'ElevenLabs
-  const checkElevenLabsStatusAndQuota = async () => {
-    setIsCheckingStatus(true);
-    setElevenLabsStatus('checking');
-    try {
-      const result = await checkElevenLabsService();
-      setElevenLabsStatus(result.success ? 'available' : 'unavailable');
-      
-      if (result.success) {
-        const quotaResult = await checkElevenLabsQuota();
-        if (quotaResult.success) {
-          setElevenLabsQuota(quotaResult.quota);
-        } else {
-          console.error('Erreur quota:', quotaResult.error);
-        }
-      } else {
-        console.error('Erreur statut:', result.error);
-      }
-    } catch (error) {
-      console.error('Erreur lors de la vérification du statut ElevenLabs:', error);
-      setElevenLabsStatus('error');
-    } finally {
-      setIsCheckingStatus(false);
-    }
-  };
-  
-  // Vérifier le statut au chargement du panneau
-  React.useEffect(() => {
-    if (menuOpen && voiceSettings.useElevenLabs) {
-      checkElevenLabsStatusAndQuota();
-    }
-  }, [menuOpen, voiceSettings.useElevenLabs]);
   
   const handleResetOnboarding = () => {
     resetOnboarding();
@@ -168,17 +120,8 @@ export const SidePanel = () => {
               </div>
 
               <div className="flex justify-between items-center">
-                <span>ElevenLabs (Premium)</span>
-                <button
-                  onClick={handleElevenLabsToggle}
-                  className={`w-12 h-6 rounded-full transition-colors ${
-                    voiceSettings.useElevenLabs ? 'bg-green-500' : 'bg-white/20'
-                  }`}
-                >
-                  <div className={`w-5 h-5 bg-white rounded-full transition-transform ${
-                    voiceSettings.useElevenLabs ? 'translate-x-6' : 'translate-x-0.5'
-                  }`} />
-                </button>
+                <span>Voix Premium</span>
+                <div className="text-xs text-green-400 px-2 py-1 bg-green-500/20 rounded-full">Activé</div>
               </div>
 
               <div>
@@ -324,87 +267,18 @@ export const SidePanel = () => {
               <div className="space-y-3">
                 <div className="flex gap-2">
                   <button
-                    onClick={handleTestSynthesisVoice}
-                    className="flex-1 bg-white/10 border border-white/20 rounded-lg p-3 text-sm hover:bg-white/15 transition-colors"
+                    onClick={handleTestSynthesisVoice} 
+                    className="w-full bg-white/10 border border-white/20 rounded-lg p-3 text-sm hover:bg-white/15 transition-colors"
                   >
-                    Tester la voix de synthèse
-                  </button>
-                  <button
-                    onClick={handleTestElevenLabsVoice}
-                    disabled={!voiceSettings.useElevenLabs}
-                    className={`flex-1 rounded-lg p-3 text-sm ${
-                      voiceSettings.useElevenLabs 
-                        ? 'bg-purple-500/20 border border-purple-500/40 hover:bg-purple-500/30 transition-colors' 
-                        : 'bg-white/5 border border-white/10 text-white/40 cursor-not-allowed'
-                    }`}
-                  >
-                    Tester la voix ElevenLabs
+                    Tester la voix
                   </button>
                 </div>
               </div>
 
-              <div className={`rounded-lg p-3 ${
-                voiceSettings.useElevenLabs 
-                  ? elevenLabsStatus === 'available' 
-                    ? 'bg-green-500/10 border border-green-500/30' 
-                    : elevenLabsStatus === 'unavailable' 
-                      ? 'bg-red-500/10 border border-red-500/30'
-                      : 'bg-purple-500/10 border border-purple-500/30'
-                  : 'bg-green-500/10 border border-green-500/30'
-              }`}>
-                {voiceSettings.useElevenLabs ? (
-                  <>
-                    <div className="flex items-start gap-2 mb-2">
-                      {isCheckingStatus ? (
-                        <div className="animate-spin h-4 w-4 border-2 border-purple-500 border-t-transparent rounded-full mt-0.5 flex-shrink-0"></div>
-                      ) : elevenLabsStatus === 'available' ? (
-                        <Check size={16} className="text-green-400 mt-0.5 flex-shrink-0" />
-                      ) : elevenLabsStatus === 'unavailable' ? (
-                        <AlertTriangle size={16} className="text-red-400 mt-0.5 flex-shrink-0" />
-                      ) : (
-                        <CloudLightning size={16} className="text-purple-400 mt-0.5 flex-shrink-0" />
-                      )}
-                      <p className="text-xs text-purple-200">
-                        <strong>ElevenLabs {
-                          isCheckingStatus ? 'vérification...' : 
-                          elevenLabsStatus === 'available' ? 'connecté' : 
-                          elevenLabsStatus === 'unavailable' ? 'non disponible' : 
-                          'statut inconnu'
-                        }</strong>
-                      </p>
-                    </div>
-                    
-                    {elevenLabsStatus === 'available' && elevenLabsQuota && (
-                      <div className="text-xs text-green-200 pl-6">
-                        <p>Quota: {elevenLabsQuota.charactersUsed}/{elevenLabsQuota.charactersLimit} caractères</p>
-                        <p>Restant: {elevenLabsQuota.remaining} caractères</p>
-                      </div>
-                    )}
-                    
-                    {elevenLabsStatus === 'unavailable' && (
-                      <div className="text-xs text-red-200 pl-6">
-                        <p>Vérifiez votre clé API dans le fichier .env.</p>
-                        <p>Format: VITE_ELEVENLABS_API_KEY=sk_votre_clé.</p>
-                        <p>Assurez-vous que "Text to Speech" est activé dans les paramètres de votre clé API.</p>
-                      </div>
-                    )}
-                    
-                    <div className="mt-2 flex justify-end">
-                      <button 
-                        onClick={checkElevenLabsStatusAndQuota}
-                        className="text-xs bg-white/10 hover:bg-white/20 transition-colors px-2 py-1 rounded"
-                        disabled={isCheckingStatus}
-                        title="Vérifier la connexion à ElevenLabs"
-                      >
-                        {isCheckingStatus ? 'Vérification...' : 'Vérifier le statut'}
-                      </button>
-                    </div>
-                  </>
-                ) : (
-                  <p className="text-xs text-green-200">
-                    <strong>Voix locales :</strong> Fichiers MP3 premium avec fallback automatique vers synthèse vocale si fichier manquant.
-                  </p>
-                )}
+              <div className="rounded-lg p-3 bg-green-500/10 border border-green-500/30">
+                <p className="text-xs text-green-200">
+                  <strong>Voix locales :</strong> Fichiers MP3 premium avec fallback automatique vers synthèse vocale si fichier manquant.
+                </p>
               </div>
             </div>
           </div>

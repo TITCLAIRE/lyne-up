@@ -34,7 +34,6 @@ export const useAppStore = create(
       voiceSettings: {
         enabled: true,
         gender: 'female', // Claire par défaut
-        useElevenLabs: false, // Désactivé par défaut - utilisation de l'API ElevenLabs
         volume: 0.7, // Volume voix recommandé 70%
       },
       
