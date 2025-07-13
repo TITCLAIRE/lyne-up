@@ -230,7 +230,19 @@ export const HypnosisSessionScreen = () => {
   // Force l'affichage de la fréquence correcte pour le sommeil
   const getDisplayFrequency = () => {
     if (currentSession === 'sleep') {
-      return 'Ondes Alpha (10Hz)';
+      return 'Ondes Delta (2Hz)';
+    } else if (currentSession === 'confidence') {
+      return 'Ondes Alpha (10Hz) - Clarté mentale';
+    } else if (currentSession === 'emotions') {
+      return 'Fréquence 432 Hz - Harmonie intérieure';
+    } else if (currentSession === 'addiction') {
+      return 'Fréquence 396 Hz - Libération';
+    } else if (currentSession === 'sieste') {
+      return 'Ondes Alpha (10Hz) - Récupération';
+    } else if (currentSession === 'stress') {
+      return 'Fréquence 528 Hz - Équilibre';
+    } else if (currentSession === 'pain') {
+      return 'Fréquence 396 Hz - Libération des tensions';
     }
     return getCurrentFrequencyName();
   };
@@ -285,8 +297,8 @@ export const HypnosisSessionScreen = () => {
         {/* Fréquence audio active */}
         <div className="bg-white/10 rounded-lg p-2 mb-4">
           <p className="text-xs text-white/70 flex items-center justify-center gap-1">
-            <Wind size={12} />
-            Fréquence active : <span className="text-indigo-400 font-medium">{getDisplayFrequency()}</span>
+            <Wind size={12} className="text-indigo-400" />
+            <span className="text-indigo-400 font-medium">{getDisplayFrequency()}</span>
           </p>
         </div>
       </div>
