@@ -8,7 +8,7 @@ export const hypnosisSessions = {
       hold: 0,
       exhale: 6
     },
-    frequency: 'theta', // Ondes Theta (4 Hz)
+    frequency: 'alpha', // Ondes Alpha (10 Hz)
     phases: [
       {
         name: 'introduction',
@@ -45,8 +45,8 @@ export const hypnosisSessions = {
     ],
     guidance: {
       start: "Bienvenue dans cette séance de sommeil profond. Allongez-vous confortablement… Fermez doucement les yeux… Et laissez-vous guider par votre souffle…",
-      inhale: ["Inspirez doucement", "Accueillez le calme", "Respirez profondément"],
-      exhale: ["Expirez lentement", "Relâchez toute tension", "Laissez-vous aller"],
+      inhale: ["Inspirez doucement… 4… 3… 2… 1…", "Accueillez le calme… 4… 3… 2… 1…", "Respirez profondément… 4… 3… 2… 1…"],
+      exhale: ["Expirez lentement… 6… 5… 4… 3… 2… 1…", "Relâchez toute tension… 6… 5… 4… 3… 2… 1…", "Laissez-vous aller… 6… 5… 4… 3… 2… 1…"],
       phases: [
         // Phase 1: Introduction + Respiration guidée (0-3 min)
         "Chaque respiration vous rapproche d'un état de calme… Votre corps se relâche… votre esprit ralentit… Rien à faire… juste respirer… et vous laisser porter…",

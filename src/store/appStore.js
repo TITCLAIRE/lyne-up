@@ -92,7 +92,11 @@ export const useAppStore = create(
       // NOUVELLES ACTIONS pour le parcours utilisateur
       completeLaunchScreen: () => {
         console.log('🎯 STORE: Pages de lancement terminées');
-        set({ showLaunchScreen: false });
+        set({ 
+          showLaunchScreen: false,
+          isTrialMode: false, // Désactiver le mode essai pour rester en mode développement
+          isAuthenticated: true // Considérer l'utilisateur comme authentifié
+        });
       },
       
       startTrialMode: () => {
@@ -102,7 +106,11 @@ export const useAppStore = create(
       
       completeTrialSession: () => {
         console.log('🎯 STORE: Session d\'essai terminée');
-        set({ isTrialMode: false, currentScreen: 'auth' });
+        set({ 
+          isTrialMode: false, 
+          isAuthenticated: true, // Considérer l'utilisateur comme authentifié
+          currentScreen: 'home' // Rediriger vers l'accueil au lieu de l'authentification
+        });
       },
       
       setAuthenticated: (authenticated, userProfile = null) => {
