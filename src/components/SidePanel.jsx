@@ -1,9 +1,11 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { X, Volume2, Mic, Download, Smartphone, RotateCcw, CloudLightning, Play, Check, AlertTriangle } from 'lucide-react';
 import { useAppStore } from '../store/appStore';
 import { useVoiceManager } from '../hooks/useVoiceManager';
 
 export const SidePanel = () => {
+  const navigate = useNavigate();
   const { 
     menuOpen, 
     toggleMenu, 
@@ -56,6 +58,7 @@ export const SidePanel = () => {
   const handleResetOnboarding = () => {
     resetOnboarding();
     toggleMenu();
+    navigate('/launch');
   };
 
   return (
@@ -309,12 +312,23 @@ export const SidePanel = () => {
             <div className="bg-white/5 rounded-xl p-4">
               <button 
                 onClick={handleResetOnboarding}
-                className="w-full bg-gradient-to-r from-orange-500/20 to-red-500/20 border-2 border-orange-500/40 rounded-xl p-3 flex items-center gap-3 hover:from-orange-500/30 hover:to-red-500/30 transition-all"
+                className="w-full bg-gradient-to-r from-orange-500/20 to-red-500/20 border-2 border-orange-500/40 rounded-xl p-3 flex items-center gap-3 hover:from-orange-500/30 hover:to-red-500/30 transition-all mb-4"
               >
                 <RotateCcw size={20} />
                 <div className="text-left">
                   <div className="font-medium text-sm">Revoir les pages de lancement</div>
                   <div className="text-xs text-white/70">Réinitialise l'onboarding pour tester</div>
+                </div>
+              </button>
+              
+              <button 
+                onClick={() => { toggleMenu(); navigate('/'); }}
+                className="w-full bg-gradient-to-r from-blue-500/20 to-cyan-500/20 border-2 border-blue-500/40 rounded-xl p-3 flex items-center gap-3 hover:from-blue-500/30 hover:to-cyan-500/30 transition-all"
+              >
+                <Play size={20} />
+                <div className="text-left">
+                  <div className="font-medium text-sm">Retour à l'accueil</div>
+                  <div className="text-xs text-white/70">Revenir à la page principale</div>
                 </div>
               </button>
             </div>

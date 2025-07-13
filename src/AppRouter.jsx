@@ -1,0 +1,74 @@
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import AppLayout from './layouts/AppLayout';
+import HomeScreen from './pages/HomeScreen';
+import SessionLibre from './pages/SessionLibre';
+import SessionGuidee from './pages/SessionGuidee';
+import SessionVoyage from './pages/SessionVoyage';
+import BlogRedirect from './pages/BlogRedirect';
+
+// Sous-pages guidées
+import Recentrage from './pages/guidees/Recentrage';
+import Evolution from './pages/guidees/Evolution';
+import Famille from './pages/guidees/Famille';
+import Scan from './pages/guidees/Scan';
+import Sommeil from './pages/guidees/Sommeil';
+
+// Sous-pages voyage intérieur
+import Meditations from './pages/voyage/Meditations';
+import Hypnoses from './pages/voyage/Hypnoses';
+
+// Pages de session
+import GuidedSessionRunner from './pages/sessions/GuidedSessionRunner';
+import CoherenceSessionRunner from './pages/sessions/CoherenceSessionRunner';
+import FreeSessionRunner from './pages/sessions/FreeSessionRunner';
+import HypnosisSessionRunner from './pages/sessions/HypnosisSessionRunner';
+import ResultsScreen from './pages/ResultsScreen';
+
+// Pages d'authentification et d'onboarding
+import LaunchScreen from './pages/LaunchScreen';
+import AuthScreen from './pages/AuthScreen';
+
+export default function AppRouter() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        {/* Pages d'onboarding et d'authentification */}
+        <Route path="/launch" element={<LaunchScreen />} />
+        <Route path="/auth" element={<AuthScreen />} />
+        
+        {/* Routes principales avec layout */}
+        <Route path="/" element={<AppLayout />}>
+          <Route index element={<HomeScreen />} />
+          
+          {/* Section libre */}
+          <Route path="sessions/libre" element={<SessionLibre />} />
+          <Route path="sessions/libre/run" element={<FreeSessionRunner />} />
+          
+          {/* Section guidée */}
+          <Route path="sessions/guidees" element={<SessionGuidee />} />
+          <Route path="sessions/guidees/recentrage" element={<Recentrage />} />
+          <Route path="sessions/guidees/evolution" element={<Evolution />} />
+          <Route path="sessions/guidees/famille" element={<Famille />} />
+          <Route path="sessions/guidees/scan" element={<Scan />} />
+          <Route path="sessions/guidees/sommeil" element={<Sommeil />} />
+          
+          {/* Voyage intérieur */}
+          <Route path="sessions/voyage" element={<SessionVoyage />} />
+          <Route path="sessions/voyage/meditations" element={<Meditations />} />
+          <Route path="sessions/voyage/hypnose" element={<Hypnoses />} />
+          
+          {/* Runners de session */}
+          <Route path="sessions/run/guided/:sessionId" element={<GuidedSessionRunner />} />
+          <Route path="sessions/run/coherence" element={<CoherenceSessionRunner />} />
+          <Route path="sessions/run/hypnosis/:sessionId" element={<HypnosisSessionRunner />} />
+          
+          {/* Résultats */}
+          <Route path="results" element={<ResultsScreen />} />
+        </Route>
+        
+        {/* Blog */}
+        <Route path="/blog" element={<BlogRedirect />} />
+      </Routes>
+    </BrowserRouter>
+  );
+}

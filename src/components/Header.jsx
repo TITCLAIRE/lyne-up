@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Menu } from 'lucide-react';
 import { useAppStore } from '../store/appStore';
 
@@ -8,7 +9,7 @@ export const Header = () => {
   return (
     <header className="flex items-center justify-between p-5 relative z-10">
       <div className="flex items-center gap-4 flex-1 min-w-0">
-        <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 overflow-hidden">
+        <Link to="/" className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 overflow-hidden">
           <img 
             src="/logo/ChatGPT Image 21 juin 2025, 18_14_03.png" 
             alt="L'Instant Opportun Logo" 
@@ -23,11 +24,11 @@ export const Header = () => {
               }
             }}
           />
-        </div>
+        </Link>
         <div className="min-w-0 flex-1">
-          <h1 className="text-2xl font-bold bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent truncate">
+          <Link to="/" className="text-2xl font-bold bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent truncate block">
             L'Instant Opportun
-          </h1>
+          </Link>
           <div className="flex flex-col">
             <p className="text-sm text-white/70 truncate">
               Cohérence Cardiaque Intégrative

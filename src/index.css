@@ -349,3 +349,30 @@
   opacity: 0;
   animation-fill-mode: forwards;
 }
+
+/* Styles pour les cartes de navigation */
+.home-card {
+  display: block;
+  border-radius: 1rem;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  text-decoration: none;
+  color: white;
+  min-height: 180px;
+}
+
+.home-card:hover {
+  transform: translateY(-5px) scale(1.02);
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
+}
+
+.home-card h2 {
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.home-card .baseline {
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
