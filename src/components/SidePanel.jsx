@@ -1,5 +1,5 @@
 import React from 'react';
-import { X, Volume2, Mic, Download, Smartphone, RotateCcw } from 'lucide-react';
+import { X, Volume2, Mic, Download, Smartphone, RotateCcw, CloudLightning } from 'lucide-react';
 import { useAppStore } from '../store/appStore';
 
 export const SidePanel = () => {
@@ -42,6 +42,10 @@ export const SidePanel = () => {
 
   const handleVoiceGenderChange = (gender) => {
     updateVoiceSettings({ gender });
+  };
+
+  const handleElevenLabsToggle = () => {
+    updateVoiceSettings({ useElevenLabs: !voiceSettings.useElevenLabs });
   };
 
   const handleResetOnboarding = () => {
@@ -106,6 +110,20 @@ export const SidePanel = () => {
                 >
                   <div className={`w-5 h-5 bg-white rounded-full transition-transform ${
                     audioSettings.gongEnabled ? 'translate-x-6' : 'translate-x-0.5'
+                  }`} />
+                </button>
+              </div>
+
+              <div className="flex justify-between items-center">
+                <span>ElevenLabs (Premium)</span>
+                <button
+                  onClick={handleElevenLabsToggle}
+                  className={`w-12 h-6 rounded-full transition-colors ${
+                    voiceSettings.useElevenLabs ? 'bg-green-500' : 'bg-white/20'
+                  }`}
+                >
+                  <div className={`w-5 h-5 bg-white rounded-full transition-transform ${
+                    voiceSettings.useElevenLabs ? 'translate-x-6' : 'translate-x-0.5'
                   }`} />
                 </button>
               </div>
@@ -250,10 +268,19 @@ export const SidePanel = () => {
                 </div>
               </div>
 
-              <div className="bg-green-500/10 border border-green-500/30 rounded-lg p-3">
-                <p className="text-xs text-green-200">
-                  <strong>Voix Premium :</strong> Vos fichiers MP3 premium avec fallback automatique vers synthèse vocale si fichier manquant.
-                </p>
+              <div className={`rounded-lg p-3 ${voiceSettings.useElevenLabs ? 'bg-purple-500/10 border border-purple-500/30' : 'bg-green-500/10 border border-green-500/30'}`}>
+                {voiceSettings.useElevenLabs ? (
+                  <div className="flex items-start gap-2">
+                    <CloudLightning size={16} className="text-purple-400 mt-0.5 flex-shrink-0" />
+                    <p className="text-xs text-purple-200">
+                      <strong>ElevenLabs activé :</strong> Voix premium Claire et Thierry générées en temps réel via l'API ElevenLabs pour toutes les sessions.
+                    </p>
+                  </div>
+                ) : (
+                  <p className="text-xs text-green-200">
+                    <strong>Voix locales :</strong> Fichiers MP3 premium avec fallback automatique vers synthèse vocale si fichier manquant.
+                  </p>
+                )}
               </div>
             </div>
           </div>

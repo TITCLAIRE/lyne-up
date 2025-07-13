@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { useAppStore } from '../store/appStore';
+import { generateSpeech } from '../services/elevenLabsService';
 
 export const useVoiceManager = () => {
   const { voiceSettings, currentSession, isSessionActive, currentMeditation } = useAppStore();
@@ -246,6 +247,7 @@ export const useVoiceManager = () => {
   // Fonction pour synthèse vocale (fallback)
   const speakWithSystemVoice = (text) => {
     if (isPlayingRef.current) {
+      console.log('🔊 Attente fin audio en cours avant synthèse vocale');
       return new Promise(resolve => {
         const checkInterval = setInterval(() => {
           if (!isPlayingRef.current) {
@@ -302,6 +304,70 @@ export const useVoiceManager = () => {
 
         speechSynthesis.speak(utterance);
       }, 300);
+    });
+  };
+
+  // Fonction pour parler avec ElevenLabs via Netlify Function
+  const speakWithElevenLabs = async (text) => {
+    if (isPlayingRef.current) {
+      console.log('🔊 Attente fin audio en cours avant ElevenLabs');
+      return new Promise(resolve => {
+        const checkInterval = setInterval(() => {
+          if (!isPlayingRef.current) {
+            clearInterval(checkInterval);
+            speakWithElevenLabs(text).then(resolve);
+          }
+        }, 100);
+      });
+    }
+
+    return new Promise(async (resolve, reject) => {
+      try {
+        console.log(`🎤 ELEVENLABS: Génération audio pour "${text.substring(0, 30)}..."`);
+        isPlayingRef.current = true;
+        
+        // Appeler le service ElevenLabs
+        const result = await generateSpeech(text, voiceSettings.gender);
+        
+        if (!result.success) {
+          console.log(`❌ ELEVENLABS ÉCHEC: ${result.error}`);
+          isPlayingRef.current = false;
+          // Fallback vers la synthèse vocale du navigateur
+          return speakWithSystemVoice(text).then(resolve).catch(reject);
+        }
+        
+        // Créer un audio à partir des données base64
+        const audio = new Audio(`data:${result.format};base64,${result.audio}`);
+        currentAudioRef.current = audio;
+        
+        audio.volume = voiceSettings.volume;
+        
+        audio.onended = () => {
+          console.log('✅ ELEVENLABS: Audio terminé');
+          currentAudioRef.current = null;
+          isPlayingRef.current = false;
+          resolve();
+        };
+        
+        audio.onerror = (e) => {
+          console.error('❌ ELEVENLABS: Erreur lecture audio', e);
+          currentAudioRef.current = null;
+          isPlayingRef.current = false;
+          
+          // Fallback vers la synthèse vocale du navigateur
+          speakWithSystemVoice(text).then(resolve).catch(reject);
+        };
+        
+        // Jouer l'audio
+        await audio.play();
+        console.log('▶️ ELEVENLABS: Lecture démarrée');
+      } catch (error) {
+        console.error('❌ ELEVENLABS: Exception', error);
+        isPlayingRef.current = false;
+        
+        // Fallback vers la synthèse vocale du navigateur
+        speakWithSystemVoice(text).then(resolve).catch(reject);
+      }
     });
   };
 
@@ -445,10 +511,18 @@ export const useVoiceManager = () => {
   // Fonction principale pour parler
   const speak = (text) => {
     if (!voiceSettings.enabled || !text.trim()) {
+      console.log('🔇 Voix désactivée ou texte vide');
       return Promise.resolve();
     }
 
-    return speakWithSystemVoice(text);
+    // Utiliser ElevenLabs si activé, sinon utiliser la synthèse vocale du navigateur
+    if (voiceSettings.useElevenLabs) {
+      console.log('🎤 Utilisation d\'ElevenLabs pour la synthèse vocale');
+      return speakWithElevenLabs(text);
+    } else {
+      console.log('🎤 Utilisation de la synthèse vocale du navigateur');
+      return speakWithSystemVoice(text);
+    }
   };
 
   // Système vocal SOS Stress (SWITCH) - SYSTÈME ORIGINAL RESTAURÉ
@@ -871,6 +945,7 @@ export const useVoiceManager = () => {
     speak,
     stop,
     isProcessing: isPlayingRef.current,
+    speakWithElevenLabs,
     startSessionGuidance,
     // Fonctions spécialisées pour SOS et SCAN
     playSosAudio,
