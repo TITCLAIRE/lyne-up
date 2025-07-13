@@ -1,6 +1,7 @@
 import React from 'react';
-import { X, Volume2, Mic, Download, Smartphone, RotateCcw, CloudLightning } from 'lucide-react';
+import { X, Volume2, Mic, Download, Smartphone, RotateCcw, CloudLightning, Play } from 'lucide-react';
 import { useAppStore } from '../store/appStore';
+import { useVoiceManager } from '../hooks/useVoiceManager';
 
 export const SidePanel = () => {
   const { 
@@ -12,6 +13,9 @@ export const SidePanel = () => {
     updateVoiceSettings,
     resetOnboarding
   } = useAppStore();
+
+  // Importer le hook useVoiceManager pour tester les voix
+  const { speak } = useVoiceManager();
 
   const handleAudioToggle = () => {
     updateAudioSettings({ enabled: !audioSettings.enabled });

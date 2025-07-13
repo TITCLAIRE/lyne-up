@@ -248,11 +248,11 @@ export const useVoiceManager = () => {
   const speakWithSystemVoice = (text) => {
     if (isPlayingRef.current) {
       console.log('🔊 Attente fin audio en cours avant synthèse vocale');
-      return new Promise(resolve => {
+      return new Promise((resolve, reject) => {
         const checkInterval = setInterval(() => {
           if (!isPlayingRef.current) {
             clearInterval(checkInterval);
-            speakWithSystemVoice(text).then(resolve);
+            speakWithSystemVoice(text).then(resolve).catch(reject);
           }
         }, 100);
       });
@@ -268,6 +268,20 @@ export const useVoiceManager = () => {
       isPlayingRef.current = true;
       
       setTimeout(() => {
+        // Forcer l'initialisation de la synthèse vocale
+        if (speechSynthesis.getVoices().length === 0) {
+          speechSynthesis.onvoiceschanged = () => {
+            // Continuer une fois les voix chargées
+            setupAndSpeakUtterance();
+          };
+          // Déclencher le chargement des voix
+          speechSynthesis.getVoices();
+        } else {
+          setupAndSpeakUtterance();
+        }
+      }, 300);
+      
+      function setupAndSpeakUtterance() {
         const utterance = new SpeechSynthesisUtterance(text);
 
         utterance.rate = 0.75;
@@ -299,11 +313,12 @@ export const useVoiceManager = () => {
 
         utterance.onerror = (event) => {
           isPlayingRef.current = false;
-          resolve();
+          console.error('❌ Erreur synthèse vocale:', event);
+          reject(new Error('Erreur synthèse vocale'));
         };
 
         speechSynthesis.speak(utterance);
-      }, 300);
+      }
     });
   };
 
@@ -311,11 +326,11 @@ export const useVoiceManager = () => {
   const speakWithElevenLabs = async (text) => {
     if (isPlayingRef.current) {
       console.log('🔊 Attente fin audio en cours avant ElevenLabs');
-      return new Promise(resolve => {
+      return new Promise((resolve, reject) => {
         const checkInterval = setInterval(() => {
           if (!isPlayingRef.current) {
             clearInterval(checkInterval);
-            speakWithElevenLabs(text).then(resolve);
+            speakWithElevenLabs(text).then(resolve).catch(reject);
           }
         }, 100);
       });
@@ -511,8 +526,34 @@ export const useVoiceManager = () => {
   // Fonction principale pour parler
   const speak = (text) => {
     if (!voiceSettings.enabled || !text.trim()) {
-      console.log('🔇 Voix désactivée ou texte vide');
+      console.log('🔇 Voix désactivée ou texte vide:', { enabled: voiceSettings.enabled, text });
       return Promise.resolve();
+    }
+
+    // Forcer l'interaction utilisateur pour débloquer l'audio
+    if (typeof document !== 'undefined') {
+      const unlockAudio = () => {
+        // Créer un contexte audio temporaire pour débloquer l'audio
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        const oscillator = audioContext.createOscillator();
+        const gainNode = audioContext.createGain();
+        
+        gainNode.gain.value = 0; // Volume à zéro
+        oscillator.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+        
+        // Jouer un son silencieux très court
+        oscillator.start(0);
+        oscillator.stop(0.001);
+        
+        // Nettoyer les écouteurs d'événements
+        document.removeEventListener('click', unlockAudio);
+        document.removeEventListener('touchstart', unlockAudio);
+      };
+      
+      // Ajouter des écouteurs d'événements pour débloquer l'audio
+      document.addEventListener('click', unlockAudio, { once: true });
+      document.addEventListener('touchstart', unlockAudio, { once: true });
     }
 
     // Utiliser ElevenLabs si activé, sinon utiliser la synthèse vocale du navigateur
