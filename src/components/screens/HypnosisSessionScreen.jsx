@@ -230,7 +230,7 @@ export const HypnosisSessionScreen = () => {
   // Force l'affichage de la fréquence correcte pour le sommeil
   const getDisplayFrequency = () => {
     if (currentSession === 'sleep') {
-      return 'Ondes Delta (2Hz)';
+      return 'Ondes Alpha (10Hz)';
     }
     return getCurrentFrequencyName();
   };

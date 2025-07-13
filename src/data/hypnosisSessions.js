@@ -4,7 +4,7 @@ export const hypnosisSessions = {
     duration: 600, // 10 minutes
     description: 'Sommeil Profond et Réparateur',
     breathingPattern: { inhale: 4, hold: 0, exhale: 6 },
-    frequency: 'delta', // Ondes Delta (2 Hz)
+    frequency: 'alpha', // Ondes Alpha (10 Hz)
     phases: [
       {
         name: 'introduction',
