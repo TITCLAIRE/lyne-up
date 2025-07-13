@@ -12,7 +12,7 @@ export const useAppStore = create(
       isSessionActive: false,
       
       // NOUVEAU : États pour le parcours utilisateur
-      showLaunchScreen: true, // Toujours afficher les pages de lancement
+      showLaunchScreen: false, // En mode développement, ne pas afficher les pages de lancement
       isTrialMode: false, // Mode session d'essai
       isAuthenticated: false, // État d'authentification
       userProfile: null, // Profil utilisateur
