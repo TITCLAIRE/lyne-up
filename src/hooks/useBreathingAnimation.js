@@ -10,7 +10,8 @@ export const useBreathingAnimation = () => {
     inhaleTime: 5,
     holdTime: 0,
     exhaleTime: 5,
-    currentPattern: null
+    currentPattern: null,
+    disableGong: false
   });
 
   const intervalRef = useRef(null);
@@ -170,6 +171,7 @@ export const useBreathingAnimation = () => {
       holdTime: 0,
       exhaleTime: 5,
       currentPattern: null,
+      disableGong: false
       timeUntilNextPhase: 0
     };
     

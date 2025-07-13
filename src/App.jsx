@@ -12,6 +12,8 @@ import { LaunchScreen } from './components/screens/LaunchScreen';
 import { TrialCoherenceSelectionScreen } from './components/screens/TrialCoherenceSelectionScreen';
 import { TrialResultsScreen } from './components/screens/TrialResultsScreen';
 import { AuthScreen } from './components/screens/AuthScreen';
+import { HypnosisSelectionScreen } from './components/screens/HypnosisSelectionScreen';
+import { HypnosisSessionScreen } from './components/screens/HypnosisSessionScreen';
 import { SidePanel } from './components/SidePanel';
 import { useAppStore } from './store/appStore';
 import { useAudioManager } from './hooks/useAudioManager';
@@ -60,6 +62,10 @@ function App() {
         return <TrialCoherenceSelectionScreen />;
       case 'auth':
         return <AuthScreen />;
+      case 'hypnosisSelection':
+        return <HypnosisSelectionScreen />;
+      case 'hypnosisSession':
+        return <HypnosisSessionScreen />;
       default:
         console.log('⚠️ Écran non reconnu, retour à l\'accueil:', currentScreen);
         return <HomeScreen />;

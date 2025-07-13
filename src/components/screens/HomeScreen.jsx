@@ -1,5 +1,5 @@
 import React from 'react';
-import { Heart, Target, Zap, Waves, Brain, Sparkles, Baby, RotateCcw, TrendingUp, Settings, Users, Wind } from 'lucide-react';
+import { Heart, Target, Zap, Waves, Brain, Sparkles, Baby, RotateCcw, TrendingUp, Settings, Users, Wind, Moon } from 'lucide-react';
 import { useAppStore } from '../../store/appStore';
 
 // Sessions d'urgence et réalignement
@@ -23,7 +23,12 @@ const ageSpecificSessions = [
 // Sessions de voyage intérieur
 const innerJourneySessions = [
   { id: 'scan', icon: Brain, name: 'SCAN CORPOREL', time: '10min', color: 'from-indigo-500 to-purple-500' },
-  { id: 'meditation', icon: Sparkles, name: 'MÉDITATIONS', time: '5-10min', color: 'from-pink-500 to-rose-500' },
+  { id: 'meditation', icon: Sparkles, name: 'MÉDITATIONS', time: '5-10min', color: 'from-pink-500 to-rose-500' }
+];
+
+// Sessions d'auto-hypnose
+const hypnosisSessions = [
+  { id: 'hypnosis', icon: Moon, name: 'AUTO-HYPNOSE', time: '10min', color: 'from-indigo-400 to-purple-600' },
 ];
 
 export const HomeScreen = () => {
@@ -33,6 +38,8 @@ export const HomeScreen = () => {
     console.log('Session sélectionnée:', sessionId);
     if (sessionId === 'meditation') {
       setCurrentScreen('meditationSelection');
+    } else if (sessionId === 'hypnosis') {
+      setCurrentScreen('hypnosisSelection');
     } else if (sessionId === 'freeSessionSelection') {
       setCurrentScreen('freeSessionSelection');
     } else {
@@ -142,6 +149,38 @@ export const HomeScreen = () => {
                   </div>
                   <h3 className="font-medium text-sm mb-1">{session.name}</h3>
                   <p className="text-xs text-white/60">{session.time}</p>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Section Auto-Hypnose */}
+      <div className="mb-6">
+        <div className="flex items-baseline gap-3 mb-4">
+          <h2 className="text-lg font-semibold flex items-center gap-2">
+            <Moon size={18} />
+            Auto-Hypnose
+          </h2>
+        </div>
+        <div className="grid grid-cols-1 gap-3">
+          {hypnosisSessions.map((session) => {
+            const Icon = session.icon;
+            return (
+              <div
+                key={session.id}
+                onClick={() => handleSessionClick(session.id)}
+                className="bg-white/8 border border-white/15 rounded-2xl p-4 cursor-pointer hover:bg-white/12 transition-all duration-200 hover:scale-[1.02]"
+              >
+                <div className="flex items-center gap-4">
+                  <div className={`w-10 h-10 bg-gradient-to-r ${session.color} rounded-xl flex items-center justify-center`}>
+                    <Icon size={20} className="text-white" />
+                  </div>
+                  <div>
+                    <h3 className="font-medium text-sm mb-1">{session.name}</h3>
+                    <p className="text-xs text-white/60">{session.time}</p>
+                  </div>
                 </div>
               </div>
             );
