@@ -361,14 +361,82 @@ export const hypnosisSessions = {
   }
 };
 
+// Nouvelle session Confiance en Soi
+export const confidenceSession = {
+  name: 'RENFORCER LA CONFIANCE EN SOI',
+  duration: 600, // 10 minutes
+  description: 'Activer sa Confiance Intérieure',
+  breathingPattern: { inhale: 4, hold: 0, exhale: 6 },
+  frequency: 'alpha', // Ondes Alpha (10 Hz) - clarté mentale, assurance
+  phases: [
+    {
+      name: 'introduction',
+      startTime: 0,
+      endTime: 180, // 3 minutes
+      type: 'guided-breathing',
+      guidedBreathing: true,
+      gongEnabled: true
+    },
+    {
+      name: 'transition',
+      startTime: 180,
+      endTime: 300, // 5 minutes (2 min de transition)
+      type: 'deepening',
+      guidedBreathing: false,
+      gongEnabled: false
+    },
+    {
+      name: 'suggestions',
+      startTime: 300,
+      endTime: 540, // 9 minutes (4 min de suggestions)
+      type: 'suggestions',
+      guidedBreathing: false,
+      gongEnabled: false
+    },
+    {
+      name: 'cloture',
+      startTime: 540,
+      endTime: 600, // 10 minutes (1 min de clôture)
+      type: 'closure',
+      guidedBreathing: false,
+      gongEnabled: false
+    }
+  ],
+  guidance: {
+    start: "Bienvenue. Dans cette séance, vous allez reconnecter avec votre confiance naturelle… celle qui a toujours été là, au fond de vous…",
+    inhale: ["Inspirez lentement… 4… 3… 2… 1…", "Accueillez la force… 4… 3… 2… 1…", "Respirez profondément… 4… 3… 2… 1…"],
+    exhale: ["Expirez doucement… 6… 5… 4… 3… 2… 1…", "Relâchez le doute… 6… 5… 4… 3… 2… 1…", "Libérez l'hésitation… 6… 5… 4… 3… 2… 1…"],
+    phases: [
+      // Phase 1: Introduction + Respiration guidée (0-3 min)
+      "À chaque souffle, vous vous redressez… à l'intérieur de vous-même… Le doute se dissout… la solidité s'installe… Vous vous alignez avec votre force.",
+      
+      // Phase 2: Respiration libre + Approfondissement (3-5 min)
+      "Et maintenant… laissez votre souffle devenir libre… fluide… confiant… Imaginez-vous debout… ancré(e)… solide… face à un paysage vaste… ouvert… Votre présence remplit l'espace… Votre respiration est claire… stable… assurée… Vous êtes à votre place. Et cette place vous appartient.",
+      
+      // Phase 3: Suggestions hypnotiques ciblées confiance (5-9 min)
+      "Vous avez déjà surmonté tant de choses… et cela vous a rendu plus fort(e), plus sage… Tout ce dont vous avez besoin est en vous… vous pouvez le ressentir… maintenant… Votre voix compte. Votre présence a un impact. Vos choix ont du poids. À chaque respiration, vous vous rappelez qui vous êtes vraiment… capable, légitime, digne. Vous n'avez rien à prouver. Juste à être… vous-même… pleinement. Vous êtes prêt(e) à avancer… avec assurance… et authenticité.",
+      
+      // Phase 4: Clôture et ancrage positif (9-10 min)
+      "Prenez une grande inspiration… et sentez cette confiance circuler partout en vous… Bougez un peu vos mains… vos épaules… votre tête…"
+    ],
+    end: "Et quand vous serez prêt(e)… ouvrez les yeux… fort(e), ancré(e), confiant(e). Vous êtes prêt(e)… pour votre prochain pas."
+  }
+};
+
 // Exporter les fonctions utilitaires
 export const getHypnosisSession = (sessionId) => {
-  return hypnosisSessions[sessionId] || null;
+  // Ajouter la session de confiance
+  const allSessions = {
+    ...hypnosisSessions,
+    confidence: confidenceSession
+  };
+  return allSessions[sessionId] || null;
 };
 
 // Obtenir la fréquence binaurale recommandée pour une session d'hypnose
 export const getHypnosisFrequency = (sessionId) => {
-  const session = hypnosisSessions[sessionId];
+  // Inclure la session de confiance
+  const session = sessionId === 'confidence' ? confidenceSession : hypnosisSessions[sessionId];
   if (!session) return 'theta'; // Fréquence par défaut
   
   return session.frequency || 'theta';
@@ -376,7 +444,8 @@ export const getHypnosisFrequency = (sessionId) => {
 
 // Obtenir le pattern respiratoire pour une session d'hypnose
 export const getHypnosisBreathingPattern = (sessionId) => {
-  const session = hypnosisSessions[sessionId];
+  // Inclure la session de confiance
+  const session = sessionId === 'confidence' ? confidenceSession : hypnosisSessions[sessionId];
   if (!session) return { inhale: 4, hold: 0, exhale: 6 }; // Pattern par défaut
   
   return session.breathingPattern || { inhale: 4, hold: 0, exhale: 6 };

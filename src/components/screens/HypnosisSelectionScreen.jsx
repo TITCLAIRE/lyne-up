@@ -4,6 +4,16 @@ import { useAppStore } from '../../store/appStore';
 
 const hypnosisSessions = [
   { 
+    id: 'confidence', 
+    name: 'Renforcer la Confiance en Soi', 
+    icon: Shield, 
+    duration: 10, 
+    desc: 'Activer sa Confiance Intérieure', 
+    color: 'from-blue-500/20 to-cyan-500/20',
+    borderColor: 'border-blue-500/30',
+    isPremium: false
+  },
+  { 
     id: 'emotions', 
     name: 'Apaiser les Émotions Fortes', 
     icon: Shield, 
@@ -24,6 +34,16 @@ const hypnosisSessions = [
     isPremium: false
   },
   { 
+    id: 'sieste', 
+    name: 'Sieste Relaxante', 
+    icon: Moon, 
+    duration: 10, 
+    desc: 'Récupération profonde en 10 min', 
+    color: 'from-blue-500/20 to-cyan-500/20',
+    borderColor: 'border-blue-500/30',
+    isPremium: false
+  },
+  { 
     id: 'stress', 
     name: 'Libérer le Stress Aigu', 
     icon: Zap, 
@@ -41,16 +61,6 @@ const hypnosisSessions = [
     desc: 'Libération des tensions et apaisement', 
     color: 'from-red-500/20 to-orange-500/20',
     borderColor: 'border-red-500/30',
-    isPremium: false
-  },
-  { 
-    id: 'sieste', 
-    name: 'Sieste Relaxante', 
-    icon: Moon, 
-    duration: 10, 
-    desc: 'Récupération profonde en 10 min', 
-    color: 'from-blue-500/20 to-cyan-500/20',
-    borderColor: 'border-blue-500/30',
     isPremium: false
   },
   { 
