@@ -171,7 +171,7 @@ export const useBreathingAnimation = () => {
       holdTime: 0,
       exhaleTime: 5,
       currentPattern: null,
-      disableGong: false
+      disableGong: false,
       timeUntilNextPhase: 0
     };
     
