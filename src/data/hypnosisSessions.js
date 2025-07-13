@@ -298,6 +298,66 @@ export const hypnosisSessions = {
       ],
       end: "Votre corps et votre esprit sont maintenant parfaitement préparés pour un sommeil profond et réparateur."
     }
+  },
+  emotions: {
+    name: 'APAISER LES ÉMOTIONS FORTES',
+    duration: 600, // 10 minutes
+    description: 'Sommeil Profond et Réparateur',
+    breathingPattern: { inhale: 4, hold: 0, exhale: 6 },
+    frequency: '432hz', // Fréquence 432 Hz - harmonie intérieure, ancrage émotionnel
+    phases: [
+      {
+        name: 'introduction',
+        startTime: 0,
+        endTime: 180, // 3 minutes
+        type: 'guided-breathing',
+        guidedBreathing: true,
+        gongEnabled: true
+      },
+      {
+        name: 'approfondissement',
+        startTime: 180,
+        endTime: 300, // 5 minutes (2 min d'approfondissement)
+        type: 'deepening',
+        guidedBreathing: false,
+        gongEnabled: false
+      },
+      {
+        name: 'suggestions',
+        startTime: 300,
+        endTime: 540, // 9 minutes (4 min de suggestions)
+        type: 'suggestions',
+        guidedBreathing: false,
+        gongEnabled: false
+      },
+      {
+        name: 'cloture',
+        startTime: 540,
+        endTime: 600, // 10 minutes (1 min de clôture)
+        type: 'closure',
+        guidedBreathing: false,
+        gongEnabled: false
+      }
+    ],
+    guidance: {
+      start: "Bienvenue. Si vous ressentez une vague d'émotion… forte, intense… vous êtes au bon endroit. Nous allons accueillir cette émotion… et la transformer.",
+      inhale: ["Inspirez doucement… 4… 3… 2… 1…", "Accueillez l'espace… 4… 3… 2… 1…", "Respirez calmement… 4… 3… 2… 1…"],
+      exhale: ["Expirez lentement… 6… 5… 4… 3… 2… 1…", "Relâchez l'émotion… 6… 5… 4… 3… 2… 1…", "Laissez aller… 6… 5… 4… 3… 2… 1…"],
+      phases: [
+        // Phase 1: Introduction + Respiration guidée (0-3 min)
+        "À chaque souffle, vous créez de l'espace… entre vous… et ce que vous ressentez… Vous n'êtes pas cette émotion… Vous l'observez… vous la traversez… Et peu à peu… elle se calme…",
+        
+        // Phase 2: Respiration libre + Approfondissement (3-5 min)
+        "Et maintenant… laissez votre respiration redevenir naturelle… fluide… libre… Imaginez que vous êtes au bord d'un lac… et que l'émotion est une tempête au loin… Vous l'observez… sans vous y perdre… Elle fait partie du paysage… Mais vous êtes assis(e)… en sécurité… sur la rive… Votre souffle devient un ancrage… Il vous garde solide… présent(e)… calme…",
+        
+        // Phase 3: Suggestions hypnotiques ciblées émotions (5-9 min)
+        "Ce que vous ressentez… est valable… mais ce que vous êtes… est bien plus vaste… Les émotions vont et viennent… mais votre calme, lui… peut rester… La colère s'apaise… la tristesse s'adoucit… vous êtes de plus en plus en paix… Votre cœur sait comment se réguler… et votre respiration l'accompagne… À chaque souffle, vous retrouvez votre équilibre… votre lucidité… votre force tranquille… Rien ne presse. Vous êtes autorisé(e) à ressentir… et à relâcher ce qui pèse…",
+        
+        // Phase 4: Clôture douce + ancrage (9-10 min)
+        "Prenez une profonde inspiration… comme pour revenir à vous… Bougez un peu vos doigts… votre nuque… vos épaules…"
+      ],
+      end: "Et quand vous serez prêt(e)… ouvrez les yeux doucement… plus calme… plus clair(e)… plus léger(e)… L'émotion est passée… et vous avez tenu bon. Vous pouvez être fier(e) de vous."
+    }
   }
 };
 

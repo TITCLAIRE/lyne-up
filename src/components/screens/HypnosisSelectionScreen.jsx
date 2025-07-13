@@ -4,6 +4,16 @@ import { useAppStore } from '../../store/appStore';
 
 const hypnosisSessions = [
   { 
+    id: 'emotions', 
+    name: 'Apaiser les Émotions Fortes', 
+    icon: Shield, 
+    duration: 10, 
+    desc: 'Traverser une tempête émotionnelle', 
+    color: 'from-purple-500/20 to-pink-500/20',
+    borderColor: 'border-purple-500/30',
+    isPremium: false
+  },
+  { 
     id: 'addiction', 
     name: 'Libération d\'une Addiction', 
     icon: Cookie, 
@@ -44,16 +54,6 @@ const hypnosisSessions = [
     isPremium: false
   },
   { 
-    id: 'confidence', 
-    name: 'Confiance & Résilience', 
-    icon: Shield, 
-    duration: 10, 
-    desc: 'Renforcement mental', 
-    color: 'from-green-500/20 to-emerald-500/20',
-    borderColor: 'border-green-500/30',
-    isPremium: true
-  },
-  { 
     id: 'sleep', 
     name: 'Sommeil Profond', 
     icon: Moon, 
@@ -61,7 +61,7 @@ const hypnosisSessions = [
     desc: 'Sommeil Profond et Réparateur', 
     color: 'from-indigo-500/20 to-purple-500/20',
     borderColor: 'border-indigo-500/30',
-    isPremium: true
+    isPremium: false
   },
 ];
 
