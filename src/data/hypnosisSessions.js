@@ -1,4 +1,64 @@
 export const hypnosisSessions = {
+  pain: {
+    name: 'SOULAGER LA DOULEUR',
+    duration: 600, // 10 minutes
+    description: 'Soulager la Douleur par la Respiration',
+    breathingPattern: { inhale: 4, hold: 0, exhale: 6 },
+    frequency: '396hz', // Fréquence 396 Hz - Libération des tensions
+    phases: [
+      {
+        name: 'introduction',
+        startTime: 0,
+        endTime: 180, // 3 minutes
+        type: 'guided-breathing',
+        guidedBreathing: true,
+        gongEnabled: true
+      },
+      {
+        name: 'transition',
+        startTime: 180,
+        endTime: 300, // 5 minutes (2 min de transition)
+        type: 'deepening',
+        guidedBreathing: false,
+        gongEnabled: false
+      },
+      {
+        name: 'suggestions',
+        startTime: 300,
+        endTime: 540, // 9 minutes (4 min de suggestions)
+        type: 'suggestions',
+        guidedBreathing: false,
+        gongEnabled: false
+      },
+      {
+        name: 'cloture',
+        startTime: 540,
+        endTime: 600, // 10 minutes (1 min de clôture)
+        type: 'closure',
+        guidedBreathing: false,
+        gongEnabled: false
+      }
+    ],
+    guidance: {
+      start: "Bienvenue dans cette séance pour apaiser la douleur. Installez-vous dans une position confortable… et laissez votre souffle devenir votre allié…",
+      inhale: ["Inspirez doucement… 4… 3… 2… 1…", "Accueillez l'air apaisant… 4… 3… 2… 1…", "Respirez calmement… 4… 3… 2… 1…"],
+      exhale: ["Expirez lentement… 6… 5… 4… 3… 2… 1…", "Relâchez la tension… 6… 5… 4… 3… 2… 1…", "Libérez la douleur… 6… 5… 4… 3… 2… 1…"],
+      phases: [
+        // Phase 1: Introduction + Respiration guidée (0-3 min)
+        "À chaque souffle, votre corps se relâche un peu plus… et la zone douloureuse commence à s'apaiser… comme si un baume de calme s'y déposait… La respiration devient un massage… un soulagement qui s'amplifie… à chaque cycle… Continuez… respirez doucement… et laissez faire…",
+        
+        // Phase 2: Passage à la respiration libre + Approfondissement (3-5 min)
+        "Et maintenant… laissez votre respiration revenir à son propre rythme… naturellement… sans la contrôler… Votre souffle sait exactement quoi faire… Imaginez que la zone douloureuse est entourée d'une lumière chaude… douce… bienveillante… Cette lumière respire avec vous… À chaque inspiration, elle s'amplifie… À chaque expiration, elle dissout la tension… La douleur diminue… fond… comme neige au soleil… Vous êtes en sécurité… ici et maintenant…",
+        
+        // Phase 3: Suggestions thérapeutiques ciblées (5-9 min)
+        "Votre esprit est calme… votre corps est détendu… Et là où se trouvait la douleur… il y a maintenant un espace plus souple… plus léger… La zone affectée retrouve de la liberté… du mouvement… de la confiance… Vous êtes plus fort(e) que cette douleur… Votre corps sait s'auto-réguler… et il le fait en cet instant… Votre souffle devient un flux de guérison… qui circule librement… partout où c'est nécessaire… À chaque respiration… vous vous sentez mieux… plus aligné(e)… plus serein(e)…",
+        
+        // Phase 4: Clôture douce et ancrage (9-10 min)
+        "Gardez avec vous cette sensation de soulagement… Elle est disponible à tout moment… en vous… Respirez plus profondément maintenant… bougez légèrement vos doigts… vos épaules… votre nuque…"
+      ],
+      end: "Et quand vous vous sentirez prêt(e)… ouvrez les yeux… avec douceur… Vous êtes apaisé(e)… et prêt(e) à poursuivre votre journée… avec plus de confort et de clarté…"
+    }
+  },
   sieste: {
     name: 'SIESTE RELAXANTE',
     duration: 600, // 10 minutes

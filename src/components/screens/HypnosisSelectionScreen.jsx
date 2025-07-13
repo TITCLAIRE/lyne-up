@@ -4,6 +4,16 @@ import { useAppStore } from '../../store/appStore';
 
 const hypnosisSessions = [
   { 
+    id: 'pain', 
+    name: 'Soulager la Douleur', 
+    icon: Flame, 
+    duration: 10, 
+    desc: 'Libération des tensions et apaisement', 
+    color: 'from-red-500/20 to-orange-500/20',
+    borderColor: 'border-red-500/30',
+    isPremium: false
+  },
+  { 
     id: 'sieste', 
     name: 'Sieste Relaxante', 
     icon: Moon, 
@@ -22,16 +32,6 @@ const hypnosisSessions = [
     color: 'from-indigo-500/20 to-purple-500/20',
     borderColor: 'border-indigo-500/30',
     isPremium: false
-  },
-  { 
-    id: 'pain', 
-    name: 'Soulagement Douleur', 
-    icon: Flame, 
-    duration: 10, 
-    desc: 'Réduction de la douleur', 
-    color: 'from-red-500/20 to-orange-500/20',
-    borderColor: 'border-red-500/30',
-    isPremium: true
   },
   { 
     id: 'stress', 
