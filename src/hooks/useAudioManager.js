@@ -406,6 +406,10 @@ export const useAudioManager = () => {
     getDefaultFrequency,
     getCurrentFrequencyName: () => {
       const freq = getDefaultFrequency();
+      // Force l'affichage correct pour le mode hypnose sommeil
+      if (currentSession === 'sleep') {
+        return 'Ondes Delta (2Hz)';
+      }
       return frequencies[freq]?.name || 'Cohérence 0.1Hz';
     },
   };
