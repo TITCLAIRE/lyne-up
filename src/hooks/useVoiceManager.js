@@ -267,6 +267,7 @@ export const useVoiceManager = () => {
       speechSynthesis.cancel();
       isPlayingRef.current = true;
       
+      // Délai pour permettre au moteur de synthèse vocale de traiter l'annulation
       setTimeout(() => {
         // Forcer l'initialisation de la synthèse vocale
         if (speechSynthesis.getVoices().length === 0) {
@@ -279,7 +280,7 @@ export const useVoiceManager = () => {
         } else {
           setupAndSpeakUtterance();
         }
-      }, 300);
+      }, 350);
       
       function setupAndSpeakUtterance() {
         const utterance = new SpeechSynthesisUtterance(text);
@@ -314,10 +315,24 @@ export const useVoiceManager = () => {
         utterance.onerror = (event) => {
           isPlayingRef.current = false;
           console.error('❌ Erreur synthèse vocale:', event);
-          reject(new Error('Erreur synthèse vocale'));
+          
+          // Si l'erreur est "interrupted", on peut réessayer une fois
+          if (event.error === 'interrupted') {
+            console.log('🔄 Tentative de récupération après interruption...');
+            setTimeout(() => {
+              if (!isPlayingRef.current) {
+                speakWithSystemVoice(text).then(resolve).catch(reject);
+              }
+            }, 100);
+          } else {
+            reject(new Error(`Erreur synthèse vocale: ${event.error}`));
+          }
         };
 
-        speechSynthesis.speak(utterance);
+        // Ajouter un petit délai avant de parler pour éviter les conflits
+        setTimeout(() => {
+          speechSynthesis.speak(utterance);
+        }, 50);
       }
     });
   };
