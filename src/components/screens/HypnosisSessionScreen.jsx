@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { Play, Pause, Home, Headphones, Moon, Wind } from 'lucide-react';
 import { useAppStore } from '../../store/appStore';
 import { BreathingGuide } from '../BreathingGuide';
@@ -13,6 +13,10 @@ export const HypnosisSessionScreen = () => {
     currentSession, 
     isSessionActive, 
     setSessionActive, 
+    setCurrentScreen,
+    audioSettings,
+    voiceSettings
+  } = useAppStore();
   const { timeRemaining, progress, startTimer, stopTimer, resetTimer } = useSessionTimer(handleSessionComplete);
   const { breathingState, startBreathing, stopBreathing } = useBreathingAnimation();
   const { startAudio, stopAudio, playGong, getCurrentFrequencyName } = useAudioManager();
@@ -24,12 +28,6 @@ export const HypnosisSessionScreen = () => {
   const [isGongEnabled, setIsGongEnabled] = useState(true);
   const [isGuidedBreathing, setIsGuidedBreathing] = useState(true);
   const phaseTimeoutRef = useRef(null);
-
-  // Fonction de fin de session
-  const handleSessionComplete = useCallback(() => {
-    console.log('🏁 Session hypnose terminée, redirection vers les résultats');
-    setCurrentScreen('results');
-  }, [setCurrentScreen]);
 
   // Fonction de fin de session
   const handleSessionComplete = useCallback(() => {
@@ -56,7 +54,7 @@ export const HypnosisSessionScreen = () => {
       }
       setLastPhase(breathingState.phase);
     }
-  }, [breathingState.phase, isSessionActive, lastPhase, isGongEnabled, playGong]);
+  }, [breathingState.phase, isSessionActive, lastPhase, isGongEnabled, playGong, audioSettings.enabled]);
 
   // Gérer les phases de la session d'hypnose
   useEffect(() => {
