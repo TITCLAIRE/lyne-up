@@ -400,7 +400,7 @@
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   text-decoration: none;
   color: white;
-  min-height: 160px;
+  min-height: 170px;
   display: flex;
   flex-direction: column;
 }
