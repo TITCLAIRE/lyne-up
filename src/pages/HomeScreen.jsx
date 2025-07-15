@@ -3,6 +3,37 @@ import { Link } from 'react-router-dom';
 import { Heart, Target, Zap, Waves, Brain, Sparkles, Baby, RotateCcw, TrendingUp, Settings, Users, Wind, Moon, BookOpen, UserCircle } from 'lucide-react';
 import { useAppStore } from '../store/appStore';
 
+const presenceExercises = [
+  {
+    id: 'breathing',
+    title: 'Respiration Consciente',
+    description: 'Ancrez-vous dans le moment présent',
+    icon: Wind,
+    color: 'bg-gradient-to-r from-blue-500 to-cyan-500'
+  },
+  {
+    id: 'meditation',
+    title: 'Méditation Guidée',
+    description: 'Trouvez la paix intérieure',
+    icon: Moon,
+    color: 'bg-gradient-to-r from-purple-500 to-indigo-500'
+  },
+  {
+    id: 'mindfulness',
+    title: 'Pleine Conscience',
+    description: 'Observez sans juger',
+    icon: Brain,
+    color: 'bg-gradient-to-r from-green-500 to-emerald-500'
+  },
+  {
+    id: 'relaxation',
+    title: 'Relaxation Profonde',
+    description: 'Relâchez les tensions',
+    icon: Waves,
+    color: 'bg-gradient-to-r from-teal-500 to-blue-500'
+  }
+];
+
 export default function HomeScreen() {
   return (
     <div className="px-5 pb-5">
