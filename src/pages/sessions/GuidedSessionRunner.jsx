@@ -20,6 +20,9 @@ export default function GuidedSessionRunner() {
     isSessionActive, 
     setSessionActive, 
     currentMeditation,
+    audioSettings,
+    voiceSettings
+  } = useAppStore();
   const { timeRemaining, progress, startTimer, stopTimer, resetTimer } = useSessionTimer(handleSessionComplete);
   const { breathingState, startBreathing, stopBreathing } = useBreathingAnimation();
   const { startAudio, stopAudio, playGong, getCurrentFrequencyName } = useAudioManager();
