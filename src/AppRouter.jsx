@@ -73,9 +73,6 @@ export default function AppRouter() {
           {/* Résultats */}
           <Route path="results" element={<ResultsScreen />} />
         </Route>
-        
-        {/* Blog */}
-        <Route path="/blog" element={<BlogRedirect />} />
       </Routes>
     </BrowserRouter>
   );
