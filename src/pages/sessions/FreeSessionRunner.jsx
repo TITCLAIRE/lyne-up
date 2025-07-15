@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Play, Pause, Home, Headphones, Settings, Wind, Sparkles } from 'lucide-react';
 import { useAppStore } from '../../store/appStore';
@@ -14,6 +14,11 @@ export default function FreeSessionRunner() {
   const { 
     freeSessionSettings,
     isSessionActive, 
+    setSessionActive,
+    audioSettings,
+    voiceSettings
+  } = useAppStore();
+  
   const { timeRemaining, progress, startTimer, stopTimer, resetTimer } = useSessionTimer(handleSessionComplete);
   const { breathingState, startBreathing, stopBreathing } = useBreathingAnimation();
   const { startAudio, stopAudio, playGong, getCurrentFrequencyName } = useAudioManager();
@@ -22,12 +27,6 @@ export default function FreeSessionRunner() {
   const [lastPhase, setLastPhase] = useState(null);
   const [sessionEnding, setSessionEnding] = useState(false);
   const [voiceSystemStarted, setVoiceSystemStarted] = useState(false);
-
-  // Fonction de fin de session
-  const handleSessionComplete = useCallback(() => {
-    console.log('🏁 Session libre terminée, redirection vers les résultats');
-    navigate('/results');
-  }, [navigate]);
 
   // Fonction de fin de session
   const handleSessionComplete = useCallback(() => {
@@ -76,7 +75,7 @@ export default function FreeSessionRunner() {
       }
       setLastPhase(breathingState.phase);
     }
-  }, [breathingState.phase, isSessionActive, lastPhase, freeSessionSettings, playGong]);
+  }, [breathingState.phase, isSessionActive, lastPhase, freeSessionSettings, playGong, audioSettings.enabled]);
 
   // Gérer la fin de session
   useEffect(() => {
