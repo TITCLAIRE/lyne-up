@@ -10,6 +10,8 @@ import { useVoiceManager } from '../../hooks/useVoiceManager';
 import { sessions, getBreathingPattern } from '../../data/sessions';
 import { meditations } from '../../data/meditations';
 
+import { useCallback } from 'react';
+
 export default function GuidedSessionRunner() {
   const { sessionId } = useParams();
   const navigate = useNavigate();
@@ -23,6 +25,13 @@ export default function GuidedSessionRunner() {
     audioSettings,
     voiceSettings
   } = useAppStore();
+
+  // Fonction de fin de session - DOIT être définie AVANT useSessionTimer
+  const handleSessionComplete = useCallback(() => {
+    console.log('🏁 Session terminée, redirection vers les résultats');
+    navigate('/results');
+  }, [navigate]);
+
   const { timeRemaining, progress, startTimer, stopTimer, resetTimer } = useSessionTimer(handleSessionComplete);
   const { breathingState, startBreathing, stopBreathing } = useBreathingAnimation();
   const { startAudio, stopAudio, playGong, getCurrentFrequencyName } = useAudioManager();
@@ -36,11 +45,6 @@ export default function GuidedSessionRunner() {
   const [currentProgressivePhase, setCurrentProgressivePhase] = useState(0);
   const [progressivePhaseChanged, setProgressivePhaseChanged] = useState(false);
   const [lastProgressiveCheck, setLastProgressiveCheck] = useState(0);
-
-  const handleSessionComplete = useCallback(() => {
-    console.log('🏁 Session terminée, redirection vers les résultats');
-    navigate('/results');
-  }, [navigate]);
 
   // Initialiser la session en fonction du paramètre d'URL
   useEffect(() => {

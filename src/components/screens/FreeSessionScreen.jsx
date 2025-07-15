@@ -7,6 +7,8 @@ import { useBreathingAnimation } from '../../hooks/useBreathingAnimation';
 import { useAudioManager } from '../../hooks/useAudioManager';
 import { useVoiceManager } from '../../hooks/useVoiceManager';
 
+import { useCallback } from 'react';
+
 export const FreeSessionScreen = () => {
   const { 
     freeSessionSettings,
@@ -16,6 +18,13 @@ export const FreeSessionScreen = () => {
     audioSettings,
     voiceSettings
   } = useAppStore();
+
+  // Fonction de fin de session - DOIT être définie AVANT useSessionTimer
+  const handleSessionComplete = useCallback(() => {
+    console.log('🏁 Session libre terminée, redirection vers les résultats');
+    setCurrentScreen('results');
+  }, [setCurrentScreen]);
+
   const { timeRemaining, progress, startTimer, stopTimer, resetTimer } = useSessionTimer(handleSessionComplete);
   const { breathingState, startBreathing, stopBreathing } = useBreathingAnimation();
   const { startAudio, stopAudio, playGong, getCurrentFrequencyName } = useAudioManager();
@@ -24,18 +33,6 @@ export const FreeSessionScreen = () => {
   const [lastPhase, setLastPhase] = useState(null);
   const [sessionEnding, setSessionEnding] = useState(false);
   const [voiceSystemStarted, setVoiceSystemStarted] = useState(false);
-
-  // Fonction de fin de session
-  const handleSessionComplete = useCallback(() => {
-    console.log('🏁 Session libre terminée, redirection vers les résultats');
-    setCurrentScreen('results');
-  }, [setCurrentScreen]);
-
-  // Fonction de fin de session
-  const handleSessionComplete = useCallback(() => {
-    console.log('🏁 Session libre terminée, redirection vers les résultats');
-    setCurrentScreen('results');
-  }, [setCurrentScreen]);
 
   // Créer le pattern respiratoire à partir des paramètres de session libre
   const createFreeSessionPattern = () => {

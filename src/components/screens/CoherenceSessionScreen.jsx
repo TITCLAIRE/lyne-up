@@ -8,6 +8,8 @@ import { useAudioManager } from '../../hooks/useAudioManager';
 import { useVoiceManager } from '../../hooks/useVoiceManager';
 import { getBreathingPattern } from '../../data/sessions';
 
+import { useCallback } from 'react';
+
 export const CoherenceSessionScreen = () => {
   const { 
     coherenceSettings,
@@ -21,19 +23,7 @@ export const CoherenceSessionScreen = () => {
     completeTrialSession
   } = useAppStore();
   
-  const { timeRemaining, progress, startTimer, stopTimer, resetTimer } = useSessionTimer();
-  const { breathingState, startBreathing, stopBreathing } = useBreathingAnimation();
-  const { startAudio, stopAudio, playGong, getCurrentFrequencyName } = useAudioManager();
-  const { speak, stop: stopVoice, startSessionGuidance } = useVoiceManager();
-
-  const [lastPhase, setLastPhase] = useState(null);
-  const [sessionEnding, setSessionEnding] = useState(false);
-  const [voiceSystemStarted, setVoiceSystemStarted] = useState(false);
-
-  // Utiliser les paramètres appropriés selon le mode
-  const currentSettings = isTrialMode ? trialCoherenceSettings : coherenceSettings;
-
-  // Fonction de fin de session
+  // Fonction de fin de session - DOIT être définie AVANT useSessionTimer
   const handleSessionComplete = useCallback(() => {
     console.log('🏁 Session cohérence terminée, redirection vers les résultats');
     if (isTrialMode) {
@@ -42,6 +32,15 @@ export const CoherenceSessionScreen = () => {
       setCurrentScreen('results');
     }
   }, [setCurrentScreen, isTrialMode]);
+
+  const { timeRemaining, progress, startTimer, stopTimer, resetTimer } = useSessionTimer();
+  const { breathingState, startBreathing, stopBreathing } = useBreathingAnimation();
+  const { startAudio, stopAudio, playGong, getCurrentFrequencyName } = useAudioManager();
+  const { speak, stop: stopVoice, startSessionGuidance } = useVoiceManager();
+
+  const [lastPhase, setLastPhase] = useState(null);
+  const [sessionEnding, setSessionEnding] = useState(false);
+  const [voiceSystemStarted, setVoiceSystemStarted] = useState(false);
 
   // Obtenir le pattern respiratoire pour la cohérence cardiaque
   const getCoherenceBreathingPattern = () => {
