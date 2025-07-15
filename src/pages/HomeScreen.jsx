@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Heart, BookOpen, UserCircle } from 'lucide-react';
+import { Heart, BookOpen, UserCircle, Sparkles } from 'lucide-react';
 import { useAppStore } from '../store/appStore';
 
 export default function HomeScreen() {
