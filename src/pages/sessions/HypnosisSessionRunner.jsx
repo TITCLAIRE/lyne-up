@@ -15,7 +15,12 @@ export default function HypnosisSessionRunner() {
   
   const { 
     setCurrentSession,
-    isSessionActive, 
+    isSessionActive,
+    setSessionActive,
+    audioSettings,
+    voiceSettings
+  } = useAppStore();
+  
   const { timeRemaining, progress, startTimer, stopTimer, resetTimer } = useSessionTimer(handleSessionComplete);
   const { breathingState, startBreathing, stopBreathing } = useBreathingAnimation();
   const { startAudio, stopAudio, playGong, getCurrentFrequencyName } = useAudioManager();
@@ -27,12 +32,6 @@ export default function HypnosisSessionRunner() {
   const [isGongEnabled, setIsGongEnabled] = useState(true);
   const [isGuidedBreathing, setIsGuidedBreathing] = useState(true);
   const phaseTimeoutRef = useRef(null);
-
-  // Fonction de fin de session
-  const handleSessionComplete = useCallback(() => {
-    console.log('🏁 Session hypnose terminée, redirection vers les résultats');
-    navigate('/results');
-  }, [navigate]);
 
   // Fonction de fin de session
   const handleSessionComplete = useCallback(() => {
@@ -66,7 +65,7 @@ export default function HypnosisSessionRunner() {
       }
       setLastPhase(breathingState.phase);
     }
-  }, [breathingState.phase, isSessionActive, lastPhase, isGongEnabled, playGong]);
+  }, [breathingState.phase, isSessionActive, lastPhase, isGongEnabled, playGong, audioSettings.enabled]);
 
   // Gérer les phases de la session d'hypnose
   useEffect(() => {
