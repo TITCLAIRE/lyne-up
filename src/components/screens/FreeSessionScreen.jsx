@@ -12,11 +12,6 @@ export const FreeSessionScreen = () => {
     freeSessionSettings,
     isSessionActive, 
     setSessionActive, 
-    setCurrentScreen,
-    audioSettings,
-    voiceSettings
-  } = useAppStore();
-  
   const { timeRemaining, progress, startTimer, stopTimer, resetTimer } = useSessionTimer(handleSessionComplete);
   const { breathingState, startBreathing, stopBreathing } = useBreathingAnimation();
   const { startAudio, stopAudio, playGong, getCurrentFrequencyName } = useAudioManager();
@@ -25,6 +20,12 @@ export const FreeSessionScreen = () => {
   const [lastPhase, setLastPhase] = useState(null);
   const [sessionEnding, setSessionEnding] = useState(false);
   const [voiceSystemStarted, setVoiceSystemStarted] = useState(false);
+
+  // Fonction de fin de session
+  const handleSessionComplete = useCallback(() => {
+    console.log('🏁 Session libre terminée, redirection vers les résultats');
+    setCurrentScreen('results');
+  }, [setCurrentScreen]);
 
   // Fonction de fin de session
   const handleSessionComplete = useCallback(() => {
