@@ -46,7 +46,6 @@ export default function CoherenceSessionRunner() {
     return pattern;
   };
 
-  const { timeRemaining, progress, startTimer, stopTimer, resetTimer } = useSessionTimer(handleSessionComplete);
   useEffect(() => {
     if (isSessionActive && breathingState.phase !== 'idle' && breathingState.phase !== lastPhase) {
       if (lastPhase !== null && currentSettings.gongEnabled && !currentSettings.silentMode) {
