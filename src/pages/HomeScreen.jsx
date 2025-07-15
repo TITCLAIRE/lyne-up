@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Heart, BookOpen, UserCircle, Sparkles } from 'lucide-react';
+import { Heart, BookOpen } from 'lucide-react';
 import { useAppStore } from '../store/appStore';
 
 export default function HomeScreen() {
@@ -41,26 +41,6 @@ export default function HomeScreen() {
             <span className="text-white/70">Lire, voir, écouter, tester</span>
           </div>
         </Link>
-      </div>
-
-      {/* Blog Card */}
-      <div className="mt-6">
-        <a 
-          href="https://www.thierrythomas.com/" 
-          target="_blank" 
-          rel="noopener noreferrer"
-          className="bg-white/8 border border-white/15 rounded-2xl p-4 block hover:bg-white/12 transition-all duration-200 hover:scale-[1.02]"
-        >
-          <div className="flex items-center gap-4">
-            <div className="w-10 h-10 bg-gradient-to-r from-green-500 to-emerald-500 rounded-xl flex items-center justify-center">
-              <BookOpen size={20} className="text-white" />
-            </div>
-            <div>
-              <h3 className="font-medium text-sm mb-1">LE BLOG</h3>
-              <p className="text-xs text-white/60">Articles, vidéos et inspirations</p>
-            </div>
-          </div>
-        </a>
       </div>
     </div>
   );
