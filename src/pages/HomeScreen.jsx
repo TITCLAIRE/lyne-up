@@ -5,8 +5,8 @@ import { useAppStore } from '../store/appStore';
 
 export default function HomeScreen() {
   return (
-    <div className="px-5 pb-5 h-full">
-      <div className="grid grid-cols-2 gap-4 grid-rows-2">
+    <div className="px-5 pb-5">
+      <div className="grid grid-cols-2 gap-4 auto-rows-fr">
         <Link to="/intro/libre" className="home-card bg-gradient-to-r from-pink-500/20 to-purple-500/20 border-2 border-pink-500/30">
           <div className="flex flex-col items-center justify-center h-full p-6 text-center">
             <Heart size={32} className="mb-4 text-pink-400" />
@@ -26,7 +26,7 @@ export default function HomeScreen() {
         <Link to="/intro/voyage" className="home-card bg-gradient-to-r from-purple-500/20 to-indigo-500/20 border-2 border-purple-500/30">
           <div className="flex flex-col items-center justify-center h-full p-6 text-center">
             <Heart size={32} className="mb-4 text-purple-400" />
-            <h2 className="text-lg font-bold mb-1">Méditation & Auto-hypnose Guidée</h2>
+            <h2 className="text-lg font-bold mb-1">Méditation & Auto-hypnose</h2>
             <span className="text-white/70 text-xs">Voyage intérieur</span>
           </div>
         </Link>
