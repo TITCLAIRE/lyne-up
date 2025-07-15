@@ -4,7 +4,7 @@ import { BookOpen } from 'lucide-react'; // Import BookOpen icon
 export default function IntroBlog() {
   useEffect(() => {
     setTimeout(() => {
-      window.location.href = "https://tonlien.systeme.io";
+      window.location.href = "https://www.thierrythomas.com/";
     }, 2000); // Redirection après 2 secondes
   }, []);
 

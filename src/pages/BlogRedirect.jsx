@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 
 export default function BlogRedirect() {
   useEffect(() => {
-    window.location.href = 'https://tonlien.systeme.io';
+    window.location.href = 'https://www.thierrythomas.com/';
   }, []);
 
   return (
