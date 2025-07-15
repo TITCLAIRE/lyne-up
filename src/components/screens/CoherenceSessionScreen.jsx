@@ -27,11 +27,21 @@ export const CoherenceSessionScreen = () => {
   const { speak, stop: stopVoice, startSessionGuidance } = useVoiceManager();
 
   const [lastPhase, setLastPhase] = useState(null);
-  const [sessionEnded, setSessionEnded] = useState(false);
+  const [sessionEnding, setSessionEnding] = useState(false);
   const [voiceSystemStarted, setVoiceSystemStarted] = useState(false);
 
   // Utiliser les paramètres appropriés selon le mode
   const currentSettings = isTrialMode ? trialCoherenceSettings : coherenceSettings;
+
+  // Fonction de fin de session
+  const handleSessionComplete = useCallback(() => {
+    console.log('🏁 Session cohérence terminée, redirection vers les résultats');
+    if (isTrialMode) {
+      setCurrentScreen('trialResults');
+    } else {
+      setCurrentScreen('results');
+    }
+  }, [setCurrentScreen, isTrialMode]);
 
   // Obtenir le pattern respiratoire pour la cohérence cardiaque
   const getCoherenceBreathingPattern = () => {
@@ -39,7 +49,7 @@ export const CoherenceSessionScreen = () => {
     return pattern;
   };
 
-  // Gérer les changements de phase pour le gong
+  const { timeRemaining, progress, startTimer, stopTimer, resetTimer } = useSessionTimer(handleSessionComplete);
   useEffect(() => {
     if (isSessionActive && breathingState.phase !== 'idle' && breathingState.phase !== lastPhase) {
       if (lastPhase !== null && currentSettings.gongEnabled && !currentSettings.silentMode && audioSettings.enabled) {
@@ -51,9 +61,9 @@ export const CoherenceSessionScreen = () => {
 
   // Gérer la fin de session
   useEffect(() => {
-    if (timeRemaining === 0 && isSessionActive && !sessionEnded) {
+    if (timeRemaining === 0 && isSessionActive && !sessionEnding) {
       console.log('🏁 Session cohérence cardiaque terminée - Mode essai:', isTrialMode);
-      setSessionEnded(true);
+      setSessionEnding(true);
       
       // Message de fin
       if (!currentSettings.silentMode) {
@@ -67,25 +77,15 @@ export const CoherenceSessionScreen = () => {
       stopAudio();
       stopBreathing();
       stopVoice();
-      
-      // Redirection selon le mode
-      setTimeout(() => {
-        if (isTrialMode) {
-          console.log('🎯 Fin de session d\'essai - Redirection vers résultats d\'essai');
-          setCurrentScreen('results'); // TrialResultsScreen sera affiché automatiquement
-        } else {
-          setCurrentScreen('results');
-        }
-      }, 3000);
     }
-  }, [timeRemaining, isSessionActive, sessionEnded, setCurrentScreen, currentSettings.silentMode, speak, stopAudio, stopBreathing, stopVoice, isTrialMode]);
+  }, [timeRemaining, isSessionActive, sessionEnding, currentSettings.silentMode, speak, stopAudio, stopBreathing, stopVoice, isTrialMode]);
 
   const handleToggleSession = () => {
     if (!isSessionActive) {
       const breathingPattern = getCoherenceBreathingPattern();
       
       setSessionActive(true);
-      setSessionEnded(false);
+      setSessionEnding(false);
       setVoiceSystemStarted(false);
       
       // Utiliser la fréquence sélectionnée manuellement ou par défaut
@@ -119,7 +119,7 @@ export const CoherenceSessionScreen = () => {
       stopAudio();
       stopVoice();
       setLastPhase(null);
-      setSessionEnded(false);
+      setSessionEnding(false);
       setVoiceSystemStarted(false);
     }
   };
@@ -132,7 +132,7 @@ export const CoherenceSessionScreen = () => {
     stopVoice();
     resetTimer();
     setLastPhase(null);
-    setSessionEnded(false);
+    setSessionEnding(false);
     setVoiceSystemStarted(false);
     
     if (isTrialMode) {
@@ -244,16 +244,16 @@ export const CoherenceSessionScreen = () => {
       <div className="flex gap-3 justify-center">
         <button
           onClick={handleToggleSession}
-          disabled={sessionEnded}
+          disabled={sessionEnding}
           className={`flex-1 py-4 px-6 rounded-2xl font-semibold flex items-center justify-center gap-2 transition-all duration-200 ${
-            sessionEnded 
+            sessionEnding 
               ? 'bg-white/10 text-white/50 cursor-not-allowed'
               : isTrialMode
                 ? 'bg-gradient-to-r from-green-500 to-emerald-500 text-white hover:from-green-600 hover:to-emerald-600'
                 : 'bg-gradient-to-r from-blue-500 to-cyan-500 text-white hover:from-blue-600 hover:to-cyan-600'
           }`}
         >
-          {sessionEnded ? (
+          {sessionEnding ? (
             <>Session terminée</>
           ) : (
             <>

@@ -21,17 +21,23 @@ export default function HypnosisSessionRunner() {
     voiceSettings
   } = useAppStore();
   
-  const { timeRemaining, progress, startTimer, stopTimer, resetTimer } = useSessionTimer();
+  const { timeRemaining, progress, startTimer, stopTimer, resetTimer } = useSessionTimer(handleSessionComplete);
   const { breathingState, startBreathing, stopBreathing } = useBreathingAnimation();
   const { startAudio, stopAudio, playGong, getCurrentFrequencyName } = useAudioManager();
   const { speak, stop: stopVoice } = useVoiceManager();
 
   const [lastPhase, setLastPhase] = useState(null);
-  const [sessionEnded, setSessionEnded] = useState(false);
+  const [sessionEnding, setSessionEnding] = useState(false);
   const [currentPhase, setCurrentPhase] = useState(0);
   const [isGongEnabled, setIsGongEnabled] = useState(true);
   const [isGuidedBreathing, setIsGuidedBreathing] = useState(true);
   const phaseTimeoutRef = useRef(null);
+
+  // Fonction de fin de session
+  const handleSessionComplete = useCallback(() => {
+    console.log('🏁 Session hypnose terminée, redirection vers les résultats');
+    navigate('/results');
+  }, [navigate]);
 
   // Initialiser la session en fonction du paramètre d'URL
   useEffect(() => {
@@ -103,9 +109,9 @@ export default function HypnosisSessionRunner() {
 
   // Gérer la fin de session
   useEffect(() => {
-    if (timeRemaining === 0 && isSessionActive && !sessionEnded) {
+    if (timeRemaining === 0 && isSessionActive && !sessionEnding) {
       console.log('Session d\'hypnose terminée:', sessionId);
-      setSessionEnded(true);
+      setSessionEnding(true);
       
       // Message de fin
       if (voiceSettings.enabled && hypnosisSession) {
@@ -116,12 +122,8 @@ export default function HypnosisSessionRunner() {
       stopAudio();
       stopBreathing();
       stopVoice();
-      
-      setTimeout(() => {
-        navigate('/results');
-      }, 3000);
     }
-  }, [timeRemaining, isSessionActive, sessionEnded, navigate, sessionId, hypnosisSession, speak, stopAudio, stopBreathing, stopVoice, voiceSettings.enabled]);
+  }, [timeRemaining, isSessionActive, sessionEnding, sessionId, hypnosisSession, speak, stopAudio, stopBreathing, stopVoice, voiceSettings.enabled]);
 
   const handleToggleSession = () => {
     if (!isSessionActive) {
@@ -134,7 +136,7 @@ export default function HypnosisSessionRunner() {
       const frequency = getHypnosisFrequency(sessionId);
       
       setSessionActive(true);
-      setSessionEnded(false);
+      setSessionEnding(false);
       setCurrentPhase(0);
       setIsGongEnabled(true);
       setIsGuidedBreathing(true);
@@ -174,7 +176,7 @@ export default function HypnosisSessionRunner() {
       stopVoice();
       
       setLastPhase(null);
-      setSessionEnded(false);
+      setSessionEnding(false);
       setCurrentPhase(0);
       setIsGongEnabled(true);
       setIsGuidedBreathing(true);
@@ -195,7 +197,7 @@ export default function HypnosisSessionRunner() {
     
     resetTimer();
     setLastPhase(null);
-    setSessionEnded(false);
+    setSessionEnding(false);
     setCurrentPhase(0);
     setIsGongEnabled(true);
     setIsGuidedBreathing(true);
@@ -364,14 +366,14 @@ export default function HypnosisSessionRunner() {
       <div className="flex gap-3 justify-center mt-8">
         <button
           onClick={handleToggleSession}
-          disabled={sessionEnded}
+          disabled={sessionEnding}
           className={`flex-1 py-4 px-6 rounded-2xl font-semibold flex items-center justify-center gap-2 transition-all duration-200 ${
-            sessionEnded 
+            sessionEnding 
               ? 'bg-white/10 text-white/50 cursor-not-allowed'
               : 'bg-gradient-to-r from-indigo-500 to-purple-500 text-white hover:from-indigo-600 hover:to-purple-600'
           }`}
         >
-          {sessionEnded ? (
+          {sessionEnding ? (
             <>Session terminée</>
           ) : (
             <>

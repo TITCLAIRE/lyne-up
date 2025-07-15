@@ -17,14 +17,20 @@ export const FreeSessionScreen = () => {
     voiceSettings
   } = useAppStore();
   
-  const { timeRemaining, progress, startTimer, stopTimer, resetTimer } = useSessionTimer();
+  const { timeRemaining, progress, startTimer, stopTimer, resetTimer } = useSessionTimer(handleSessionComplete);
   const { breathingState, startBreathing, stopBreathing } = useBreathingAnimation();
   const { startAudio, stopAudio, playGong, getCurrentFrequencyName } = useAudioManager();
   const { speak, stop: stopVoice } = useVoiceManager();
 
   const [lastPhase, setLastPhase] = useState(null);
-  const [sessionEnded, setSessionEnded] = useState(false);
+  const [sessionEnding, setSessionEnding] = useState(false);
   const [voiceSystemStarted, setVoiceSystemStarted] = useState(false);
+
+  // Fonction de fin de session
+  const handleSessionComplete = useCallback(() => {
+    console.log('🏁 Session libre terminée, redirection vers les résultats');
+    setCurrentScreen('results');
+  }, [setCurrentScreen]);
 
   // Créer le pattern respiratoire à partir des paramètres de session libre
   const createFreeSessionPattern = () => {
@@ -71,9 +77,9 @@ export const FreeSessionScreen = () => {
 
   // Gérer la fin de session
   useEffect(() => {
-    if (timeRemaining === 0 && isSessionActive && !sessionEnded) {
+    if (timeRemaining === 0 && isSessionActive && !sessionEnding) {
       console.log('Session libre terminée');
-      setSessionEnded(true);
+      setSessionEnding(true);
       
       // Message de fin pour session libre
       if (!freeSessionSettings.silentMode) {
@@ -84,13 +90,8 @@ export const FreeSessionScreen = () => {
       stopAudio();
       stopBreathing();
       stopVoice();
-      
-      // Redirection automatique vers les résultats
-      setTimeout(() => {
-        setCurrentScreen('results');
-      }, 3000);
     }
-  }, [timeRemaining, isSessionActive, sessionEnded, setCurrentScreen, freeSessionSettings.silentMode, speak, stopAudio, stopBreathing, stopVoice]);
+  }, [timeRemaining, isSessionActive, sessionEnding, freeSessionSettings.silentMode, speak, stopAudio, stopBreathing, stopVoice]);
 
   // DÉMARRAGE VOCAL AUTOMATIQUE - SYSTÈME SIMPLE POUR SESSION LIBRE
   useEffect(() => {
@@ -114,7 +115,7 @@ export const FreeSessionScreen = () => {
       console.log('Paramètres:', freeSessionSettings);
       
       setSessionActive(true);
-      setSessionEnded(false);
+      setSessionEnding(false);
       setVoiceSystemStarted(false);
       
       // Démarrer l'audio avec la fréquence sélectionnée - CORRECTION IMPORTANTE
@@ -143,7 +144,7 @@ export const FreeSessionScreen = () => {
       stopAudio();
       stopVoice();
       setLastPhase(null);
-      setSessionEnded(false);
+      setSessionEnding(false);
       setVoiceSystemStarted(false);
     }
   };
@@ -157,7 +158,7 @@ export const FreeSessionScreen = () => {
     stopVoice();
     resetTimer();
     setLastPhase(null);
-    setSessionEnded(false);
+    setSessionEnding(false);
     setVoiceSystemStarted(false);
     setCurrentScreen('home');
   };
@@ -263,14 +264,14 @@ export const FreeSessionScreen = () => {
       <div className="flex gap-3 justify-center mt-8">
         <button
           onClick={handleToggleSession}
-          disabled={sessionEnded}
+          disabled={sessionEnding}
           className={`flex-1 py-4 px-6 rounded-2xl font-semibold flex items-center justify-center gap-2 transition-all duration-200 ${
-            sessionEnded 
+            sessionEnding 
               ? 'bg-white/10 text-white/50 cursor-not-allowed'
               : 'bg-gradient-to-r from-green-500 to-emerald-500 text-white hover:from-green-600 hover:to-emerald-600'
           }`}
         >
-          {sessionEnded ? (
+          {sessionEnding ? (
             <>Session terminée</>
           ) : (
             <>

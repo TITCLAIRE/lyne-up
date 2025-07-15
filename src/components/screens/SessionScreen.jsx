@@ -21,19 +21,25 @@ export const SessionScreen = () => {
     coherenceSettings
   } = useAppStore();
   
-  const { timeRemaining, progress, startTimer, stopTimer, resetTimer } = useSessionTimer();
+  const { timeRemaining, progress, startTimer, stopTimer, resetTimer } = useSessionTimer(handleSessionComplete);
   const { breathingState, startBreathing, stopBreathing } = useBreathingAnimation();
   const { startAudio, stopAudio, playGong, getCurrentFrequencyName } = useAudioManager();
   const { speak, stop: stopVoice, startSessionGuidance } = useVoiceManager();
 
   const [lastPhase, setLastPhase] = useState(null);
-  const [sessionEnded, setSessionEnded] = useState(false);
+  const [sessionEnding, setSessionEnding] = useState(false);
   const [voiceSystemStarted, setVoiceSystemStarted] = useState(false);
 
   // État pour l'entraînement progressif
   const [currentProgressivePhase, setCurrentProgressivePhase] = useState(0);
   const [progressivePhaseChanged, setProgressivePhaseChanged] = useState(false);
   const [lastProgressiveCheck, setLastProgressiveCheck] = useState(0);
+
+  // Fonction de fin de session
+  const handleSessionComplete = useCallback(() => {
+    console.log('🏁 Session terminée, redirection vers les résultats');
+    setCurrentScreen('results');
+  }, [setCurrentScreen]);
 
   // Obtenir les données de session selon le type
   const getSessionData = () => {
@@ -146,9 +152,9 @@ export const SessionScreen = () => {
 
   // Gérer la fin de session
   useEffect(() => {
-    if (timeRemaining === 0 && isSessionActive && !sessionEnded) {
+    if (timeRemaining === 0 && isSessionActive && !sessionEnding) {
       console.log('Session terminée:', currentSession);
-      setSessionEnded(true);
+      setSessionEnding(true);
       
       // Message de fin adapté aux différentes sessions
       if (currentSession === 'kids') {
@@ -167,12 +173,8 @@ export const SessionScreen = () => {
       stopAudio();
       stopBreathing();
       stopVoice();
-      
-      setTimeout(() => {
-        setCurrentScreen('results');
-      }, 3000);
     }
-  }, [timeRemaining, isSessionActive, sessionEnded, setCurrentScreen, currentSession, speak, stopAudio, stopBreathing, stopVoice]);
+  }, [timeRemaining, isSessionActive, sessionEnding, currentSession, speak, stopAudio, stopBreathing, stopVoice]);
 
   // Démarrage vocal automatique
   useEffect(() => {
@@ -191,7 +193,7 @@ export const SessionScreen = () => {
       const breathingPattern = getCurrentBreathingPattern();
       
       setSessionActive(true);
-      setSessionEnded(false);
+      setSessionEnding(false);
       setVoiceSystemStarted(false);
       
       // Reset pour l'entraînement progressif
@@ -225,7 +227,7 @@ export const SessionScreen = () => {
       stopVoice();
       
       setLastPhase(null);
-      setSessionEnded(false);
+      setSessionEnding(false);
       setVoiceSystemStarted(false);
       
       // Reset pour l'entraînement progressif
@@ -246,7 +248,7 @@ export const SessionScreen = () => {
     
     resetTimer();
     setLastPhase(null);
-    setSessionEnded(false);
+    setSessionEnding(false);
     setVoiceSystemStarted(false);
     
     // Reset pour l'entraînement progressif
@@ -443,9 +445,9 @@ export const SessionScreen = () => {
       <div className="flex gap-3 justify-center mt-8">
         <button
           onClick={handleToggleSession}
-          disabled={sessionEnded}
+          disabled={sessionEnding}
           className={`flex-1 py-4 px-6 rounded-2xl font-semibold flex items-center justify-center gap-2 transition-all duration-200 ${
-            sessionEnded 
+            sessionEnding 
               ? 'bg-white/10 text-white/50 cursor-not-allowed'
               : currentSession === 'kids'
                 ? 'bg-gradient-to-r from-pink-500 to-purple-500 text-white hover:from-pink-600 hover:to-purple-600'
@@ -458,7 +460,7 @@ export const SessionScreen = () => {
                 : 'bg-gradient-to-r from-blue-500 to-cyan-500 text-white hover:from-blue-600 hover:to-cyan-600'
           }`}
         >
-          {sessionEnded ? (
+          {sessionEnding ? (
             <>Session terminée</>
           ) : (
             <>

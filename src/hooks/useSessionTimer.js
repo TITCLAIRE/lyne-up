@@ -1,7 +1,7 @@
 import { useState, useRef, useCallback } from 'react';
 import { useAppStore } from '../store/appStore';
 
-export const useSessionTimer = () => {
+export const useSessionTimer = (onComplete) => {
   const [timeRemaining, setTimeRemaining] = useState(0);
   const [totalDuration, setTotalDuration] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
@@ -27,7 +27,12 @@ export const useSessionTimer = () => {
           }
           
           setTimeout(() => {
-            setCurrentScreen('results');
+            // Utiliser le callback si fourni, sinon rediriger vers les résultats
+            if (typeof onComplete === 'function') {
+              onComplete();
+            } else {
+              setCurrentScreen('results');
+            }
           }, 2000);
           
           return 0;
