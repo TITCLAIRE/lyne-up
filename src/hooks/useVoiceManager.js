@@ -264,6 +264,12 @@ export const useVoiceManager = () => {
         return;
       }
 
+      // Annuler toute synthèse vocale en cours pour éviter l'erreur "interrupted"
+      if (window.speechSynthesis.speaking || window.speechSynthesis.pending) {
+        console.log('🔄 Annulation de la synthèse vocale en cours avant de parler');
+        window.speechSynthesis.cancel();
+      }
+
       speechSynthesis.cancel();
       isPlayingRef.current = true;
       
@@ -315,6 +321,11 @@ export const useVoiceManager = () => {
         utterance.onerror = (event) => {
           isPlayingRef.current = false;
           console.error('❌ Erreur synthèse vocale:', event);
+          
+          // Nettoyage en cas d'erreur
+          if (window.speechSynthesis.speaking) {
+            window.speechSynthesis.cancel();
+          }
           
           // Si l'erreur est "interrupted", on peut réessayer une fois
           if (event.error === 'interrupted') {
