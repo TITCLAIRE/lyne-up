@@ -37,13 +37,6 @@ export default function GuidedSessionRunner() {
   const [progressivePhaseChanged, setProgressivePhaseChanged] = useState(false);
   const [lastProgressiveCheck, setLastProgressiveCheck] = useState(0);
 
-  // Fonction de fin de session
-  const handleSessionComplete = useCallback(() => {
-    console.log('🏁 Session terminée, redirection vers les résultats');
-    navigate('/results');
-  }, [navigate]);
-
-  // Fonction de fin de session
   const handleSessionComplete = useCallback(() => {
     console.log('🏁 Session terminée, redirection vers les résultats');
     navigate('/results');
