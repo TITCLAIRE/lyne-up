@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Heart, Target, Zap, Waves, Brain, Sparkles, Baby, RotateCcw, TrendingUp, Settings, Users, Wind, Moon, BookOpen } from 'lucide-react';
+import { Heart, Target, Zap, Waves, Brain, Sparkles, Baby, RotateCcw, TrendingUp, Settings, Users, Wind, Moon, BookOpen, UserCircle } from 'lucide-react';
 import { useAppStore } from '../store/appStore';
 
 export default function HomeScreen() {
