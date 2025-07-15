@@ -1,38 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Heart, Target, Zap, Waves, Brain, Sparkles, Baby, RotateCcw, TrendingUp, Settings, Users, Wind, Moon, BookOpen, UserCircle } from 'lucide-react';
+import { Heart, BookOpen, UserCircle } from 'lucide-react';
 import { useAppStore } from '../store/appStore';
-
-const presenceExercises = [
-  {
-    id: 'breathing',
-    title: 'Respiration Consciente',
-    description: 'Ancrez-vous dans le moment présent',
-    icon: Wind,
-    color: 'bg-gradient-to-r from-blue-500 to-cyan-500'
-  },
-  {
-    id: 'meditation',
-    title: 'Méditation Guidée',
-    description: 'Trouvez la paix intérieure',
-    icon: Moon,
-    color: 'bg-gradient-to-r from-purple-500 to-indigo-500'
-  },
-  {
-    id: 'mindfulness',
-    title: 'Pleine Conscience',
-    description: 'Observez sans juger',
-    icon: Brain,
-    color: 'bg-gradient-to-r from-green-500 to-emerald-500'
-  },
-  {
-    id: 'relaxation',
-    title: 'Relaxation Profonde',
-    description: 'Relâchez les tensions',
-    icon: Waves,
-    color: 'bg-gradient-to-r from-teal-500 to-blue-500'
-  }
-];
 
 export default function HomeScreen() {
   return (
@@ -74,54 +43,24 @@ export default function HomeScreen() {
         </Link>
       </div>
 
-      {/* Section Présence et Blog */}
-      <div className="mb-6">
-        <div className="flex items-baseline gap-3 mb-4">
-          <h2 className="text-lg font-semibold flex items-center gap-2">
-            <Sparkles size={20} className="text-purple-400" />
-            Présence
-          </h2>
-        </div>
-        <div className="grid grid-cols-2 gap-3">
-          {presenceExercises.map((exercise) => {
-            const Icon = exercise.icon;
-            return (
-              <Link
-                key={exercise.id}
-                to={`/exercise/${exercise.id}`}
-                className="bg-white/8 border border-white/15 rounded-2xl p-4 hover:bg-white/12 transition-all duration-200 hover:scale-[1.02]"
-              >
-                <div className="flex flex-col items-center text-center">
-                  <div className={`w-10 h-10 ${exercise.color} rounded-xl flex items-center justify-center mb-3`}>
-                    <Icon size={20} className="text-white" />
-                  </div>
-                  <h3 className="font-medium text-sm mb-1">{exercise.title}</h3>
-                  <p className="text-xs text-white/60">{exercise.description}</p>
-                </div>
-              </Link>
-            );
-          })}
-        </div>
-        
-        {/* Blog Card */}
-        <div className="mt-3">
-          <a 
-            href="https://www.thierrythomas.com/" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="bg-white/8 border border-white/15 rounded-2xl p-4 block hover:bg-white/12 transition-all duration-200 hover:scale-[1.02]"
-          >
-            <div className="flex items-center gap-4">
-              <div className="w-10 h-10 bg-gradient-to-r from-green-500 to-emerald-500 rounded-xl flex items-center justify-center">
-                <BookOpen size={20} className="text-white" />
-              </div>
-              <div>
-                <h3 className="font-medium text-sm mb-1">LE BLOG</h3>
-                <p className="text-xs text-white/60">Articles, vidéos et inspirations</p>
-              </div>
+      {/* Blog Card */}
+      <div className="mt-6">
+        <a 
+          href="https://www.thierrythomas.com/" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="bg-white/8 border border-white/15 rounded-2xl p-4 block hover:bg-white/12 transition-all duration-200 hover:scale-[1.02]"
+        >
+          <div className="flex items-center gap-4">
+            <div className="w-10 h-10 bg-gradient-to-r from-green-500 to-emerald-500 rounded-xl flex items-center justify-center">
+              <BookOpen size={20} className="text-white" />
             </div>
-          </a>
-        </div>
+            <div>
+              <h3 className="font-medium text-sm mb-1">LE BLOG</h3>
+              <p className="text-xs text-white/60">Articles, vidéos et inspirations</p>
+            </div>
+          </div>
+        </a>
       </div>
     </div>
   );
