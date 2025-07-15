@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 
 export default function BlogRedirect() {
   useEffect(() => {
+    // Redirection vers le blog externe
     window.location.href = 'https://www.thierrythomas.com/';
   }, []);
 
