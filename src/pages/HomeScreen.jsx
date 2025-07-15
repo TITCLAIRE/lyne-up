@@ -26,7 +26,7 @@ export default function HomeScreen() {
         <Link to="/intro/voyage" className="home-card bg-gradient-to-r from-purple-500/20 to-indigo-500/20 border-2 border-purple-500/30">
           <div className="flex flex-col items-center justify-center h-full p-6 text-center">
             <Heart size={32} className="mb-4 text-purple-400" />
-            <h2 className="text-lg font-bold mb-1">Méditations</h2>
+            <h2 className="text-lg font-bold mb-1">Méditation & Auto-hypnose</h2>
             <span className="text-white/70 text-xs">Voyage intérieur</span>
           </div>
         </Link>
