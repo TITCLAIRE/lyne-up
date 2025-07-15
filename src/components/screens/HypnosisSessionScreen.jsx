@@ -44,7 +44,7 @@ export const HypnosisSessionScreen = () => {
   // Gérer les changements de phase pour le gong
   useEffect(() => {
     if (isSessionActive && breathingState.phase !== 'idle' && breathingState.phase !== lastPhase) {
-      if (lastPhase !== null && isGongEnabled) {
+      if (lastPhase !== null && isGongEnabled && audioSettings.enabled) {
         playGong(breathingState.phase);
       }
       setLastPhase(breathingState.phase);
@@ -131,7 +131,9 @@ export const HypnosisSessionScreen = () => {
       
       // Démarrer l'audio
       console.log('Démarrage audio hypnose avec fréquence:', frequency);
-      startAudio(frequency);
+      if (audioSettings.enabled) {
+        startAudio(frequency);
+      }
       
       // Démarrer le timer et la respiration
       const duration = hypnosisSession.duration;
@@ -142,12 +144,16 @@ export const HypnosisSessionScreen = () => {
       // Message d'introduction
       if (voiceSettings.enabled) {
         setTimeout(() => {
-          speak(hypnosisSession.guidance.start);
+          if (voiceSettings.enabled) {
+            speak(hypnosisSession.guidance.start);
+          }
         }, 1000);
         
         // Programmer le message de la première phase
         phaseTimeoutRef.current = setTimeout(() => {
-          speak(hypnosisSession.guidance.phases[0]);
+          if (voiceSettings.enabled) {
+            speak(hypnosisSession.guidance.phases[0]);
+          }
         }, 10000);
       }
     } else {

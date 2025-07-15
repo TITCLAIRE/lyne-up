@@ -79,7 +79,10 @@ export const useAudioManager = () => {
   };
 
   const startAudio = (frequency) => {
-    if (!audioSettings.enabled || isPlayingRef.current) return;
+    if (!audioSettings.enabled || isPlayingRef.current) {
+      console.log('🔇 Audio déjà en cours ou désactivé');
+      return;
+    }
 
     console.log('🎵 DÉMARRAGE AUDIO - Session:', currentSession, 'Fréquence:', frequency);
     
@@ -128,6 +131,9 @@ export const useAudioManager = () => {
       // Démarrer les oscillateurs SANS LIMITE DE TEMPS
       oscillatorLeft.start();
       oscillatorRight.start();
+      
+      // Vérification de démarrage
+      console.log('🎵 Oscillateurs démarrés avec succès');
 
       // Stocker les références
       oscillatorsRef.current = { left: oscillatorLeft, right: oscillatorRight };
@@ -321,8 +327,8 @@ export const useAudioManager = () => {
       // Diminution progressive sur toute la durée de la phase
       const fadeSteps = 8;
       for (let i = 1; i <= fadeSteps; i++) {
-        const timePoint = now + (gongDuration * i / fadeSteps);
-        const volumePoint = recommendedGongVolume * (1 - (i / fadeSteps) * 0.7); // Diminue de 70% max
+        const timePoint = now + (gongDuration * i / fadeSteps); 
+        const volumePoint = recommendedGongVolume * (1 - (i / fadeSteps) * 0.7); // Diminue progressivement
         gainNode.gain.linearRampToValueAtTime(volumePoint, timePoint);
       }
       
@@ -355,7 +361,7 @@ export const useAudioManager = () => {
       // Nettoyer automatiquement après la fin
       setTimeout(() => {
         activeGongsRef.current.delete(gongId);
-        console.log('🧹 Gong nettoyé:', gongId);
+        console.log('🧹 Gong terminé et nettoyé:', gongId);
       }, (gongDuration + 0.1) * 1000);
 
       console.log('🔔 Gong parfaitement synchronisé joué - Durée exacte:', gongDuration, 's');
@@ -367,7 +373,7 @@ export const useAudioManager = () => {
   // Surveiller l'état de la session pour maintenir l'audio
   useEffect(() => {
     if (isSessionActive && !isPlayingRef.current && audioSettings.enabled) {
-      console.log('🔄 Session active détectée, redémarrage audio si nécessaire');
+      console.log('🔄 Session active détectée, démarrage audio');
       // Redémarrer l'audio si la session est active mais l'audio arrêté
       const frequency = getDefaultFrequency();
       startAudio(frequency);
@@ -380,7 +386,7 @@ export const useAudioManager = () => {
   // Surveiller les changements de volume en temps réel
   useEffect(() => {
     if (isPlayingRef.current && gainNodeRef.current && audioContextRef.current) {
-      const newVolume = audioSettings.volume * 0.25;
+      const newVolume = audioSettings.volume * 0.25; // Volume recommandé 25%
       gainNodeRef.current.gain.setValueAtTime(newVolume, audioContextRef.current.currentTime);
       console.log('🔊 Volume mis à jour:', newVolume);
     }
@@ -405,7 +411,7 @@ export const useAudioManager = () => {
     isPlaying: isPlayingRef.current,
     getDefaultFrequency,
     getCurrentFrequencyName: () => {
-      const freq = getDefaultFrequency();
+      const freq = audioSettings.frequency !== 'coherence' ? audioSettings.frequency : getDefaultFrequency();
       // Force l'affichage correct pour le mode hypnose sommeil
       if (currentSession === 'sleep') {
         return 'Ondes Delta (2Hz)';

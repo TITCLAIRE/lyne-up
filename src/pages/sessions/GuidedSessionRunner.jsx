@@ -148,7 +148,7 @@ export default function GuidedSessionRunner() {
   // Gérer les changements de phase pour le gong
   useEffect(() => {
     if (isSessionActive && breathingState.phase !== 'idle' && breathingState.phase !== lastPhase) {
-      if (lastPhase !== null) {
+      if (lastPhase !== null && audioSettings.gongEnabled) {
         playGong(breathingState.phase);
       }
       setLastPhase(breathingState.phase);
@@ -188,11 +188,12 @@ export default function GuidedSessionRunner() {
   // Démarrage vocal automatique
   useEffect(() => {
     if (isSessionActive && !voiceSystemStarted && voiceSettings.enabled) {
+      console.log('🎤 Démarrage vocal automatique pour session guidée:', currentSession);
       setVoiceSystemStarted(true);
       
       setTimeout(() => {
         startSessionGuidance();
-      }, 200);
+      }, 500);
     }
   }, [isSessionActive, voiceSystemStarted, voiceSettings.enabled, startSessionGuidance]);
 
@@ -214,7 +215,11 @@ export default function GuidedSessionRunner() {
       // Démarrer l'audio
       if (audioSettings.enabled) {
         console.log('Démarrage audio session:', currentSession);
-        startAudio();
+        // Utiliser la fréquence appropriée pour la session
+        const sessionFrequency = currentSession === 'meditation' && currentMeditation 
+          ? meditations[currentMeditation]?.frequency || 'coherence'
+          : null;
+        startAudio(sessionFrequency);
       }
       
       // Démarrer le timer et la respiration

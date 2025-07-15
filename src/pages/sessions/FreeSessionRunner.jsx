@@ -64,7 +64,7 @@ export default function FreeSessionRunner() {
   // Gérer les changements de phase pour le gong
   useEffect(() => {
     if (isSessionActive && breathingState.phase !== 'idle' && breathingState.phase !== lastPhase) {
-      if (lastPhase !== null && freeSessionSettings.gongEnabled && !freeSessionSettings.silentMode) {
+      if (lastPhase !== null && freeSessionSettings.gongEnabled && !freeSessionSettings.silentMode && audioSettings.enabled) {
         playGong(breathingState.phase);
       }
       setLastPhase(breathingState.phase);
@@ -103,8 +103,10 @@ export default function FreeSessionRunner() {
       // Message de démarrage simple
       setTimeout(() => {
         const message = `Session libre démarrée. Rythme ${freeSessionSettings.inhaleTime} secondes inspiration, ${freeSessionSettings.exhaleTime} secondes expiration. Durée : ${freeSessionSettings.duration} minutes. Fréquence : ${getSelectedFrequencyName()}.`;
-        speak(message);
-      }, 1000);
+        if (voiceSettings.enabled) {
+          speak(message);
+        }
+      }, 500);
     }
   }, [isSessionActive, voiceSystemStarted, voiceSettings.enabled, freeSessionSettings, speak, getSelectedFrequencyName]);
 
@@ -120,7 +122,9 @@ export default function FreeSessionRunner() {
       // Démarrer l'audio avec la fréquence sélectionnée - CORRECTION IMPORTANTE
       if (audioSettings.enabled && freeSessionSettings.gongEnabled && !freeSessionSettings.silentMode) {
         console.log('Démarrage audio avec fréquence:', freeSessionSettings.frequency);
-        startAudio(freeSessionSettings.frequency);
+        // Vérifier que la fréquence est valide
+        const frequency = freeSessionSettings.frequency || 'coherence';
+        startAudio(frequency);
       }
       
       // Démarrer le timer avec la durée personnalisée

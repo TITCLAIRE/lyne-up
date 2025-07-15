@@ -42,7 +42,7 @@ export const CoherenceSessionScreen = () => {
   // Gérer les changements de phase pour le gong
   useEffect(() => {
     if (isSessionActive && breathingState.phase !== 'idle' && breathingState.phase !== lastPhase) {
-      if (lastPhase !== null && currentSettings.transitionEnabled && !currentSettings.silentMode) {
+      if (lastPhase !== null && currentSettings.gongEnabled && !currentSettings.silentMode && audioSettings.enabled) {
         playGong(breathingState.phase);
       }
       setLastPhase(breathingState.phase);
@@ -91,8 +91,10 @@ export const CoherenceSessionScreen = () => {
       // Utiliser la fréquence sélectionnée manuellement ou par défaut
       if (currentSettings.gongEnabled && !currentSettings.silentMode) {
         const selectedFrequency = audioSettings.frequency !== 'coherence' ? audioSettings.frequency : 'coherence';
-        console.log('🎵 Démarrage audio cohérence avec fréquence:', selectedFrequency);
-        startAudio(selectedFrequency);
+        console.log('🎵 Démarrage audio cohérence avec fréquence:', selectedFrequency, 'Gong activé:', currentSettings.gongEnabled);
+        if (audioSettings.enabled) {
+          startAudio(selectedFrequency);
+        }
       }
       
       // Démarrer le timer et la respiration
@@ -104,8 +106,11 @@ export const CoherenceSessionScreen = () => {
       // Démarrage du guidage vocal pour la session
       if (!currentSettings.silentMode && voiceSettings.enabled) {
         console.log('🎤 Démarrage guidage vocal pour cohérence cardiaque');
-        // Utiliser startSessionGuidance au lieu de startCoherenceGuidance
-        startSessionGuidance();
+        setTimeout(() => {
+          if (voiceSettings.enabled) {
+            startSessionGuidance();
+          }
+        }, 500);
       }
     } else {
       setSessionActive(false);
