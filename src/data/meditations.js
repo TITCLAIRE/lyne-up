@@ -137,6 +137,15 @@ export const spiritualMeditations = {
     borderColor: 'rgba(124, 58, 237, 0.3)',
     breathingPattern: { inhale: 4, hold: 0, exhale: 6 }, // Rythme 4/6 comme demandé
     frequency: '852hz', // Fréquence de retour à l'ordre spirituel
+    audioFiles: {
+      welcome: 'metatron-welcome',
+      invocation: 'metatron-invocation',
+      light: 'metatron-light',
+      memory: 'metatron-memory',
+      inspiration: 'metatron-inspiration',
+      protection: 'metatron-protection',
+      elevation: 'metatron-elevation'
+    },
     guidance: {
       start: "Bienvenue dans cette méditation d'invocation de l'archange Métatron. Installez-vous confortablement. Fermez les yeux et prenez quelques profondes respirations. Nous allons établir une connexion avec cet être de lumière, gardien des archives akashiques et porteur de la géométrie sacrée. Suivez le rythme respiratoire et ouvrez votre coeur à cette présence divine.",
       inhale: ["Inspirez l'énergie divine", "Accueillez la lumière céleste", "Recevez la présence sacrée"],

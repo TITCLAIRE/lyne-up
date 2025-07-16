@@ -295,35 +295,12 @@ export default function GuidedSessionRunner() {
           const success = startSessionGuidance();
           console.log('🎤 Démarrage guidage vocal guidé:', success ? 'réussi' : 'échoué');
         } else if (currentMeditation === 'metatron') {
-          console.log('🌟 Méditation Métatron - Pas de démarrage automatique du guidage vocal');
-          // Pour Métatron, on gère les fichiers audio manuellement
-          const gender = voiceSettings.gender;
-          
-          // Utiliser le système standard de guidage vocal pour Métatron
           console.log('🌟 Méditation Métatron - Utilisation du système standard de guidage');
+          // Utiliser le système standard de guidage vocal pour Métatron
           setTimeout(() => {
-            speak(spiritualMeditations.metatron.guidance.start);
-          }, 1000);
-          
-          // Programmer les phases avec des délais sécurisés
-          if (spiritualMeditations.metatron && spiritualMeditations.metatron.guidance && spiritualMeditations.metatron.guidance.phases) {
-            const phases = spiritualMeditations.metatron.guidance.phases;
-            
-            // Délais sécurisés pour chaque phase
-            const phaseDelays = [30000, 70000, 110000, 150000, 190000, 230000];
-            
-            // Programmer chaque phase avec son propre délai
-            phases.forEach((phase, index) => {
-              if (index < phaseDelays.length) {
-                setTimeout(() => {
-                  if (isSessionActive && voiceSettings.enabled) {
-                    console.log(`🌟 Méditation Métatron - Phase ${index + 1}`);
-                    speak(phase);
-                  }
-                }, phaseDelays[index]);
-              }
-            });
-          }
+            const success = startSessionGuidance();
+            console.log('🎤 Démarrage guidage vocal Métatron:', success ? 'réussi' : 'échoué');
+          }, 500);
         }
       }, 1000);
       

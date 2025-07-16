@@ -441,6 +441,30 @@ export const useVoiceManager = () => {
         audioPath = `/audio/meditation/${gender}/gratitude-nature.mp3`;
         audioKey = 'gratitude-nature';
       } else if (text.includes('Ancrez maintenant cette énergie de gratitude')) {
+    } else if (sessionType === 'meditation' && currentMeditation === 'metatron') {
+      // Essayer de trouver un fichier audio pour Méditation Métatron
+      if (text.includes('Bienvenue dans cette méditation d\'invocation')) {
+        audioPath = `/audio/meditation/${gender}/metatron-welcome.mp3`;
+        audioKey = 'metatron-welcome';
+      } else if (text.includes('Ô Metatron, ange de la Présence')) {
+        audioPath = `/audio/meditation/${gender}/metatron-invocation.mp3`;
+        audioKey = 'metatron-invocation';
+      } else if (text.includes('Que ta lumière entoure mon esprit')) {
+        audioPath = `/audio/meditation/${gender}/metatron-light.mp3`;
+        audioKey = 'metatron-light';
+      } else if (text.includes('Toi qui écris dans les Livres Célestes')) {
+        audioPath = `/audio/meditation/${gender}/metatron-memory.mp3`;
+        audioKey = 'metatron-memory';
+      } else if (text.includes('Toi qui transmets la pensée divine')) {
+        audioPath = `/audio/meditation/${gender}/metatron-inspiration.mp3`;
+        audioKey = 'metatron-inspiration';
+      } else if (text.includes('Entoure-moi de ton Cube sacré')) {
+        audioPath = `/audio/meditation/${gender}/metatron-protection.mp3`;
+        audioKey = 'metatron-protection';
+      } else if (text.includes('Metatron, Archange de feu blanc')) {
+        audioPath = `/audio/meditation/${gender}/metatron-elevation.mp3`;
+        audioKey = 'metatron-elevation';
+      }
         audioPath = `/audio/meditation/${gender}/gratitude-anchoring.mp3`;
         audioKey = 'gratitude-anchoring';
       } else if (text.includes('Intégrez pleinement cette énergie de gratitude')) {
@@ -820,6 +844,34 @@ export const useVoiceManager = () => {
     } else if (currentSession === 'meditation') {
       // Guidage pour les méditations géré séparément
       console.log('🧘 Méditation:', currentMeditation);
+      
+      // Guidage spécifique pour Métatron
+      if (currentMeditation === 'metatron') {
+        console.log('🌟 Démarrage guidage Métatron');
+        
+        // Message d'accueil
+        speak(spiritualMeditations.metatron.guidance.start);
+        
+        // Programmer les phases avec des délais sécurisés
+        const phaseDelays = [30000, 70000, 110000, 150000, 190000, 230000];
+        
+        // Programmer chaque phase avec son propre délai
+        spiritualMeditations.metatron.guidance.phases.forEach((phase, index) => {
+          if (index < phaseDelays.length) {
+            createTrackedTimeout(() => {
+              console.log(`🌟 Méditation Métatron - Phase ${index + 1}`);
+              speak(phase);
+            }, phaseDelays[index]);
+          }
+        });
+        
+        // Message de fin
+        createTrackedTimeout(() => {
+          speak(spiritualMeditations.metatron.guidance.end);
+        }, 290000);
+        
+        return true;
+      }
       
       return true;
     } else {
