@@ -1,9 +1,17 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Home, Star, Info } from 'lucide-react';
+import { Home, Star } from 'lucide-react';
+import { useAppStore } from '../../store/appStore';
 
 export default function Spiritualite() {
   const navigate = useNavigate();
+  const { setCurrentMeditation, setCurrentSession, setCurrentScreen } = useAppStore();
+
+  const handleMeditationSelect = () => {
+    setCurrentMeditation('metatron');
+    setCurrentSession('meditation');
+    setCurrentScreen('session');
+  };
 
   const handleGoBack = () => {
     navigate('/sessions/voyage');
@@ -17,20 +25,19 @@ export default function Spiritualite() {
       </div>
 
       {/* Message de maintenance */}
-      <div className="bg-gradient-to-r from-amber-500/20 to-yellow-500/20 border border-amber-500/30 rounded-xl p-6 mb-8">
-        <div className="flex items-start gap-4">
-          <Info size={24} className="text-amber-400 mt-1 flex-shrink-0" />
-          <div className="text-left">
-            <h3 className="text-lg font-semibold text-amber-200 mb-2">Méditations en préparation</h3>
-            <p className="text-white/80 text-sm leading-relaxed mb-3">
-              Nos méditations spirituelles sont actuellement en cours de préparation pour vous offrir 
-              une expérience optimale. Elles seront disponibles très prochainement.
-            </p>
-            <div className="bg-amber-500/10 rounded-lg p-3">
-              <p className="text-xs text-amber-100/90">
-                ✨ <strong>À venir :</strong> Invocation de l'Archange Métatron, Connexion aux Guides Spirituels, 
-                Méditation des Chakras, et bien plus encore.
-              </p>
+      <div className="grid gap-3 mb-8">
+        <div
+          onClick={handleMeditationSelect}
+          className="bg-gradient-to-r from-violet-700/20 to-purple-700/20 border border-violet-700/30 rounded-xl p-6 hover:scale-[1.02] transition-all duration-200"
+        >
+          <div className="flex items-center gap-4">
+            <div className="w-16 h-16 bg-white/10 rounded-xl flex items-center justify-center">
+              <Star size={32} className="text-violet-400" />
+            </div>
+            <div>
+              <h3 className="font-semibold text-xl mb-1">🌟 Invocation de l'Archange Métatron</h3>
+              <p className="text-white/70">Connexion à l'Archange des Archives Akashiques</p>
+              <p className="text-white/50 text-sm mt-1">5 minutes • Synthèse vocale</p>
             </div>
           </div>
         </div>
