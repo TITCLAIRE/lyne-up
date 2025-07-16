@@ -263,7 +263,11 @@ export const useVoiceManager = () => {
       };
       
       utterance.onerror = (event) => {
-        console.error('❌ ERREUR SYNTHÈSE:', event);
+        if (event.error === 'interrupted') {
+          console.warn('⚠️ SYNTHÈSE INTERROMPUE:', event);
+        } else {
+          console.error('❌ ERREUR SYNTHÈSE:', event);
+        }
         currentUtterance.current = null;
       };
       
