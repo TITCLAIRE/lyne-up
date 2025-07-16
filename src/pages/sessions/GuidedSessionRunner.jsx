@@ -62,11 +62,14 @@ export default function GuidedSessionRunner() {
   const getSessionData = () => {
     if (currentSession === 'meditation' && currentMeditation) {
       const meditation = meditations[currentMeditation];
-      return {
-        name: meditation.name,
-        duration: meditation.duration,
-        desc: meditation.description
-      };
+      if (meditation) {
+        return {
+          name: meditation.name,
+          duration: meditation.duration,
+          desc: meditation.description
+        };
+      }
+      return null;
     } else if (currentSession && sessions[currentSession]) {
       const session = sessions[currentSession];
       return {
