@@ -339,8 +339,7 @@ export const useVoiceManager = () => {
           console.log(`🎤 Tentative de lecture audio de méditation: ${audioPath} (${audioKey})`);
         }
       }
-    } else
-    if (sessionType === 'switch') {
+    } else if (sessionType === 'switch') {
       // Essayer de trouver un fichier audio pour SOS Stress
       if (text.includes('Bienvenue dans votre bulle')) {
         audioPath = `/audio/sos-stress/${gender}/welcome.mp3`;
@@ -838,6 +837,28 @@ export const useVoiceManager = () => {
   }, [voiceSettings.enabled, voiceSettings.gender, isSessionActive, speak, clearAllTimeouts, createTrackedTimeout]);
   
   // Fonction pour démarrer le guidage vocal pour n'importe quelle session
+  const startSessionGuidance = useCallback(() => {
+    if (!voiceSettings.enabled || !isSessionActive) {
+      console.log('🔇 Guidage vocal désactivé ou session inactive');
+      return false;
+    }
+    
+    if (sessionGuidanceStarted.current) {
+      console.log('⚠️ Guidage vocal déjà démarré');
+      return false;
+    }
+    
+    sessionGuidanceStarted.current = true;
+    
+    if (currentSession === 'switch') {
+      return startSosStressGuidance();
+    } else if (currentSession === 'scan') {
+      return startScanGuidance();
+    } else if (currentSession === 'coherence') {
+      return startCoherenceGuidance();
+    } else if (currentSession === 'meditation' && currentMeditation) {
+      // Vérifier si c'est la méditation Métatron
+      if (currentMeditation === 'metatron') {
         console.log('⚠️ Méditation Métatron non disponible actuellement');
         speak("La méditation Métatron n'est pas disponible actuellement. Veuillez choisir une autre méditation.");
         return false;
