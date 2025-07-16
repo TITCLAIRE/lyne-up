@@ -1,7 +1,6 @@
 import { useEffect, useRef, useCallback } from 'react';
 import { useAppStore } from '../store/appStore';
 import { spiritualMeditations } from '../data/meditations';
-import { spiritualMeditations } from '../data/meditations';
 
 export const useVoiceManager = () => {
   const { 
