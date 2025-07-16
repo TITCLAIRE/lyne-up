@@ -127,49 +127,5 @@ export const meditations = {
 };
 
 // Méditations spirituelles
-export const spiritualMeditations = {
-  metatron: {
-    name: 'Invocation de l\'Archange Métatron',
-    icon: 'Star',
-    duration: 300, // 5 minutes
-    description: 'Connexion spirituelle',
-    color: 'rgba(124, 58, 237, 0.2)', // Violet plus profond
-    borderColor: 'rgba(124, 58, 237, 0.3)',
-    breathingPattern: { inhale: 4, hold: 0, exhale: 6 }, // Rythme 4/6 comme demandé
-    frequency: '852hz', // Fréquence de retour à l'ordre spirituel
-    audioFiles: {
-      welcome: 'metatron-welcome',
-      invocation: 'metatron-invocation',
-      light: 'metatron-light',
-      memory: 'metatron-memory',
-      inspiration: 'metatron-inspiration',
-      protection: 'metatron-protection',
-      elevation: 'metatron-elevation'
-    },
-    guidance: {
-      start: "Bienvenue dans cette méditation d'invocation de l'archange Métatron. Installez-vous confortablement. Fermez les yeux et prenez quelques profondes respirations. Nous allons établir une connexion avec cet être de lumière, gardien des archives akashiques et porteur de la géométrie sacrée. Suivez le rythme respiratoire et ouvrez votre coeur à cette présence divine.",
-      inhale: ["Inspirez l'énergie divine", "Accueillez la lumière céleste", "Recevez la présence sacrée"],
-      exhale: ["Expirez toute résistance", "Libérez les voiles", "Ouvrez-vous à la vérité"],
-      phases: [
-       // Séquence 2 - Invocation (30s-70s)
-       "Ô Metatron, ange de la Présence, scribe de Lumière, gardien du Trône Divin, toi qui as connu la chair et t'es élevé au-delà, je t'appelle avec humilité. Que ta présence sacrée se manifeste dans cet espace. Je t'invite à m'accompagner dans cette méditation, à m'envelopper de ton énergie céleste.",
-       
-       // Séquence 3 - Lumière (70s-110s)
-       "Que ta lumière entoure mon esprit, que ta sagesse éclaire mon cœur, que ta voix me guide sur les chemins de vérité. Je sens ta présence comme une lumière dorée qui m'enveloppe, qui purifie mon aura et élève ma vibration. Ta lumière pénètre chaque cellule de mon être.",
-       
-       // Séquence 4 - Mémoire (110s-150s)
-       "Toi qui écris dans les Livres Célestes, inscris en moi la mémoire de mon âme. Aide-moi à me souvenir de qui je suis, au-delà des voiles de l'oubli et des peurs humaines. Révèle-moi ma véritable nature, mon essence divine, ma mission sacrée sur cette Terre.",
-       
-       // Séquence 5 - Inspiration (150s-190s)
-       "Toi qui transmets la pensée divine, fais descendre en moi l'inspiration claire, la parole juste, et le silence plein de sens. Guide-moi vers la connaissance qui m'est nécessaire en ce moment. Ouvre les canaux de ma perception pour que je puisse recevoir les messages divins.",
-       
-       // Séquence 6 - Protection (190s-230s)
-       "Entoure-moi de ton Cube sacré, géométrie vivante de la création, bouclier de lumière contre les ombres, structure de l'ordre cosmique. Protège mon corps, mon cœur, mon esprit. Que ce Cube de Métatron m'enveloppe de ses lignes de force, équilibrant mes énergies et harmonisant mes chakras.",
-       
-       // Séquence 7 - Élévation (230s-300s)
-       "Metatron, Archange de feu blanc, ouvre les portes de la haute conscience. Aide-moi à élever ma fréquence, à faire rayonner l'amour, et à servir ce qui est plus grand que moi. Que ta présence m'accompagne dans mon quotidien, m'inspirant sagesse et discernement. Je te rends grâce pour ta présence, ta guidance et ta protection. Amen. Amen. Amen. Doucement, prenez conscience de votre corps, de votre respiration. Quand vous êtes prêt, ouvrez les yeux en gardant cette connexion sacrée avec l'Archange Métatron."
-      ],
-      end: "Votre connexion avec l'Archange Métatron est maintenant établie. Gardez cette énergie avec vous."
-    }
-  }
-};
+// Objet vide pour maintenir la structure mais sans la méditation Métatron
+export const spiritualMeditations = {};

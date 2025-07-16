@@ -1,6 +1,6 @@
 import { useEffect, useRef, useCallback } from 'react';
 import { useAppStore } from '../store/appStore';
-import { spiritualMeditations } from '../data/meditations';
+import { meditations, spiritualMeditations } from '../data/meditations';
 
 export const useVoiceManager = () => {
   const { 
@@ -151,36 +151,31 @@ export const useVoiceManager = () => {
   
   // Fonction pour jouer le prochain audio dans la file d'attente
   const playNextInQueue = useCallback(() => {
-    if (audioQueue.current.length === 0) {
-      isPlayingAudio.current = false;
-      return;
-    }
-    
-    isPlayingAudio.current = true;
-    const nextAudio = audioQueue.current.shift();
-    
-    try {
-      // Créer un nouvel élément audio
-      const audio = new Audio(nextAudio.url);
-      audioElementRef.current = audio;
-      
-      // Configurer les événements
-      audio.onended = () => {
-        console.log('✅ AUDIO TERMINÉ:', nextAudio.url);
-        audioElementRef.current = null;
-        playNextInQueue();
-      };
-      
-      audio.onerror = (error) => {
-        console.error('❌ ERREUR AUDIO:', error, nextAudio.url);
-        audioElementRef.current = null;
-        
-        // Fallback vers synthèse vocale si l'audio échoue
-        if (nextAudio.fallbackText) {
-          console.log('🔄 FALLBACK SYNTHÈSE pour:', nextAudio.key, '- Raison:', error.type || 'Erreur audio');
-          speakWithSynthesis(nextAudio.fallbackText);
+
+        // Récupérer les données de la méditation
+        const meditationData = meditations[currentMeditation];
+        if (!meditationData) {
+          console.error('❌ Données de méditation non trouvées pour:', currentMeditation);
+          return false;
         }
-        
+
+        // Message d'accueil
+        speak(meditationData.guidance.start);
+
+        // Programmer les phases avec des délais génériques
+        meditationData.guidance.phases.forEach((phaseText, index) => {
+          // Délai simple: 30s par phase
+          createTrackedTimeout(() => {
+            console.log(`🧘 Méditation ${currentMeditation} - Phase ${index + 1}`);
+            speak(phaseText);
+          }, (index + 1) * 30000);
+        });
+
+        // Message de fin
+        createTrackedTimeout(() => {
+          speak(meditationData.guidance.end);
+        }, meditationData.duration * 1000 - 10000); // 10 secondes avant la fin
+
         playNextInQueue();
       };
       
