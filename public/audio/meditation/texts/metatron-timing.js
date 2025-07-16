@@ -8,8 +8,7 @@ export const metatronTimingsOptimized = [
   { time: 110000, audioKey: 'memory', duration: 40 },          // 110s - Mémoire de l'âme
   { time: 150000, audioKey: 'inspiration', duration: 40 },     // 150s - Inspiration divine
   { time: 190000, audioKey: 'protection', duration: 40 },      // 190s - Cube de protection
-  { time: 230000, audioKey: 'elevation', duration: 40 },       // 230s - Élévation de conscience
-  { time: 270000, audioKey: 'gratitude', duration: 30 }        // 270s - Gratitude finale
+  { time: 230000, audioKey: 'elevation', duration: 70 }        // 230s - Élévation et gratitude finale (jusqu'à 300s)
 ];
 
 // Mapping des fichiers audio MÉTATRON
@@ -20,8 +19,7 @@ export const METATRON_AUDIO_FILES = {
   memory: 'metatron-memory',
   inspiration: 'metatron-inspiration',
   protection: 'metatron-protection',
-  elevation: 'metatron-elevation',
-  gratitude: 'metatron-gratitude'
+  elevation: 'metatron-elevation'
 };
 
 // Durée totale de la méditation MÉTATRON : 5 minutes (300 secondes)

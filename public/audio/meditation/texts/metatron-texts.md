@@ -50,20 +50,16 @@ Toi qui transmets la pensée divine, fais descendre en moi l'inspiration claire,
 Entoure-moi de ton Cube sacré, géométrie vivante de la création, bouclier de lumière contre les ombres, structure de l'ordre cosmique. Protège mon corps, mon cœur, mon esprit. Que ce Cube de Métatron m'enveloppe de ses lignes de force, équilibrant mes énergies et harmonisant mes chakras.
 ```
 
-### **7. metatron-elevation.mp3** (230s-270s)
+### **7. metatron-elevation.mp3** (230s-300s)
 **Fichier :** `metatron-elevation.mp3`
-**Durée :** 40 secondes
+**Durée :** 70 secondes
 **Texte :**
 ```
 Metatron, Archange de feu blanc, ouvre les portes de la haute conscience. Aide-moi à élever ma fréquence, à faire rayonner l'amour, et à servir ce qui est plus grand que moi. Que ta présence m'accompagne dans mon quotidien, m'inspirant sagesse et discernement.
-```
 
-### **8. metatron-gratitude.mp3** (270s-300s)
-**Fichier :** `metatron-gratitude.mp3`
-**Durée :** 30 secondes
-**Texte :**
-```
-Je te rends grâce pour ta présence, ta guidance et ta protection. Amen. Amen. Amen. Doucement, prenez conscience de votre corps, de votre respiration. Quand vous êtes prêt, ouvrez les yeux en gardant cette connexion sacrée avec l'Archange Métatron.
+Je te rends grâce pour ta présence, ta guidance et ta protection. Amen. Amen. Amen. 
+
+Doucement, prenez conscience de votre corps, de votre respiration. Quand vous êtes prêt, ouvrez les yeux en gardant cette connexion sacrée avec l'Archange Métatron.
 ```
 
 ## 🎯 **PARAMÈTRES D'ENREGISTREMENT RECOMMANDÉS**
@@ -90,14 +86,14 @@ Je te rends grâce pour ta présence, ta guidance et ta protection. Amen. Amen. 
 ## 📊 **RÉCAPITULATIF FINAL**
 
 ### **À enregistrer :**
-- **Claire** : 8 fichiers MP3 (voix féminine)
-- **Thierry** : 8 fichiers MP3 (voix masculine)
-- **Total :** 16 fichiers
+- **Claire** : 7 fichiers MP3 (voix féminine)
+- **Thierry** : 7 fichiers MP3 (voix masculine)
+- **Total :** 14 fichiers
 
 ### **Durées :**
 - **Introduction :** 30 secondes
-- **Séquences principales :** 40 secondes chacune
-- **Gratitude finale :** 30 secondes
+- **Séquences 2-6 :** 40 secondes chacune
+- **Séquence 7 (finale) :** 70 secondes (inclut l'élévation et la gratitude)
 
 ### **Timing total :** 5 minutes (300 secondes)
 
