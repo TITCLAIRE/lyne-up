@@ -328,7 +328,6 @@ export const useVoiceManager = () => {
     
     // Construire le chemin du fichier audio en fonction du type de session
     let audioPath = null;
-    let audioKey = null;
     
     // Vérifier les fichiers audio de méditation en premier
     if (currentSession === 'meditation' && currentMeditation) {
