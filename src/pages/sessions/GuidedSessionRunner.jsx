@@ -8,7 +8,7 @@ import { useBreathingAnimation } from '../../hooks/useBreathingAnimation';
 import { useAudioManager } from '../../hooks/useAudioManager';
 import { useVoiceManager } from '../../hooks/useVoiceManager';
 import { sessions, getBreathingPattern } from '../../data/sessions';
-import { meditations } from '../../data/meditations';
+import { meditations, spiritualMeditations } from '../../data/meditations';
 
 import { useCallback } from 'react';
 
@@ -61,7 +61,8 @@ export default function GuidedSessionRunner() {
   // Obtenir les données de session selon le type
   const getSessionData = () => {
     if (currentSession === 'meditation' && currentMeditation) {
-      const meditation = meditations[currentMeditation];
+      // Vérifier dans les deux collections de méditations
+      const meditation = meditations[currentMeditation] || spiritualMeditations[currentMeditation];
       if (meditation) {
         return {
           name: meditation.name,
@@ -103,6 +104,15 @@ export default function GuidedSessionRunner() {
 
   // Obtenir le pattern respiratoire
   const getCurrentBreathingPattern = () => {
+    // Pour les méditations, vérifier si un pattern spécifique est défini
+    if (currentSession === 'meditation' && currentMeditation) {
+      const meditation = meditations[currentMeditation] || spiritualMeditations[currentMeditation];
+      if (meditation && meditation.breathingPattern) {
+        return meditation.breathingPattern;
+      }
+    }
+    
+    // Sinon utiliser le pattern par défaut
     const pattern = getBreathingPattern(currentSession);
     return pattern;
   };
