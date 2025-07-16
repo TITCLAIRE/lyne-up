@@ -35,7 +35,7 @@ export default function GuidedSessionRunner() {
   const { timeRemaining, progress, startTimer, stopTimer, resetTimer } = useSessionTimer(handleSessionComplete);
   const { breathingState, startBreathing, stopBreathing } = useBreathingAnimation();
   const { startAudio, stopAudio, playGong, getCurrentFrequencyName } = useAudioManager();
-  const { speak, stop: stopVoice, startSessionGuidance, clearAllTimeouts } = useVoiceManager();
+  const { speak, stop: stopVoice, startSessionGuidance, clearAllTimeouts, instanceId } = useVoiceManager();
 
   const [lastPhase, setLastPhase] = useState(null);
   const [sessionEnding, setSessionEnding] = useState(false);
@@ -234,17 +234,22 @@ export default function GuidedSessionRunner() {
       // Démarrer le timer et la respiration
       const duration = sessionData?.duration || 180;
       console.log('⏱️ Durée session:', duration, 'secondes');
+      console.log('🎤 Instance VoiceManager:', instanceId);
       startTimer(duration);
       startBreathing(breathingPattern);
       
       // Démarrage du guidage vocal pour la session
       // Attendre un peu pour que tout soit initialisé
-      setTimeout(() => {
+      const guidanceTimeout = setTimeout(() => {
         if (voiceSettings.enabled) {
+          console.log('🎤 Démarrage guidage vocal après délai');
           const success = startSessionGuidance();
           console.log('🎤 Démarrage guidage vocal guidé:', success ? 'réussi' : 'échoué');
         }
       }, 1000);
+      
+      // Nettoyer le timeout si la session est arrêtée avant qu'il ne se déclenche
+      return () => clearTimeout(guidanceTimeout);
     } else {
       setSessionActive(false);
       console.log('⏸️ PAUSE session guidée:', currentSession || sessionId);
@@ -255,8 +260,7 @@ export default function GuidedSessionRunner() {
       // Arrêt explicite de la voix avec vérification
       if (stopVoice) {
         console.log('🔇 ARRÊT FORCÉ de la voix lors de la pause');
-        const voiceStopped = stopVoice();
-        console.log('🔇 Résultat arrêt voix:', voiceStopped ? 'Réussi' : 'Échoué');
+        stopVoice();
       }
 
       // Nettoyage explicite de tous les timeouts
@@ -286,11 +290,12 @@ export default function GuidedSessionRunner() {
     // Arrêter l'audio et la respiration avec vérification
     if (stopBreathing) stopBreathing();
     if (stopAudio) stopAudio();
-    if (stopVoice) {
-      console.log('🔇 ARRÊT FORCÉ de la voix avant navigation');
-      const voiceStopped = stopVoice();
-      console.log('🔇 Résultat arrêt voix avant navigation:', voiceStopped ? 'Réussi' : 'Échoué');
-    }
+    
+    // Arrêt forcé de la voix
+    console.log('🔇 ARRÊT FORCÉ de la voix avant navigation');
+    if (stopVoice) stopVoice();
+    if (synth && synth.cancel) synth.cancel();
+    window.speechSynthesis.cancel();
 
     // Nettoyage explicite de tous les timeouts
     if (clearAllTimeouts) {
@@ -325,6 +330,16 @@ export default function GuidedSessionRunner() {
       navigate('/');
     }
   };
+
+  // Nettoyage complet lors du démontage du composant
+  useEffect(() => {
+    return () => {
+      console.log('🧹 Nettoyage lors du démontage de GuidedSessionRunner');
+      if (stopVoice) stopVoice();
+      if (clearAllTimeouts) clearAllTimeouts();
+      window.speechSynthesis.cancel();
+    };
+  }, [stopVoice, clearAllTimeouts]);
 
   const formatTime = (seconds) => {
     const mins = Math.floor(seconds / 60);
