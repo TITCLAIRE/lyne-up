@@ -103,6 +103,8 @@ export const meditations = {
     description: 'Préparez-vous au repos',
     color: 'rgba(99, 102, 241, 0.2)',
     borderColor: 'rgba(99, 102, 241, 0.3)',
+    breathingPattern: { inhale: 4, hold: 0, exhale: 6 },
+    frequency: 'delta', // Ondes Delta (2Hz) - sommeil profond
     guidance: {
       start: "Méditation du sommeil. Préparez votre corps et votre esprit à un repos profond et réparateur.",
       inhale: ["Inspirez la détente", "Accueillez la paix", "Invitez le calme"],
@@ -123,6 +125,11 @@ export const meditations = {
     }
   },
 
+  // Déplacé vers la section spiritualité
+};
+
+// Méditations spirituelles
+export const spiritualMeditations = {
   metatron: {
     name: 'Invocation de l\'Archange Métatron',
     icon: 'Star',
@@ -130,7 +137,7 @@ export const meditations = {
     description: 'Connexion spirituelle',
     color: 'rgba(124, 58, 237, 0.2)', // Violet plus profond
     borderColor: 'rgba(124, 58, 237, 0.3)',
-    breathingPattern: { inhale: 4, hold: 0, exhale: 6 },
+    breathingPattern: { inhale: 4, hold: 0, exhale: 6 }, // Rythme 4/6 comme demandé
     frequency: '852hz', // Fréquence de retour à l'ordre spirituel
     guidance: {
       start: "Bienvenue dans cette méditation d'invocation de l'Archange Métatron. Installez-vous confortablement et ouvrez votre cœur à cette connexion spirituelle.",

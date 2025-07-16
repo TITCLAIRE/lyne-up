@@ -15,6 +15,7 @@ import Sommeil from './pages/guidees/Sommeil';
 
 // Sous-pages voyage intérieur
 import Meditations from './pages/voyage/Meditations';
+import Spiritualite from './pages/voyage/Spiritualite';
 import Hypnoses from './pages/voyage/Hypnoses';
 
 // Pages de session
@@ -63,6 +64,7 @@ export default function AppRouter() {
           {/* Voyage intérieur */}
           <Route path="sessions/voyage" element={<SessionVoyage />} />
           <Route path="sessions/voyage/meditations" element={<Meditations />} />
+          <Route path="sessions/voyage/spiritualite" element={<Spiritualite />} />
           <Route path="sessions/voyage/hypnose" element={<Hypnoses />} />
           
           {/* Runners de session */}

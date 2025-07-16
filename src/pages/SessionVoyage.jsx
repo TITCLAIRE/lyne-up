@@ -30,7 +30,7 @@ export default function SessionVoyage() {
           </div>
         </Link>
 
-        <Link to="/sessions/voyage/meditations" className="bg-gradient-to-r from-violet-700/20 to-purple-700/20 border border-violet-700/30 rounded-xl p-6 hover:scale-[1.02] transition-all duration-200">
+        <Link to="/sessions/voyage/spiritualite" className="bg-gradient-to-r from-violet-700/20 to-purple-700/20 border border-violet-700/30 rounded-xl p-6 hover:scale-[1.02] transition-all duration-200">
           <div className="flex items-center gap-4">
             <div className="w-16 h-16 bg-white/10 rounded-xl flex items-center justify-center">
               <Star size={32} className="text-violet-400" />
