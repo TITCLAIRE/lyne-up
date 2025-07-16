@@ -533,7 +533,9 @@ export const useVoiceManager = () => {
     
     // Arrêter l'audio en cours
     if (audioElementRef.current) {
+      console.log('🔇 Arrêt forcé de l\'audio en cours:', audioElementRef.current.src);
       audioElementRef.current.pause();
+      audioElementRef.current.src = '';
       audioElementRef.current = null;
     }
     
