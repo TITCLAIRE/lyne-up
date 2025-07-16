@@ -155,7 +155,7 @@ export const SessionScreen = () => {
   // Gérer la fin de session
   useEffect(() => {
     if (timeRemaining === 0 && isSessionActive && !sessionEnding) {
-      console.log('Session terminée:', currentSession);
+      console.log('🏁 Session terminée - Redirection vers résultats');
       setSessionEnding(true);
       
       // Message de fin adapté aux différentes sessions
@@ -174,9 +174,14 @@ export const SessionScreen = () => {
       // Arrêter l'audio et la respiration
       stopAudio();
       stopBreathing();
-      stopVoice();
+      
+      // Redirection après un court délai pour permettre au message de fin de se jouer
+      setTimeout(() => {
+        stopVoice();
+        setCurrentScreen('results');
+      }, 2000);
     }
-  }, [timeRemaining, isSessionActive, sessionEnding, currentSession, speak, stopAudio, stopBreathing, stopVoice]);
+  }, [timeRemaining, isSessionActive, sessionEnding, currentSession, speak, stopAudio, stopBreathing, stopVoice, setCurrentScreen]);
 
   // Démarrage vocal automatique
   useEffect(() => {

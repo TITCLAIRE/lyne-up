@@ -99,7 +99,7 @@ export const HypnosisSessionScreen = () => {
   // Gérer la fin de session
   useEffect(() => {
     if (timeRemaining === 0 && isSessionActive && !sessionEnding) {
-      console.log('Session d\'hypnose terminée:', currentSession);
+      console.log('🏁 Session d\'hypnose terminée - Redirection vers résultats');
       setSessionEnding(true);
       
       // Message de fin
@@ -110,9 +110,14 @@ export const HypnosisSessionScreen = () => {
       // Arrêter l'audio et la respiration
       stopAudio();
       stopBreathing();
-      stopVoice();
+      
+      // Redirection après un court délai pour permettre au message de fin de se jouer
+      setTimeout(() => {
+        stopVoice();
+        setCurrentScreen('results');
+      }, 2000);
     }
-  }, [timeRemaining, isSessionActive, sessionEnding, currentSession, hypnosisSession, speak, stopAudio, stopBreathing, stopVoice, voiceSettings.enabled]);
+  }, [timeRemaining, isSessionActive, sessionEnding, currentSession, hypnosisSession, speak, stopAudio, stopBreathing, stopVoice, voiceSettings.enabled, setCurrentScreen]);
 
   const handleToggleSession = () => {
     if (!isSessionActive) {

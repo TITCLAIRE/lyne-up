@@ -80,7 +80,7 @@ export default function FreeSessionRunner() {
   // Gérer la fin de session
   useEffect(() => {
     if (timeRemaining === 0 && isSessionActive && !sessionEnding) {
-      console.log('Session libre terminée');
+      console.log('🏁 Session libre terminée - Redirection vers résultats');
       setSessionEnding(true);
       
       // Message de fin pour session libre
@@ -91,9 +91,14 @@ export default function FreeSessionRunner() {
       // Arrêter l'audio et la respiration
       stopAudio();
       stopBreathing();
-      stopVoice();
+      
+      // Redirection après un court délai pour permettre au message de fin de se jouer
+      setTimeout(() => {
+        stopVoice();
+        navigate('/results');
+      }, 2000);
     }
-  }, [timeRemaining, isSessionActive, sessionEnding, freeSessionSettings.silentMode, speak, stopAudio, stopBreathing, stopVoice]);
+  }, [timeRemaining, isSessionActive, sessionEnding, freeSessionSettings.silentMode, speak, stopAudio, stopBreathing, stopVoice, navigate]);
 
   // DÉMARRAGE VOCAL AUTOMATIQUE - SYSTÈME SIMPLE POUR SESSION LIBRE
   useEffect(() => {

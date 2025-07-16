@@ -61,7 +61,7 @@ export const CoherenceSessionScreen = () => {
   // Gérer la fin de session
   useEffect(() => {
     if (timeRemaining === 0 && isSessionActive && !sessionEnding) {
-      console.log('🏁 Session cohérence cardiaque terminée - Mode essai:', isTrialMode);
+      console.log('🏁 Session cohérence cardiaque terminée - Redirection vers résultats');
       setSessionEnding(true);
       
       // Message de fin
@@ -75,9 +75,18 @@ export const CoherenceSessionScreen = () => {
       // Arrêter l'audio et la respiration
       stopAudio();
       stopBreathing();
-      stopVoice();
+      
+      // Redirection après un court délai pour permettre au message de fin de se jouer
+      setTimeout(() => {
+        stopVoice();
+        if (isTrialMode) {
+          setCurrentScreen('trialResults');
+        } else {
+          setCurrentScreen('results');
+        }
+      }, 2000);
     }
-  }, [timeRemaining, isSessionActive, sessionEnding, currentSettings.silentMode, speak, stopAudio, stopBreathing, stopVoice, isTrialMode]);
+  }, [timeRemaining, isSessionActive, sessionEnding, currentSettings.silentMode, speak, stopAudio, stopBreathing, stopVoice, isTrialMode, setCurrentScreen]);
 
   const handleToggleSession = () => {
     if (!isSessionActive) {

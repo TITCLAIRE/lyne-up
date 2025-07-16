@@ -1,12 +1,10 @@
 import { useState, useRef, useCallback } from 'react';
-import { useAppStore } from '../store/appStore';
 
 export const useSessionTimer = (onComplete) => {
   const [timeRemaining, setTimeRemaining] = useState(0);
   const [totalDuration, setTotalDuration] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
   const intervalRef = useRef(null);
-  const { setCurrentScreen, setSessionActive } = useAppStore();
 
   const startTimer = useCallback((duration) => {
     setTotalDuration(duration);
@@ -19,28 +17,18 @@ export const useSessionTimer = (onComplete) => {
         
         if (newTime <= 0) {
           setIsRunning(false);
-          setSessionActive(false);
           
           if (intervalRef.current) {
             clearInterval(intervalRef.current);
             intervalRef.current = null;
           }
           
-          setTimeout(() => {
-            // Utiliser le callback si fourni, sinon rediriger vers les résultats
-            if (typeof onComplete === 'function') {
-              onComplete();
-            } else {
-              setCurrentScreen('results');
-            }
-          }, 2000);
-          
           return 0;
         }
         return newTime;
       });
     }, 1000);
-  }, [setCurrentScreen, setSessionActive]);
+  }, [onComplete]);
 
   const stopTimer = useCallback(() => {
     setIsRunning(false);

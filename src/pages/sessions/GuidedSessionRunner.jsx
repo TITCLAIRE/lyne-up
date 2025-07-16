@@ -165,7 +165,7 @@ export default function GuidedSessionRunner() {
   // Gérer la fin de session
   useEffect(() => {
     if (timeRemaining === 0 && isSessionActive && !sessionEnding) {
-      console.log('Session terminée:', currentSession);
+      console.log('🏁 Session guidée terminée - Redirection vers résultats');
       setSessionEnding(true);
       
       // Message de fin adapté aux différentes sessions
@@ -184,9 +184,14 @@ export default function GuidedSessionRunner() {
       // Arrêter l'audio et la respiration
       stopAudio();
       stopBreathing();
-      stopVoice();
+      
+      // Redirection après un court délai pour permettre au message de fin de se jouer
+      setTimeout(() => {
+        stopVoice();
+        navigate('/results');
+      }, 2000);
     }
-  }, [timeRemaining, isSessionActive, sessionEnding, currentSession, speak, stopAudio, stopBreathing, stopVoice]);
+  }, [timeRemaining, isSessionActive, sessionEnding, currentSession, speak, stopAudio, stopBreathing, stopVoice, navigate]);
 
   // Démarrage vocal automatique
   useEffect(() => {
