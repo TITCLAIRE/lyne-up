@@ -224,7 +224,7 @@ export const useVoiceManager = () => {
     fetch(url, { method: 'HEAD' })
       .then(response => {
         if (response.ok) {
-          console.log('✅ FICHIER AUDIO TROUVÉ:', url, `(${response.status})`);
+          console.log('✅ FICHIER AUDIO TROUVÉ:', url, `(${response.status}) - Clé: ${key}`);
           
           // Ajouter à la file d'attente
           audioQueue.current.push({
@@ -238,7 +238,7 @@ export const useVoiceManager = () => {
             playNextInQueue();
           }
         } else {
-          console.log('❌ FICHIER AUDIO NON TROUVÉ:', url, `(${response.status})`);
+          console.log('❌ FICHIER AUDIO NON TROUVÉ:', url, `(${response.status}) - Clé: ${key}`);
           
           // Fallback vers synthèse vocale
           if (fallbackText) {
@@ -248,7 +248,7 @@ export const useVoiceManager = () => {
         }
       })
       .catch(error => {
-        console.error('❌ ERREUR VÉRIFICATION AUDIO:', error, url);
+        console.error('❌ ERREUR VÉRIFICATION AUDIO:', error, url, '- Clé:', key);
         
         // Fallback vers synthèse vocale
         if (fallbackText) {
@@ -323,7 +323,7 @@ export const useVoiceManager = () => {
     
     // Essayer d'abord de trouver un fichier audio correspondant
     const sessionType = currentSession;
-    let fileAudioKey = audioKey;
+    // Utiliser directement audioKey s'il est fourni
     const gender = voiceSettings.gender;
     
     // Construire le chemin du fichier audio en fonction du type de session
@@ -332,12 +332,11 @@ export const useVoiceManager = () => {
     // Vérifier les fichiers audio de méditation en premier
     if (currentSession === 'meditation' && currentMeditation) {
       const meditationData = meditations[currentMeditation] || spiritualMeditations[currentMeditation];
-      if (meditationData && meditationData.audioFiles && fileAudioKey) {
-        const fileName = meditationData.audioFiles[fileAudioKey];
+      if (meditationData && meditationData.audioFiles && audioKey) {
+        const fileName = meditationData.audioFiles[audioKey];
         if (fileName) {
           audioPath = `/audio/meditation/${gender}/${fileName}.mp3`;
-          audioKey = fileAudioKey;
-          console.log(`🎤 Tentative de lecture audio de méditation: ${audioPath}`);
+          console.log(`🎤 Tentative de lecture audio de méditation: ${audioPath} (${audioKey})`);
         }
       }
     } else
@@ -896,21 +895,38 @@ export const useVoiceManager = () => {
         // Message d'accueil
         speak(metatron.guidance.start, 'welcome');
         
-        // Programmer les phases avec des délais précis
+        // Programmer les phases avec des délais précis et vérification de l'existence des fichiers
         const metatronTimings = [
-          { time: 30000, text: metatron.guidance.phases[0], audioKey: 'invocation' },
-          { time: 70000, text: metatron.guidance.phases[1], audioKey: 'light' },
-          { time: 110000, text: metatron.guidance.phases[2], audioKey: 'memory' },
-          { time: 150000, text: metatron.guidance.phases[3], audioKey: 'inspiration' },
-          { time: 190000, text: metatron.guidance.phases[4], audioKey: 'protection' },
-          { time: 230000, text: metatron.guidance.phases[5], audioKey: 'elevation' }
+          { time: 30000, text: metatron.guidance.phases[0], key: 'invocation' },
+          { time: 70000, text: metatron.guidance.phases[1], key: 'light' },
+          { time: 110000, text: metatron.guidance.phases[2], key: 'memory' },
+          { time: 150000, text: metatron.guidance.phases[3], key: 'inspiration' },
+          { time: 190000, text: metatron.guidance.phases[4], key: 'protection' },
+          { time: 230000, text: metatron.guidance.phases[5], key: 'elevation' }
         ];
         
         // Programmer chaque phase avec son propre délai
         metatronTimings.forEach((item) => {
           createTrackedTimeout(() => {
-            console.log(`🌟 Méditation Métatron - Phase à ${item.time/1000}s`);
-            speak(item.text, item.audioKey);
+            console.log(`🌟 Méditation Métatron - Phase à ${item.time/1000}s - Fichier: ${item.key}`);
+            
+            // Vérifier si le fichier audio existe avant de l'utiliser
+            const audioPath = `/audio/meditation/${voiceSettings.gender}/metatron-${item.key}.mp3`;
+            
+            fetch(audioPath, { method: 'HEAD' })
+              .then(response => {
+                if (response.ok) {
+                  console.log(`✅ Fichier audio trouvé: ${audioPath}`);
+                  speak(item.text, item.key);
+                } else {
+                  console.log(`❌ Fichier audio non trouvé: ${audioPath}, utilisation de la synthèse vocale`);
+                  speakWithSynthesis(item.text);
+                }
+              })
+              .catch(error => {
+                console.error(`❌ Erreur lors de la vérification du fichier: ${audioPath}`, error);
+                speakWithSynthesis(item.text);
+              });
           }, item.time);
         });
         
