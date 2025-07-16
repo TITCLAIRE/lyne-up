@@ -109,14 +109,14 @@ export const useVoiceManager = () => {
       audioQueue.current = [];
       isPlayingAudio.current = false;
     };
-  }, []);
+  }, [clearAllTimeouts]);
   
   // Réinitialiser le guidage vocal lorsque la session change
   useEffect(() => {
     sessionGuidanceStarted.current = false;
     sessionGuidancePhase.current = 0;
     clearAllTimeouts();
-  }, [currentSession, currentMeditation]);
+  }, [currentSession, currentMeditation, clearAllTimeouts]);
   
   // Arrêter le guidage vocal lorsque la session est arrêtée
   useEffect(() => {
@@ -151,31 +151,37 @@ export const useVoiceManager = () => {
   
   // Fonction pour jouer le prochain audio dans la file d'attente
   const playNextInQueue = useCallback(() => {
-
-        // Récupérer les données de la méditation
-        const meditationData = meditations[currentMeditation];
-        if (!meditationData) {
-          console.error('❌ Données de méditation non trouvées pour:', currentMeditation);
-          return false;
+    if (audioQueue.current.length === 0) {
+      isPlayingAudio.current = false;
+      console.log('🔇 File d\'attente audio vide');
+      return;
+    }
+    
+    const nextAudio = audioQueue.current.shift();
+    isPlayingAudio.current = true;
+    
+    console.log('🎵 LECTURE AUDIO:', nextAudio.key, nextAudio.url);
+    
+    try {
+      const audio = new Audio(nextAudio.url);
+      audioElementRef.current = audio;
+      
+      audio.onended = () => {
+        console.log('✅ AUDIO TERMINÉ:', nextAudio.key);
+        audioElementRef.current = null;
+        playNextInQueue();
+      };
+      
+      audio.onerror = (error) => {
+        console.error('❌ ERREUR AUDIO:', error, nextAudio.url);
+        
+        // Fallback vers synthèse vocale
+        if (nextAudio.fallbackText) {
+          console.log('🔄 FALLBACK SYNTHÈSE pour:', nextAudio.key, '- Raison:', error.message);
+          speakWithSynthesis(nextAudio.fallbackText);
         }
-
-        // Message d'accueil
-        speak(meditationData.guidance.start);
-
-        // Programmer les phases avec des délais génériques
-        meditationData.guidance.phases.forEach((phaseText, index) => {
-          // Délai simple: 30s par phase
-          createTrackedTimeout(() => {
-            console.log(`🧘 Méditation ${currentMeditation} - Phase ${index + 1}`);
-            speak(phaseText);
-          }, (index + 1) * 30000);
-        });
-
-        // Message de fin
-        createTrackedTimeout(() => {
-          speak(meditationData.guidance.end);
-        }, meditationData.duration * 1000 - 10000); // 10 secondes avant la fin
-
+        
+        audioElementRef.current = null;
         playNextInQueue();
       };
       
@@ -250,7 +256,7 @@ export const useVoiceManager = () => {
           speakWithSynthesis(fallbackText);
         }
       });
-  }, []);
+  }, [playNextInQueue]);
   
   // Fonction pour parler avec la synthèse vocale
   const speakWithSynthesis = useCallback((text) => {
@@ -437,6 +443,15 @@ export const useVoiceManager = () => {
         audioPath = `/audio/meditation/${gender}/gratitude-nature.mp3`;
         audioKey = 'gratitude-nature';
       } else if (text.includes('Ancrez maintenant cette énergie de gratitude')) {
+        audioPath = `/audio/meditation/${gender}/gratitude-anchoring.mp3`;
+        audioKey = 'gratitude-anchoring';
+      } else if (text.includes('Intégrez pleinement cette énergie de gratitude')) {
+        audioPath = `/audio/meditation/${gender}/gratitude-integration.mp3`;
+        audioKey = 'gratitude-integration';
+      } else if (text.includes('Doucement, prenez une respiration plus profonde. Remerciez-vous')) {
+        audioPath = `/audio/meditation/${gender}/gratitude-conclusion.mp3`;
+        audioKey = 'gratitude-conclusion';
+      }
     } else if (sessionType === 'meditation' && currentMeditation === 'metatron') {
       // Essayer de trouver un fichier audio pour Méditation Métatron
       if (text.includes('Bienvenue dans cette méditation d\'invocation')) {
@@ -460,17 +475,6 @@ export const useVoiceManager = () => {
       } else if (text.includes('Metatron, Archange de feu blanc')) {
         audioPath = `/audio/meditation/${gender}/metatron-elevation.mp3`;
         audioKey = 'metatron-elevation';
-      }
-    }
-    
-    if (sessionType === 'meditation' && currentMeditation === 'gratitude') {
-        audioKey = 'gratitude-anchoring';
-      } else if (text.includes('Intégrez pleinement cette énergie de gratitude')) {
-        audioPath = `/audio/meditation/${gender}/gratitude-integration.mp3`;
-        audioKey = 'gratitude-integration';
-      } else if (text.includes('Doucement, prenez une respiration plus profonde. Remerciez-vous')) {
-        audioPath = `/audio/meditation/${gender}/gratitude-conclusion.mp3`;
-        audioKey = 'gratitude-conclusion';
       }
     } else if (sessionType === 'meditation' && currentMeditation === 'abundance') {
       // Essayer de trouver un fichier audio pour Méditation Abondance
@@ -677,7 +681,7 @@ export const useVoiceManager = () => {
     }, 85000);
     
     return true;
-  }, [voiceSettings.enabled, voiceSettings.gender, isSessionActive, speak, clearAllTimeouts]);
+  }, [voiceSettings.enabled, voiceSettings.gender, isSessionActive, speak, clearAllTimeouts, createTrackedTimeout]);
   
   // Fonction pour démarrer le guidage vocal pour la session Scan Corporel
   const startScanGuidance = useCallback(() => {
@@ -780,7 +784,7 @@ export const useVoiceManager = () => {
     }, 570000);
     
     return true;
-  }, [voiceSettings.enabled, voiceSettings.gender, isSessionActive, speak, clearAllTimeouts]);
+  }, [voiceSettings.enabled, voiceSettings.gender, isSessionActive, speak, clearAllTimeouts, createTrackedTimeout]);
   
   // Fonction pour démarrer le guidage vocal pour la session de cohérence cardiaque
   const startCoherenceGuidance = useCallback(() => {
@@ -820,7 +824,7 @@ export const useVoiceManager = () => {
     }, endTime);
     
     return true;
-  }, [voiceSettings.enabled, voiceSettings.gender, isSessionActive, speak, clearAllTimeouts]);
+  }, [voiceSettings.enabled, voiceSettings.gender, isSessionActive, speak, clearAllTimeouts, createTrackedTimeout]);
   
   // Fonction pour démarrer le guidage vocal pour n'importe quelle session
   const startSessionGuidance = useCallback(() => {
@@ -872,13 +876,37 @@ export const useVoiceManager = () => {
         return true;
       }
       
+      // Récupérer les données de la méditation
+      const meditationData = meditations[currentMeditation];
+      if (!meditationData) {
+        console.error('❌ Données de méditation non trouvées pour:', currentMeditation);
+        return false;
+      }
+
+      // Message d'accueil
+      speak(meditationData.guidance.start);
+
+      // Programmer les phases avec des délais génériques
+      meditationData.guidance.phases.forEach((phaseText, index) => {
+        // Délai simple: 30s par phase
+        createTrackedTimeout(() => {
+          console.log(`🧘 Méditation ${currentMeditation} - Phase ${index + 1}`);
+          speak(phaseText);
+        }, (index + 1) * 30000);
+      });
+
+      // Message de fin
+      createTrackedTimeout(() => {
+        speak(meditationData.guidance.end);
+      }, meditationData.duration * 1000 - 10000); // 10 secondes avant la fin
+
       return true;
     } else {
       // Pour les autres sessions, utiliser un guidage générique
       speak("Bienvenue dans votre session. Suivez le rythme respiratoire et laissez-vous guider.");
       return true;
     }
-  }, [currentSession, currentMeditation, startSosStressGuidance, startScanGuidance, startCoherenceGuidance, speak, queueAudio, voiceSettings.enabled, voiceSettings.gender, isSessionActive]);
+  }, [currentSession, currentMeditation, startSosStressGuidance, startScanGuidance, startCoherenceGuidance, speak, voiceSettings.enabled, voiceSettings.gender, isSessionActive, createTrackedTimeout]);
   
   return {
     speak,
