@@ -526,7 +526,7 @@ export const useVoiceManager = () => {
   // Fonction pour arrêter toute parole
   const stop = useCallback(() => {
     // Arrêter la synthèse vocale
-    console.log('🔇 ARRÊT FORCÉ de toute parole et guidage');
+    console.log('🔇 ARRÊT FORCÉ de toute parole et guidage'); 
     if (synth.current) {
       synth.current.cancel();
     }
@@ -538,6 +538,13 @@ export const useVoiceManager = () => {
       audioElementRef.current.src = '';
       audioElementRef.current = null;
     }
+    
+    // Arrêter tous les éléments audio en cours
+    document.querySelectorAll('audio').forEach(audio => {
+      console.log('🔇 Arrêt forcé d\'un élément audio:', audio.src);
+      audio.pause();
+      audio.src = '';
+    });
     
     // Vider la file d'attente
     audioQueue.current = [];

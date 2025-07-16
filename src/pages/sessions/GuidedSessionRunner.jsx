@@ -6,7 +6,7 @@ import { BreathingGuide } from '../../components/BreathingGuide';
 import { useSessionTimer } from '../../hooks/useSessionTimer';
 import { useBreathingAnimation } from '../../hooks/useBreathingAnimation';
 import { useAudioManager } from '../../hooks/useAudioManager';
-import { useVoiceManager } from '../../hooks/useVoiceManager';
+import { useVoiceManager } from '../../hooks/useVoiceManager'; 
 import { sessions, getBreathingPattern } from '../../data/sessions';
 import { meditations, spiritualMeditations } from '../../data/meditations';
 
@@ -210,7 +210,7 @@ export default function GuidedSessionRunner() {
   // Démarrage vocal automatique
   useEffect(() => {
     if (isSessionActive && !voiceSystemStarted && voiceSettings.enabled) {
-      console.log('🎤 DÉMARRAGE VOCAL AUTOMATIQUE pour session guidée:', currentSession || sessionId, 'Méditation:', currentMeditation);
+      console.log('🎤 DÉMARRAGE VOCAL AUTOMATIQUE pour session guidée:', currentSession || sessionId, 'Méditation:', currentMeditation); 
       setVoiceSystemStarted(true);
       
       // Démarrage immédiat du guidage vocal
@@ -233,8 +233,10 @@ export default function GuidedSessionRunner() {
           }
         }, 28000);
       } else if (currentMeditation === 'metatron') {
-        // Aucun guidage vocal automatique - on laisse le système de fichiers audio fonctionner
-        console.log('🌟 Méditation Métatron - Utilisation des fichiers audio uniquement');
+        // Pour Métatron, on utilise le système normal mais sans démarrer le guidage vocal
+        console.log('🌟 Méditation Métatron - Utilisation des fichiers audio uniquement'); 
+        // On marque quand même comme démarré pour éviter les doublons
+        setVoiceSystemStarted(true);
       } else {
         // Pour les autres sessions, utiliser le système normal
         setTimeout(() => {
@@ -250,8 +252,8 @@ export default function GuidedSessionRunner() {
       const breathingPattern = getCurrentBreathingPattern();
       console.log('▶️ DÉMARRAGE session guidée:', currentSession || sessionId);
       setSessionActive(true);
-      setSessionEnding(false);
-      setVoiceSystemStarted(false);
+      setSessionEnding(false); 
+      setVoiceSystemStarted(false); 
       
       // Reset pour l'entraînement progressif
       if (currentSession === 'progressive') {
@@ -288,10 +290,64 @@ export default function GuidedSessionRunner() {
       // Démarrage du guidage vocal pour la session
       // Attendre un peu pour que tout soit initialisé
       const guidanceTimeout = setTimeout(() => {
-        if (voiceSettings.enabled) {
+        if (voiceSettings.enabled && currentMeditation !== 'metatron') {
           console.log('🎤 Démarrage guidage vocal après délai');
           const success = startSessionGuidance();
           console.log('🎤 Démarrage guidage vocal guidé:', success ? 'réussi' : 'échoué');
+        } else if (currentMeditation === 'metatron') {
+          console.log('🌟 Méditation Métatron - Pas de démarrage automatique du guidage vocal');
+          // Pour Métatron, on gère les fichiers audio manuellement
+          const gender = voiceSettings.gender;
+          const welcomePath = `/audio/meditation/${gender}/metatron-welcome.mp3`;
+          
+          console.log('🎵 Lecture directe audio Métatron welcome:', welcomePath);
+          const audio = new Audio(welcomePath);
+          audio.volume = voiceSettings.volume;
+          
+          // Événements pour détecter les erreurs
+          audio.onerror = (e) => {
+            console.error('❌ Erreur lecture audio welcome Métatron:', e);
+            speak("Bienvenue dans cette méditation d'invocation de l'archange Métatron. Installez-vous confortablement. Fermez les yeux et prenez quelques profondes respirations. Nous allons établir une connexion avec cet être de lumière, gardien des archives akashiques et porteur de la géométrie sacrée. Suivez le rythme respiratoire et ouvrez votre coeur à cette présence divine.");
+          };
+          
+          // Jouer l'audio
+          audio.play().catch(error => {
+            console.error('❌ Erreur lecture audio welcome Métatron:', error);
+            speak("Bienvenue dans cette méditation d'invocation de l'archange Métatron. Installez-vous confortablement. Fermez les yeux et prenez quelques profondes respirations. Nous allons établir une connexion avec cet être de lumière, gardien des archives akashiques et porteur de la géométrie sacrée. Suivez le rythme respiratoire et ouvrez votre coeur à cette présence divine.");
+          });
+          
+          // Programmer les séquences suivantes
+          const sequences = [
+            { time: 30000, name: 'invocation' },
+            { time: 70000, name: 'light' },
+            { time: 110000, name: 'memory' },
+            { time: 150000, name: 'inspiration' },
+            { time: 190000, name: 'protection' },
+            { time: 230000, name: 'elevation' }
+          ];
+          
+          // Créer des timeouts pour chaque séquence
+          sequences.forEach(seq => {
+            setTimeout(() => {
+              if (isSessionActive && voiceSettings.enabled) {
+                const audioPath = `/audio/meditation/${gender}/metatron-${seq.name}.mp3`;
+                console.log(`🎵 Lecture audio Métatron ${seq.name}:`, audioPath);
+                const seqAudio = new Audio(audioPath);
+                seqAudio.volume = voiceSettings.volume;
+                seqAudio.play().catch(error => {
+                  console.error(`❌ Erreur lecture audio ${seq.name}:`, error);
+                  // Fallback vers le texte correspondant dans les phases
+                  const metatron = spiritualMeditations.metatron;
+                  if (metatron && metatron.guidance && metatron.guidance.phases) {
+                    const index = sequences.findIndex(s => s.name === seq.name);
+                    if (index >= 0 && index < metatron.guidance.phases.length) {
+                      speak(metatron.guidance.phases[index]);
+                    }
+                  }
+                });
+              }
+            }, seq.time);
+          });
         }
       }, 1000);
       
@@ -301,8 +357,8 @@ export default function GuidedSessionRunner() {
       setSessionActive(false);
       console.log('⏸️ PAUSE session guidée:', currentSession || sessionId);
       stopTimer();
-      if (stopBreathing) stopBreathing();
-      if (stopAudio) stopAudio();
+      if (stopBreathing) stopBreathing(); 
+      if (stopAudio) stopAudio(); 
       
       // Arrêt explicite de la voix avec vérification
       if (stopVoice) {
@@ -317,8 +373,8 @@ export default function GuidedSessionRunner() {
       }
       
       setLastPhase(null);
-      setSessionEnding(false);
-      setVoiceSystemStarted(false);
+      setSessionEnding(false); 
+      setVoiceSystemStarted(false); 
       
       // Arrêt forcé de tous les timeouts
       const highestId = setTimeout(() => {}, 0);
@@ -328,6 +384,12 @@ export default function GuidedSessionRunner() {
       
       // Arrêt forcé de la synthèse vocale
       window.speechSynthesis.cancel();
+
+      // Arrêter tous les éléments audio en cours
+      document.querySelectorAll('audio').forEach(audio => {
+        audio.pause();
+        audio.src = '';
+      });
       
       // Reset pour l'entraînement progressif
       if (currentSession === 'progressive') {
