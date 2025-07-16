@@ -196,15 +196,79 @@ export default function GuidedSessionRunner() {
   // Démarrage vocal automatique
   useEffect(() => {
     if (isSessionActive && !voiceSystemStarted && voiceSettings.enabled) {
-      console.log('🎤 Démarrage vocal automatique pour session guidée:', currentSession || sessionId);
+      console.log('🎤 DÉMARRAGE VOCAL AUTOMATIQUE pour session guidée:', currentSession || sessionId);
       setVoiceSystemStarted(true);
       
-      setTimeout(() => {
-        const success = startSessionGuidance();
-        console.log('🎤 Démarrage guidage vocal guidé:', success ? 'réussi' : 'échoué');
-      }, 500);
+      // Démarrage immédiat du guidage vocal
+      if (currentSession === 'switch' || sessionId === 'switch') {
+        console.log('🚨 DÉMARRAGE DIRECT GUIDAGE SWITCH');
+        // Message d'accueil (0s)
+        speak("Bienvenue dans votre bulle de calme. Posez vos pieds bien à plat sur le sol. Détendez vos épaules.");
+        
+        // Séquence 2 - Inspiration (12s)
+        setTimeout(() => {
+          if (isSessionActive && voiceSettings.enabled) {
+            speak("Inspirez le calme");
+          }
+        }, 12000);
+        
+        // Séquence 3 - Ancrage (28s)
+        setTimeout(() => {
+          if (isSessionActive && voiceSettings.enabled) {
+            speak("Vos pieds touchent le sol. Vous êtes ancré, solide, stable.");
+          }
+        }, 28000);
+        
+        // Séquence 4 - Expiration (37s)
+        setTimeout(() => {
+          if (isSessionActive && voiceSettings.enabled) {
+            speak("Soufflez doucement");
+          }
+        }, 37000);
+        
+        // Séquence 5 - Inspiration (48s)
+        setTimeout(() => {
+          if (isSessionActive && voiceSettings.enabled) {
+            speak("Accueillez l'air frais");
+          }
+        }, 48000);
+        
+        // Séquence 6 - Libération (58s)
+        setTimeout(() => {
+          if (isSessionActive && voiceSettings.enabled) {
+            speak("Le stress s'évapore à chaque souffle. Votre corps se détend profondément.");
+          }
+        }, 58000);
+        
+        // Séquence 7 - Expiration (67s)
+        setTimeout(() => {
+          if (isSessionActive && voiceSettings.enabled) {
+            speak("Relâchez tout");
+          }
+        }, 67000);
+        
+        // Séquence 8 - Recentrage (78s)
+        setTimeout(() => {
+          if (isSessionActive && voiceSettings.enabled) {
+            speak("Vous retrouvez votre centre. Tout va bien. Vous êtes en sécurité.");
+          }
+        }, 78000);
+        
+        // Séquence 9 - Message de fin (85s)
+        setTimeout(() => {
+          if (isSessionActive && voiceSettings.enabled) {
+            speak("Parfait. Vous avez retrouvé votre calme intérieur. Gardez cette sensation avec vous.");
+          }
+        }, 85000);
+      } else {
+        // Pour les autres sessions, utiliser le système normal
+        setTimeout(() => {
+          const success = startSessionGuidance();
+          console.log('🎤 Démarrage guidage vocal guidé:', success ? 'réussi' : 'échoué');
+        }, 500);
+      }
     }
-  }, [isSessionActive, voiceSystemStarted, voiceSettings.enabled, startSessionGuidance, currentSession, sessionId]);
+  }, [isSessionActive, voiceSystemStarted, voiceSettings.enabled, startSessionGuidance, currentSession, sessionId, speak]);
 
   const handleToggleSession = () => {
     if (!isSessionActive) {
@@ -272,6 +336,15 @@ export default function GuidedSessionRunner() {
       setSessionEnding(false);
       setVoiceSystemStarted(false);
       
+      // Arrêt forcé de tous les timeouts
+      const highestId = setTimeout(() => {}, 0);
+      for (let i = 0; i < highestId; i++) {
+        clearTimeout(i);
+      }
+      
+      // Arrêt forcé de la synthèse vocale
+      window.speechSynthesis.cancel();
+      
       // Reset pour l'entraînement progressif
       if (currentSession === 'progressive') {
         setCurrentProgressivePhase(0);
@@ -310,6 +383,15 @@ export default function GuidedSessionRunner() {
     setLastPhase(null);
     setSessionEnding(false);
     setVoiceSystemStarted(false);
+    
+    // Arrêt forcé de tous les timeouts
+    const highestId = setTimeout(() => {}, 0);
+    for (let i = 0; i < highestId; i++) {
+      clearTimeout(i);
+    }
+    
+    // Arrêt forcé de la synthèse vocale
+    window.speechSynthesis.cancel();
     
     // Reset pour l'entraînement progressif
     if (currentSession === 'progressive') {

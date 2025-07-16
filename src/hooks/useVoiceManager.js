@@ -526,7 +526,7 @@ export const useVoiceManager = () => {
   // Fonction pour arrêter toute parole
   const stop = useCallback(() => {
     // Arrêter la synthèse vocale
-    console.log('🔇 ARRÊT FORCÉ de toute parole et guidage', new Date().toISOString());
+    console.log('🔇 ARRÊT FORCÉ de toute parole et guidage');
     if (synth.current) {
       synth.current.cancel();
     }
@@ -540,14 +540,20 @@ export const useVoiceManager = () => {
     // Vider la file d'attente
     audioQueue.current = [];
     isPlayingAudio.current = false;
+
+    // Arrêt direct de la synthèse vocale
+    window.speechSynthesis.cancel();
     
     // Réinitialiser les variables de guidage
     console.log('🔄 Réinitialisation complète du système de guidage vocal');
     sessionGuidanceStarted.current = false;
     sessionGuidancePhase.current = 0;
     
-    // Nettoyer tous les timeouts
-    clearAllTimeouts(); 
+    // Nettoyer tous les timeouts possibles
+    const highestId = setTimeout(() => {}, 0);
+    for (let i = 0; i < highestId; i++) {
+      clearTimeout(i);
+    }
     
     console.log('🔇 Toute parole arrêtée');
     return true;
