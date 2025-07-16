@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Home, Hand, DollarSign, Heart, Armchair, Moon } from 'lucide-react';
+import { Home, Hand, DollarSign, Heart, Armchair, Moon, Star } from 'lucide-react';
 import { useAppStore } from '../../store/appStore';
 
 export default function Meditations() {
@@ -13,6 +13,7 @@ export default function Meditations() {
     { id: 'love', name: 'Amour Universel', icon: Heart, duration: 8, desc: 'Ouvrez votre cœur', color: 'from-pink-500/20 to-rose-500/20', borderColor: 'border-pink-500/30' },
     { id: 'confidence', name: 'Confiance en Soi', icon: Armchair, duration: 6, desc: 'Renforcez votre pouvoir', color: 'from-blue-500/20 to-cyan-500/20', borderColor: 'border-blue-500/30' },
     { id: 'sleep', name: 'Sommeil Profond', icon: Moon, duration: 10, desc: 'Préparez-vous au repos', color: 'from-indigo-500/20 to-purple-500/20', borderColor: 'border-indigo-500/30' },
+    { id: 'metatron', name: 'Invocation de l\'Archange Métatron', icon: Star, duration: 5, desc: 'Connexion spirituelle', color: 'from-violet-700/20 to-purple-700/20', borderColor: 'border-violet-700/30' },
   ];
 
   const handleMeditationSelect = (meditationId) => {

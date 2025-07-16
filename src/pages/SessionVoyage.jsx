@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Home, Sparkles, Moon } from 'lucide-react';
+import { Home, Sparkles, Moon, Star } from 'lucide-react';
 
 export default function SessionVoyage() {
   const navigate = useNavigate();
@@ -26,6 +26,19 @@ export default function SessionVoyage() {
               <h3 className="font-semibold text-xl mb-1">✨ Méditations thématiques</h3>
               <p className="text-white/70">Gratitude, Abondance, Amour, Confiance, Sommeil</p>
               <p className="text-white/50 text-sm mt-1">5-10 minutes • Guidage vocal premium</p>
+            </div>
+          </div>
+        </Link>
+
+        <Link to="/sessions/voyage/meditations" className="bg-gradient-to-r from-violet-700/20 to-purple-700/20 border border-violet-700/30 rounded-xl p-6 hover:scale-[1.02] transition-all duration-200">
+          <div className="flex items-center gap-4">
+            <div className="w-16 h-16 bg-white/10 rounded-xl flex items-center justify-center">
+              <Star size={32} className="text-violet-400" />
+            </div>
+            <div>
+              <h3 className="font-semibold text-xl mb-1">🌟 Spiritualité</h3>
+              <p className="text-white/70">Invocation de l'Archange Métatron</p>
+              <p className="text-white/50 text-sm mt-1">5 minutes • Connexion spirituelle</p>
             </div>
           </div>
         </Link>

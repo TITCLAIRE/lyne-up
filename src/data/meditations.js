@@ -121,5 +121,31 @@ export const meditations = {
       ],
       end: "Vous êtes maintenant parfaitement préparé pour un sommeil profond et réparateur."
     }
+  },
+
+  metatron: {
+    name: 'Invocation de l\'Archange Métatron',
+    icon: 'Star',
+    duration: 300, // 5 minutes
+    description: 'Connexion spirituelle',
+    color: 'rgba(124, 58, 237, 0.2)', // Violet plus profond
+    borderColor: 'rgba(124, 58, 237, 0.3)',
+    breathingPattern: { inhale: 4, hold: 0, exhale: 6 },
+    frequency: '852hz', // Fréquence de retour à l'ordre spirituel
+    guidance: {
+      start: "Bienvenue dans cette méditation d'invocation de l'Archange Métatron. Installez-vous confortablement et ouvrez votre cœur à cette connexion spirituelle.",
+      inhale: ["Inspirez l'énergie divine", "Accueillez la lumière céleste", "Recevez la sagesse éternelle"],
+      exhale: ["Expirez toute résistance", "Libérez les voiles de l'illusion", "Ouvrez-vous à la vérité"],
+      phases: [
+        "Ô Metatron, ange de la Présence, scribe de Lumière, gardien du Trône Divin, toi qui as connu la chair et t'es élevé au-delà, je t'appelle avec humilité.",
+        "Que ta lumière entoure mon esprit, que ta sagesse éclaire mon cœur, que ta voix me guide sur les chemins de vérité.",
+        "Toi qui écris dans les Livres Célestes, inscris en moi la mémoire de mon âme. Aide-moi à me souvenir de qui je suis, au-delà des voiles de l'oubli et des peurs humaines.",
+        "Toi qui transmets la pensée divine, fais descendre en moi l'inspiration claire, la parole juste, et le silence plein de sens.",
+        "Entoure-moi de ton Cube sacré, géométrie vivante de la création, bouclier de lumière contre les ombres, structure de l'ordre cosmique. Protège mon corps, mon cœur, mon esprit.",
+        "Metatron, Archange de feu blanc, ouvre les portes de la haute conscience. Aide-moi à élever ma fréquence, à faire rayonner l'amour, et à servir ce qui est plus grand que moi.",
+        "Je te rends grâce. Amen. Amen. Amen."
+      ],
+      end: "Que la sagesse et la protection de l'Archange Métatron vous accompagnent. Gardez cette connexion sacrée en vous."
+    }
   }
 };
