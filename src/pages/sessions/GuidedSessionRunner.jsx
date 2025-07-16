@@ -35,7 +35,7 @@ export default function GuidedSessionRunner() {
   const { timeRemaining, progress, startTimer, stopTimer, resetTimer } = useSessionTimer(handleSessionComplete);
   const { breathingState, startBreathing, stopBreathing } = useBreathingAnimation();
   const { startAudio, stopAudio, playGong, getCurrentFrequencyName } = useAudioManager();
-  const { speak, stop: stopVoice, startSessionGuidance } = useVoiceManager();
+  const { speak, stop: stopVoice, startSessionGuidance, clearAllTimeouts } = useVoiceManager();
 
   const [lastPhase, setLastPhase] = useState(null);
   const [sessionEnding, setSessionEnding] = useState(false);
@@ -249,14 +249,20 @@ export default function GuidedSessionRunner() {
       setSessionActive(false);
       console.log('⏸️ PAUSE session guidée:', currentSession || sessionId);
       stopTimer();
-      stopBreathing();
-      stopAudio();
+      if (stopBreathing) stopBreathing();
+      if (stopAudio) stopAudio();
       
       // Arrêt explicite de la voix avec vérification
       if (stopVoice) {
         console.log('🔇 ARRÊT FORCÉ de la voix lors de la pause');
         const voiceStopped = stopVoice();
         console.log('🔇 Résultat arrêt voix:', voiceStopped ? 'Réussi' : 'Échoué');
+      }
+
+      // Nettoyage explicite de tous les timeouts
+      if (clearAllTimeouts) {
+        console.log('🧹 Nettoyage forcé de tous les timeouts lors de la pause');
+        clearAllTimeouts();
       }
       
       setLastPhase(null);
@@ -275,7 +281,7 @@ export default function GuidedSessionRunner() {
   const handleGoBack = () => {
     console.log('🏠 RETOUR à l\'accueil depuis session guidée');
     setSessionActive(false);
-    stopTimer();
+    if (stopTimer) stopTimer();
     
     // Arrêter l'audio et la respiration avec vérification
     if (stopBreathing) stopBreathing();
@@ -285,8 +291,14 @@ export default function GuidedSessionRunner() {
       const voiceStopped = stopVoice();
       console.log('🔇 Résultat arrêt voix avant navigation:', voiceStopped ? 'Réussi' : 'Échoué');
     }
+
+    // Nettoyage explicite de tous les timeouts
+    if (clearAllTimeouts) {
+      console.log('🧹 Nettoyage forcé de tous les timeouts avant navigation');
+      clearAllTimeouts();
+    }
     
-    resetTimer();
+    if (resetTimer) resetTimer();
     setLastPhase(null);
     setSessionEnding(false);
     setVoiceSystemStarted(false);

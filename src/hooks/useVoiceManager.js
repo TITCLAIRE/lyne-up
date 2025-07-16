@@ -1,6 +1,9 @@
 import { useEffect, useRef, useCallback } from 'react';
 import { useAppStore } from '../store/appStore';
 
+// Stockage global des timeouts pour permettre un nettoyage complet
+const globalTimeouts = new Set();
+
 export const useVoiceManager = () => {
   const { 
     voiceSettings, 
@@ -14,12 +17,37 @@ export const useVoiceManager = () => {
   const currentUtterance = useRef(null);
   const isInitialized = useRef(false);
   const sessionGuidanceStarted = useRef(false);
-  const sessionGuidanceTimeout = useRef(null);
   const sessionGuidancePhase = useRef(0);
   const lastSpeakTime = useRef(0);
   const audioElementRef = useRef(null);
   const audioQueue = useRef([]);
   const isPlayingAudio = useRef(false);
+  
+  // Fonction pour créer un timeout qui sera automatiquement suivi
+  const createTrackedTimeout = useCallback((callback, delay) => {
+    const timeoutId = setTimeout(() => {
+      globalTimeouts.delete(timeoutId);
+      callback();
+    }, delay);
+    
+    globalTimeouts.add(timeoutId);
+    return timeoutId;
+  }, []);
+  
+  // Fonction pour nettoyer tous les timeouts
+  const clearAllTimeouts = useCallback(() => {
+    console.log(`🧹 Nettoyage de TOUS les timeouts (${globalTimeouts.size} timeouts actifs)`);
+    
+    // Nettoyer tous les timeouts enregistrés
+    globalTimeouts.forEach(id => {
+      clearTimeout(id);
+    });
+    
+    // Vider la collection
+    globalTimeouts.clear();
+    
+    console.log('✅ Tous les timeouts ont été nettoyés');
+  }, []);
   
   // Initialiser les voix
   useEffect(() => {
@@ -61,7 +89,7 @@ export const useVoiceManager = () => {
   useEffect(() => {
     return () => {
       // Nettoyer tous les timeouts
-      clearAllTimeouts();
+      clearAllTimeouts(); 
       
       // Arrêter toute synthèse vocale en cours
       if (synth.current) {
@@ -80,31 +108,11 @@ export const useVoiceManager = () => {
     };
   }, []);
   
-  // Fonction pour nettoyer tous les timeouts
-  const clearAllTimeouts = useCallback(() => {
-    console.log('🧹 Nettoyage de TOUS les timeouts de guidage');
-    
-    // Nettoyer le timeout principal
-    if (sessionGuidanceTimeout.current) {
-      clearTimeout(sessionGuidanceTimeout.current);
-      sessionGuidanceTimeout.current = null;
-    }
-    
-    // Nettoyer tous les timeouts programmés pour SOS Stress
-    for (let i = 0; i < 10; i++) {
-      clearTimeout(i);
-    }
-  }, []);
-  
   // Réinitialiser le guidage vocal lorsque la session change
   useEffect(() => {
     sessionGuidanceStarted.current = false;
     sessionGuidancePhase.current = 0;
-    
-    if (sessionGuidanceTimeout.current) {
-      clearTimeout(sessionGuidanceTimeout.current);
-      sessionGuidanceTimeout.current = null;
-    }
+    clearAllTimeouts();
   }, [currentSession, currentMeditation]);
   
   // Arrêter le guidage vocal lorsque la session est arrêtée
@@ -516,7 +524,7 @@ export const useVoiceManager = () => {
   // Fonction pour arrêter toute parole
   const stop = useCallback(() => {
     // Arrêter la synthèse vocale
-    console.log('🔇 ARRÊT FORCÉ de toute parole et guidage');
+    console.log('🔇 ARRÊT FORCÉ de toute parole et guidage', new Date().toISOString());
     if (synth.current) {
       synth.current.cancel();
     }
@@ -537,7 +545,7 @@ export const useVoiceManager = () => {
     sessionGuidancePhase.current = 0;
     
     // Nettoyer tous les timeouts
-    clearAllTimeouts();
+    clearAllTimeouts(); 
     
     console.log('🔇 Toute parole arrêtée');
     return true;
@@ -556,7 +564,7 @@ export const useVoiceManager = () => {
     console.log('🚨 DÉMARRAGE SWITCH/SOS STRESS - DIAGNOSTIC COMPLET', voiceSettings.gender === 'female' ? '(Claire)' : '(Thierry)');
     
     // Tester tous les fichiers audio pour SOS Stress
-    console.log('🔍 TEST DES FICHIERS AUDIO SWITCH/SOS STRESS...');
+    console.log('🔍 TEST DES FICHIERS AUDIO SWITCH/SOS STRESS...', new Date().toISOString());
     const gender = voiceSettings.gender;
     const filesToTest = [
       'welcome', 'breathe-calm', 'grounding', 'breathe-softly', 
@@ -576,47 +584,56 @@ export const useVoiceManager = () => {
     });
     
     // Séquence 1 - Message d'accueil (0s)
-    setTimeout(() => {
+    createTrackedTimeout(() => {
+      console.log('🎯 SOS: welcome (0.5s - accueil)');
       speak("Bienvenue dans votre bulle de calme. Posez vos pieds bien à plat sur le sol. Détendez vos épaules.");
     }, 500);
     
     // Séquence 2 - Inspiration (12s)
-    sessionGuidanceTimeout.current = setTimeout(() => {
+    createTrackedTimeout(() => {
+      console.log('🎯 SOS: breathe-calm (12s - inspiration)');
       speak("Inspirez le calme");
     }, 12000);
     
     // Séquence 3 - Ancrage (28s)
-    sessionGuidanceTimeout.current = setTimeout(() => {
+    createTrackedTimeout(() => {
+      console.log('🎯 SOS: grounding (28s - ancrage)');
       speak("Vos pieds touchent le sol. Vous êtes ancré, solide, stable.");
     }, 28000);
     
     // Séquence 4 - Expiration (37s)
-    sessionGuidanceTimeout.current = setTimeout(() => {
+    createTrackedTimeout(() => {
+      console.log('🎯 SOS: breathe-softly (37s - expiration)');
       speak("Soufflez doucement");
     }, 37000);
     
     // Séquence 5 - Inspiration (48s)
-    sessionGuidanceTimeout.current = setTimeout(() => {
+    createTrackedTimeout(() => {
+      console.log('🎯 SOS: breathe-fresh (48s - inspiration)');
       speak("Accueillez l'air frais");
     }, 48000);
     
     // Séquence 6 - Libération (58s)
-    sessionGuidanceTimeout.current = setTimeout(() => {
+    createTrackedTimeout(() => {
+      console.log('🎯 SOS: stress-release (58s - libération)');
       speak("Le stress s'évapore à chaque souffle. Votre corps se détend profondément.");
     }, 58000);
     
     // Séquence 7 - Expiration (67s)
-    sessionGuidanceTimeout.current = setTimeout(() => {
+    createTrackedTimeout(() => {
+      console.log('🎯 SOS: breathe-release (67s - expiration)');
       speak("Relâchez tout");
     }, 67000);
     
     // Séquence 8 - Recentrage (78s)
-    sessionGuidanceTimeout.current = setTimeout(() => {
+    createTrackedTimeout(() => {
+      console.log('🎯 SOS: center-peace (78s - recentrage)');
       speak("Vous retrouvez votre centre. Tout va bien. Vous êtes en sécurité.");
     }, 78000);
     
     // Séquence 9 - Message de fin (85s)
-    sessionGuidanceTimeout.current = setTimeout(() => {
+    createTrackedTimeout(() => {
+      console.log('🎯 SOS: completion (85s - fin)');
       speak("Parfait. Vous avez retrouvé votre calme intérieur. Gardez cette sensation avec vous.");
     }, 85000);
     
@@ -633,93 +650,93 @@ export const useVoiceManager = () => {
     console.log('🧠 DÉMARRAGE SCAN CORPOREL', voiceSettings.gender === 'female' ? '(Claire)' : '(Thierry)');
     
     // Nettoyer tout timeout existant pour éviter les doublons
-    clearAllTimeouts();
+    clearAllTimeouts(); 
     
     // Séquence 1 - Message d'accueil (0s)
     speak("Bienvenue dans cette séance de scan corporel. Installez-vous confortablement, fermez les yeux si vous le souhaitez. Nous allons explorer chaque partie de votre corps pour une relaxation profonde.");
     
     // Séquence 2 - Tête (30s)
-    sessionGuidanceTimeout.current = setTimeout(() => {
+    createTrackedTimeout(() => {
       speak("Portez votre attention sur le sommet de votre tête. Sentez cette zone se détendre complètement.");
     }, 30000);
     
     // Séquence 3 - Visage (60s)
-    sessionGuidanceTimeout.current = setTimeout(() => {
+    createTrackedTimeout(() => {
       speak("Descendez vers votre visage. Relâchez votre front, vos sourcils, vos paupières. Détendez vos mâchoires, votre langue, votre gorge.");
     }, 60000);
     
     // Séquence 4 - Cou (90s)
-    sessionGuidanceTimeout.current = setTimeout(() => {
+    createTrackedTimeout(() => {
       speak("Votre cou et vos épaules se relâchent maintenant. Laissez partir toute tension accumulée dans cette zone.");
     }, 90000);
     
     // Séquence 5 - Poitrine (120s)
-    sessionGuidanceTimeout.current = setTimeout(() => {
+    createTrackedTimeout(() => {
       speak("Votre poitrine s'ouvre et se détend à chaque respiration. Sentez l'air qui entre et qui sort librement.");
     }, 120000);
     
     // Séquence 6 - Dos (150s)
-    sessionGuidanceTimeout.current = setTimeout(() => {
+    createTrackedTimeout(() => {
       speak("Votre dos se détend vertèbre par vertèbre, du haut vers le bas. Chaque vertèbre s'aligne parfaitement.");
     }, 150000);
     
     // Séquence 7 - Ventre (180s)
-    sessionGuidanceTimeout.current = setTimeout(() => {
+    createTrackedTimeout(() => {
       speak("Votre ventre se gonfle et se dégonfle naturellement, sans effort. Sentez une douce chaleur s'y répandre.");
     }, 180000);
     
     // Séquence 8 - Hanches (210s)
-    sessionGuidanceTimeout.current = setTimeout(() => {
+    createTrackedTimeout(() => {
       speak("Vos hanches et votre bassin se relâchent complètement. Sentez le poids de votre corps s'enfoncer dans le support.");
     }, 210000);
     
     // Séquence 9 - Cuisses (240s)
-    sessionGuidanceTimeout.current = setTimeout(() => {
+    createTrackedTimeout(() => {
       speak("Vos cuisses se détendent profondément. Toute tension s'évapore à chaque expiration.");
     }, 240000);
     
     // Séquence 10 - Genoux (255s)
-    sessionGuidanceTimeout.current = setTimeout(() => {
+    createTrackedTimeout(() => {
       speak("Vos genoux se détendent. Sentez l'espace dans vos articulations.");
     }, 255000);
     
     // Séquence 11 - Mollets (270s)
-    sessionGuidanceTimeout.current = setTimeout(() => {
+    createTrackedTimeout(() => {
       speak("Vos mollets se relâchent entièrement. Sentez l'énergie circuler librement.");
     }, 270000);
     
     // Séquence 12 - Chevilles (285s)
-    sessionGuidanceTimeout.current = setTimeout(() => {
+    createTrackedTimeout(() => {
       speak("Vos chevilles se détendent. Sentez l'espace dans ces articulations.");
     }, 285000);
     
     // Séquence 13 - Pieds (300s)
-    sessionGuidanceTimeout.current = setTimeout(() => {
+    createTrackedTimeout(() => {
       speak("Vos pieds, jusqu'au bout de vos orteils, sont maintenant complètement détendus et lourds.");
     }, 300000);
     
     // Séquence 14 - Corps entier (360s)
-    sessionGuidanceTimeout.current = setTimeout(() => {
+    createTrackedTimeout(() => {
       speak("Une vague de bien-être parcourt maintenant tout votre corps, de la tête aux pieds. Vous êtes dans un état de relaxation profonde.");
     }, 360000);
     
     // Séquence 15 - Respiration (420s)
-    sessionGuidanceTimeout.current = setTimeout(() => {
+    createTrackedTimeout(() => {
       speak("Observez votre respiration, calme et régulière. Chaque inspiration vous apporte énergie et vitalité. Chaque expiration approfondit votre relaxation.");
     }, 420000);
     
     // Séquence 16 - Conscience (480s)
-    sessionGuidanceTimeout.current = setTimeout(() => {
+    createTrackedTimeout(() => {
       speak("Prenez conscience de votre corps dans son ensemble, parfaitement détendu et en harmonie.");
     }, 480000);
     
     // Séquence 17 - Présence (540s)
-    sessionGuidanceTimeout.current = setTimeout(() => {
+    createTrackedTimeout(() => {
       speak("Restez dans cet état de relaxation profonde, en pleine conscience de votre corps et de votre respiration.");
     }, 540000);
     
     // Séquence 18 - Fin (570s)
-    sessionGuidanceTimeout.current = setTimeout(() => {
+    createTrackedTimeout(() => {
       speak("Progressivement, reprenez conscience de votre environnement. Bougez doucement vos doigts, vos orteils. Étirez-vous si vous le souhaitez. Votre corps est maintenant complètement détendu et votre esprit apaisé.");
     }, 570000);
     
@@ -736,7 +753,7 @@ export const useVoiceManager = () => {
     console.log('💓 DÉMARRAGE COHÉRENCE CARDIAQUE', voiceSettings.gender === 'female' ? '(Claire)' : '(Thierry)');
     
     // Nettoyer tout timeout existant pour éviter les doublons
-    clearAllTimeouts();
+    clearAllTimeouts(); 
     
     // Message d'accueil
     speak("Bienvenue dans votre session de cohérence cardiaque. Installez-vous confortablement et suivez le rythme respiratoire.");
@@ -745,21 +762,21 @@ export const useVoiceManager = () => {
     const sessionDuration = 300; // 5 minutes par défaut
     const midPoint = Math.floor(sessionDuration / 2) * 1000;
     
-    sessionGuidanceTimeout.current = setTimeout(() => {
+    createTrackedTimeout(() => {
       speak("Vous êtes à mi-parcours. Continuez ce rythme respiratoire qui harmonise votre cœur et votre esprit.");
     }, midPoint);
     
     // Message à 1 minute de la fin
     const oneMinuteBeforeEnd = (sessionDuration - 60) * 1000;
     
-    sessionGuidanceTimeout.current = setTimeout(() => {
+    createTrackedTimeout(() => {
       speak("Plus qu'une minute. Savourez ces derniers instants de cohérence.");
     }, oneMinuteBeforeEnd);
     
     // Message de fin
     const endTime = (sessionDuration - 10) * 1000;
     
-    sessionGuidanceTimeout.current = setTimeout(() => {
+    createTrackedTimeout(() => {
       speak("Votre session de cohérence cardiaque se termine. Gardez cette harmonie avec vous tout au long de votre journée.");
     }, endTime);
     
@@ -797,13 +814,14 @@ export const useVoiceManager = () => {
   return {
     speak,
     stop,
+    clearAllTimeouts,
     startSessionGuidance: useCallback(() => {
       console.log('🔄 Réinitialisation du guidage avant démarrage');
       // Réinitialiser l'état pour permettre un nouveau démarrage
       sessionGuidanceStarted.current = false;
       
       // Nettoyer tous les timeouts existants
-      clearAllTimeouts();
+      clearAllTimeouts(); 
       
       return startSessionGuidance();
     }, [startSessionGuidance, clearAllTimeouts]),
