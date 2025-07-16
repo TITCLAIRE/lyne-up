@@ -36,7 +36,6 @@ export default function GuidedSessionRunner() {
   const { breathingState, startBreathing, stopBreathing } = useBreathingAnimation();
   const { startAudio, stopAudio, playGong, getCurrentFrequencyName } = useAudioManager();
   const { speak, stop: stopVoice, startSessionGuidance } = useVoiceManager();
-  const { timeRemaining, progress, startTimer, stopTimer, resetTimer } = useSessionTimer(handleSessionComplete);
 
   const [lastPhase, setLastPhase] = useState(null);
   const [sessionEnding, setSessionEnding] = useState(false);
