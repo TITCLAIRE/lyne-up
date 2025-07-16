@@ -618,8 +618,41 @@ export default function GuidedSessionRunner() {
           <div className="text-left">
             <p className="text-sm text-blue-200 font-medium mb-1">Important :</p>
             <p className="text-xs text-blue-100/80 leading-relaxed">
-              ? 'bg-white/10 text-white/50 cursor-not-allowed'
-              : currentSession === 'kids'
+              Pour une expérience optimale, utilisez des écouteurs ou un casque audio. Le guidage vocal et les fréquences sonores sont conçus pour créer un environnement immersif.
+            </p>
+          </div>
+        </div>
+
+        {/* Timer et progression */}
+        <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-6 mb-6">
+          <div className="text-center mb-4">
+            <div className="text-4xl font-bold mb-2">{formatTime(timeRemaining)}</div>
+            <div className="w-full bg-white/20 rounded-full h-2">
+              <div 
+                className="bg-gradient-to-r from-blue-400 to-cyan-400 h-2 rounded-full transition-all duration-1000"
+                style={{ width: `${progress}%` }}
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Guide respiratoire */}
+        <div className="mb-6">
+          <BreathingGuide 
+            breathingState={breathingState}
+            currentSession={currentSession}
+          />
+        </div>
+
+        {/* Contrôles */}
+        <div className="flex gap-4 justify-center">
+          <button
+            onClick={handleToggleSession}
+            disabled={sessionEnding}
+            className={`py-4 px-8 rounded-2xl font-semibold flex items-center justify-center gap-2 transition-all duration-200 ${
+              sessionEnding 
+                ? 'bg-white/10 text-white/50 cursor-not-allowed'
+                : currentSession === 'kids'
                 ? 'bg-gradient-to-r from-pink-500 to-purple-500 text-white hover:from-pink-600 hover:to-purple-600'
                 : currentSession === 'reset'
                 ? 'bg-gradient-to-r from-indigo-500 to-purple-500 text-white hover:from-indigo-600 hover:to-purple-600'
@@ -628,30 +661,31 @@ export default function GuidedSessionRunner() {
                 : currentSession === 'seniors'
                 ? 'bg-gradient-to-r from-blue-400 to-cyan-500 text-white hover:from-blue-500 hover:to-cyan-600'
                 : 'bg-gradient-to-r from-blue-500 to-cyan-500 text-white hover:from-blue-600 hover:to-cyan-600'
-          }`}
-        >
-          {sessionEnding ? (
-            <>Session terminée</>
-          ) : (
-            <>
-              {isSessionActive ? <Pause size={20} /> : <Play size={20} />}
-              {isSessionActive ? 'Pause' : (
-                currentSession === 'kids' ? 'C\'est parti !' : 
-                currentSession === 'reset' ? 'Commencer RESET' : 
-                currentSession === 'progressive' ? 'Commencer l\'entraînement' :
-                currentSession === 'seniors' ? 'Commencer SENIORS +' :
-                'Commencer'
-              )}
-            </>
-          )}
-        </button>
-        <button
-          onClick={handleGoBack}
-          className="bg-white/10 border-2 border-white/30 text-white py-4 px-6 rounded-2xl font-semibold flex items-center justify-center gap-2 hover:bg-white/20 transition-all duration-200"
-        >
-          <Home size={20} />
-          Retour
-        </button>
+            }`}
+          >
+            {sessionEnding ? (
+              <>Session terminée</>
+            ) : (
+              <>
+                {isSessionActive ? <Pause size={20} /> : <Play size={20} />}
+                {isSessionActive ? 'Pause' : (
+                  currentSession === 'kids' ? 'C\'est parti !' : 
+                  currentSession === 'reset' ? 'Commencer RESET' : 
+                  currentSession === 'progressive' ? 'Commencer l\'entraînement' :
+                  currentSession === 'seniors' ? 'Commencer SENIORS +' :
+                  'Commencer'
+                )}
+              </>
+            )}
+          </button>
+          <button
+            onClick={handleGoBack}
+            className="bg-white/10 border-2 border-white/30 text-white py-4 px-6 rounded-2xl font-semibold flex items-center justify-center gap-2 hover:bg-white/20 transition-all duration-200"
+          >
+            <Home size={20} />
+            Retour
+          </button>
+        </div>
       </div>
     </div>
   );
