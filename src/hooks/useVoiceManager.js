@@ -524,14 +524,14 @@ export const useVoiceManager = () => {
   // Fonction pour démarrer le guidage vocal pour la session SOS Stress
   const startSosStressGuidance = useCallback(() => {
     if (!voiceSettings.enabled || !isSessionActive) {
-      console.log('🔇 Guidage vocal désactivé ou session inactive');
+      console.log('🔇 Guidage vocal SOS désactivé ou session inactive');
       return false;
     }
     
-    console.log('🚨 DÉMARRAGE SOS STRESS - DIAGNOSTIC COMPLET', voiceSettings.gender === 'female' ? '(Claire)' : '(Thierry)');
+    console.log('🚨 DÉMARRAGE SWITCH/SOS STRESS - DIAGNOSTIC COMPLET', voiceSettings.gender === 'female' ? '(Claire)' : '(Thierry)');
     
     // Tester tous les fichiers audio pour SOS Stress
-    console.log('🔍 TEST DES FICHIERS AUDIO SOS STRESS...');
+    console.log('🔍 TEST DES FICHIERS AUDIO SWITCH/SOS STRESS...');
     const gender = voiceSettings.gender;
     const filesToTest = [
       'welcome', 'breathe-calm', 'grounding', 'breathe-softly', 
@@ -736,14 +736,15 @@ export const useVoiceManager = () => {
   // Fonction pour démarrer le guidage vocal pour n'importe quelle session
   const startSessionGuidance = useCallback(() => {
     if (sessionGuidanceStarted.current) {
-      console.log('🔇 Guidage vocal déjà démarré');
+      console.log('🔇 Guidage vocal déjà démarré pour:', currentSession);
       return false;
     }
     sessionGuidanceStarted.current = true;
     
     console.log('🎯 Démarrage guidage vocal pour session:', currentSession);
     
-    if (currentSession === 'switch') {
+    // Utiliser le même guidage pour 'switch' et 'sos'
+    if (currentSession === 'switch' || currentSession === 'sos') {
       return startSosStressGuidance();
     } else if (currentSession === 'scan') {
       return startScanGuidance();
@@ -763,7 +764,11 @@ export const useVoiceManager = () => {
   return {
     speak,
     stop,
-    startSessionGuidance,
+    startSessionGuidance: useCallback(() => {
+      // Réinitialiser l'état pour permettre un nouveau démarrage
+      sessionGuidanceStarted.current = false;
+      return startSessionGuidance();
+    }, [startSessionGuidance]),
     isInitialized: isInitialized.current,
   };
 };

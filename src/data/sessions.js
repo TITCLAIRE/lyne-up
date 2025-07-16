@@ -191,7 +191,7 @@ export const sessions = {
 // Rythmes respiratoires par défaut pour les sessions sans pattern défini
 export const defaultBreathingPatterns = {
   // Sessions d'urgence - Rythme anti-stress
-  'sos': { inhale: 4, hold: 0, exhale: 6 },
+  'sos': { inhale: 4, hold: 0, exhale: 6 }, // Même pattern que switch
   'focus': { inhale: 4, hold: 0, exhale: 6 },
   'recovery': { inhale: 4, hold: 0, exhale: 6 },
   'transition': { inhale: 4, hold: 0, exhale: 6 },

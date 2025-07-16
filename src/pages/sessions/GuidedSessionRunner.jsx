@@ -196,14 +196,15 @@ export default function GuidedSessionRunner() {
   // Démarrage vocal automatique
   useEffect(() => {
     if (isSessionActive && !voiceSystemStarted && voiceSettings.enabled) {
-      console.log('🎤 Démarrage vocal automatique pour session guidée:', currentSession);
+      console.log('🎤 Démarrage vocal automatique pour session guidée:', currentSession || sessionId);
       setVoiceSystemStarted(true);
       
       setTimeout(() => {
-        startSessionGuidance();
+        const success = startSessionGuidance();
+        console.log('🎤 Démarrage guidage vocal guidé:', success ? 'réussi' : 'échoué');
       }, 500);
     }
-  }, [isSessionActive, voiceSystemStarted, voiceSettings.enabled, startSessionGuidance]);
+  }, [isSessionActive, voiceSystemStarted, voiceSettings.enabled, startSessionGuidance, currentSession, sessionId]);
 
   const handleToggleSession = () => {
     if (!isSessionActive) {
@@ -231,12 +232,18 @@ export default function GuidedSessionRunner() {
       }
       
       // Démarrer le timer et la respiration
+      const duration = sessionData?.duration || 180;
+      console.log('⏱️ Durée session:', duration, 'secondes');
+      startTimer(duration);
+      startBreathing(breathingPattern);
+      
+      // Démarrage du guidage vocal pour la session
+      if (voiceSettings.enabled) {
         setTimeout(() => {
           const success = startSessionGuidance();
           console.log('🎤 Démarrage guidage vocal guidé:', success ? 'réussi' : 'échoué');
         }, 500);
-      startBreathing(breathingPattern);
-      
+      }
     } else {
       setSessionActive(false);
       stopTimer();
