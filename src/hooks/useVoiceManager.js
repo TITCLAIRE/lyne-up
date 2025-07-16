@@ -1,9 +1,6 @@
 import { useEffect, useRef, useCallback } from 'react';
 import { useAppStore } from '../store/appStore';
 
-// Stockage des timeouts par instance du hook
-const timeoutRegistry = new Map();
-
 export const useVoiceManager = () => {
   const { 
     voiceSettings, 
@@ -22,7 +19,6 @@ export const useVoiceManager = () => {
   const audioElementRef = useRef(null);
   const audioQueue = useRef([]);
   const isPlayingAudio = useRef(false);
-  const instanceId = useRef(`voice-manager-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`);
   const timeoutsRef = useRef([]);
   
   // Fonction pour créer un timeout qui sera automatiquement suivi
@@ -30,40 +26,25 @@ export const useVoiceManager = () => {
     const timeoutId = setTimeout(() => {
       // Supprimer ce timeout de la liste des timeouts actifs
       timeoutsRef.current = timeoutsRef.current.filter(id => id !== timeoutId);
-      if (timeoutRegistry.has(instanceId.current)) {
-        const timeouts = timeoutRegistry.get(instanceId.current);
-        timeoutRegistry.set(instanceId.current, timeouts.filter(id => id !== timeoutId));
-      }
       callback();
     }, delay);
     
     // Ajouter ce timeout à la liste des timeouts actifs
     timeoutsRef.current.push(timeoutId);
-    if (!timeoutRegistry.has(instanceId.current)) {
-      timeoutRegistry.set(instanceId.current, []);
-    }
-    timeoutRegistry.get(instanceId.current).push(timeoutId);
     
     return timeoutId;
   }, []);
   
   // Fonction pour nettoyer tous les timeouts
   const clearAllTimeouts = useCallback(() => {
-    console.log(`🧹 Nettoyage de TOUS les timeouts (${timeoutsRef.current.length} timeouts actifs) pour l'instance ${instanceId.current}`);
+    console.log(`🧹 Nettoyage de TOUS les timeouts (${timeoutsRef.current.length} timeouts actifs)`);
     
-    // Nettoyer tous les timeouts de cette instance
     timeoutsRef.current.forEach(id => {
-      console.log(`🧹 Nettoyage timeout ${id}`);
       clearTimeout(id);
     });
     
     // Vider la liste des timeouts
     timeoutsRef.current = [];
-    
-    // Nettoyer le registre global
-    if (timeoutRegistry.has(instanceId.current)) {
-      timeoutRegistry.delete(instanceId.current);
-    }
     
     console.log('✅ Tous les timeouts ont été nettoyés');
   }, []);
@@ -107,7 +88,7 @@ export const useVoiceManager = () => {
   // Nettoyer les timeouts à la destruction du composant
   useEffect(() => {
     return () => {
-      console.log(`🧹 Nettoyage lors de la destruction du hook pour l'instance ${instanceId.current}`);
+      console.log('🧹 Nettoyage lors de la destruction du hook');
       
       // Nettoyer tous les timeouts
       clearAllTimeouts(); 
@@ -575,17 +556,17 @@ export const useVoiceManager = () => {
   // Fonction pour démarrer le guidage vocal pour la session SOS Stress
   const startSosStressGuidance = useCallback(() => {
     if (!voiceSettings.enabled || !isSessionActive) {
-      console.log('🔇 Guidage vocal SWITCH/SOS désactivé ou session inactive', new Date().toISOString());
+      console.log('🔇 Guidage vocal SWITCH/SOS désactivé ou session inactive');
       return false;
     }
     
     // Nettoyer tout timeout existant pour éviter les doublons
     clearAllTimeouts();
     
-    console.log('🚨 DÉMARRAGE SWITCH/SOS STRESS - DIAGNOSTIC COMPLET', voiceSettings.gender === 'female' ? '(Claire)' : '(Thierry)', new Date().toISOString());
+    console.log('🚨 DÉMARRAGE SWITCH/SOS STRESS - DIAGNOSTIC COMPLET', voiceSettings.gender === 'female' ? '(Claire)' : '(Thierry)');
     
     // Tester tous les fichiers audio pour SOS Stress
-    console.log('🔍 TEST DES FICHIERS AUDIO SWITCH/SOS STRESS...', new Date().toISOString());
+    console.log('🔍 TEST DES FICHIERS AUDIO SWITCH/SOS STRESS...');
     const gender = voiceSettings.gender;
     const filesToTest = [
       'welcome', 'breathe-calm', 'grounding', 'breathe-softly', 
@@ -807,12 +788,12 @@ export const useVoiceManager = () => {
   // Fonction pour démarrer le guidage vocal pour n'importe quelle session
   const startSessionGuidance = useCallback(() => {
     if (sessionGuidanceStarted.current) {
-      console.log('🔇 Guidage vocal déjà démarré pour:', currentSession, new Date().toISOString());
+      console.log('🔇 Guidage vocal déjà démarré pour:', currentSession);
       return false;
     }
     sessionGuidanceStarted.current = true;
     
-    console.log('🎯 Démarrage guidage vocal pour session:', currentSession, new Date().toISOString());
+    console.log('🎯 Démarrage guidage vocal pour session:', currentSession);
     
     // Utiliser le même guidage pour 'switch' et 'sos'
     if (currentSession === 'switch' || currentSession === 'sos') {
@@ -837,7 +818,8 @@ export const useVoiceManager = () => {
     stop,
     clearAllTimeouts: useCallback(() => {
       console.log('🧹 Nettoyage explicite des timeouts demandé');
-      return clearAllTimeouts();
+      clearAllTimeouts();
+      return true;
     }, [clearAllTimeouts]),
     startSessionGuidance: useCallback(() => {
       console.log('🔄 Réinitialisation du guidage avant démarrage');
@@ -850,6 +832,5 @@ export const useVoiceManager = () => {
       return startSessionGuidance();
     }, [startSessionGuidance, clearAllTimeouts]),
     isInitialized: isInitialized.current,
-    instanceId: instanceId.current,
   };
 };

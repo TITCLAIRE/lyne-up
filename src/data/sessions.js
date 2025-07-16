@@ -1,7 +1,7 @@
 export const sessions = {
   switch: {
     name: 'SWITCH',
-    duration: 105, // 1min 45s
+    duration: 90, // 1min 30s
     description: 'Sérénité express',
     breathingPattern: {
       inhale: 4,

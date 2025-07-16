@@ -35,7 +35,7 @@ export default function GuidedSessionRunner() {
   const { timeRemaining, progress, startTimer, stopTimer, resetTimer } = useSessionTimer(handleSessionComplete);
   const { breathingState, startBreathing, stopBreathing } = useBreathingAnimation();
   const { startAudio, stopAudio, playGong, getCurrentFrequencyName } = useAudioManager();
-  const { speak, stop: stopVoice, startSessionGuidance, clearAllTimeouts, instanceId } = useVoiceManager();
+  const { speak, stop: stopVoice, startSessionGuidance, clearAllTimeouts } = useVoiceManager();
 
   const [lastPhase, setLastPhase] = useState(null);
   const [sessionEnding, setSessionEnding] = useState(false);
@@ -234,7 +234,6 @@ export default function GuidedSessionRunner() {
       // Démarrer le timer et la respiration
       const duration = sessionData?.duration || 180;
       console.log('⏱️ Durée session:', duration, 'secondes');
-      console.log('🎤 Instance VoiceManager:', instanceId);
       startTimer(duration);
       startBreathing(breathingPattern);
       
@@ -294,7 +293,11 @@ export default function GuidedSessionRunner() {
     // Arrêt forcé de la voix
     console.log('🔇 ARRÊT FORCÉ de la voix avant navigation');
     if (stopVoice) stopVoice();
-    if (synth && synth.cancel) synth.cancel();
+    
+    // Forcer l'arrêt de la synthèse vocale
+      
+      // Forcer l'arrêt de la synthèse vocale
+      window.speechSynthesis.cancel();
     window.speechSynthesis.cancel();
 
     // Nettoyage explicite de tous les timeouts
@@ -335,9 +338,25 @@ export default function GuidedSessionRunner() {
   useEffect(() => {
     return () => {
       console.log('🧹 Nettoyage lors du démontage de GuidedSessionRunner');
-      if (stopVoice) stopVoice();
-      if (clearAllTimeouts) clearAllTimeouts();
+      
+      // Arrêter toute synthèse vocale
+      if (stopVoice) {
+        stopVoice();
+      }
+      
+      // Forcer l'arrêt de la synthèse vocale
       window.speechSynthesis.cancel();
+      
+      // Nettoyer tous les timeouts
+      if (clearAllTimeouts) {
+        clearAllTimeouts();
+      }
+      
+      // Arrêter tous les timeouts manuellement
+      const highestId = setTimeout(() => {}, 0);
+      for (let i = 0; i < highestId; i++) {
+        clearTimeout(i);
+      }
     };
   }, [stopVoice, clearAllTimeouts]);
 
