@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Play, Pause, Home, Headphones, Moon, Wind } from 'lucide-react';
 import { useAppStore } from '../../store/appStore';
@@ -21,6 +21,12 @@ export default function HypnosisSessionRunner() {
     voiceSettings
   } = useAppStore();
   
+  // Fonction de fin de session
+  const handleSessionComplete = useCallback(() => {
+    console.log('🏁 Session hypnose terminée, redirection vers les résultats');
+    navigate('/results');
+  }, [navigate]);
+
   const { timeRemaining, progress, startTimer, stopTimer, resetTimer } = useSessionTimer(handleSessionComplete);
   const { breathingState, startBreathing, stopBreathing } = useBreathingAnimation();
   const { startAudio, stopAudio, playGong, getCurrentFrequencyName } = useAudioManager();
@@ -33,11 +39,6 @@ export default function HypnosisSessionRunner() {
   const [isGuidedBreathing, setIsGuidedBreathing] = useState(true);
   const phaseTimeoutRef = useRef(null);
 
-  // Fonction de fin de session
-  const handleSessionComplete = useCallback(() => {
-    console.log('🏁 Session hypnose terminée, redirection vers les résultats');
-    navigate('/results');
-  }, [navigate]);
 
   // Initialiser la session en fonction du paramètre d'URL
   useEffect(() => {

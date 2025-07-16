@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Play, Pause, Home, Headphones, Heart } from 'lucide-react';
 import { useAppStore } from '../../store/appStore';
@@ -23,6 +23,12 @@ export default function CoherenceSessionRunner() {
     setCurrentScreen
   } = useAppStore();
   
+  // Fonction de fin de session
+  const handleSessionComplete = useCallback(() => {
+    console.log('🏁 Session cohérence terminée, redirection vers les résultats');
+    navigate('/results');
+  }, [navigate]);
+
   const { timeRemaining, progress, startTimer, stopTimer, resetTimer } = useSessionTimer();
   const { breathingState, startBreathing, stopBreathing } = useBreathingAnimation();
   const { startAudio, stopAudio, playGong, getCurrentFrequencyName } = useAudioManager();
@@ -35,11 +41,6 @@ export default function CoherenceSessionRunner() {
   // Utiliser les paramètres appropriés selon le mode
   const currentSettings = isTrialMode ? trialCoherenceSettings : coherenceSettings;
 
-  // Fonction de fin de session
-  const handleSessionComplete = useCallback(() => {
-    console.log('🏁 Session cohérence terminée, redirection vers les résultats');
-    navigate('/results');
-  }, [navigate]);
 
   // Obtenir le pattern respiratoire pour la cohérence cardiaque
   const getCoherenceBreathingPattern = () => {

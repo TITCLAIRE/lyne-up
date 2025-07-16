@@ -19,6 +19,12 @@ export default function FreeSessionRunner() {
     voiceSettings
   } = useAppStore();
   
+  // Fonction de fin de session
+  const handleSessionComplete = useCallback(() => {
+    console.log('🏁 Session libre terminée, redirection vers les résultats');
+    navigate('/results');
+  }, [navigate]);
+
   const { timeRemaining, progress, startTimer, stopTimer, resetTimer } = useSessionTimer(handleSessionComplete);
   const { breathingState, startBreathing, stopBreathing } = useBreathingAnimation();
   const { startAudio, stopAudio, playGong, getCurrentFrequencyName } = useAudioManager();
@@ -28,11 +34,6 @@ export default function FreeSessionRunner() {
   const [sessionEnding, setSessionEnding] = useState(false);
   const [voiceSystemStarted, setVoiceSystemStarted] = useState(false);
 
-  // Fonction de fin de session
-  const handleSessionComplete = useCallback(() => {
-    console.log('🏁 Session libre terminée, redirection vers les résultats');
-    navigate('/results');
-  }, [navigate]);
 
   // Créer le pattern respiratoire à partir des paramètres de session libre
   const createFreeSessionPattern = () => {
