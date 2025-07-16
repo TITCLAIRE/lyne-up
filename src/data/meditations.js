@@ -141,8 +141,8 @@ export const spiritualMeditations = {
     frequency: '852hz', // Fréquence de retour à l'ordre spirituel
     guidance: {
       start: "Bienvenue dans cette méditation d'invocation de l'Archange Métatron. Installez-vous confortablement et ouvrez votre cœur à cette connexion spirituelle.",
-      inhale: ["Inspirez l'énergie divine", "Accueillez la lumière céleste", "Recevez la sagesse éternelle"],
-      exhale: ["Expirez toute résistance", "Libérez les voiles de l'illusion", "Ouvrez-vous à la vérité"],
+      inhale: ["Inspirez pendant 4 secondes", "Accueillez l'énergie divine", "Recevez la lumière céleste"],
+      exhale: ["Expirez pendant 6 secondes", "Libérez toute résistance", "Ouvrez-vous à la vérité"],
       phases: [
         "Ô Metatron, ange de la Présence, scribe de Lumière, gardien du Trône Divin, toi qui as connu la chair et t'es élevé au-delà, je t'appelle avec humilité.",
         "Que ta lumière entoure mon esprit, que ta sagesse éclaire mon cœur, que ta voix me guide sur les chemins de vérité.",
