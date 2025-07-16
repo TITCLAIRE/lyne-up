@@ -298,56 +298,32 @@ export default function GuidedSessionRunner() {
           console.log('🌟 Méditation Métatron - Pas de démarrage automatique du guidage vocal');
           // Pour Métatron, on gère les fichiers audio manuellement
           const gender = voiceSettings.gender;
-          const welcomePath = `/audio/meditation/${gender}/metatron-welcome.mp3`;
           
-          console.log('🎵 Lecture directe audio Métatron welcome:', welcomePath);
-          const audio = new Audio(welcomePath);
-          audio.volume = voiceSettings.volume;
+          // Utiliser le système standard de guidage vocal pour Métatron
+          console.log('🌟 Méditation Métatron - Utilisation du système standard de guidage');
+          setTimeout(() => {
+            speak(spiritualMeditations.metatron.guidance.start);
+          }, 1000);
           
-          // Événements pour détecter les erreurs
-          audio.onerror = (e) => {
-            console.error('❌ Erreur lecture audio welcome Métatron:', e);
-            speak("Bienvenue dans cette méditation d'invocation de l'archange Métatron. Installez-vous confortablement. Fermez les yeux et prenez quelques profondes respirations. Nous allons établir une connexion avec cet être de lumière, gardien des archives akashiques et porteur de la géométrie sacrée. Suivez le rythme respiratoire et ouvrez votre coeur à cette présence divine.");
-          };
-          
-          // Jouer l'audio
-          audio.play().catch(error => {
-            console.error('❌ Erreur lecture audio welcome Métatron:', error);
-            speak("Bienvenue dans cette méditation d'invocation de l'archange Métatron. Installez-vous confortablement. Fermez les yeux et prenez quelques profondes respirations. Nous allons établir une connexion avec cet être de lumière, gardien des archives akashiques et porteur de la géométrie sacrée. Suivez le rythme respiratoire et ouvrez votre coeur à cette présence divine.");
-          });
-          
-          // Programmer les séquences suivantes
-          const sequences = [
-            { time: 30000, name: 'invocation' },
-            { time: 70000, name: 'light' },
-            { time: 110000, name: 'memory' },
-            { time: 150000, name: 'inspiration' },
-            { time: 190000, name: 'protection' },
-            { time: 230000, name: 'elevation' }
-          ];
-          
-          // Créer des timeouts pour chaque séquence
-          sequences.forEach(seq => {
-            setTimeout(() => {
-              if (isSessionActive && voiceSettings.enabled) {
-                const audioPath = `/audio/meditation/${gender}/metatron-${seq.name}.mp3`;
-                console.log(`🎵 Lecture audio Métatron ${seq.name}:`, audioPath);
-                const seqAudio = new Audio(audioPath);
-                seqAudio.volume = voiceSettings.volume;
-                seqAudio.play().catch(error => {
-                  console.error(`❌ Erreur lecture audio ${seq.name}:`, error);
-                  // Fallback vers le texte correspondant dans les phases
-                  const metatron = spiritualMeditations.metatron;
-                  if (metatron && metatron.guidance && metatron.guidance.phases) {
-                    const index = sequences.findIndex(s => s.name === seq.name);
-                    if (index >= 0 && index < metatron.guidance.phases.length) {
-                      speak(metatron.guidance.phases[index]);
-                    }
+          // Programmer les phases avec des délais sécurisés
+          if (spiritualMeditations.metatron && spiritualMeditations.metatron.guidance && spiritualMeditations.metatron.guidance.phases) {
+            const phases = spiritualMeditations.metatron.guidance.phases;
+            
+            // Délais sécurisés pour chaque phase
+            const phaseDelays = [30000, 70000, 110000, 150000, 190000, 230000];
+            
+            // Programmer chaque phase avec son propre délai
+            phases.forEach((phase, index) => {
+              if (index < phaseDelays.length) {
+                setTimeout(() => {
+                  if (isSessionActive && voiceSettings.enabled) {
+                    console.log(`🌟 Méditation Métatron - Phase ${index + 1}`);
+                    speak(phase);
                   }
-                });
+                }, phaseDelays[index]);
               }
-            }, seq.time);
-          });
+            });
+          }
         }
       }, 1000);
       
@@ -388,7 +364,11 @@ export default function GuidedSessionRunner() {
       // Arrêter tous les éléments audio en cours
       document.querySelectorAll('audio').forEach(audio => {
         audio.pause();
-        audio.src = '';
+       try {
+         audio.src = '';
+       } catch (e) {
+         console.log('⚠️ Erreur lors de la réinitialisation de la source audio:', e);
+       }
       });
       
       // Reset pour l'entraînement progressif
