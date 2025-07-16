@@ -816,30 +816,28 @@ export const useVoiceManager = () => {
       if (currentSession === 'meditation' && currentMeditation === 'metatron') {
         console.log('🌟 DÉMARRAGE DIRECT GUIDAGE MÉTATRON avec voix premium');
         
-        // Message d'introduction complet (0s)
+        // Utiliser directement les fichiers audio sans synthèse vocale
         const gender = voiceSettings.gender;
+        
+        // Message d'introduction (0s) - Lecture directe sans synthèse
         const welcomePath = `/audio/meditation/${gender}/metatron-welcome.mp3`;
-        // Vérifier si le fichier existe avant de le jouer
-        fetch(welcomePath, { method: 'HEAD' })
-          .then(response => {
-            if (response.ok) {
-              console.log('✅ Fichier welcome trouvé, lecture directe sans synthèse vocale');
-              queueAudio(welcomePath, 'metatron-welcome', null); // Pas de fallback text pour éviter le doublon
-            } else {
-              console.log('❌ Fichier welcome non trouvé, utilisation de la synthèse vocale');
-              speak("Bienvenue dans cette méditation d'invocation de l'archange Métatron. Installez-vous confortablement. Fermez les yeux et prenez quelques profondes respirations. Nous allons établir une connexion avec cet être de lumière, gardien des archives akashiques et porteur de la géométrie sacrée. Suivez le rythme respiratoire et ouvrez votre coeur à cette présence divine.");
-            }
-          })
-          .catch(error => {
-            console.error('❌ Erreur lors de la vérification du fichier welcome:', error);
-            speak("Bienvenue dans cette méditation d'invocation de l'archange Métatron. Installez-vous confortablement. Fermez les yeux et prenez quelques profondes respirations. Nous allons établir une connexion avec cet être de lumière, gardien des archives akashiques et porteur de la géométrie sacrée. Suivez le rythme respiratoire et ouvrez votre coeur à cette présence divine.");
-          });
+        console.log('🎵 LECTURE DIRECTE AUDIO MÉTATRON:', welcomePath);
+        const audio = new Audio(welcomePath);
+        audio.volume = voiceSettings.volume;
+        audio.play().catch(error => {
+          console.error('❌ Erreur lecture audio welcome:', error);
+        });
         
         // Invocation (30s)
         setTimeout(() => {
           if (isSessionActive && voiceSettings.enabled) {
             const invocationPath = `/audio/meditation/${gender}/metatron-invocation.mp3`;
-            queueAudio(invocationPath, 'metatron-invocation', "Ô Metatron, ange de la Présence, scribe de Lumière, gardien du Trône Divin, toi qui as connu la chair et t'es élevé au-delà, je t'appelle avec humilité. Que ta présence sacrée se manifeste dans cet espace. Je t'invite à m'accompagner dans cette méditation, à m'envelopper de ton énergie céleste.");
+            const audio = new Audio(invocationPath);
+            audio.volume = voiceSettings.volume;
+            audio.play().catch(error => {
+              console.error('❌ Erreur lecture audio invocation:', error);
+              speak("Ô Metatron, ange de la Présence, scribe de Lumière, gardien du Trône Divin, toi qui as connu la chair et t'es élevé au-delà, je t'appelle avec humilité. Que ta présence sacrée se manifeste dans cet espace. Je t'invite à m'accompagner dans cette méditation, à m'envelopper de ton énergie céleste.");
+            });
           }
         }, 30000);
         
@@ -847,7 +845,12 @@ export const useVoiceManager = () => {
         setTimeout(() => {
           if (isSessionActive && voiceSettings.enabled) {
             const lightPath = `/audio/meditation/${gender}/metatron-light.mp3`;
-            queueAudio(lightPath, 'metatron-light', "Que ta lumière entoure mon esprit, que ta sagesse éclaire mon cœur, que ta voix me guide sur les chemins de vérité. Je sens ta présence comme une lumière dorée qui m'enveloppe, qui purifie mon aura et élève ma vibration. Ta lumière pénètre chaque cellule de mon être.");
+            const audio = new Audio(lightPath);
+            audio.volume = voiceSettings.volume;
+            audio.play().catch(error => {
+              console.error('❌ Erreur lecture audio light:', error);
+              speak("Que ta lumière entoure mon esprit, que ta sagesse éclaire mon cœur, que ta voix me guide sur les chemins de vérité. Je sens ta présence comme une lumière dorée qui m'enveloppe, qui purifie mon aura et élève ma vibration. Ta lumière pénètre chaque cellule de mon être.");
+            });
           }
         }, 70000);
         
@@ -855,7 +858,12 @@ export const useVoiceManager = () => {
         setTimeout(() => {
           if (isSessionActive && voiceSettings.enabled) {
             const memoryPath = `/audio/meditation/${gender}/metatron-memory.mp3`;
-            queueAudio(memoryPath, 'metatron-memory', "Toi qui écris dans les Livres Célestes, inscris en moi la mémoire de mon âme. Aide-moi à me souvenir de qui je suis, au-delà des voiles de l'oubli et des peurs humaines. Révèle-moi ma véritable nature, mon essence divine, ma mission sacrée sur cette Terre.");
+            const audio = new Audio(memoryPath);
+            audio.volume = voiceSettings.volume;
+            audio.play().catch(error => {
+              console.error('❌ Erreur lecture audio memory:', error);
+              speak("Toi qui écris dans les Livres Célestes, inscris en moi la mémoire de mon âme. Aide-moi à me souvenir de qui je suis, au-delà des voiles de l'oubli et des peurs humaines. Révèle-moi ma véritable nature, mon essence divine, ma mission sacrée sur cette Terre.");
+            });
           }
         }, 110000);
         
@@ -863,7 +871,12 @@ export const useVoiceManager = () => {
         setTimeout(() => {
           if (isSessionActive && voiceSettings.enabled) {
             const inspirationPath = `/audio/meditation/${gender}/metatron-inspiration.mp3`;
-            queueAudio(inspirationPath, 'metatron-inspiration', "Toi qui transmets la pensée divine, fais descendre en moi l'inspiration claire, la parole juste, et le silence plein de sens. Guide-moi vers la connaissance qui m'est nécessaire en ce moment. Ouvre les canaux de ma perception pour que je puisse recevoir les messages divins.");
+            const audio = new Audio(inspirationPath);
+            audio.volume = voiceSettings.volume;
+            audio.play().catch(error => {
+              console.error('❌ Erreur lecture audio inspiration:', error);
+              speak("Toi qui transmets la pensée divine, fais descendre en moi l'inspiration claire, la parole juste, et le silence plein de sens. Guide-moi vers la connaissance qui m'est nécessaire en ce moment. Ouvre les canaux de ma perception pour que je puisse recevoir les messages divins.");
+            });
           }
         }, 150000);
         
@@ -871,7 +884,12 @@ export const useVoiceManager = () => {
         setTimeout(() => {
           if (isSessionActive && voiceSettings.enabled) {
             const protectionPath = `/audio/meditation/${gender}/metatron-protection.mp3`;
-            queueAudio(protectionPath, 'metatron-protection', "Entoure-moi de ton Cube sacré, géométrie vivante de la création, bouclier de lumière contre les ombres, structure de l'ordre cosmique. Protège mon corps, mon cœur, mon esprit. Que ce Cube de Métatron m'enveloppe de ses lignes de force, équilibrant mes énergies et harmonisant mes chakras.");
+            const audio = new Audio(protectionPath);
+            audio.volume = voiceSettings.volume;
+            audio.play().catch(error => {
+              console.error('❌ Erreur lecture audio protection:', error);
+              speak("Entoure-moi de ton Cube sacré, géométrie vivante de la création, bouclier de lumière contre les ombres, structure de l'ordre cosmique. Protège mon corps, mon cœur, mon esprit. Que ce Cube de Métatron m'enveloppe de ses lignes de force, équilibrant mes énergies et harmonisant mes chakras.");
+            });
           }
         }, 190000);
         
@@ -879,7 +897,12 @@ export const useVoiceManager = () => {
         setTimeout(() => {
           if (isSessionActive && voiceSettings.enabled) {
             const elevationPath = `/audio/meditation/${gender}/metatron-elevation.mp3`;
-            queueAudio(elevationPath, 'metatron-elevation', "Metatron, Archange de feu blanc, ouvre les portes de la haute conscience. Aide-moi à élever ma fréquence, à faire rayonner l'amour, et à servir ce qui est plus grand que moi. Que ta présence m'accompagne dans mon quotidien, m'inspirant sagesse et discernement. Je te rends grâce pour ta présence, ta guidance et ta protection. Amen. Amen. Amen. Doucement, prenez conscience de votre corps, de votre respiration. Quand vous êtes prêt, ouvrez les yeux en gardant cette connexion sacrée avec l'Archange Métatron.");
+            const audio = new Audio(elevationPath);
+            audio.volume = voiceSettings.volume;
+            audio.play().catch(error => {
+              console.error('❌ Erreur lecture audio elevation:', error);
+              speak("Metatron, Archange de feu blanc, ouvre les portes de la haute conscience. Aide-moi à élever ma fréquence, à faire rayonner l'amour, et à servir ce qui est plus grand que moi. Que ta présence m'accompagne dans mon quotidien, m'inspirant sagesse et discernement. Je te rends grâce pour ta présence, ta guidance et ta protection. Amen. Amen. Amen. Doucement, prenez conscience de votre corps, de votre respiration. Quand vous êtes prêt, ouvrez les yeux en gardant cette connexion sacrée avec l'Archange Métatron.");
+            });
           }
         }, 230000);
         
