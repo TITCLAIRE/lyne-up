@@ -123,7 +123,7 @@ export const meditations = {
       ],
       end: "Vous êtes maintenant parfaitement préparé pour un sommeil profond et réparateur."
     }
-  },
+  }
 
   // Déplacé vers la section spiritualité
 };
