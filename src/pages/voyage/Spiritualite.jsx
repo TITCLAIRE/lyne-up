@@ -1,11 +1,17 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Home, Star } from 'lucide-react';
+import { Home, Star, ArrowRight } from 'lucide-react';
 import { useAppStore } from '../../store/appStore';
 
 export default function Spiritualite() {
   const navigate = useNavigate();
-  const { setCurrentMeditation, setCurrentSession } = useAppStore();
+  const { setCurrentMeditation, setCurrentSession, setCurrentScreen } = useAppStore();
+
+  const handleMeditationSelect = (meditationId) => {
+    setCurrentMeditation(meditationId);
+    setCurrentSession('meditation');
+    navigate(`/sessions/run/guided/meditation`);
+  };
 
   const handleGoBack = () => {
     navigate('/sessions/voyage');
@@ -18,15 +24,22 @@ export default function Spiritualite() {
         <p className="text-white/70">Connexion à l'univers et aux énergies supérieures</p>
       </div>
 
-      <div className="bg-gradient-to-r from-violet-700/10 to-purple-700/10 border border-violet-700/20 rounded-xl p-6 mb-8 text-center">
-        <Star size={48} className="text-violet-400 mx-auto mb-4" />
-        <h3 className="text-xl font-semibold text-violet-200 mb-3">Nouvelles méditations à venir</h3>
-        <p className="text-white/70 mb-4">
-          De nouvelles méditations spirituelles seront bientôt disponibles dans cette section.
-        </p>
-        <p className="text-white/50 text-sm">
-          Revenez prochainement pour découvrir nos guidances de connexion spirituelle.
-        </p>
+      <div className="grid gap-3 mb-8">
+        <div
+          onClick={() => handleMeditationSelect('metatron')}
+          className="bg-gradient-to-r from-violet-700/20 to-purple-700/20 border border-violet-700/30 rounded-xl p-6 hover:scale-[1.02] transition-all duration-200"
+        >
+          <div className="flex items-center gap-4">
+            <div className="w-16 h-16 bg-white/10 rounded-xl flex items-center justify-center">
+              <Star size={32} className="text-violet-400" />
+            </div>
+            <div>
+              <h3 className="font-semibold text-xl mb-1">🌟 Invocation de l'Archange Métatron</h3>
+              <p className="text-white/70">Connexion à l'Ange de la Présence</p>
+              <p className="text-white/50 text-sm mt-1">5 minutes • Guidage vocal premium</p>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div className="flex justify-center">

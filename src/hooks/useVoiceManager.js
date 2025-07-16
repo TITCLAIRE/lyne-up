@@ -310,7 +310,7 @@ export const useVoiceManager = () => {
   }, [voiceSettings.enabled, voiceSettings.volume]);
   
   // Fonction principale pour parler (avec audio ou synthèse)
-  const speak = useCallback((text) => {
+  const speak = useCallback((text, audioKey = null) => {
     if (!voiceSettings.enabled || !text) return;
     
     // Éviter les répétitions trop rapprochées
@@ -323,12 +323,25 @@ export const useVoiceManager = () => {
     
     // Essayer d'abord de trouver un fichier audio correspondant
     const sessionType = currentSession;
+    let fileAudioKey = audioKey;
     const gender = voiceSettings.gender;
     
     // Construire le chemin du fichier audio en fonction du type de session
     let audioPath = null;
     let audioKey = null;
     
+    // Vérifier les fichiers audio de méditation en premier
+    if (currentSession === 'meditation' && currentMeditation) {
+      const meditationData = meditations[currentMeditation] || spiritualMeditations[currentMeditation];
+      if (meditationData && meditationData.audioFiles && fileAudioKey) {
+        const fileName = meditationData.audioFiles[fileAudioKey];
+        if (fileName) {
+          audioPath = `/audio/meditation/${gender}/${fileName}.mp3`;
+          audioKey = fileAudioKey;
+          console.log(`🎤 Tentative de lecture audio de méditation: ${audioPath}`);
+        }
+      }
+    } else
     if (sessionType === 'switch') {
       // Essayer de trouver un fichier audio pour SOS Stress
       if (text.includes('Bienvenue dans votre bulle')) {
@@ -876,15 +889,49 @@ export const useVoiceManager = () => {
         return true;
       }
       
-      // Récupérer les données de la méditation
-      const meditationData = meditations[currentMeditation];
+      // Guidage spécifique pour Métatron
+      if (currentMeditation === 'metatron') {
+        console.log('🌟 Démarrage guidage Métatron');
+        const metatron = spiritualMeditations.metatron;
+        
+        // Message d'accueil
+        speak(metatron.guidance.start, 'welcome');
+        
+        // Programmer les phases avec des délais précis
+        const metatronTimings = [
+          { time: 30000, text: metatron.guidance.phases[0], audioKey: 'invocation' },
+          { time: 70000, text: metatron.guidance.phases[1], audioKey: 'light' },
+          { time: 110000, text: metatron.guidance.phases[2], audioKey: 'memory' },
+          { time: 150000, text: metatron.guidance.phases[3], audioKey: 'inspiration' },
+          { time: 190000, text: metatron.guidance.phases[4], audioKey: 'protection' },
+          { time: 230000, text: metatron.guidance.phases[5], audioKey: 'elevation' }
+        ];
+        
+        // Programmer chaque phase avec son propre délai
+        metatronTimings.forEach((item) => {
+          createTrackedTimeout(() => {
+            console.log(`🌟 Méditation Métatron - Phase à ${item.time/1000}s`);
+            speak(item.text, item.audioKey);
+          }, item.time);
+        });
+        
+        // Message de fin
+        createTrackedTimeout(() => {
+          speak(metatron.guidance.end);
+        }, 290000);
+        
+        return true;
+      }
+      
+      // Pour les autres méditations
+      const meditationData = meditations[currentMeditation] || spiritualMeditations[currentMeditation];
       if (!meditationData) {
         console.error('❌ Données de méditation non trouvées pour:', currentMeditation);
         return false;
       }
 
       // Message d'accueil
-      speak(meditationData.guidance.start);
+      speak(meditationData.guidance.start, meditationData.audioFiles?.welcome);
 
       // Programmer les phases avec des délais génériques
       meditationData.guidance.phases.forEach((phaseText, index) => {
