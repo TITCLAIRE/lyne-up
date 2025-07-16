@@ -886,10 +886,9 @@ export const useVoiceManager = () => {
       // Message d'erreur pour Métatron
       speak("La méditation Métatron est temporairement indisponible. Veuillez choisir une autre méditation.");
       
-      // Redirection après un court délai
+      // Log au lieu de redirection
       setTimeout(() => {
-        // Utiliser window.history pour naviguer en arrière
-        window.history.back();
+        console.log('⚠️ Méditation Métatron indisponible - pas de redirection automatique');
       }, 3000);
       
       return false;
