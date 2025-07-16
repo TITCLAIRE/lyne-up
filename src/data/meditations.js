@@ -128,30 +128,5 @@ export const meditations = {
 
 // Méditations spirituelles
 export const spiritualMeditations = {
-  // Méditation Métatron simplifiée
-  metatron: {
-    name: 'Invocation de l\'Archange Métatron',
-    icon: 'Star',
-    duration: 300, // 5 minutes
-    description: 'Connexion spirituelle',
-    color: 'rgba(124, 58, 237, 0.2)', // Violet plus profond
-    borderColor: 'rgba(124, 58, 237, 0.3)',
-    breathingPattern: { inhale: 4, hold: 0, exhale: 6 }, // Rythme 4/6
-    frequency: '852hz', // Fréquence de retour à l'ordre spirituel
-    guidance: {
-      start: "Bienvenue dans cette méditation d'invocation de l'archange Métatron. Installez-vous confortablement. Fermez les yeux et prenez quelques profondes respirations. Nous allons établir une connexion avec cet être de lumière, gardien des archives akashiques et porteur de la géométrie sacrée. Suivez le rythme respiratoire et ouvrez votre coeur à cette présence divine.",
-      inhale: ["Inspirez l'énergie divine", "Accueillez la lumière céleste", "Recevez la présence sacrée"],
-      exhale: ["Expirez toute résistance", "Libérez les voiles", "Ouvrez-vous à la vérité"],
-      phases: [
-        "Ô Metatron, ange de la Présence, scribe de Lumière, gardien du Trône Divin, toi qui as connu la chair et t'es élevé au-delà, je t'appelle avec humilité.",
-        "Que ta présence sacrée se manifeste dans cet espace. Je t'invite à m'accompagner dans cette méditation, à m'envelopper de ton énergie céleste.",
-        "Que ta lumière entoure mon esprit, que ta sagesse éclaire mon cœur, que ta voix me guide sur les chemins de vérité.",
-        "Toi qui écris dans les Livres Célestes, inscris en moi la mémoire de mon âme. Aide-moi à me souvenir de qui je suis.",
-        "Toi qui transmets la pensée divine, fais descendre en moi l'inspiration claire, la parole juste, et le silence plein de sens.",
-        "Entoure-moi de ton Cube sacré, géométrie vivante de la création, bouclier de lumière contre les ombres.",
-        "Metatron, Archange de feu blanc, ouvre les portes de la haute conscience. Aide-moi à élever ma fréquence."
-      ],
-      end: "Votre connexion avec l'Archange Métatron est maintenant établie. Gardez cette énergie avec vous."
-    }
-  }
+  // Les méditations spirituelles seront ajoutées prochainement
 };

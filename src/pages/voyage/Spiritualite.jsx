@@ -25,19 +25,16 @@ export default function Spiritualite() {
       </div>
 
       <div className="grid gap-3 mb-8">
-        <div
-          onClick={() => handleMeditationSelect('metatron')}
-          className="bg-gradient-to-r from-violet-700/20 to-purple-700/20 border border-violet-700/30 rounded-xl p-6 hover:scale-[1.02] transition-all duration-200"
-        >
-          <div className="flex items-center gap-4">
-            <div className="w-16 h-16 bg-white/10 rounded-xl flex items-center justify-center">
-              <Star size={32} className="text-violet-400" />
-            </div>
-            <div>
-              <h3 className="font-semibold text-xl mb-1">🌟 Invocation de l'Archange Métatron</h3>
-              <p className="text-white/70">Connexion à l'Ange de la Présence (Synthèse vocale)</p>
-              <p className="text-white/50 text-sm mt-1">5 minutes • Guidage vocal premium</p>
-            </div>
+        <div className="bg-gradient-to-r from-violet-700/20 to-purple-700/20 border border-violet-700/30 rounded-xl p-6">
+          <div className="text-center">
+            <Star size={48} className="text-violet-400 mx-auto mb-4" />
+            <h3 className="font-semibold text-xl mb-3">✨ Nouvelles méditations spirituelles à venir</h3>
+            <p className="text-white/70 mb-2">
+              De nouvelles méditations spirituelles seront bientôt disponibles dans cette section.
+            </p>
+            <p className="text-white/50 text-sm">
+              Revenez prochainement pour découvrir nos guidances spirituelles.
+            </p>
           </div>
         </div>
       </div>
