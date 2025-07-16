@@ -174,7 +174,7 @@ export default function GuidedSessionRunner() {
       }
       setLastPhase(breathingState.phase);
     }
-  }, [breathingState.phase, isSessionActive, lastPhase, playGong]);
+  }, [breathingState.phase, isSessionActive, lastPhase, playGong, audioSettings.gongEnabled]);
 
   // Gérer la fin de session
   useEffect(() => {
@@ -230,6 +230,9 @@ export default function GuidedSessionRunner() {
         setTimeout(() => {
           if (isSessionActive && voiceSettings.enabled) {
             speak("Vos pieds touchent le sol. Vous êtes ancré, solide, stable.");
+          }
+        }, 28000);
+      } else if (currentMeditation === 'metatron') {
         // Aucun guidage vocal automatique - on laisse le système de fichiers audio fonctionner
         console.log('🌟 Méditation Métatron - Utilisation des fichiers audio uniquement');
       } else {
@@ -240,7 +243,7 @@ export default function GuidedSessionRunner() {
         }, 500);
       }
     }
-  }, [isSessionActive, voiceSystemStarted, voiceSettings.enabled, startSessionGuidance, currentSession, sessionId, speak]);
+  }, [isSessionActive, voiceSystemStarted, voiceSettings.enabled, startSessionGuidance, currentSession, sessionId, speak, currentMeditation]);
 
   const handleToggleSession = () => {
     if (!isSessionActive) {
@@ -349,9 +352,6 @@ export default function GuidedSessionRunner() {
     if (stopVoice) stopVoice();
     
     // Forcer l'arrêt de la synthèse vocale
-      
-      // Forcer l'arrêt de la synthèse vocale
-      window.speechSynthesis.cancel();
     window.speechSynthesis.cancel();
 
     // Nettoyage explicite de tous les timeouts
