@@ -124,8 +124,6 @@ export const meditations = {
       end: "Vous êtes maintenant parfaitement préparé pour un sommeil profond et réparateur."
     }
   }
-
-  // Déplacé vers la section spiritualité
 };
 
 // Méditations spirituelles
@@ -161,7 +159,8 @@ export const spiritualMeditations = {
        
        // Séquence 7 - Élévation (230s-300s)
        "Metatron, Archange de feu blanc, ouvre les portes de la haute conscience. Aide-moi à élever ma fréquence, à faire rayonner l'amour, et à servir ce qui est plus grand que moi. Que ta présence m'accompagne dans mon quotidien, m'inspirant sagesse et discernement. Je te rends grâce pour ta présence, ta guidance et ta protection. Amen. Amen. Amen. Doucement, prenez conscience de votre corps, de votre respiration. Quand vous êtes prêt, ouvrez les yeux en gardant cette connexion sacrée avec l'Archange Métatron."
-      ]
-    };
+      ],
+      end: "Votre connexion avec l'Archange Métatron est maintenant établie. Gardez cette énergie avec vous."
+    }
   }
-}
+};
