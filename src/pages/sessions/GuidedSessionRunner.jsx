@@ -618,60 +618,6 @@ export default function GuidedSessionRunner() {
           <div className="text-left">
             <p className="text-sm text-blue-200 font-medium mb-1">Important :</p>
             <p className="text-xs text-blue-100/80 leading-relaxed">
-              {currentSession === 'kids' 
-                ? "Les sons magiques sont encore plus beaux avec des écouteurs !" 
-                : currentSession === 'reset'
-                ? "Pour une efficacité maximale de la technique 4-7-8, utilisez des écouteurs pour une immersion complète."
-                : currentSession === 'progressive'
-                ? "L'entraînement progressif est plus efficace avec des écouteurs pour bien entendre les changements de rythme."
-                : currentSession === 'seniors'
-                ? "Pour une relaxation optimale et une meilleure baisse de tension, utilisez des écouteurs pour une immersion complète."
-                : "Les sons binauraux nécessitent impérativement l'utilisation d'écouteurs stéréo pour créer l'effet de battement binaural entre les deux oreilles."
-              }
-            </p>
-          </div>
-        </div>
-
-        {/* Fréquence audio active */}
-        {audioSettings.enabled && (
-          <div className="bg-white/10 rounded-lg p-2 mb-4">
-            <p className="text-xs text-white/70 flex items-center justify-center gap-1">
-              <Waves size={12} />
-              Fréquence active : <span className="text-cyan-400 font-medium">{getCurrentFrequencyName()}</span>
-            </p>
-          </div>
-        )}
-      </div>
-
-      {/* Guide de respiration */}
-      <BreathingGuide 
-        breathingState={breathingState}
-        isActive={isSessionActive}
-      />
-
-      {/* Timer et progression */}
-      <div className="text-center mb-8">
-        <div className="text-5xl font-light mb-4 tracking-wider">
-          {formatTime(timeRemaining)}
-        </div>
-        <div className="w-full max-w-sm mx-auto h-1 bg-white/20 rounded-full overflow-hidden">
-          <div 
-            className="h-full bg-gradient-to-r from-cyan-400 to-purple-400 transition-all duration-1000"
-            style={{ width: `${progress}%` }}
-          />
-        </div>
-        <div className="text-sm text-white/60 mt-2">
-          Progression : {Math.round(progress)}%
-        </div>
-      </div>
-
-      {/* Contrôles */}
-      <div className="flex gap-3 justify-center mt-8">
-        <button
-          onClick={handleToggleSession}
-          disabled={sessionEnding}
-          className={`flex-1 py-4 px-6 rounded-2xl font-semibold flex items-center justify-center gap-2 transition-all duration-200 ${
-            sessionEnding 
               ? 'bg-white/10 text-white/50 cursor-not-allowed'
               : currentSession === 'kids'
                 ? 'bg-gradient-to-r from-pink-500 to-purple-500 text-white hover:from-pink-600 hover:to-purple-600'
