@@ -108,6 +108,7 @@ export default function GuidedSessionRunner() {
     if (currentSession === 'meditation' && currentMeditation) {
       const meditation = meditations[currentMeditation] || spiritualMeditations[currentMeditation];
       if (meditation && meditation.breathingPattern) {
+        console.log('🫁 Utilisation du pattern spécifique pour la méditation:', currentMeditation, meditation.breathingPattern);
         return meditation.breathingPattern;
       }
     }
@@ -209,7 +210,7 @@ export default function GuidedSessionRunner() {
   // Démarrage vocal automatique
   useEffect(() => {
     if (isSessionActive && !voiceSystemStarted && voiceSettings.enabled) {
-      console.log('🎤 DÉMARRAGE VOCAL AUTOMATIQUE pour session guidée:', currentSession || sessionId);
+      console.log('🎤 DÉMARRAGE VOCAL AUTOMATIQUE pour session guidée:', currentSession || sessionId, 'Méditation:', currentMeditation);
       setVoiceSystemStarted(true);
       
       // Démarrage immédiat du guidage vocal
@@ -273,6 +274,53 @@ export default function GuidedSessionRunner() {
             speak("Parfait. Vous avez retrouvé votre calme intérieur. Gardez cette sensation avec vous.");
           }
         }, 85000);
+      } else if (currentSession === 'meditation' && currentMeditation === 'metatron') {
+        console.log('🌟 DÉMARRAGE DIRECT GUIDAGE MÉTATRON');
+        
+        // Message d'introduction (0s)
+        speak("Bienvenue dans cette méditation d'invocation de l'Archange Métatron. Installez-vous confortablement, fermez les yeux et prenez quelques respirations profondes. Nous allons établir une connexion avec cet être de lumière, gardien des archives akashiques et porteur de la géométrie sacrée. Suivez le rythme respiratoire et ouvrez votre cœur à cette présence divine.");
+        
+        // Invocation (30s)
+        setTimeout(() => {
+          if (isSessionActive && voiceSettings.enabled) {
+            speak("Ô Metatron, ange de la Présence, scribe de Lumière, gardien du Trône Divin, toi qui as connu la chair et t'es élevé au-delà, je t'appelle avec humilité. Que ta présence sacrée se manifeste dans cet espace. Je t'invite à m'accompagner dans cette méditation, à m'envelopper de ton énergie céleste.");
+          }
+        }, 30000);
+        
+        // Lumière (70s)
+        setTimeout(() => {
+          if (isSessionActive && voiceSettings.enabled) {
+            speak("Que ta lumière entoure mon esprit, que ta sagesse éclaire mon cœur, que ta voix me guide sur les chemins de vérité. Je sens ta présence comme une lumière dorée qui m'enveloppe, qui purifie mon aura et élève ma vibration. Ta lumière pénètre chaque cellule de mon être.");
+          }
+        }, 70000);
+        
+        // Mémoire (110s)
+        setTimeout(() => {
+          if (isSessionActive && voiceSettings.enabled) {
+            speak("Toi qui écris dans les Livres Célestes, inscris en moi la mémoire de mon âme. Aide-moi à me souvenir de qui je suis, au-delà des voiles de l'oubli et des peurs humaines. Révèle-moi ma véritable nature, mon essence divine, ma mission sacrée sur cette Terre.");
+          }
+        }, 110000);
+        
+        // Inspiration (150s)
+        setTimeout(() => {
+          if (isSessionActive && voiceSettings.enabled) {
+            speak("Toi qui transmets la pensée divine, fais descendre en moi l'inspiration claire, la parole juste, et le silence plein de sens. Guide-moi vers la connaissance qui m'est nécessaire en ce moment. Ouvre les canaux de ma perception pour que je puisse recevoir les messages divins.");
+          }
+        }, 150000);
+        
+        // Protection (190s)
+        setTimeout(() => {
+          if (isSessionActive && voiceSettings.enabled) {
+            speak("Entoure-moi de ton Cube sacré, géométrie vivante de la création, bouclier de lumière contre les ombres, structure de l'ordre cosmique. Protège mon corps, mon cœur, mon esprit. Que ce Cube de Métatron m'enveloppe de ses lignes de force, équilibrant mes énergies et harmonisant mes chakras.");
+          }
+        }, 190000);
+        
+        // Élévation et gratitude (230s)
+        setTimeout(() => {
+          if (isSessionActive && voiceSettings.enabled) {
+            speak("Metatron, Archange de feu blanc, ouvre les portes de la haute conscience. Aide-moi à élever ma fréquence, à faire rayonner l'amour, et à servir ce qui est plus grand que moi. Que ta présence m'accompagne dans mon quotidien, m'inspirant sagesse et discernement. Je te rends grâce pour ta présence, ta guidance et ta protection. Amen. Amen. Amen. Doucement, prenez conscience de votre corps, de votre respiration. Quand vous êtes prêt, ouvrez les yeux en gardant cette connexion sacrée avec l'Archange Métatron.");
+          }
+        }, 230000);
       } else {
         // Pour les autres sessions, utiliser le système normal
         setTimeout(() => {
@@ -301,10 +349,19 @@ export default function GuidedSessionRunner() {
       // Démarrer l'audio
       if (audioSettings.enabled) {
         console.log('Démarrage audio session:', currentSession);
-        // Utiliser la fréquence appropriée pour la session
-        const sessionFrequency = currentSession === 'meditation' && currentMeditation 
-          ? meditations[currentMeditation]?.frequency || 'coherence'
-          : null;
+        
+        // Utiliser la fréquence appropriée pour la session ou méditation
+        let sessionFrequency = null;
+        
+        if (currentSession === 'meditation' && currentMeditation) {
+          // Chercher dans les deux collections de méditations
+          const meditation = meditations[currentMeditation] || spiritualMeditations[currentMeditation];
+          if (meditation && meditation.frequency) {
+            sessionFrequency = meditation.frequency;
+            console.log('🎵 Fréquence spécifique trouvée pour la méditation:', currentMeditation, sessionFrequency);
+          }
+        }
+        
         startAudio(sessionFrequency);
       }
       

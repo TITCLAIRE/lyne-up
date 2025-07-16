@@ -46,6 +46,7 @@ const sessionFrequencies = {
   attraction: '432hz',           // 432 Hz (alignement universel)
   confidence: 'beta',            // Ondes Beta 14 Hz (affirmation/action)
   sleep: 'delta',                // Ondes Delta 2 Hz (sommeil réparateur)
+  metatron: '852hz',             // 852 Hz (retour à l'ordre spirituel)
 };
 
 export const useAudioManager = () => {
