@@ -210,7 +210,7 @@ export default function GuidedSessionRunner() {
   // Démarrage vocal automatique
   useEffect(() => {
     if (isSessionActive && !voiceSystemStarted && voiceSettings.enabled) {
-      console.log('🎤 DÉMARRAGE VOCAL AUTOMATIQUE pour session guidée:', currentSession || sessionId, 'Méditation:', currentMeditation); 
+      console.log('🎤 DÉMARRAGE VOCAL AUTOMATIQUE pour session guidée:', currentSession || sessionId, 'Méditation:', currentMeditation);
       setVoiceSystemStarted(true);
       
       // Démarrage immédiat du guidage vocal
@@ -234,9 +234,11 @@ export default function GuidedSessionRunner() {
         }, 28000);
       } else if (currentMeditation === 'metatron') {
         // Pour Métatron, on utilise le système normal mais sans démarrer le guidage vocal
-        console.log('🌟 Méditation Métatron - Utilisation des fichiers audio uniquement'); 
-        // On marque quand même comme démarré pour éviter les doublons
-        setVoiceSystemStarted(true);
+        console.log('🌟 Méditation Métatron - Démarrage du guidage spécifique');
+        setTimeout(() => {
+          const success = startSessionGuidance();
+          console.log('🎤 Démarrage guidage vocal Métatron:', success ? 'réussi' : 'échoué');
+        }, 500);
       } else {
         // Pour les autres sessions, utiliser le système normal
         setTimeout(() => {
@@ -290,17 +292,10 @@ export default function GuidedSessionRunner() {
       // Démarrage du guidage vocal pour la session
       // Attendre un peu pour que tout soit initialisé
       const guidanceTimeout = setTimeout(() => {
-        if (voiceSettings.enabled && currentMeditation !== 'metatron') {
+        if (voiceSettings.enabled) {
           console.log('🎤 Démarrage guidage vocal après délai');
           const success = startSessionGuidance();
           console.log('🎤 Démarrage guidage vocal guidé:', success ? 'réussi' : 'échoué');
-        } else if (currentMeditation === 'metatron') {
-          console.log('🌟 Méditation Métatron - Utilisation du système standard de guidage');
-          // Utiliser le système standard de guidage vocal pour Métatron
-          setTimeout(() => {
-            const success = startSessionGuidance();
-            console.log('🎤 Démarrage guidage vocal Métatron:', success ? 'réussi' : 'échoué');
-          }, 500);
         }
       }, 1000);
       

@@ -1,6 +1,7 @@
 import { useEffect, useRef, useCallback } from 'react';
 import { useAppStore } from '../store/appStore';
 import { spiritualMeditations } from '../data/meditations';
+import { spiritualMeditations } from '../data/meditations';
 
 export const useVoiceManager = () => {
   const { 
@@ -466,7 +467,9 @@ export const useVoiceManager = () => {
         audioPath = `/audio/meditation/${gender}/metatron-elevation.mp3`;
         audioKey = 'metatron-elevation';
       }
-        audioPath = `/audio/meditation/${gender}/gratitude-anchoring.mp3`;
+    }
+    
+    if (sessionType === 'meditation' && currentMeditation === 'gratitude') {
         audioKey = 'gratitude-anchoring';
       } else if (text.includes('Intégrez pleinement cette énergie de gratitude')) {
         audioPath = `/audio/meditation/${gender}/gratitude-integration.mp3`;
@@ -849,15 +852,16 @@ export const useVoiceManager = () => {
       // Guidage spécifique pour Métatron
       if (currentMeditation === 'metatron') {
         console.log('🌟 Démarrage guidage Métatron');
+        const metatron = spiritualMeditations.metatron;
         
         // Message d'accueil
-        speak(spiritualMeditations.metatron.guidance.start);
+        speak(metatron.guidance.start);
         
         // Programmer les phases avec des délais sécurisés
         const phaseDelays = [30000, 70000, 110000, 150000, 190000, 230000];
         
         // Programmer chaque phase avec son propre délai
-        spiritualMeditations.metatron.guidance.phases.forEach((phase, index) => {
+        metatron.guidance.phases.forEach((phase, index) => {
           if (index < phaseDelays.length) {
             createTrackedTimeout(() => {
               console.log(`🌟 Méditation Métatron - Phase ${index + 1}`);
@@ -868,7 +872,7 @@ export const useVoiceManager = () => {
         
         // Message de fin
         createTrackedTimeout(() => {
-          speak(spiritualMeditations.metatron.guidance.end);
+          speak(metatron.guidance.end);
         }, 290000);
         
         return true;
