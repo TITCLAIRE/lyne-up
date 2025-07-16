@@ -818,8 +818,22 @@ export const useVoiceManager = () => {
         
         // Message d'introduction complet (0s)
         const gender = voiceSettings.gender;
-        const introPath = `/audio/meditation/${gender}/metatron-welcome.mp3`;
-        queueAudio(introPath, 'metatron-welcome', "Bienvenue dans cette méditation d'invocation de l'archange Métatron. Installez-vous confortablement. Fermez les yeux et prenez quelques profondes respirations. Nous allons établir une connexion avec cet être de lumière, gardien des archives akashiques et porteur de la géométrie sacrée. Suivez le rythme respiratoire et ouvrez votre coeur à cette présence divine.");
+        const welcomePath = `/audio/meditation/${gender}/metatron-welcome.mp3`;
+        // Vérifier si le fichier existe avant de le jouer
+        fetch(welcomePath, { method: 'HEAD' })
+          .then(response => {
+            if (response.ok) {
+              console.log('✅ Fichier welcome trouvé, lecture directe sans synthèse vocale');
+              queueAudio(welcomePath, 'metatron-welcome', null); // Pas de fallback text pour éviter le doublon
+            } else {
+              console.log('❌ Fichier welcome non trouvé, utilisation de la synthèse vocale');
+              speak("Bienvenue dans cette méditation d'invocation de l'archange Métatron. Installez-vous confortablement. Fermez les yeux et prenez quelques profondes respirations. Nous allons établir une connexion avec cet être de lumière, gardien des archives akashiques et porteur de la géométrie sacrée. Suivez le rythme respiratoire et ouvrez votre coeur à cette présence divine.");
+            }
+          })
+          .catch(error => {
+            console.error('❌ Erreur lors de la vérification du fichier welcome:', error);
+            speak("Bienvenue dans cette méditation d'invocation de l'archange Métatron. Installez-vous confortablement. Fermez les yeux et prenez quelques profondes respirations. Nous allons établir une connexion avec cet être de lumière, gardien des archives akashiques et porteur de la géométrie sacrée. Suivez le rythme respiratoire et ouvrez votre coeur à cette présence divine.");
+          });
         
         // Invocation (30s)
         setTimeout(() => {
