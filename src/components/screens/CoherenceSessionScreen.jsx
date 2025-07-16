@@ -22,6 +22,9 @@ export const CoherenceSessionScreen = () => {
     isTrialMode,
     completeTrialSession
   } = useAppStore();
+
+  // Utiliser les paramètres appropriés selon le mode
+  const currentSettings = isTrialMode ? trialCoherenceSettings : coherenceSettings;
   
   // Fonction de fin de session - DOIT être définie AVANT useSessionTimer
   const handleSessionComplete = useCallback(() => {
@@ -39,16 +42,12 @@ export const CoherenceSessionScreen = () => {
   const { speak, stop: stopVoice, startSessionGuidance } = useVoiceManager();
 
   const [lastPhase, setLastPhase] = useState(null);
-  const [sessionEnding, setSessionEnding] = useState(false);
-  const [voiceSystemStarted, setVoiceSystemStarted] = useState(false);
-
   // Obtenir le pattern respiratoire pour la cohérence cardiaque
   const getCoherenceBreathingPattern = () => {
     const pattern = getBreathingPattern('coherence', currentSettings.rhythm);
     return pattern;
   };
 
-  const { timeRemaining, progress, startTimer, stopTimer, resetTimer } = useSessionTimer(handleSessionComplete);
   useEffect(() => {
     if (isSessionActive && breathingState.phase !== 'idle' && breathingState.phase !== lastPhase) {
       if (lastPhase !== null && currentSettings.gongEnabled && !currentSettings.silentMode && audioSettings.enabled) {
@@ -114,11 +113,13 @@ export const CoherenceSessionScreen = () => {
       // Démarrage du guidage vocal pour la session
       if (!currentSettings.silentMode && voiceSettings.enabled) {
         console.log('🎤 Démarrage guidage vocal pour cohérence cardiaque');
-        setTimeout(() => {
-          if (voiceSettings.enabled) {
-            startSessionGuidance();
-          }
-        }, 500);
+        // Démarrer le guidage vocal après un court délai
+        if (voiceSettings.enabled) {
+          setTimeout(() => {
+            const success = startSessionGuidance();
+            console.log('🎤 Démarrage guidage vocal cohérence:', success ? 'réussi' : 'échoué');
+          }, 500);
+        }
       }
     } else {
       setSessionActive(false);

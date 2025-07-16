@@ -36,6 +36,7 @@ export default function GuidedSessionRunner() {
   const { breathingState, startBreathing, stopBreathing } = useBreathingAnimation();
   const { startAudio, stopAudio, playGong, getCurrentFrequencyName } = useAudioManager();
   const { speak, stop: stopVoice, startSessionGuidance } = useVoiceManager();
+  const { timeRemaining, progress, startTimer, stopTimer, resetTimer } = useSessionTimer(handleSessionComplete);
 
   const [lastPhase, setLastPhase] = useState(null);
   const [sessionEnding, setSessionEnding] = useState(false);
@@ -49,7 +50,7 @@ export default function GuidedSessionRunner() {
   // Initialiser la session en fonction du paramètre d'URL
   useEffect(() => {
     if (sessionId) {
-      if (sessionId === 'meditation' && !currentMeditation) {
+      if (sessionId === 'meditation' && currentMeditation === null) {
         // Si c'est une méditation mais qu'aucune n'est sélectionnée, rediriger
         navigate('/sessions/voyage/meditations');
       } else {
@@ -231,9 +232,10 @@ export default function GuidedSessionRunner() {
       }
       
       // Démarrer le timer et la respiration
-      const duration = sessionData?.duration || 180;
-      console.log('Durée session:', duration, 'secondes');
-      startTimer(duration);
+        setTimeout(() => {
+          const success = startSessionGuidance();
+          console.log('🎤 Démarrage guidage vocal guidé:', success ? 'réussi' : 'échoué');
+        }, 500);
       startBreathing(breathingPattern);
       
     } else {

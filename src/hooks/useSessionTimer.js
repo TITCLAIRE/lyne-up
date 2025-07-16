@@ -1,6 +1,6 @@
 import { useState, useRef, useCallback } from 'react';
 
-export const useSessionTimer = (onComplete) => {
+export const useSessionTimer = (onComplete = null) => {
   const [timeRemaining, setTimeRemaining] = useState(0);
   const [totalDuration, setTotalDuration] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
@@ -17,6 +17,11 @@ export const useSessionTimer = (onComplete) => {
         
         if (newTime <= 0) {
           setIsRunning(false);
+          
+          // Appeler le callback de fin si fourni
+          if (onComplete && typeof onComplete === 'function') {
+            onComplete();
+          }
           
           if (intervalRef.current) {
             clearInterval(intervalRef.current);

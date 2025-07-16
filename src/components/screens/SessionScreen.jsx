@@ -16,7 +16,16 @@ export const SessionScreen = () => {
     setSessionActive, 
     setCurrentScreen,
     currentMeditation,
+    audioSettings,
+    voiceSettings
   } = useAppStore();
+
+  // Fonction de fin de session
+  const handleSessionComplete = useCallback(() => {
+    console.log('🏁 Session terminée, redirection vers les résultats');
+    setCurrentScreen('results');
+  }, [setCurrentScreen]);
+
   const { timeRemaining, progress, startTimer, stopTimer, resetTimer } = useSessionTimer(handleSessionComplete);
   const { breathingState, startBreathing, stopBreathing } = useBreathingAnimation();
   const { startAudio, stopAudio, playGong, getCurrentFrequencyName } = useAudioManager();
@@ -30,18 +39,6 @@ export const SessionScreen = () => {
   const [currentProgressivePhase, setCurrentProgressivePhase] = useState(0);
   const [progressivePhaseChanged, setProgressivePhaseChanged] = useState(false);
   const [lastProgressiveCheck, setLastProgressiveCheck] = useState(0);
-
-  // Fonction de fin de session
-  const handleSessionComplete = useCallback(() => {
-    console.log('🏁 Session terminée, redirection vers les résultats');
-    setCurrentScreen('results');
-  }, [setCurrentScreen]);
-
-  // Fonction de fin de session
-  const handleSessionComplete = useCallback(() => {
-    console.log('🏁 Session terminée, redirection vers les résultats');
-    setCurrentScreen('results');
-  }, [setCurrentScreen]);
 
   // Obtenir les données de session selon le type
   const getSessionData = () => {

@@ -81,7 +81,7 @@ export const useAudioManager = () => {
   const startAudio = (frequency) => {
     if (!audioSettings.enabled || isPlayingRef.current) {
       console.log('🔇 Audio déjà en cours ou désactivé');
-      return;
+      return false;
     }
 
     console.log('🎵 DÉMARRAGE AUDIO - Session:', currentSession, 'Fréquence:', frequency);
@@ -89,8 +89,13 @@ export const useAudioManager = () => {
     const selectedFrequency = frequency || getDefaultFrequency();
     const freq = frequencies[selectedFrequency];
     if (!freq) {
-      console.error('❌ Fréquence non trouvée:', selectedFrequency);
-      return;
+      console.error('❌ Fréquence non trouvée:', selectedFrequency, 'Utilisation de la fréquence par défaut');
+      // Utiliser la fréquence de cohérence par défaut
+      freq = frequencies['coherence'];
+      if (!freq) {
+        console.error('❌ Impossible de démarrer l\'audio - Fréquence par défaut non disponible');
+        return false;
+      }
     }
 
     const audioContext = initAudioContext();
@@ -143,6 +148,8 @@ export const useAudioManager = () => {
       console.log(`🎵 Audio démarré avec succès: ${freq.name} (${selectedFrequency})`);
       console.log('🔊 Volume:', recommendedVolume, 'Base freq:', freq.base, 'Beat:', freq.beat);
       
+      return true;
+      
       // Gestion des erreurs d'oscillateur
       oscillatorLeft.onended = () => {
         console.log('🔄 Oscillateur gauche terminé');
@@ -155,6 +162,7 @@ export const useAudioManager = () => {
     } catch (error) {
       console.error('❌ Erreur lors du démarrage audio:', error);
       isPlayingRef.current = false;
+      return false;
     }
   };
 

@@ -519,7 +519,10 @@ export const useVoiceManager = () => {
   
   // Fonction pour démarrer le guidage vocal pour la session SOS Stress
   const startSosStressGuidance = useCallback(() => {
-    if (!voiceSettings.enabled || !isSessionActive) return;
+    if (!voiceSettings.enabled || !isSessionActive) {
+      console.log('🔇 Guidage vocal désactivé ou session inactive');
+      return false;
+    }
     
     console.log('🚨 DÉMARRAGE SOS STRESS - DIAGNOSTIC COMPLET', voiceSettings.gender === 'female' ? '(Claire)' : '(Thierry)');
     
@@ -585,11 +588,16 @@ export const useVoiceManager = () => {
     sessionGuidanceTimeout.current = setTimeout(() => {
       speak("Parfait. Vous avez retrouvé votre calme intérieur. Gardez cette sensation avec vous.");
     }, 85000);
+    
+    return true;
   }, [voiceSettings.enabled, voiceSettings.gender, isSessionActive, speak]);
   
   // Fonction pour démarrer le guidage vocal pour la session Scan Corporel
   const startScanGuidance = useCallback(() => {
-    if (!voiceSettings.enabled || !isSessionActive) return;
+    if (!voiceSettings.enabled || !isSessionActive) {
+      console.log('🔇 Guidage vocal désactivé ou session inactive');
+      return false;
+    }
     
     console.log('🧠 DÉMARRAGE SCAN CORPOREL', voiceSettings.gender === 'female' ? '(Claire)' : '(Thierry)');
     
@@ -680,11 +688,16 @@ export const useVoiceManager = () => {
     sessionGuidanceTimeout.current = setTimeout(() => {
       speak("Progressivement, reprenez conscience de votre environnement. Bougez doucement vos doigts, vos orteils. Étirez-vous si vous le souhaitez. Votre corps est maintenant complètement détendu et votre esprit apaisé.");
     }, 570000);
+    
+    return true;
   }, [voiceSettings.enabled, voiceSettings.gender, isSessionActive, speak]);
   
   // Fonction pour démarrer le guidage vocal pour la session de cohérence cardiaque
   const startCoherenceGuidance = useCallback(() => {
-    if (!voiceSettings.enabled || !isSessionActive) return;
+    if (!voiceSettings.enabled || !isSessionActive) {
+      console.log('🔇 Guidage vocal désactivé ou session inactive');
+      return false;
+    }
     
     console.log('💓 DÉMARRAGE COHÉRENCE CARDIAQUE', voiceSettings.gender === 'female' ? '(Claire)' : '(Thierry)');
     
@@ -712,27 +725,34 @@ export const useVoiceManager = () => {
     sessionGuidanceTimeout.current = setTimeout(() => {
       speak("Votre session de cohérence cardiaque se termine. Gardez cette harmonie avec vous tout au long de votre journée.");
     }, endTime);
+    
+    return true;
   }, [voiceSettings.enabled, voiceSettings.gender, isSessionActive, speak]);
   
   // Fonction pour démarrer le guidage vocal pour n'importe quelle session
   const startSessionGuidance = useCallback(() => {
-    if (sessionGuidanceStarted.current) return;
+    if (sessionGuidanceStarted.current) {
+      console.log('🔇 Guidage vocal déjà démarré');
+      return false;
+    }
     sessionGuidanceStarted.current = true;
     
     console.log('🎯 Démarrage guidage vocal pour session:', currentSession);
     
     if (currentSession === 'switch') {
-      startSosStressGuidance();
+      return startSosStressGuidance();
     } else if (currentSession === 'scan') {
-      startScanGuidance();
+      return startScanGuidance();
     } else if (currentSession === 'coherence') {
-      startCoherenceGuidance();
+      return startCoherenceGuidance();
     } else if (currentSession === 'meditation') {
       // Guidage pour les méditations géré séparément
       console.log('🧘 Méditation:', currentMeditation);
+      return true;
     } else {
       // Pour les autres sessions, utiliser un guidage générique
       speak("Bienvenue dans votre session. Suivez le rythme respiratoire et laissez-vous guider.");
+      return true;
     }
   }, [currentSession, currentMeditation, startSosStressGuidance, startScanGuidance, startCoherenceGuidance, speak]);
   
