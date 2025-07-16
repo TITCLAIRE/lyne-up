@@ -2,12 +2,12 @@
 
 ## 🎯 **7 SÉQUENCES À ENREGISTRER**
 
-### **1. metatron-introduction.mp3** (0s-30s)
-**Fichier :** `metatron-introduction.mp3`
+### **1. metatron-welcome.mp3** (0s-30s)
+**Fichier :** `metatron-welcome.mp3`
 **Durée :** 30 secondes
 **Texte :**
 ```
-Bienvenue dans cette méditation d'invocation de l'Archange Métatron. Installez-vous confortablement, fermez les yeux et prenez quelques respirations profondes. Nous allons établir une connexion avec cet être de lumière, gardien des archives akashiques et porteur de la géométrie sacrée. Suivez le rythme respiratoire et ouvrez votre cœur à cette présence divine.
+Bienvenue dans cette méditation d'invocation de l'archange Métatron. Installez-vous confortablement. Fermez les yeux et prenez quelques profondes respirations. Nous allons établir une connexion avec cet être de lumière, gardien des archives akashiques et porteur de la géométrie sacrée. Suivez le rythme respiratoire et ouvrez votre coeur à cette présence divine.
 ```
 
 ### **2. metatron-invocation.mp3** (30s-70s)

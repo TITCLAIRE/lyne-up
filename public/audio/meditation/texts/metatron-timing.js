@@ -2,7 +2,7 @@
 // Basé sur une méditation de 5 minutes (300 secondes)
 
 export const metatronTimingsOptimized = [
-  { time: 0, audioKey: 'introduction', duration: 30 },         // 0s - Introduction
+  { time: 0, audioKey: 'welcome', duration: 30 },              // 0s - Introduction
   { time: 30000, audioKey: 'invocation', duration: 40 },       // 30s - Invocation initiale
   { time: 70000, audioKey: 'light', duration: 40 },            // 70s - Lumière et sagesse
   { time: 110000, audioKey: 'memory', duration: 40 },          // 110s - Mémoire de l'âme
@@ -13,7 +13,7 @@ export const metatronTimingsOptimized = [
 
 // Mapping des fichiers audio MÉTATRON
 export const METATRON_AUDIO_FILES = {
-  introduction: 'metatron-introduction',
+  welcome: 'metatron-welcome',
   invocation: 'metatron-invocation',
   light: 'metatron-light',
   memory: 'metatron-memory',

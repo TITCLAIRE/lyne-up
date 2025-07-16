@@ -816,10 +816,10 @@ export const useVoiceManager = () => {
       if (currentSession === 'meditation' && currentMeditation === 'metatron') {
         console.log('🌟 DÉMARRAGE DIRECT GUIDAGE MÉTATRON avec voix premium');
         
-        // Message d'introduction (0s)
+        // Message d'introduction complet (0s)
         const gender = voiceSettings.gender;
-        const introPath = `/audio/meditation/${gender}/metatron-introduction.mp3`;
-        queueAudio(introPath, 'metatron-introduction', "Bienvenue dans cette méditation d'invocation de l'Archange Métatron. Installez-vous confortablement, fermez les yeux et prenez quelques respirations profondes. Nous allons établir une connexion avec cet être de lumière, gardien des archives akashiques et porteur de la géométrie sacrée. Suivez le rythme respiratoire et ouvrez votre cœur à cette présence divine.");
+        const introPath = `/audio/meditation/${gender}/metatron-welcome.mp3`;
+        queueAudio(introPath, 'metatron-welcome', "Bienvenue dans cette méditation d'invocation de l'archange Métatron. Installez-vous confortablement. Fermez les yeux et prenez quelques profondes respirations. Nous allons établir une connexion avec cet être de lumière, gardien des archives akashiques et porteur de la géométrie sacrée. Suivez le rythme respiratoire et ouvrez votre coeur à cette présence divine.");
         
         // Invocation (30s)
         setTimeout(() => {
