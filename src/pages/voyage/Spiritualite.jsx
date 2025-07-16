@@ -1,30 +1,9 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Home, Star, ArrowRight } from 'lucide-react';
-import { useAppStore } from '../../store/appStore';
-import { spiritualMeditations } from '../../data/meditations';
+import { Home, Star, Info } from 'lucide-react';
 
 export default function Spiritualite() {
   const navigate = useNavigate();
-  const { setCurrentMeditation, setCurrentSession, setCurrentScreen } = useAppStore();
-
-  const spiritualMeditationsList = [
-    { 
-      id: 'metatron', 
-      name: 'Invocation de l\'Archange Métatron', 
-      icon: Star, 
-      duration: 5, 
-      desc: 'Connexion à l\'Archange Métatron',
-      color: 'from-violet-700/20 to-purple-700/20',
-      borderColor: 'border-violet-700/30'
-    }
-  ];
-
-  const handleMeditationSelect = (meditationId) => {
-    setCurrentMeditation(meditationId);
-    setCurrentSession('meditation');
-    navigate(`/sessions/run/guided/meditation`);
-  };
 
   const handleGoBack = () => {
     navigate('/sessions/voyage');
@@ -37,27 +16,24 @@ export default function Spiritualite() {
         <p className="text-white/70">Connexion à l'univers et aux énergies supérieures</p>
       </div>
 
-      <div className="grid gap-3 mb-8">
-        {spiritualMeditationsList.map((meditation) => {
-          const IconComponent = meditation.icon;
-          return (
-            <div
-              key={meditation.id}
-              onClick={() => handleMeditationSelect(meditation.id)}
-              className={`bg-gradient-to-r ${meditation.color} border ${meditation.borderColor} rounded-xl p-6 cursor-pointer hover:scale-[1.02] transition-all duration-200`}
-            >
-              <div className="flex items-center gap-4">
-                <div className="flex items-center justify-center w-12 h-12 bg-white/10 rounded-xl">
-                  <IconComponent size={24} className="text-violet-400" />
-                </div>
-                <div className="flex-1">
-                  <h3 className="font-semibold text-lg">{meditation.name}</h3>
-                  <p className="text-white/70 text-sm">{meditation.duration}min • {meditation.desc}</p>
-                </div>
-              </div>
+      {/* Message de maintenance */}
+      <div className="bg-gradient-to-r from-amber-500/20 to-yellow-500/20 border border-amber-500/30 rounded-xl p-6 mb-8">
+        <div className="flex items-start gap-4">
+          <Info size={24} className="text-amber-400 mt-1 flex-shrink-0" />
+          <div className="text-left">
+            <h3 className="text-lg font-semibold text-amber-200 mb-2">Méditations en préparation</h3>
+            <p className="text-white/80 text-sm leading-relaxed mb-3">
+              Nos méditations spirituelles sont actuellement en cours de préparation pour vous offrir 
+              une expérience optimale. Elles seront disponibles très prochainement.
+            </p>
+            <div className="bg-amber-500/10 rounded-lg p-3">
+              <p className="text-xs text-amber-100/90">
+                ✨ <strong>À venir :</strong> Invocation de l'Archange Métatron, Connexion aux Guides Spirituels, 
+                Méditation des Chakras, et bien plus encore.
+              </p>
             </div>
-          );
-        })}
+          </div>
+        </div>
       </div>
 
       <div className="flex justify-center">

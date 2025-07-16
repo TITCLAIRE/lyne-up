@@ -856,14 +856,7 @@ export const useVoiceManager = () => {
       return startScanGuidance();
     } else if (currentSession === 'coherence') {
       return startCoherenceGuidance();
-    } else if (currentSession === 'meditation' && currentMeditation) {
-      // Vérifier si c'est la méditation Métatron
-      if (currentMeditation === 'metatron') {
-        console.log('⚠️ Méditation Métatron non disponible actuellement');
-        speak("La méditation Métatron n'est pas disponible actuellement. Veuillez choisir une autre méditation.");
-        return false;
-      }
-      
+    } else if (currentSession === 'meditation' && currentMeditation && currentMeditation !== 'metatron') {
       // Pour les autres méditations
       const meditationData = meditations[currentMeditation] || spiritualMeditations[currentMeditation];
       if (!meditationData) {
@@ -889,6 +882,17 @@ export const useVoiceManager = () => {
       }, meditationData.duration * 1000 - 10000); // 10 secondes avant la fin
 
       return true;
+    } else if (currentSession === 'meditation' && currentMeditation === 'metatron') {
+      // Message d'erreur pour Métatron
+      speak("La méditation Métatron est temporairement indisponible. Veuillez choisir une autre méditation.");
+      
+      // Redirection après un court délai
+      setTimeout(() => {
+        // Utiliser window.history pour naviguer en arrière
+        window.history.back();
+      }, 3000);
+      
+      return false;
     } else {
       // Pour les autres sessions, utiliser un guidage générique
       speak("Bienvenue dans votre session. Suivez le rythme respiratoire et laissez-vous guider.");
