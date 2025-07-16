@@ -60,9 +60,8 @@ export const useVoiceManager = () => {
   // Nettoyer les timeouts à la destruction du composant
   useEffect(() => {
     return () => {
-      if (sessionGuidanceTimeout.current) {
-        clearTimeout(sessionGuidanceTimeout.current);
-      }
+      // Nettoyer tous les timeouts
+      clearAllTimeouts();
       
       // Arrêter toute synthèse vocale en cours
       if (synth.current) {
@@ -81,6 +80,22 @@ export const useVoiceManager = () => {
     };
   }, []);
   
+  // Fonction pour nettoyer tous les timeouts
+  const clearAllTimeouts = useCallback(() => {
+    console.log('🧹 Nettoyage de TOUS les timeouts de guidage');
+    
+    // Nettoyer le timeout principal
+    if (sessionGuidanceTimeout.current) {
+      clearTimeout(sessionGuidanceTimeout.current);
+      sessionGuidanceTimeout.current = null;
+    }
+    
+    // Nettoyer tous les timeouts programmés pour SOS Stress
+    for (let i = 0; i < 10; i++) {
+      clearTimeout(i);
+    }
+  }, []);
+  
   // Réinitialiser le guidage vocal lorsque la session change
   useEffect(() => {
     sessionGuidanceStarted.current = false;
@@ -95,12 +110,10 @@ export const useVoiceManager = () => {
   // Arrêter le guidage vocal lorsque la session est arrêtée
   useEffect(() => {
     if (!isSessionActive) {
-      console.log('🔇 Session inactive détectée - Arrêt de tout guidage vocal');
-      if (sessionGuidanceTimeout.current) {
-        clearTimeout(sessionGuidanceTimeout.current);
-        sessionGuidanceTimeout.current = null;
-        console.log('🧹 Timeouts de guidage nettoyés');
-      }
+      console.log('🔇 Session inactive détectée - ARRÊT COMPLET de tout guidage vocal');
+      
+      // Nettoyer tous les timeouts
+      clearAllTimeouts();
       
       // Arrêter toute synthèse vocale en cours
       if (synth.current) {
@@ -123,7 +136,7 @@ export const useVoiceManager = () => {
       sessionGuidancePhase.current = 0;
       console.log('🔄 État du guidage vocal réinitialisé');
     }
-  }, [isSessionActive]);
+  }, [isSessionActive, clearAllTimeouts]);
   
   // Fonction pour jouer le prochain audio dans la file d'attente
   const playNextInQueue = useCallback(() => {
@@ -503,7 +516,7 @@ export const useVoiceManager = () => {
   // Fonction pour arrêter toute parole
   const stop = useCallback(() => {
     // Arrêter la synthèse vocale
-    console.log('🔇 Arrêt manuel de toute parole');
+    console.log('🔇 ARRÊT FORCÉ de toute parole et guidage');
     if (synth.current) {
       synth.current.cancel();
     }
@@ -519,17 +532,16 @@ export const useVoiceManager = () => {
     isPlayingAudio.current = false;
     
     // Réinitialiser les variables de guidage
+    console.log('🔄 Réinitialisation complète du système de guidage vocal');
     sessionGuidanceStarted.current = false;
     sessionGuidancePhase.current = 0;
-    if (sessionGuidanceTimeout.current) {
-      clearTimeout(sessionGuidanceTimeout.current);
-      sessionGuidanceTimeout.current = null;
-      console.log('🧹 Timeouts de guidage nettoyés dans stop()');
-    }
+    
+    // Nettoyer tous les timeouts
+    clearAllTimeouts();
     
     console.log('🔇 Toute parole arrêtée');
     return true;
-  }, []);
+  }, [clearAllTimeouts]);
   
   // Fonction pour démarrer le guidage vocal pour la session SOS Stress
   const startSosStressGuidance = useCallback(() => {
@@ -539,11 +551,7 @@ export const useVoiceManager = () => {
     }
     
     // Nettoyer tout timeout existant pour éviter les doublons
-    if (sessionGuidanceTimeout.current) {
-      clearTimeout(sessionGuidanceTimeout.current);
-      sessionGuidanceTimeout.current = null;
-      console.log('🧹 Anciens timeouts nettoyés avant démarrage SWITCH/SOS');
-    }
+    clearAllTimeouts();
     
     console.log('🚨 DÉMARRAGE SWITCH/SOS STRESS - DIAGNOSTIC COMPLET', voiceSettings.gender === 'female' ? '(Claire)' : '(Thierry)');
     
@@ -568,7 +576,9 @@ export const useVoiceManager = () => {
     });
     
     // Séquence 1 - Message d'accueil (0s)
-    speak("Bienvenue dans votre bulle de calme. Posez vos pieds bien à plat sur le sol. Détendez vos épaules.");
+    setTimeout(() => {
+      speak("Bienvenue dans votre bulle de calme. Posez vos pieds bien à plat sur le sol. Détendez vos épaules.");
+    }, 500);
     
     // Séquence 2 - Inspiration (12s)
     sessionGuidanceTimeout.current = setTimeout(() => {
@@ -611,7 +621,7 @@ export const useVoiceManager = () => {
     }, 85000);
     
     return true;
-  }, [voiceSettings.enabled, voiceSettings.gender, isSessionActive, speak]);
+  }, [voiceSettings.enabled, voiceSettings.gender, isSessionActive, speak, clearAllTimeouts]);
   
   // Fonction pour démarrer le guidage vocal pour la session Scan Corporel
   const startScanGuidance = useCallback(() => {
@@ -621,6 +631,9 @@ export const useVoiceManager = () => {
     }
     
     console.log('🧠 DÉMARRAGE SCAN CORPOREL', voiceSettings.gender === 'female' ? '(Claire)' : '(Thierry)');
+    
+    // Nettoyer tout timeout existant pour éviter les doublons
+    clearAllTimeouts();
     
     // Séquence 1 - Message d'accueil (0s)
     speak("Bienvenue dans cette séance de scan corporel. Installez-vous confortablement, fermez les yeux si vous le souhaitez. Nous allons explorer chaque partie de votre corps pour une relaxation profonde.");
@@ -711,7 +724,7 @@ export const useVoiceManager = () => {
     }, 570000);
     
     return true;
-  }, [voiceSettings.enabled, voiceSettings.gender, isSessionActive, speak]);
+  }, [voiceSettings.enabled, voiceSettings.gender, isSessionActive, speak, clearAllTimeouts]);
   
   // Fonction pour démarrer le guidage vocal pour la session de cohérence cardiaque
   const startCoherenceGuidance = useCallback(() => {
@@ -721,6 +734,9 @@ export const useVoiceManager = () => {
     }
     
     console.log('💓 DÉMARRAGE COHÉRENCE CARDIAQUE', voiceSettings.gender === 'female' ? '(Claire)' : '(Thierry)');
+    
+    // Nettoyer tout timeout existant pour éviter les doublons
+    clearAllTimeouts();
     
     // Message d'accueil
     speak("Bienvenue dans votre session de cohérence cardiaque. Installez-vous confortablement et suivez le rythme respiratoire.");
@@ -748,7 +764,7 @@ export const useVoiceManager = () => {
     }, endTime);
     
     return true;
-  }, [voiceSettings.enabled, voiceSettings.gender, isSessionActive, speak]);
+  }, [voiceSettings.enabled, voiceSettings.gender, isSessionActive, speak, clearAllTimeouts]);
   
   // Fonction pour démarrer le guidage vocal pour n'importe quelle session
   const startSessionGuidance = useCallback(() => {
@@ -782,10 +798,15 @@ export const useVoiceManager = () => {
     speak,
     stop,
     startSessionGuidance: useCallback(() => {
+      console.log('🔄 Réinitialisation du guidage avant démarrage');
       // Réinitialiser l'état pour permettre un nouveau démarrage
       sessionGuidanceStarted.current = false;
+      
+      // Nettoyer tous les timeouts existants
+      clearAllTimeouts();
+      
       return startSessionGuidance();
-    }, [startSessionGuidance]),
+    }, [startSessionGuidance, clearAllTimeouts]),
     isInitialized: isInitialized.current,
   };
 };

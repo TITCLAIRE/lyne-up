@@ -209,7 +209,7 @@ export default function GuidedSessionRunner() {
   const handleToggleSession = () => {
     if (!isSessionActive) {
       const breathingPattern = getCurrentBreathingPattern();
-      console.log('▶️ Démarrage session guidée:', currentSession || sessionId);
+      console.log('▶️ DÉMARRAGE session guidée:', currentSession || sessionId);
       setSessionActive(true);
       setSessionEnding(false);
       setVoiceSystemStarted(false);
@@ -238,22 +238,23 @@ export default function GuidedSessionRunner() {
       startBreathing(breathingPattern);
       
       // Démarrage du guidage vocal pour la session
-      if (voiceSettings.enabled) {
-        setTimeout(() => {
+      // Attendre un peu pour que tout soit initialisé
+      setTimeout(() => {
+        if (voiceSettings.enabled) {
           const success = startSessionGuidance();
           console.log('🎤 Démarrage guidage vocal guidé:', success ? 'réussi' : 'échoué');
-        }, 500);
-      }
+        }
+      }, 1000);
     } else {
       setSessionActive(false);
-      console.log('⏸️ Pause session guidée:', currentSession || sessionId);
+      console.log('⏸️ PAUSE session guidée:', currentSession || sessionId);
       stopTimer();
       stopBreathing();
       stopAudio();
       
       // Arrêt explicite de la voix avec vérification
       if (stopVoice) {
-        console.log('🔇 Arrêt explicite de la voix lors de la pause');
+        console.log('🔇 ARRÊT FORCÉ de la voix lors de la pause');
         const voiceStopped = stopVoice();
         console.log('🔇 Résultat arrêt voix:', voiceStopped ? 'Réussi' : 'Échoué');
       }
@@ -272,6 +273,7 @@ export default function GuidedSessionRunner() {
   };
 
   const handleGoBack = () => {
+    console.log('🏠 RETOUR à l\'accueil depuis session guidée');
     setSessionActive(false);
     stopTimer();
     
@@ -279,8 +281,9 @@ export default function GuidedSessionRunner() {
     if (stopBreathing) stopBreathing();
     if (stopAudio) stopAudio();
     if (stopVoice) {
-      console.log('🔇 Arrêt explicite de la voix avant navigation');
-      stopVoice();
+      console.log('🔇 ARRÊT FORCÉ de la voix avant navigation');
+      const voiceStopped = stopVoice();
+      console.log('🔇 Résultat arrêt voix avant navigation:', voiceStopped ? 'Réussi' : 'Échoué');
     }
     
     resetTimer();
