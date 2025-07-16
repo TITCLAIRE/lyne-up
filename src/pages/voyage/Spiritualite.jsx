@@ -5,12 +5,12 @@ import { useAppStore } from '../../store/appStore';
 
 export default function Spiritualite() {
   const navigate = useNavigate();
-  const { setCurrentMeditation, setCurrentSession, setCurrentScreen } = useAppStore();
+  const { setCurrentMeditation, setCurrentSession } = useAppStore();
 
   const handleMeditationSelect = () => {
     setCurrentMeditation('metatron');
     setCurrentSession('meditation');
-    setCurrentScreen('session');
+    navigate('/sessions/run/guided/meditation');
   };
 
   const handleGoBack = () => {

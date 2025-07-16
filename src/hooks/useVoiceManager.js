@@ -885,16 +885,16 @@ export const useVoiceManager = () => {
     } else if (currentSession === 'meditation' && currentMeditation === 'metatron') {
       // Pour la méditation Métatron, utiliser la synthèse vocale directement
       console.log('🌟 Méditation Métatron - Utilisation de la synthèse vocale');
-      
+
       const meditationData = spiritualMeditations[currentMeditation];
       if (!meditationData) {
         console.error('❌ Données de méditation Métatron non trouvées');
         return false;
       }
-      
+
       // Message d'accueil
       speak(meditationData.guidance.start);
-      
+
       // Programmer les phases avec des délais
       meditationData.guidance.phases.forEach((phaseText, index) => {
         // Délai: 45s par phase
@@ -903,12 +903,12 @@ export const useVoiceManager = () => {
           speak(phaseText);
         }, (index + 1) * 45000);
       });
-      
+
       // Message de fin
       createTrackedTimeout(() => {
         speak(meditationData.guidance.end);
       }, meditationData.duration * 1000 - 15000); // 15 secondes avant la fin
-      
+
       return true;
     } else {
       // Pour les autres sessions, utiliser un guidage générique

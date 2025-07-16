@@ -129,7 +129,7 @@ export const meditations = {
 // Méditations spirituelles
 export const spiritualMeditations = {
   metatron: {
-    name: 'Invocation de l\'Archange Métatron (Synthèse vocale)',
+    name: 'Invocation de l\'Archange Métatron',
     icon: 'Star',
     duration: 300, // 5 minutes
     description: 'Connexion à l\'Archange Métatron',
@@ -138,7 +138,7 @@ export const spiritualMeditations = {
     breathingPattern: { inhale: 4, hold: 0, exhale: 6 },
     frequency: '852hz', // Retour à l'ordre spirituel
     guidance: {
-      start: "Bienvenue dans cette méditation d'invocation de l'archange Métatron. Installez-vous confortablement. Fermez les yeux et prenez quelques profondes respirations. Cette méditation utilise la synthèse vocale.",
+      start: "Bienvenue dans cette méditation d'invocation de l'archange Métatron. Installez-vous confortablement. Fermez les yeux et prenez quelques profondes respirations.",
       inhale: ["Inspirez la lumière divine", "Accueillez la présence sacrée", "Recevez la sagesse céleste"],
       exhale: ["Expirez toute limitation", "Libérez les voiles", "Ouvrez votre perception"],
       phases: [
