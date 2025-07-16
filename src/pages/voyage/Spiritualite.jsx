@@ -35,7 +35,7 @@ export default function Spiritualite() {
             </div>
             <div>
               <h3 className="font-semibold text-xl mb-1">🌟 Invocation de l'Archange Métatron</h3>
-              <p className="text-white/70">Connexion à l'Ange de la Présence</p>
+              <p className="text-white/70">Connexion à l'Ange de la Présence (Synthèse vocale)</p>
               <p className="text-white/50 text-sm mt-1">5 minutes • Guidage vocal premium</p>
             </div>
           </div>
