@@ -128,5 +128,28 @@ export const meditations = {
 
 // Méditations spirituelles
 export const spiritualMeditations = {
-  // Les méditations spirituelles seront ajoutées prochainement
+  metatron: {
+    name: 'Invocation de l\'Archange Métatron',
+    icon: 'Star',
+    duration: 300, // 5 minutes
+    description: 'Connexion à l\'Archange Métatron',
+    color: 'rgba(139, 92, 246, 0.2)',
+    borderColor: 'rgba(139, 92, 246, 0.3)',
+    breathingPattern: { inhale: 4, hold: 0, exhale: 6 },
+    frequency: '852hz', // Retour à l'ordre spirituel
+    guidance: {
+      start: "Bienvenue dans cette méditation d'invocation de l'archange Métatron. Installez-vous confortablement. Fermez les yeux et prenez quelques profondes respirations.",
+      inhale: ["Inspirez la lumière divine", "Accueillez la présence sacrée", "Recevez la sagesse céleste"],
+      exhale: ["Expirez toute limitation", "Libérez les voiles", "Ouvrez votre perception"],
+      phases: [
+        "Ô Metatron, ange de la Présence, scribe de Lumière, gardien du Trône Divin, je t'appelle avec humilité.",
+        "Que ta lumière entoure mon esprit, que ta sagesse éclaire mon cœur, que ta voix me guide sur les chemins de vérité.",
+        "Toi qui écris dans les Livres Célestes, inscris en moi la mémoire de mon âme.",
+        "Toi qui transmets la pensée divine, fais descendre en moi l'inspiration claire.",
+        "Entoure-moi de ton Cube sacré, géométrie vivante de la création, bouclier de lumière contre les ombres.",
+        "Metatron, Archange de feu blanc, ouvre les portes de la haute conscience."
+      ],
+      end: "Je te rends grâce pour ta présence, ta guidance et ta protection. Amen. Amen. Amen. Doucement, prenez conscience de votre corps, de votre respiration."
+    }
+  }
 };

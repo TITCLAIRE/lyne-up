@@ -2,10 +2,23 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Home, Star, ArrowRight } from 'lucide-react';
 import { useAppStore } from '../../store/appStore';
+import { spiritualMeditations } from '../../data/meditations';
 
 export default function Spiritualite() {
   const navigate = useNavigate();
   const { setCurrentMeditation, setCurrentSession, setCurrentScreen } = useAppStore();
+
+  const spiritualMeditationsList = [
+    { 
+      id: 'metatron', 
+      name: 'Invocation de l\'Archange Métatron', 
+      icon: Star, 
+      duration: 5, 
+      desc: 'Connexion à l\'Archange Métatron',
+      color: 'from-violet-700/20 to-purple-700/20',
+      borderColor: 'border-violet-700/30'
+    }
+  ];
 
   const handleMeditationSelect = (meditationId) => {
     setCurrentMeditation(meditationId);
@@ -25,18 +38,26 @@ export default function Spiritualite() {
       </div>
 
       <div className="grid gap-3 mb-8">
-        <div className="bg-gradient-to-r from-violet-700/20 to-purple-700/20 border border-violet-700/30 rounded-xl p-6">
-          <div className="text-center">
-            <Star size={48} className="text-violet-400 mx-auto mb-4" />
-            <h3 className="font-semibold text-xl mb-3">✨ Nouvelles méditations spirituelles à venir</h3>
-            <p className="text-white/70 mb-2">
-              De nouvelles méditations spirituelles seront bientôt disponibles dans cette section.
-            </p>
-            <p className="text-white/50 text-sm">
-              Revenez prochainement pour découvrir nos guidances spirituelles.
-            </p>
-          </div>
-        </div>
+        {spiritualMeditationsList.map((meditation) => {
+          const IconComponent = meditation.icon;
+          return (
+            <div
+              key={meditation.id}
+              onClick={() => handleMeditationSelect(meditation.id)}
+              className={`bg-gradient-to-r ${meditation.color} border ${meditation.borderColor} rounded-xl p-6 cursor-pointer hover:scale-[1.02] transition-all duration-200`}
+            >
+              <div className="flex items-center gap-4">
+                <div className="flex items-center justify-center w-12 h-12 bg-white/10 rounded-xl">
+                  <IconComponent size={24} className="text-violet-400" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="font-semibold text-lg">{meditation.name}</h3>
+                  <p className="text-white/70 text-sm">{meditation.duration}min • {meditation.desc}</p>
+                </div>
+              </div>
+            </div>
+          );
+        })}
       </div>
 
       <div className="flex justify-center">
