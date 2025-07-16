@@ -209,7 +209,7 @@ export default function GuidedSessionRunner() {
   const handleToggleSession = () => {
     if (!isSessionActive) {
       const breathingPattern = getCurrentBreathingPattern();
-      
+      console.log('▶️ Démarrage session guidée:', currentSession || sessionId);
       setSessionActive(true);
       setSessionEnding(false);
       setVoiceSystemStarted(false);
@@ -246,10 +246,17 @@ export default function GuidedSessionRunner() {
       }
     } else {
       setSessionActive(false);
+      console.log('⏸️ Pause session guidée:', currentSession || sessionId);
       stopTimer();
       stopBreathing();
       stopAudio();
-      stopVoice();
+      
+      // Arrêt explicite de la voix avec vérification
+      if (stopVoice) {
+        console.log('🔇 Arrêt explicite de la voix lors de la pause');
+        const voiceStopped = stopVoice();
+        console.log('🔇 Résultat arrêt voix:', voiceStopped ? 'Réussi' : 'Échoué');
+      }
       
       setLastPhase(null);
       setSessionEnding(false);
@@ -267,9 +274,14 @@ export default function GuidedSessionRunner() {
   const handleGoBack = () => {
     setSessionActive(false);
     stopTimer();
-    stopBreathing();
-    stopAudio();
-    stopVoice();
+    
+    // Arrêter l'audio et la respiration avec vérification
+    if (stopBreathing) stopBreathing();
+    if (stopAudio) stopAudio();
+    if (stopVoice) {
+      console.log('🔇 Arrêt explicite de la voix avant navigation');
+      stopVoice();
+    }
     
     resetTimer();
     setLastPhase(null);

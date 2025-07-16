@@ -95,20 +95,24 @@ export const useVoiceManager = () => {
   // Arrêter le guidage vocal lorsque la session est arrêtée
   useEffect(() => {
     if (!isSessionActive) {
+      console.log('🔇 Session inactive détectée - Arrêt de tout guidage vocal');
       if (sessionGuidanceTimeout.current) {
         clearTimeout(sessionGuidanceTimeout.current);
         sessionGuidanceTimeout.current = null;
+        console.log('🧹 Timeouts de guidage nettoyés');
       }
       
       // Arrêter toute synthèse vocale en cours
       if (synth.current) {
         synth.current.cancel();
+        console.log('🔇 Synthèse vocale arrêtée');
       }
       
       // Arrêter tout audio en cours
       if (audioElementRef.current) {
         audioElementRef.current.pause();
         audioElementRef.current = null;
+        console.log('🔇 Lecture audio arrêtée');
       }
       
       // Vider la file d'attente
@@ -116,6 +120,8 @@ export const useVoiceManager = () => {
       isPlayingAudio.current = false;
       
       sessionGuidanceStarted.current = false;
+      sessionGuidancePhase.current = 0;
+      console.log('🔄 État du guidage vocal réinitialisé');
     }
   }, [isSessionActive]);
   
@@ -497,6 +503,7 @@ export const useVoiceManager = () => {
   // Fonction pour arrêter toute parole
   const stop = useCallback(() => {
     // Arrêter la synthèse vocale
+    console.log('🔇 Arrêt manuel de toute parole');
     if (synth.current) {
       synth.current.cancel();
     }
@@ -513,19 +520,29 @@ export const useVoiceManager = () => {
     
     // Réinitialiser les variables de guidage
     sessionGuidanceStarted.current = false;
+    sessionGuidancePhase.current = 0;
     if (sessionGuidanceTimeout.current) {
       clearTimeout(sessionGuidanceTimeout.current);
       sessionGuidanceTimeout.current = null;
+      console.log('🧹 Timeouts de guidage nettoyés dans stop()');
     }
     
     console.log('🔇 Toute parole arrêtée');
+    return true;
   }, []);
   
   // Fonction pour démarrer le guidage vocal pour la session SOS Stress
   const startSosStressGuidance = useCallback(() => {
     if (!voiceSettings.enabled || !isSessionActive) {
-      console.log('🔇 Guidage vocal SOS désactivé ou session inactive');
+      console.log('🔇 Guidage vocal SWITCH/SOS désactivé ou session inactive');
       return false;
+    }
+    
+    // Nettoyer tout timeout existant pour éviter les doublons
+    if (sessionGuidanceTimeout.current) {
+      clearTimeout(sessionGuidanceTimeout.current);
+      sessionGuidanceTimeout.current = null;
+      console.log('🧹 Anciens timeouts nettoyés avant démarrage SWITCH/SOS');
     }
     
     console.log('🚨 DÉMARRAGE SWITCH/SOS STRESS - DIAGNOSTIC COMPLET', voiceSettings.gender === 'female' ? '(Claire)' : '(Thierry)');
