@@ -88,7 +88,7 @@ export const useAudioManager = () => {
     console.log('🎵 DÉMARRAGE AUDIO - Session:', currentSession, 'Fréquence:', frequency);
     
     const selectedFrequency = frequency || getDefaultFrequency();
-    const freq = frequencies[selectedFrequency];
+    let freq = frequencies[selectedFrequency];
     if (!freq) {
       console.error('❌ Fréquence non trouvée:', selectedFrequency, 'Utilisation de la fréquence par défaut');
       // Utiliser la fréquence de cohérence par défaut
