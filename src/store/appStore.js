@@ -14,7 +14,7 @@ export const useAppStore = create(
       freeSessionType: null, // 'focus' ou 'scan'
       
       // NOUVEAU : États pour le parcours utilisateur
-      showStartScreen: false, // En mode développement, ne pas afficher les pages de lancement
+     showStartScreen: true, // Forcer l'affichage de l'écran de démarrage
       isTrialMode: false, // Mode session d'essai
       isAuthenticated: false, // État d'authentification
       userProfile: null, // Profil utilisateur
