@@ -15,11 +15,13 @@ export default function CoherenceSessionRunner() {
   const { 
     coherenceSettings,
     trialCoherenceSettings,
+    freeSessionSettings,
     isSessionActive, 
     setSessionActive, 
     audioSettings,
     voiceSettings,
     isTrialMode,
+    isFreeSessionMode,
     setCurrentScreen
   } = useAppStore();
   
@@ -39,7 +41,9 @@ export default function CoherenceSessionRunner() {
   const [voiceSystemStarted, setVoiceSystemStarted] = useState(false);
 
   // Utiliser les paramètres appropriés selon le mode
-  const currentSettings = isTrialMode ? trialCoherenceSettings : coherenceSettings;
+  const currentSettings = isTrialMode ? trialCoherenceSettings : 
+                         isFreeSessionMode ? freeSessionSettings : 
+                         coherenceSettings;
 
 
   // Obtenir le pattern respiratoire pour la cohérence cardiaque
@@ -78,14 +82,16 @@ export default function CoherenceSessionRunner() {
       // Redirection après un court délai pour permettre au message de fin de se jouer
       setTimeout(() => {
         stopVoice();
-        if (isTrialMode) {
+        if (isFreeSessionMode) {
+          navigate('/');
+        } else if (isTrialMode) {
           setCurrentScreen('trialResults');
         } else {
           setCurrentScreen('results');
         }
       }, 2000);
     }
-  }, [timeRemaining, isSessionActive, sessionEnding, currentSettings.silentMode, speak, stopAudio, stopBreathing, stopVoice, isTrialMode, setCurrentScreen]);
+  }, [timeRemaining, isSessionActive, sessionEnding, currentSettings.silentMode, speak, stopAudio, stopBreathing, stopVoice, isTrialMode, isFreeSessionMode, setCurrentScreen, navigate]);
 
   const handleToggleSession = () => {
     if (!isSessionActive) {

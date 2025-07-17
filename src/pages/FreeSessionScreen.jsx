@@ -61,7 +61,8 @@ export default function FreeSessionScreen() {
       silentMode: false
     });
     
-    // Naviguer vers la page de session de cohérence cardiaque
+    // Définir la session active et naviguer vers la page de session
+    setCurrentSession('coherence');
     navigate('/sessions/run/coherence');
   };
   

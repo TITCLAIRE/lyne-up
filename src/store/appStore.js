@@ -10,7 +10,7 @@ export const useAppStore = create(
       currentSession: null,
       currentMeditation: null,
       isSessionActive: false,
-      isFreeSessionMode: false,
+      isFreeSessionMode: false, // Mode session gratuite/découverte
       freeSessionType: 'coherence', // Toujours 'coherence' pour la séance découverte
       
       // NOUVEAU : États pour le parcours utilisateur
@@ -103,9 +103,9 @@ export const useAppStore = create(
       startFreeSession: (sessionType) => {
         console.log('🎯 STORE: Démarrage session gratuite:', sessionType);
         set({
-          isFreeSessionMode: true,
-          freeSessionType: 'coherence',
-          currentSession: 'coherence'
+          isFreeSessionMode: true, // Activer le mode session gratuite
+          freeSessionType: sessionType || 'coherence',
+          currentSession: sessionType || 'coherence'
         });
       },
       
@@ -183,7 +183,22 @@ export const useAppStore = create(
       // Action pour mettre à jour les paramètres de session libre
       updateFreeSessionSettings: (settings) =>
         set((state) => ({
-          freeSessionSettings: { ...state.freeSessionSettings, ...settings }
+          freeSessionSettings: { ...state.freeSessionSettings, ...settings },
+          // Si on est en mode session gratuite, mettre à jour aussi les paramètres de cohérence
+          coherenceSettings: state.isFreeSessionMode ? 
+            { ...state.coherenceSettings, 
+              rhythm: settings.inhaleTime && settings.exhaleTime ? 
+                `${settings.inhaleTime}-${settings.exhaleTime}` : 
+                state.coherenceSettings.rhythm,
+              duration: settings.duration || state.coherenceSettings.duration,
+              gongEnabled: settings.gongEnabled !== undefined ? 
+                settings.gongEnabled : 
+                state.coherenceSettings.gongEnabled,
+              silentMode: settings.silentMode !== undefined ? 
+                settings.silentMode : 
+                state.coherenceSettings.silentMode
+            } : 
+            state.coherenceSettings
         })),
       
       updateBiometricData: (data) =>

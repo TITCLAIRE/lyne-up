@@ -10,6 +10,15 @@ export default function StartScreen() {
   const handleDiscoverCoherenceSession = () => {
     // Mettre à jour le store pour indiquer le mode "séance gratuite de cohérence cardiaque"
     startFreeSession('coherence');
+    // Définir les paramètres par défaut pour la session gratuite
+    updateFreeSessionSettings({
+      inhaleTime: 5,
+      exhaleTime: 5,
+      duration: 5,
+      frequency: 'coherence',
+      gongEnabled: true,
+      silentMode: false
+    });
     navigate('/free-session');
   };
 
