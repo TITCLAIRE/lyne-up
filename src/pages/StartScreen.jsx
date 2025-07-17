@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { Heart, Headphones, Lock } from 'lucide-react';
 import { useAppStore } from '../store/appStore';
 
@@ -10,6 +10,7 @@ export default function StartScreen() {
   const handleDiscoverCoherenceSession = () => {
     // Mettre à jour le store pour indiquer le mode "séance gratuite de cohérence cardiaque"
     startFreeSession('coherence');
+    
     // Définir les paramètres par défaut pour la session gratuite
     updateFreeSessionSettings({
       inhaleTime: 5,
@@ -19,7 +20,9 @@ export default function StartScreen() {
       gongEnabled: true,
       silentMode: false
     });
-    navigate('/sessions/libre');
+    
+    // Utiliser une redirection forcée au lieu de navigate
+    window.location.href = '/sessions/libre';
   };
 
   const handleAuth = () => {
@@ -74,6 +77,15 @@ export default function StartScreen() {
               <Headphones size={24} />
               Découvrir la cohérence cardiaque
             </button>
+            
+            {/* Lien direct alternatif */}
+            <Link
+              to="/sessions/libre"
+              className="w-full bg-gradient-to-r from-blue-500 to-cyan-500 text-white py-5 px-6 rounded-2xl font-semibold flex items-center justify-center gap-3 hover:from-blue-600 hover:to-cyan-600 transition-all duration-200 shadow-lg"
+            >
+              <Heart size={24} />
+              Accès direct à la cohérence cardiaque
+            </Link>
             
             <button
               onClick={handleAuth}
