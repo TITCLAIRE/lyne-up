@@ -9,7 +9,9 @@ export default function StartScreen() {
 
   const handleDiscoverFreeSession = () => {
     // Mettre à jour le store pour indiquer le mode "séance gratuite"
-    startFreeSession('focus'); // On choisit la session "focus" comme session gratuite
+    // Proposer deux options: focus ou scan
+    const sessionType = Math.random() > 0.5 ? 'focus' : 'scan';
+    startFreeSession(sessionType);
     navigate('/free-session');
   };
 

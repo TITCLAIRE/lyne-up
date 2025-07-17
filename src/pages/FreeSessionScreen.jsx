@@ -1,11 +1,15 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Play, Home, Headphones, Target, Brain, Lock } from 'lucide-react';
+import { Play, Home, Headphones, Target, Brain, Lock, Music, Wind } from 'lucide-react';
 import { useAppStore } from '../store/appStore';
 
 export default function FreeSessionScreen() {
   const navigate = useNavigate();
-  const { freeSessionType, endFreeSession } = useAppStore();
+  const { freeSessionType, endFreeSession, updateFreeSessionSettings, freeSessionSettings } = useAppStore();
+  
+  // État local pour les paramètres de session
+  const [selectedRhythm, setSelectedRhythm] = React.useState('5-5');
+  const [selectedFrequency, setSelectedFrequency] = React.useState('coherence');
   
   // Détermine quelle session gratuite afficher
   const sessionInfo = freeSessionType === 'scan' 
@@ -23,8 +27,46 @@ export default function FreeSessionScreen() {
         duration: '5 minutes',
         color: 'from-blue-500 to-cyan-500'
       };
+
+  // Liste des fréquences disponibles
+  const frequencies = [
+    { value: 'coherence', name: '0.1 Hz - Cohérence cardiaque', category: 'Cohérence' },
+    { value: '396hz', name: '396 Hz - Libération des peurs', category: 'Solfège' },
+    { value: '432hz', name: '432 Hz - Harmonie naturelle', category: 'Solfège' },
+    { value: '528hz', name: '528 Hz - Amour & Guérison', category: 'Solfège' },
+    { value: '639hz', name: '639 Hz - Relations harmonieuses', category: 'Solfège' },
+    { value: 'theta', name: 'Ondes Theta (4.5Hz) - Méditation profonde', category: 'Ondes cérébrales' },
+    { value: 'alpha', name: 'Ondes Alpha (10Hz) - Relaxation active', category: 'Ondes cérébrales' },
+    { value: 'delta', name: 'Ondes Delta (2Hz) - Sommeil profond', category: 'Ondes cérébrales' },
+  ];
+  
+  // Fonction pour mettre à jour le rythme
+  const handleRhythmChange = (rhythm) => {
+    setSelectedRhythm(rhythm);
+    
+    // Mettre à jour les paramètres de session libre
+    if (rhythm === '5-5') {
+      updateFreeSessionSettings({ inhaleTime: 5, exhaleTime: 5 });
+    } else if (rhythm === '4-6') {
+      updateFreeSessionSettings({ inhaleTime: 4, exhaleTime: 6 });
+    }
+  };
+  
+  // Fonction pour mettre à jour la fréquence
+  const handleFrequencyChange = (e) => {
+    const frequency = e.target.value;
+    setSelectedFrequency(frequency);
+    updateFreeSessionSettings({ frequency });
+  };
   
   const handleStartSession = () => {
+    // Mettre à jour les paramètres finaux
+    updateFreeSessionSettings({ 
+      duration: 5, // 5 minutes pour la session découverte
+      gongEnabled: true,
+      silentMode: false
+    });
+    
     // Naviguer vers la page de session appropriée
     if (freeSessionType === 'scan') {
       navigate('/sessions/run/guided/scan');
@@ -65,7 +107,7 @@ export default function FreeSessionScreen() {
           </div>
           
           {/* Carte de session */}
-          <div className={`bg-gradient-to-r ${sessionInfo.color}/20 border border-${sessionInfo.color.split(' ')[0]}/30 rounded-2xl p-6 mb-8`}>
+          <div className={`bg-gradient-to-r ${sessionInfo.color} border border-${sessionInfo.color.split(' ')[0]}/30 rounded-2xl p-6 mb-8`}>
             <div className="flex items-center gap-4 mb-4">
               <div className={`w-16 h-16 bg-gradient-to-r ${sessionInfo.color} rounded-xl flex items-center justify-center`}>
                 <SessionIcon size={32} className="text-white" />
@@ -84,6 +126,69 @@ export default function FreeSessionScreen() {
               </p>
             </div>
           </div>
+
+          {/* Options de personnalisation */}
+          <div className="bg-white/10 border border-white/20 rounded-2xl p-6 mb-8">
+            <h3 className="text-xl font-bold mb-4">Personnalisez votre expérience</h3>
+            
+            {/* Sélection du rythme respiratoire */}
+            <div className="mb-6">
+              <h4 className="text-lg font-semibold mb-3 flex items-center gap-2">
+                <Wind size={18} />
+                Rythme respiratoire
+              </h4>
+              <div className="grid grid-cols-2 gap-3">
+                <div
+                  onClick={() => handleRhythmChange('5-5')}
+                  className={`bg-white/8 border rounded-xl p-3 cursor-pointer text-center transition-all duration-200 ${
+                    selectedRhythm === '5-5'
+                      ? 'border-pink-500/50 bg-pink-500/20'
+                      : 'border-white/15 hover:bg-white/12'
+                  }`}
+                >
+                  <div className="font-medium">Rythme 5/5</div>
+                  <div className="text-xs text-white/70">Équilibre classique</div>
+                </div>
+                <div
+                  onClick={() => handleRhythmChange('4-6')}
+                  className={`bg-white/8 border rounded-xl p-3 cursor-pointer text-center transition-all duration-200 ${
+                    selectedRhythm === '4-6'
+                      ? 'border-pink-500/50 bg-pink-500/20'
+                      : 'border-white/15 hover:bg-white/12'
+                  }`}
+                >
+                  <div className="font-medium">Rythme 4/6</div>
+                  <div className="text-xs text-white/70">Anti-stress</div>
+                </div>
+              </div>
+            </div>
+            
+            {/* Sélection de fréquence */}
+            <div className="mb-4">
+              <h4 className="text-lg font-semibold mb-3 flex items-center gap-2">
+                <Music size={18} />
+                Fréquence thérapeutique
+              </h4>
+              <div className="bg-white/8 border border-white/15 rounded-xl p-4">
+                <div className="mb-3">
+                  <label className="block text-sm font-medium text-white/80 mb-2">
+                    Choisissez votre fréquence
+                  </label>
+                  <select
+                    value={selectedFrequency}
+                    onChange={handleFrequencyChange}
+                    className="w-full p-3 bg-white/10 border border-white/20 rounded-xl text-white text-sm focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500/50"
+                  >
+                    {frequencies.map(freq => (
+                      <option key={freq.value} value={freq.value}>
+                        {freq.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
           
           {/* Indication importante sur les écouteurs */}
           <div className="bg-blue-500/20 border border-blue-500/30 rounded-xl p-4 mb-8 flex items-start gap-3">
@@ -97,7 +202,7 @@ export default function FreeSessionScreen() {
           </div>
           
           {/* Fonctionnalités premium verrouillées */}
-          <div className="bg-gradient-to-r from-purple-500/10 to-pink-500/10 border border-purple-500/20 rounded-xl p-4 mb-8">
+          <div className="bg-gradient-to-r from-purple-500/20 to-pink-500/20 border border-purple-500/30 rounded-xl p-4 mb-8">
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center gap-2">
                 <Lock size={16} className="text-purple-400" />
@@ -143,8 +248,8 @@ export default function FreeSessionScreen() {
                 onClick={handleStartSession}
                 className="w-full bg-gradient-to-r from-green-500 to-emerald-500 text-white py-4 px-6 rounded-2xl font-semibold flex items-center justify-center gap-2 hover:from-green-600 hover:to-emerald-600 transition-all duration-200"
               >
-                <Play size={20} />
-                Commencer la séance gratuite
+                <Play size={24} />
+                Commencer ma séance découverte
               </button>
               <button
                 onClick={handleGoBack}

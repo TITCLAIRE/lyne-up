@@ -102,7 +102,7 @@ export const useAppStore = create(
       
       startFreeSession: (sessionType) => {
         console.log('🎯 STORE: Démarrage session gratuite:', sessionType);
-        set({ 
+        set({
           isFreeSessionMode: true, 
           freeSessionType: sessionType,
           currentSession: sessionType
