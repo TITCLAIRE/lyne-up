@@ -5,7 +5,7 @@ import { useAppStore } from '../store/appStore';
 
 export default function StartScreen() {
   const navigate = useNavigate();
-  const { startFreeSession } = useAppStore();
+  const { startFreeSession, updateFreeSessionSettings } = useAppStore();
 
   const handleDiscoverCoherenceSession = () => {
     // Mettre à jour le store pour indiquer le mode "séance gratuite de cohérence cardiaque"
