@@ -72,7 +72,7 @@ export default function AppRouter() {
           
           {/* Runners de session */}
           <Route path="sessions/run/guided/:sessionId" element={<GuidedSessionRunner />} />
-          <Route path="sessions/run/coherence" element={<CoherenceSessionRunner />} />
+          <Route path="sessions/run/coherence" element={<CoherenceSessionRunner />} /> {/* Gardé pour compatibilité */}
           <Route path="sessions/run/hypnosis/:sessionId" element={<HypnosisSessionRunner />} />
           
           {/* Résultats */}

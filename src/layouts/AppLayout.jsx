@@ -23,8 +23,7 @@ function AppLayout() {
 
   // Redirection si l'utilisateur n'a pas encore terminé les pages de lancement
   useEffect(() => {
-    // Forcer l'affichage de l'écran de démarrage pour tester
-    if (true) {
+    if (showStartScreen) {
       navigate('/start');
     }
   }, [showStartScreen, navigate]);

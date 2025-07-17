@@ -63,7 +63,7 @@ export default function FreeSessionScreen() {
     
     // Définir la session active et naviguer vers la page de session
     setCurrentSession('coherence');
-    navigate('/sessions/run/coherence');
+    navigate('/sessions/run/guided/coherence');
   };
   
   const handleGoBack = () => {
