@@ -30,16 +30,19 @@ import HypnosisSessionRunner from './pages/sessions/HypnosisSessionRunner';
 import ResultsScreen from './pages/ResultsScreen';
 
 // Pages d'authentification et d'onboarding
-import LaunchScreen from './pages/LaunchScreen';
+import StartScreen from './pages/StartScreen';
 import AuthScreen from './pages/AuthScreen';
+// Nouvelle page pour la session gratuite
+import FreeSessionScreen from './pages/FreeSessionScreen';
 
 export default function AppRouter() {
   return (
     <BrowserRouter>
       <Routes>
         {/* Pages d'onboarding et d'authentification */}
-        <Route path="/launch" element={<LaunchScreen />} />
+        <Route path="/start" element={<StartScreen />} />
         <Route path="/auth" element={<AuthScreen />} />
+        <Route path="/free-session" element={<FreeSessionScreen />} />
         
         {/* Routes principales avec layout */}
         <Route path="/" element={<AppLayout />}>

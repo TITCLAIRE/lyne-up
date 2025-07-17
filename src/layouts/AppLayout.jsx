@@ -9,7 +9,7 @@ import { useHeartRateDetector } from '../hooks/useHeartRateDetector';
 
 function AppLayout() {
   const { 
-    showLaunchScreen,
+    showStartScreen,
     isTrialMode,
     isAuthenticated
   } = useAppStore();
@@ -23,10 +23,10 @@ function AppLayout() {
 
   // Redirection si l'utilisateur n'a pas encore terminé les pages de lancement
   useEffect(() => {
-    if (showLaunchScreen) {
-      navigate('/launch');
+    if (showStartScreen) {
+      navigate('/start');
     }
-  }, [showLaunchScreen, navigate]);
+  }, [showStartScreen, navigate]);
 
   return (
     <div 

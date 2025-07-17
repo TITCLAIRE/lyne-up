@@ -10,9 +10,11 @@ export const useAppStore = create(
       currentSession: null,
       currentMeditation: null,
       isSessionActive: false,
+      isFreeSessionMode: false,
+      freeSessionType: null, // 'focus' ou 'scan'
       
       // NOUVEAU : États pour le parcours utilisateur
-      showLaunchScreen: false, // En mode développement, ne pas afficher les pages de lancement
+      showStartScreen: false, // En mode développement, ne pas afficher les pages de lancement
       isTrialMode: false, // Mode session d'essai
       isAuthenticated: false, // État d'authentification
       userProfile: null, // Profil utilisateur
@@ -89,12 +91,29 @@ export const useAppStore = create(
       },
       
       // NOUVELLES ACTIONS pour le parcours utilisateur
-      completeLaunchScreen: () => {
-        console.log('🎯 STORE: Pages de lancement terminées');
+      completeStartScreen: () => {
+        console.log('🎯 STORE: Page de démarrage terminée');
         set({ 
-          showLaunchScreen: false,
+          showStartScreen: false,
           isTrialMode: false, // Désactiver le mode essai pour rester en mode développement
           isAuthenticated: true // Considérer l'utilisateur comme authentifié
+        });
+      },
+      
+      startFreeSession: (sessionType) => {
+        console.log('🎯 STORE: Démarrage session gratuite:', sessionType);
+        set({ 
+          isFreeSessionMode: true, 
+          freeSessionType: sessionType,
+          currentSession: sessionType
+        });
+      },
+      
+      endFreeSession: () => {
+        console.log('🎯 STORE: Fin de la session gratuite');
+        set({ 
+          isFreeSessionMode: false, 
+          freeSessionType: null 
         });
       },
       
@@ -125,11 +144,13 @@ export const useAppStore = create(
       resetApp: () => {
         console.log('🔄 STORE: Réinitialisation complète de l\'application');
         set({ 
-          showLaunchScreen: true,
+          showStartScreen: true,
           isTrialMode: false,
           isAuthenticated: false,
           userProfile: null,
-          currentScreen: 'home'
+          currentScreen: 'home',
+          isFreeSessionMode: false,
+          freeSessionType: null
         });
       },
       
@@ -179,7 +200,7 @@ export const useAppStore = create(
         freeSessionSettings: state.freeSessionSettings,
         trialCoherenceSettings: state.trialCoherenceSettings,
         // IMPORTANT: Ne pas persister les états d'authentification et de lancement
-        // pour garantir que l'application redémarre toujours avec les pages de lancement
+        // pour garantir que l'application redémarre toujours avec la page de démarrage
       }),
     }
   )
