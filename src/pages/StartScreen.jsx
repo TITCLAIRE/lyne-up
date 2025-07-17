@@ -19,7 +19,7 @@ export default function StartScreen() {
       gongEnabled: true,
       silentMode: false
     });
-    navigate('/free-session');
+    navigate('/sessions/libre');
   };
 
   const handleAuth = () => {
