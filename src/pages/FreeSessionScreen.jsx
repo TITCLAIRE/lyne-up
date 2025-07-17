@@ -5,7 +5,7 @@ import { useAppStore } from '../store/appStore';
 
 export default function FreeSessionScreen() {
   const navigate = useNavigate();
-  const { endFreeSession, updateFreeSessionSettings, freeSessionSettings } = useAppStore();
+  const { endFreeSession, updateFreeSessionSettings, freeSessionSettings, setCurrentSession } = useAppStore();
   
   // État local pour les paramètres de session
   const [selectedRhythm, setSelectedRhythm] = React.useState('5-5');
