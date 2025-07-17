@@ -1,32 +1,24 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Play, Home, Headphones, Target, Brain, Lock, Music, Wind } from 'lucide-react';
+import { Play, Home, Headphones, Heart, Lock, Music, Wind } from 'lucide-react';
 import { useAppStore } from '../store/appStore';
 
 export default function FreeSessionScreen() {
   const navigate = useNavigate();
-  const { freeSessionType, endFreeSession, updateFreeSessionSettings, freeSessionSettings } = useAppStore();
+  const { endFreeSession, updateFreeSessionSettings, freeSessionSettings } = useAppStore();
   
   // État local pour les paramètres de session
   const [selectedRhythm, setSelectedRhythm] = React.useState('5-5');
   const [selectedFrequency, setSelectedFrequency] = React.useState('coherence');
   
-  // Détermine quelle session gratuite afficher
-  const sessionInfo = freeSessionType === 'scan' 
-    ? {
-        name: 'SCAN CORPOREL',
-        icon: Brain,
-        description: 'Relaxation profonde guidée de tout le corps',
-        duration: '10 minutes',
-        color: 'from-indigo-500 to-purple-500'
-      }
-    : {
-        name: 'FOCUS',
-        icon: Target,
-        description: 'Concentration et clarté mentale',
-        duration: '5 minutes',
-        color: 'from-blue-500 to-cyan-500'
-      };
+  // Information sur la session de cohérence cardiaque
+  const sessionInfo = {
+    name: 'COHÉRENCE CARDIAQUE',
+    icon: Heart,
+    description: 'Harmonisez votre rythme cardiaque et respiratoire',
+    duration: '5 minutes',
+    color: 'from-pink-500 to-purple-500'
+  };
 
   // Liste des fréquences disponibles
   const frequencies = [
@@ -63,16 +55,14 @@ export default function FreeSessionScreen() {
     // Mettre à jour les paramètres finaux
     updateFreeSessionSettings({ 
       duration: 5, // 5 minutes pour la session découverte
+      rhythm: selectedRhythm,
+      frequency: selectedFrequency,
       gongEnabled: true,
       silentMode: false
     });
     
-    // Naviguer vers la page de session appropriée
-    if (freeSessionType === 'scan') {
-      navigate('/sessions/run/guided/scan');
-    } else {
-      navigate('/sessions/run/guided/focus');
-    }
+    // Naviguer vers la page de session de cohérence cardiaque
+    navigate('/sessions/run/coherence');
   };
   
   const handleGoBack = () => {
@@ -83,6 +73,8 @@ export default function FreeSessionScreen() {
   const handlePremiumClick = () => {
     // Cette fonction sera mise à jour dans la Phase 3 pour naviguer vers PremiumScreen
     alert('Fonctionnalité premium - Bientôt disponible !');
+    // Rediriger vers la page d'authentification
+    navigate('/auth');
   };
   
   const SessionIcon = sessionInfo.icon;
@@ -205,8 +197,8 @@ export default function FreeSessionScreen() {
           <div className="bg-gradient-to-r from-purple-500/20 to-pink-500/20 border border-purple-500/30 rounded-xl p-4 mb-8">
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center gap-2">
-                <Lock size={16} className="text-purple-400" />
-                <span className="text-sm text-purple-200 font-medium">Voix premium</span>
+                <Lock size={16} className="text-purple-300" />
+                <span className="text-sm text-white font-medium">Voix premium</span>
               </div>
               <button 
                 onClick={handlePremiumClick}
@@ -217,8 +209,8 @@ export default function FreeSessionScreen() {
             </div>
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center gap-2">
-                <Lock size={16} className="text-purple-400" />
-                <span className="text-sm text-purple-200 font-medium">Sons binauraux thérapeutiques</span>
+                <Lock size={16} className="text-purple-300" />
+                <span className="text-sm text-white font-medium">Scan corporel guidé</span>
               </div>
               <button 
                 onClick={handlePremiumClick}
@@ -229,8 +221,8 @@ export default function FreeSessionScreen() {
             </div>
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <Lock size={16} className="text-purple-400" />
-                <span className="text-sm text-purple-200 font-medium">Toutes les séances (15+)</span>
+                <Lock size={16} className="text-purple-300" />
+                <span className="text-sm text-white font-medium">Toutes les séances (15+)</span>
               </div>
               <button 
                 onClick={handlePremiumClick}
@@ -249,7 +241,7 @@ export default function FreeSessionScreen() {
                 className="w-full bg-gradient-to-r from-green-500 to-emerald-500 text-white py-4 px-6 rounded-2xl font-semibold flex items-center justify-center gap-2 hover:from-green-600 hover:to-emerald-600 transition-all duration-200"
               >
                 <Play size={24} />
-                Commencer ma séance découverte
+                Commencer ma séance de cohérence cardiaque
               </button>
               <button
                 onClick={handleGoBack}

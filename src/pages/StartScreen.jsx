@@ -7,11 +7,9 @@ export default function StartScreen() {
   const navigate = useNavigate();
   const { startFreeSession } = useAppStore();
 
-  const handleDiscoverFreeSession = () => {
-    // Mettre à jour le store pour indiquer le mode "séance gratuite"
-    // Proposer deux options: focus ou scan
-    const sessionType = Math.random() > 0.5 ? 'focus' : 'scan';
-    startFreeSession(sessionType);
+  const handleDiscoverCoherenceSession = () => {
+    // Mettre à jour le store pour indiquer le mode "séance gratuite de cohérence cardiaque"
+    startFreeSession('coherence');
     navigate('/free-session');
   };
 
@@ -61,11 +59,11 @@ export default function StartScreen() {
           {/* Boutons d'action */}
           <div className="space-y-4 animate-fade-in-up" style={{animationDelay: '0.3s'}}>
             <button
-              onClick={handleDiscoverFreeSession}
+              onClick={handleDiscoverCoherenceSession}
               className="w-full bg-gradient-to-r from-green-500 to-emerald-500 text-white py-5 px-6 rounded-2xl font-semibold flex items-center justify-center gap-3 hover:from-green-600 hover:to-emerald-600 transition-all duration-200 shadow-lg"
             >
               <Headphones size={24} />
-              Découvrir une séance gratuite
+              Découvrir la cohérence cardiaque
             </button>
             
             <button
@@ -80,7 +78,7 @@ export default function StartScreen() {
           {/* Texte d'information */}
           <div className="mt-12 text-center text-white/60 text-sm animate-fade-in" style={{animationDelay: '0.6s'}}>
             <p>Cohérence cardiaque intégrative</p>
-            <p>Guidage vocal premium • Sons binauraux thérapeutiques</p>
+            <p>Créez un compte gratuit pour accéder au Scan Corporel</p>
           </div>
         </div>
       </div>

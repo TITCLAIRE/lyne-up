@@ -11,7 +11,7 @@ export const useAppStore = create(
       currentMeditation: null,
       isSessionActive: false,
       isFreeSessionMode: false,
-      freeSessionType: null, // 'focus' ou 'scan'
+      freeSessionType: 'coherence', // Toujours 'coherence' pour la séance découverte
       
       // NOUVEAU : États pour le parcours utilisateur
      showStartScreen: true, // Forcer l'affichage de l'écran de démarrage
@@ -103,9 +103,9 @@ export const useAppStore = create(
       startFreeSession: (sessionType) => {
         console.log('🎯 STORE: Démarrage session gratuite:', sessionType);
         set({
-          isFreeSessionMode: true, 
-          freeSessionType: sessionType,
-          currentSession: sessionType
+          isFreeSessionMode: true,
+          freeSessionType: 'coherence',
+          currentSession: 'coherence'
         });
       },
       

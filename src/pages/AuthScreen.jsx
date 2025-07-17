@@ -79,9 +79,9 @@ export default function AuthScreen() {
                 <h3 className="text-lg font-semibold text-green-200 mb-2">Compte gratuit inclus :</h3>
                 <ul className="text-sm text-white space-y-1">
                   <li className="flex items-center"><span className="bg-green-500 text-white rounded-full w-5 h-5 inline-flex items-center justify-center mr-2">✓</span> Sessions de cohérence cardiaque illimitées</li>
-                  <li className="flex items-center"><span className="bg-green-500 text-white rounded-full w-5 h-5 inline-flex items-center justify-center mr-2">✓</span> Rythmes 5/5 et 4/6 disponibles</li>
+                  <li className="flex items-center"><span className="bg-green-500 text-white rounded-full w-5 h-5 inline-flex items-center justify-center mr-2">✓</span> Scan Corporel guidé (10 min)</li>
                   <li className="flex items-center"><span className="bg-green-500 text-white rounded-full w-5 h-5 inline-flex items-center justify-center mr-2">✓</span> Sons binauraux thérapeutiques</li>
-                  <li className="flex items-center"><span className="bg-green-500 text-white rounded-full w-5 h-5 inline-flex items-center justify-center mr-2">✓</span> Suivi de vos progrès</li>
+                  <li className="flex items-center"><span className="bg-green-500 text-white rounded-full w-5 h-5 inline-flex items-center justify-center mr-2">✓</span> Tous les rythmes respiratoires</li>
                 </ul>
               </div>
             </div>
