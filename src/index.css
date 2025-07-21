@@ -391,6 +391,49 @@
   animation-fill-mode: forwards;
 }
 
+/* ===== MOTIF DE FOND ÉSOTÉRIQUE ===== */
+
+/* Motif de fond avec symboles ésotériques subtils */
+.esoteric-background-pattern {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('/assets/background-patterns/esoteric-pattern.png');
+  background-repeat: repeat;
+  background-size: 200px 200px; /* Taille ajustable selon vos préférences */
+  background-position: 0 0;
+  opacity: 0.03; /* Très subtil pour ne pas gêner la lecture */
+  pointer-events: none; /* Ne pas interférer avec les interactions */
+  z-index: -1; /* Derrière tout le contenu */
+  filter: hue-rotate(200deg) brightness(1.5) contrast(0.8); /* Conversion en bleu subtil */
+}
+
+/* Animation douce du motif (optionnel) */
+@keyframes subtle-float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.esoteric-background-pattern.animated {
+  animation: subtle-float 20s ease-in-out infinite;
+}
+
+/* Variante pour les pages spéciales */
+.esoteric-background-pattern.meditation {
+  opacity: 0.05; /* Légèrement plus visible pour les méditations */
+  filter: hue-rotate(280deg) brightness(1.3) contrast(0.7); /* Teinte plus violette */
+}
+
+.esoteric-background-pattern.session {
+  opacity: 0.02; /* Encore plus subtil pendant les sessions */
+  filter: hue-rotate(180deg) brightness(1.2) contrast(0.9); /* Teinte cyan */
+}
 /* Styles pour les cartes de navigation */
 .home-card {
   display: block;

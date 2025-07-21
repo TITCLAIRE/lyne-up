@@ -50,6 +50,9 @@ export default function AuthScreen() {
         background: 'linear-gradient(135deg, #003366, #004488, #0055AA, #003366)'
       }}
     >
+      {/* Motif de fond ésotérique pour l'authentification */}
+      <div className="esoteric-background-pattern" />
+      
       <div className="max-w-md mx-auto w-full px-5 py-8">
         {/* En-tête */}
         <div className="text-center mb-8">

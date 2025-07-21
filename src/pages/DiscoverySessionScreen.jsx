@@ -67,6 +67,9 @@ export default function DiscoverySessionScreen() {
         background: 'linear-gradient(135deg, #003366, #004488, #0055AA, #003366)'
       }}
     >
+      {/* Motif de fond ésotérique pour la session découverte */}
+      <div className="esoteric-background-pattern session" />
+      
       <div className="p-5 flex-1 flex flex-col">
         <div className="max-w-md mx-auto w-full flex-1 flex flex-col">
           {/* En-tête */}

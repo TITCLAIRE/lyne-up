@@ -160,6 +160,9 @@ export default function DiscoverySessionRunner() {
         background: 'linear-gradient(135deg, #003366, #004488, #0055AA, #003366)'
       }}
     >
+      {/* Motif de fond ésotérique pour la session en cours */}
+      <div className="esoteric-background-pattern session" />
+      
       <div className="px-5 pb-5 flex-1 flex flex-col">
         {/* En-tête de session */}
         <div className="text-center mb-6">

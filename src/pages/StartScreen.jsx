@@ -37,6 +37,9 @@ export default function StartScreen() {
         background: 'linear-gradient(135deg, #003366, #004488, #0055AA, #003366)'
       }}
     >
+      {/* Motif de fond ésotérique pour la page de démarrage */}
+      <div className="esoteric-background-pattern" />
+      
       {/* Contenu principal */}
       <div className="flex-1 px-5 flex flex-col items-center justify-center">
         <div className="max-w-md mx-auto w-full">

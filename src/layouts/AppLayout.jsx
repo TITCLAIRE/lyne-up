@@ -34,6 +34,9 @@ function AppLayout() {
         background: 'linear-gradient(135deg, #003366, #004488, #0055AA, #003366)'
       }}
     >
+      {/* Motif de fond ésotérique subtil */}
+      <div className="esoteric-background-pattern" />
+      
       <Header />
       <main className="relative">
         <Outlet />
