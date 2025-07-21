@@ -39,7 +39,7 @@ export const useSupabase = () => {
     );
 
     return () => subscription.unsubscribe();
-  }, []);
+  }, [setAuthenticated]);
 
   // Fonction pour récupérer le profil utilisateur complet
   const getUserProfile = async (userId) => {
