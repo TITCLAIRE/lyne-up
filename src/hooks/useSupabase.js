@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
+import { useAppStore } from '../store/appStore';
 
 export const useSupabase = () => {
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(null);
+  const { setAuthenticated } = useAppStore();
 
   useEffect(() => {
     // Récupérer la session actuelle
