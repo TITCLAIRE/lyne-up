@@ -59,7 +59,7 @@ export const SidePanel = () => {
   const handleResetOnboarding = () => {
     resetOnboarding();
     toggleMenu();
-    navigate('/launch');
+    navigate('/start');
   };
 
   return (

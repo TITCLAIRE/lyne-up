@@ -43,6 +43,7 @@ export default function AppRouter() {
       <Routes>
         {/* Pages d'onboarding et d'authentification */}
         <Route path="/start" element={<StartScreen />} />
+        <Route path="/launch" element={<StartScreen />} />
         <Route path="/auth" element={<AuthScreen />} />
         <Route path="/free-session" element={<FreeSessionScreen />} />
         <Route path="/discovery-session" element={<DiscoverySessionScreen />} />

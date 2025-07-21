@@ -23,13 +23,8 @@ function AppLayout() {
 
   // Redirection si l'utilisateur n'a pas encore terminé les pages de lancement
   useEffect(() => {
-    // Désactiver temporairement la redirection automatique pour le débogage
-    if (showStartScreen && 
-        window.location.pathname !== '/sessions/libre' && 
-        window.location.pathname !== '/discovery-session' &&
-        window.location.pathname !== '/sessions/run/discovery') {
-      navigate('/start');
-    }
+    // Ne pas faire de redirection automatique depuis AppLayout
+    // La redirection se fait directement dans resetOnboarding
   }, [showStartScreen, navigate]);
 
   return (

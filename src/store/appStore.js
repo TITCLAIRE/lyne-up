@@ -158,11 +158,11 @@ export const useAppStore = create(
       resetOnboarding: () => {
         console.log('🔄 STORE: Réinitialisation de l\'onboarding');
         set({ 
-          showStartScreen: true,
+          showStartScreen: false,
           isTrialMode: false,
           isAuthenticated: false,
           userProfile: null,
-          currentScreen: 'home'
+          currentScreen: 'start'
         });
       },
       
