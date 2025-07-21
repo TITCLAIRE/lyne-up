@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { X, Volume2, Mic, Download, Smartphone, RotateCcw, CloudLightning, Play, Check, AlertTriangle } from 'lucide-react';
+import { X, Volume2, Mic, Download, Smartphone, RotateCcw, CloudLightning, Play, Check, AlertTriangle, User, LogOut } from 'lucide-react';
 import { useAppStore } from '../store/appStore';
 import { useVoiceManager } from '../hooks/useVoiceManager';
 import { useSupabase } from '../hooks/useSupabase';
