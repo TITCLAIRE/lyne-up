@@ -90,7 +90,7 @@ export default function StartScreen() {
           {/* Texte d'information */}
           <div className="mt-12 text-center text-white/60 text-sm animate-fade-in" style={{animationDelay: '0.6s'}}>
             <p>Cohérence cardiaque intégrative</p>
-            <p>Créez un compte gratuit pour accéder au Scan Corporel</p>
+            <p>Créez un compte gratuit et accédez aux premiers exercices de cohérence cardiaque intégrative et au Scan Corporel</p>
           </div>
         </div>
       </div>
