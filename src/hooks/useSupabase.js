@@ -104,6 +104,15 @@ export const useSupabase = () => {
 
       if (error) {
         console.error('❌ Erreur connexion:', error);
+        // Gestion spécifique pour email non confirmé
+        if (error.message === 'Email not confirmed') {
+          return { 
+            success: false, 
+            error: 'Votre email n\'a pas encore été confirmé. Veuillez vérifier votre boîte mail et cliquer sur le lien de confirmation.',
+            errorCode: 'email_not_confirmed',
+            email: email
+          };
+        }
         return { success: false, error: error.message };
       }
 
@@ -114,6 +123,27 @@ export const useSupabase = () => {
       return { success: false, error: error.message };
     } finally {
       setLoading(false);
+    }
+  };
+
+  // Fonction pour renvoyer l'email de confirmation
+  const resendConfirmation = async (email) => {
+    try {
+      const { error } = await supabase.auth.resend({
+        type: 'signup',
+        email: email
+      });
+
+      if (error) {
+        console.error('❌ Erreur renvoi email:', error);
+        return { success: false, error: error.message };
+      }
+
+      console.log('✅ Email de confirmation renvoyé');
+      return { success: true };
+    } catch (error) {
+      console.error('❌ Erreur resendConfirmation:', error);
+      return { success: false, error: error.message };
     }
   };
 
@@ -140,6 +170,7 @@ export const useSupabase = () => {
     signUp,
     signIn,
     signOut,
-    getUserProfile
+    getUserProfile,
+    resendConfirmation
   };
 };
