@@ -14,9 +14,9 @@ export const useAppStore = create(
       freeSessionType: 'coherence', // Toujours 'coherence' pour la séance découverte
       
       // NOUVEAU : États pour le parcours utilisateur
-     showStartScreen: true, // Forcer l'affichage de l'écran de démarrage
+     showStartScreen: false, // Désactiver pour le développement
       isTrialMode: false, // Mode session d'essai
-      isAuthenticated: false, // État d'authentification
+      isAuthenticated: true, // Activer pour le développement
       userProfile: null, // Profil utilisateur
       
       sessionSettings: {
@@ -151,6 +151,18 @@ export const useAppStore = create(
           currentScreen: 'home',
           isFreeSessionMode: false,
           freeSessionType: null
+        });
+      },
+      
+      // Action pour réinitialiser l'onboarding (pour les tests)
+      resetOnboarding: () => {
+        console.log('🔄 STORE: Réinitialisation de l\'onboarding');
+        set({ 
+          showStartScreen: true,
+          isTrialMode: false,
+          isAuthenticated: false,
+          userProfile: null,
+          currentScreen: 'home'
         });
       },
       

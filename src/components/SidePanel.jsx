@@ -9,6 +9,7 @@ export const SidePanel = () => {
   const { 
     menuOpen, 
     toggleMenu, 
+    setAuthenticated,
     audioSettings,
     updateAudioSettings,
     voiceSettings,
@@ -310,6 +311,27 @@ export const SidePanel = () => {
               Test & Debug
             </h3>
             <div className="bg-white/5 rounded-xl p-4">
+              <button 
+                onClick={() => { 
+                  // Activer le mode développement complet
+                  setAuthenticated(true, { 
+                    id: 'dev', 
+                    email: 'dev@instantopportun.com', 
+                    name: 'Développeur', 
+                    isPremium: true 
+                  });
+                  toggleMenu(); 
+                  navigate('/'); 
+                }}
+                className="w-full bg-gradient-to-r from-green-500/20 to-emerald-500/20 border-2 border-green-500/40 rounded-xl p-3 flex items-center gap-3 hover:from-green-500/30 hover:to-emerald-500/30 transition-all mb-4"
+              >
+                <Play size={20} />
+                <div className="text-left">
+                  <div className="font-medium text-sm">Mode Développement</div>
+                  <div className="text-xs text-white/70">Accès complet à toutes les sessions</div>
+                </div>
+              </button>
+              
               <button 
                 onClick={handleResetOnboarding}
                 className="w-full bg-gradient-to-r from-orange-500/20 to-red-500/20 border-2 border-orange-500/40 rounded-xl p-3 flex items-center gap-3 hover:from-orange-500/30 hover:to-red-500/30 transition-all mb-4"
