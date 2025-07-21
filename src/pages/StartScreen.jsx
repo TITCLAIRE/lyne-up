@@ -75,17 +75,8 @@ export default function StartScreen() {
               className="w-full bg-gradient-to-r from-green-500 to-emerald-500 text-white py-5 px-6 rounded-2xl font-semibold flex items-center justify-center gap-3 hover:from-green-600 hover:to-emerald-600 transition-all duration-200 shadow-lg"
             >
               <Headphones size={24} />
-              Découvrir la cohérence cardiaque
+              Découvrir la cohérence cardiaque intégrative
             </button>
-            
-            {/* Lien direct alternatif */}
-            <Link
-              to="/sessions/libre"
-              className="w-full bg-gradient-to-r from-blue-500 to-cyan-500 text-white py-5 px-6 rounded-2xl font-semibold flex items-center justify-center gap-3 hover:from-blue-600 hover:to-cyan-600 transition-all duration-200 shadow-lg"
-            >
-              <Heart size={24} />
-              Accès direct à la cohérence cardiaque
-            </Link>
             
             <button
               onClick={handleAuth}
