@@ -9,6 +9,7 @@ export const useSupabase = () => {
     // Récupérer la session actuelle
     const getSession = async () => {
       try {
+      }
       const { data: { session } } = await supabase.auth.getSession();
       setUser(session?.user ?? null);
       setLoading(false);
@@ -23,6 +24,7 @@ export const useSupabase = () => {
     getSession();
 
       (event, session) => {
+      }
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
       }
