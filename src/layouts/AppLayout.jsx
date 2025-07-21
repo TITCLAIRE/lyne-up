@@ -35,7 +35,7 @@ function AppLayout() {
       }}
     >
       {/* Motif de fond ésotérique subtil */}
-      <div className="esoteric-background-pattern" />
+      <div className="esoteric-background-pattern animated" />
       
       <Header />
       <main className="relative">
