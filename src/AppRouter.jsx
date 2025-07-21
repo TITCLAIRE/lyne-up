@@ -34,6 +34,8 @@ import StartScreen from './pages/StartScreen';
 import AuthScreen from './pages/AuthScreen';
 // Nouvelle page pour la session gratuite
 import FreeSessionScreen from './pages/FreeSessionScreen';
+import DiscoverySessionScreen from './pages/DiscoverySessionScreen';
+import DiscoverySessionRunner from './pages/sessions/DiscoverySessionRunner';
 
 export default function AppRouter() {
   return (
