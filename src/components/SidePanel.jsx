@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { X, Volume2, Mic, Download, Smartphone, RotateCcw, CloudLightning, Play, Check, AlertTriangle } from 'lucide-react';
 import { useAppStore } from '../store/appStore';
 import { useVoiceManager } from '../hooks/useVoiceManager';
+import { useSupabase } from '../hooks/useSupabase';
 
 export const SidePanel = () => {
   const navigate = useNavigate();
@@ -10,6 +11,8 @@ export const SidePanel = () => {
     menuOpen, 
     toggleMenu, 
     setAuthenticated,
+    isAuthenticated,
+    userProfile,
     audioSettings,
     updateAudioSettings,
     voiceSettings,
@@ -19,6 +22,7 @@ export const SidePanel = () => {
 
   // Importer le hook useVoiceManager pour tester les voix
   const { speak } = useVoiceManager();
+  const { signOut, user } = useSupabase();
   
   const handleAudioToggle = () => {
     updateAudioSettings({ enabled: !audioSettings.enabled });
@@ -62,6 +66,18 @@ export const SidePanel = () => {
     navigate('/start');
   };
 
+  const handleSignOut = async () => {
+    try {
+      const result = await signOut();
+      if (result.success) {
+        console.log('✅ Déconnexion réussie');
+        toggleMenu();
+        navigate('/start');
+      }
+    } catch (error) {
+      console.error('❌ Erreur déconnexion:', error);
+    }
+  };
   return (
     <>
       {/* Overlay */}
@@ -357,6 +373,41 @@ export const SidePanel = () => {
           </div>
         </div>
       </div>
+        {/* Section Compte utilisateur */}
+        {isAuthenticated && (
+          <div className="mb-6">
+            <h3 className="text-lg font-medium mb-3 flex items-center gap-2">
+              <User size={18} />
+              Mon Compte
+            </h3>
+            <div className="bg-white/5 rounded-xl p-4 space-y-4">
+              <div className="text-center">
+                <div className="text-sm text-white/70 mb-1">Connecté en tant que :</div>
+                <div className="font-medium text-white">{userProfile?.name || user?.email}</div>
+                <div className="text-xs text-white/50">{user?.email}</div>
+                <div className={`inline-block px-2 py-1 rounded-full text-xs mt-2 ${
+                  userProfile?.isPremium 
+                    ? 'bg-gradient-to-r from-amber-500/20 to-yellow-500/20 border border-amber-500/30 text-amber-200'
+                    : 'bg-gradient-to-r from-green-500/20 to-emerald-500/20 border border-green-500/30 text-green-200'
+                }`}>
+                  {userProfile?.isPremium ? '👑 Premium' : '🎁 Gratuit'}
+                </div>
+              </div>
+              
+              <button 
+                onClick={handleSignOut}
+                className="w-full bg-gradient-to-r from-red-500/20 to-pink-500/20 border-2 border-red-500/40 rounded-xl p-3 flex items-center gap-3 hover:from-red-500/30 hover:to-pink-500/30 transition-all"
+              >
+                <LogOut size={20} />
+                <div className="text-left">
+                  <div className="font-medium text-sm">Se déconnecter</div>
+                  <div className="text-xs text-white/70">Retour à l'écran de démarrage</div>
+                </div>
+              </button>
+            </div>
+          </div>
+        )}
+
     </>
   );
 };

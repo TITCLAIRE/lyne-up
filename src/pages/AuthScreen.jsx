@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Mail, Lock, User, ArrowRight, Heart, Sparkles, Gift, Crown } from 'lucide-react';
 import { useAppStore } from '../store/appStore';
+import { useSupabase } from '../hooks/useSupabase';
 
 export default function AuthScreen() {
   const [isLogin, setIsLogin] = useState(false);
@@ -10,8 +11,12 @@ export default function AuthScreen() {
     password: '',
     name: ''
   });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  
   const navigate = useNavigate();
   const { setAuthenticated } = useAppStore();
+  const { signUp, signIn } = useSupabase();
 
   const handleInputChange = (e) => {
     setFormData({
@@ -20,27 +25,43 @@ export default function AuthScreen() {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
+    setError('');
+    
     console.log('🔐 Tentative d\'authentification:', { isLogin, email: formData.email });
     
-    // Simulation d'authentification réussie
-    // Dans la vraie implémentation, ici on appellerait Supabase
-    const mockUser = {
-      id: '1',
-      email: formData.email,
-      name: formData.name || 'Utilisateur',
-      isPremium: false,
-      createdAt: new Date().toISOString()
-    };
-    
-    setAuthenticated(true, mockUser);
-    navigate('/');
+    try {
+      let result;
+      
+      if (isLogin) {
+        // Connexion
+        result = await signIn(formData.email, formData.password);
+      } else {
+        // Inscription
+        result = await signUp(formData.email, formData.password, formData.name);
+      }
+      
+      if (result.success) {
+        console.log('✅ Authentification réussie');
+        // L'authentification est gérée automatiquement par useSupabase
+        navigate('/');
+      } else {
+        setError(result.error || 'Une erreur est survenue');
+      }
+    } catch (error) {
+      console.error('❌ Erreur authentification:', error);
+      setError('Une erreur inattendue est survenue');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const toggleMode = () => {
     setIsLogin(!isLogin);
     setFormData({ email: '', password: '', name: '' });
+    setError('');
   };
 
   return (
@@ -101,6 +122,12 @@ export default function AuthScreen() {
         )}
 
         {/* Formulaire */}
+        {error && (
+          <div className="bg-red-500/20 border border-red-500/30 rounded-xl p-4 mb-6">
+            <p className="text-red-200 text-sm text-center">{error}</p>
+          </div>
+        )}
+        
         <form onSubmit={handleSubmit} className="space-y-6 mb-8">
           {!isLogin && (
             <div>
@@ -166,10 +193,20 @@ export default function AuthScreen() {
 
           <button
             type="submit"
+            disabled={loading}
             className="w-full bg-gradient-to-r from-cyan-500 to-blue-500 text-white py-4 px-6 rounded-2xl font-semibold flex items-center justify-center gap-2 hover:from-cyan-600 hover:to-blue-600 transition-all duration-200"
           >
-            {isLogin ? 'Se connecter' : 'Créer mon compte gratuit'}
-            <ArrowRight size={20} />
+            {loading ? (
+              <>
+                <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                {isLogin ? 'Connexion...' : 'Création...'}
+              </>
+            ) : (
+              <>
+                {isLogin ? 'Se connecter' : 'Créer mon compte gratuit'}
+                <ArrowRight size={20} />
+              </>
+            )}
           </button>
         </form>
 

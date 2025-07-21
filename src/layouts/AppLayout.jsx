@@ -3,6 +3,7 @@ import { Outlet, useNavigate } from 'react-router-dom';
 import { Header } from '../components/Header';
 import { SidePanel } from '../components/SidePanel';
 import { useAppStore } from '../store/appStore';
+import { useSupabase } from '../hooks/useSupabase';
 import { useAudioManager } from '../hooks/useAudioManager';
 import { useVoiceManager } from '../hooks/useVoiceManager';
 import { useHeartRateDetector } from '../hooks/useHeartRateDetector';
@@ -11,21 +12,48 @@ function AppLayout() {
   const { 
     showStartScreen,
     isTrialMode,
-    isAuthenticated
+    isAuthenticated,
+    setAuthenticated
   } = useAppStore();
   
   const navigate = useNavigate();
+  const { user, loading } = useSupabase();
   
   // Initialiser les gestionnaires
   useAudioManager();
   useVoiceManager();
   useHeartRateDetector();
 
-  // Redirection si l'utilisateur n'a pas encore terminé les pages de lancement
+  // Gérer l'authentification avec Supabase
   useEffect(() => {
-    // Ne pas faire de redirection automatique depuis AppLayout
-    // La redirection se fait directement dans resetOnboarding
-  }, [showStartScreen, navigate]);
+    if (!loading) {
+      if (user && !isAuthenticated) {
+        // Utilisateur connecté dans Supabase mais pas dans le store
+        setAuthenticated(true, {
+          id: user.id,
+          email: user.email,
+          name: user.user_metadata?.full_name || 'Utilisateur',
+          isPremium: false // Sera mis à jour selon l'abonnement
+        });
+      } else if (!user && isAuthenticated) {
+        // Utilisateur déconnecté de Supabase
+        setAuthenticated(false, null);
+        navigate('/start');
+      }
+    }
+  }, [user, loading, isAuthenticated, setAuthenticated, navigate]);
+
+  // Afficher un loader pendant la vérification de l'authentification
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-900 to-purple-900">
+        <div className="text-center">
+          <div className="w-12 h-12 border-4 border-white/30 border-t-white rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-white/70">Chargement...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div 
