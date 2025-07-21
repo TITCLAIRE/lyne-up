@@ -15,9 +15,15 @@ export default function DiscoverySessionRunner() {
     freeSessionSettings,
     isSessionActive, 
     setSessionActive,
+    setCurrentSession,
     audioSettings,
     voiceSettings
   } = useAppStore();
+  
+  // Initialiser la session comme 'free' pour la compatibilité
+  useEffect(() => {
+    setCurrentSession('free');
+  }, [setCurrentSession]);
   
   // Fonction de fin de session - redirige vers la page d'authentification
   const handleSessionComplete = useCallback(() => {

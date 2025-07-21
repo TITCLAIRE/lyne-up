@@ -56,7 +56,7 @@ export default function DiscoverySessionScreen() {
     }
     
     // Définir la session active et naviguer vers la page de session
-    setCurrentSession('discovery');
+    setCurrentSession('free');
     navigate('/sessions/run/discovery');
   };
 

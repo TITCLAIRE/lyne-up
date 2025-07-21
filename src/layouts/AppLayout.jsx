@@ -24,7 +24,10 @@ function AppLayout() {
   // Redirection si l'utilisateur n'a pas encore terminé les pages de lancement
   useEffect(() => {
     // Désactiver temporairement la redirection automatique pour le débogage
-    if (showStartScreen && window.location.pathname !== '/sessions/libre') {
+    if (showStartScreen && 
+        window.location.pathname !== '/sessions/libre' && 
+        window.location.pathname !== '/discovery-session' &&
+        window.location.pathname !== '/sessions/run/discovery') {
       navigate('/start');
     }
   }, [showStartScreen, navigate]);
