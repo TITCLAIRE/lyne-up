@@ -85,7 +85,7 @@ export default function StartScreen() {
           <div className="space-y-4 animate-fade-in-up" style={{animationDelay: '0.3s'}}>
             <button
               onClick={handleDiscoverCoherenceSession}
-              className="w-full bg-gradient-to-r from-green-500 to-emerald-500 text-white py-5 px-6 rounded-2xl font-semibold flex items-center justify-center gap-3 hover:from-green-600 hover:to-emerald-600 transition-all duration-200 shadow-lg"
+              className="w-full bg-gradient-to-r from-green-500 to-emerald-500 text-white py-4 px-6 rounded-2xl font-semibold flex items-center justify-center gap-3 hover:from-green-600 hover:to-emerald-600 transition-all duration-200 shadow-lg"
             >
               <Headphones size={24} />
               Découvrir la cohérence cardiaque intégrative
@@ -93,7 +93,7 @@ export default function StartScreen() {
             
             <button
               onClick={handleAuth}
-              className="w-full bg-white/10 border-2 border-white/30 text-white py-5 px-6 rounded-2xl font-semibold flex items-center justify-center gap-3 hover:bg-white/20 transition-all duration-200"
+              className="w-full bg-white/10 border-2 border-white/30 text-white py-4 px-6 rounded-2xl font-semibold flex items-center justify-center gap-3 hover:bg-white/20 transition-all duration-200"
             >
               <Lock size={24} />
               Se connecter ou créer un compte
