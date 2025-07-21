@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Heart, Headphones, Lock } from 'lucide-react';
 import { useAppStore } from '../store/appStore';
+import DiscoverySessionScreen from './DiscoverySessionScreen';
 
 export default function StartScreen() {
   const navigate = useNavigate();
@@ -15,14 +16,14 @@ export default function StartScreen() {
     updateFreeSessionSettings({
       inhaleTime: 5,
       exhaleTime: 5,
-      duration: 5,
+      duration: 6, // 6 minutes pour la session découverte
       frequency: 'coherence',
       gongEnabled: true,
       silentMode: false
     });
     
-    // Utiliser une redirection forcée au lieu de navigate
-    window.location.href = '/sessions/libre';
+    // Rediriger vers la page de session découverte
+    navigate('/discovery-session');
   };
 
   const handleAuth = () => {
