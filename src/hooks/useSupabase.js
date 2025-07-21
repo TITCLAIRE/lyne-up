@@ -1,15 +1,14 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
-import { useAppStore } from '../store/appStore';
 
 export const useSupabase = () => {
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(null);
-  const { setAuthenticated } = useAppStore();
 
   useEffect(() => {
     // Récupérer la session actuelle
     const getSession = async () => {
+      try {
       const { data: { session } } = await supabase.auth.getSession();
       setUser(session?.user ?? null);
       setLoading(false);
@@ -23,23 +22,14 @@ export const useSupabase = () => {
 
     getSession();
 
-    // Écouter les changements d'authentification
+      (event, session) => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
-        console.log('🔐 Changement d\'authentification:', event);
-        setUser(session?.user ?? null);
-        
-        if (session?.user) {
-          const userData = await getUserProfile(session.user.id);
-          setAuthenticated(true, userData);
-        } else {
-          setAuthenticated(false, null);
-        }
       }
     );
 
     return () => subscription.unsubscribe();
-  }, [setAuthenticated]);
+  }, []);
 
   // Fonction pour récupérer le profil utilisateur complet
   const getUserProfile = async (userId) => {

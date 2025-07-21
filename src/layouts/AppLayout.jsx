@@ -10,8 +10,6 @@ import { useHeartRateDetector } from '../hooks/useHeartRateDetector';
 
 function AppLayout() {
   const { 
-    showStartScreen,
-    isTrialMode,
     isAuthenticated,
     setAuthenticated
   } = useAppStore();
@@ -29,6 +27,7 @@ function AppLayout() {
     if (!loading) {
       if (user && !isAuthenticated) {
         // Utilisateur connecté dans Supabase mais pas dans le store
+        console.log('✅ Utilisateur connecté, mise à jour du store');
         setAuthenticated(true, {
           id: user.id,
           email: user.email,
@@ -37,14 +36,15 @@ function AppLayout() {
         });
       } else if (!user && isAuthenticated) {
         // Utilisateur déconnecté de Supabase
+        console.log('❌ Utilisateur déconnecté, nettoyage du store');
         setAuthenticated(false, null);
-        navigate('/start');
       }
     }
-  }, [user, loading, isAuthenticated, setAuthenticated, navigate]);
+  }, [user, loading, isAuthenticated, setAuthenticated]);
 
   // Afficher un loader pendant la vérification de l'authentification
   if (loading) {
+    console.log('⏳ Chargement de la session...');
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-900 to-purple-900">
         <div className="text-center">
@@ -54,6 +54,8 @@ function AppLayout() {
       </div>
     );
   }
+
+  console.log('🔄 Rendu AppLayout - User:', !!user, 'Authenticated:', isAuthenticated, 'Loading:', loading);
 
   return (
     <div 
