@@ -8,8 +8,6 @@ export const useSupabase = () => {
   useEffect(() => {
     // Récupérer la session actuelle
     const getSession = async () => {
-      try {
-      }
       const { data: { session } } = await supabase.auth.getSession();
       setUser(session?.user ?? null);
       setLoading(false);
