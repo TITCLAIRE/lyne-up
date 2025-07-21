@@ -73,8 +73,8 @@ export default function DiscoverySessionScreen() {
         alt=""
         className="fixed inset-0 w-full h-full object-cover pointer-events-none z-0"
         style={{
-          opacity: 0.1,
-          filter: 'hue-rotate(180deg) brightness(1.4) contrast(1.1)',
+          opacity: 0.05,
+          filter: 'hue-rotate(180deg) brightness(1.1) contrast(0.8)',
           mixBlendMode: 'overlay'
         }}
       />

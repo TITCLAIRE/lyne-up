@@ -93,8 +93,8 @@ export default function FreeSessionScreen() {
         alt=""
         className="fixed inset-0 w-full h-full object-cover pointer-events-none z-0"
         style={{
-          opacity: 0.1,
-          filter: 'hue-rotate(190deg) brightness(1.4) contrast(1.1)',
+          opacity: 0.06,
+          filter: 'hue-rotate(190deg) brightness(1.1) contrast(0.8)',
           mixBlendMode: 'overlay'
         }}
       />

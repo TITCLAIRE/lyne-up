@@ -43,8 +43,8 @@ export default function StartScreen() {
         alt=""
         className="fixed inset-0 w-full h-full object-cover pointer-events-none z-0"
         style={{
-          opacity: 0.2,
-          filter: 'hue-rotate(200deg) brightness(1.8) contrast(1.3)',
+          opacity: 0.12,
+          filter: 'hue-rotate(200deg) brightness(1.3) contrast(0.9)',
           mixBlendMode: 'overlay'
         }}
       />

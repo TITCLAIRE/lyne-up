@@ -56,8 +56,8 @@ export default function AuthScreen() {
         alt=""
         className="fixed inset-0 w-full h-full object-cover pointer-events-none z-0"
         style={{
-          opacity: 0.12,
-          filter: 'hue-rotate(200deg) brightness(1.6) contrast(1.2)',
+          opacity: 0.06,
+          filter: 'hue-rotate(200deg) brightness(1.1) contrast(0.8)',
           mixBlendMode: 'overlay'
         }}
       />

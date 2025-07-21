@@ -40,8 +40,8 @@ function AppLayout() {
         alt=""
         className="fixed inset-0 w-full h-full object-cover pointer-events-none z-0"
         style={{
-          opacity: 0.15,
-          filter: 'hue-rotate(200deg) brightness(1.5) contrast(1.2)',
+          opacity: 0.08,
+          filter: 'hue-rotate(200deg) brightness(1.2) contrast(0.9)',
           mixBlendMode: 'overlay'
         }}
         onLoad={() => console.log('✅ Image de fond chargée avec succès')}

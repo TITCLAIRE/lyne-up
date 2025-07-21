@@ -166,8 +166,8 @@ export default function DiscoverySessionRunner() {
         alt=""
         className="fixed inset-0 w-full h-full object-cover pointer-events-none z-0"
         style={{
-          opacity: 0.08,
-          filter: 'hue-rotate(180deg) brightness(1.3) contrast(1.0)',
+          opacity: 0.04,
+          filter: 'hue-rotate(180deg) brightness(1.0) contrast(0.7)',
           mixBlendMode: 'overlay'
         }}
       />
