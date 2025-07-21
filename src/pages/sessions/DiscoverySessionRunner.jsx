@@ -160,10 +160,19 @@ export default function DiscoverySessionRunner() {
         background: 'linear-gradient(135deg, #003366, #004488, #0055AA, #003366)'
       }}
     >
-      {/* Motif de fond ésotérique pour la session en cours */}
-      <div className="esoteric-background-pattern session" />
+      {/* Image de fond directe pour la session en cours */}
+      <img 
+        src="/Fond app.png" 
+        alt=""
+        className="fixed inset-0 w-full h-full object-cover pointer-events-none z-0"
+        style={{
+          opacity: 0.08,
+          filter: 'hue-rotate(180deg) brightness(1.3) contrast(1.0)',
+          mixBlendMode: 'overlay'
+        }}
+      />
       
-      <div className="px-5 pb-5 flex-1 flex flex-col">
+      <div className="px-5 pb-5 flex-1 flex flex-col relative z-10">
         {/* En-tête de session */}
         <div className="text-center mb-6">
           <div className="flex items-center justify-center gap-4 mb-4">

@@ -50,10 +50,19 @@ export default function AuthScreen() {
         background: 'linear-gradient(135deg, #003366, #004488, #0055AA, #003366)'
       }}
     >
-      {/* Motif de fond ésotérique pour l'authentification */}
-      <div className="esoteric-background-pattern" />
+      {/* Image de fond directe pour l'authentification */}
+      <img 
+        src="/Fond app.png" 
+        alt=""
+        className="fixed inset-0 w-full h-full object-cover pointer-events-none z-0"
+        style={{
+          opacity: 0.12,
+          filter: 'hue-rotate(200deg) brightness(1.6) contrast(1.2)',
+          mixBlendMode: 'overlay'
+        }}
+      />
       
-      <div className="max-w-md mx-auto w-full px-5 py-8">
+      <div className="max-w-md mx-auto w-full px-5 py-8 relative z-10">
         {/* En-tête */}
         <div className="text-center mb-8">
           <div className="flex items-center justify-center gap-4 mb-6">

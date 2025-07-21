@@ -37,11 +37,20 @@ export default function StartScreen() {
         background: 'linear-gradient(135deg, #003366, #004488, #0055AA, #003366)'
       }}
     >
-      {/* Motif de fond ésotérique pour la page de démarrage */}
-      <div className="esoteric-background-pattern" />
+      {/* Image de fond directe pour la page de démarrage */}
+      <img 
+        src="/Fond app.png" 
+        alt=""
+        className="fixed inset-0 w-full h-full object-cover pointer-events-none z-0"
+        style={{
+          opacity: 0.2,
+          filter: 'hue-rotate(200deg) brightness(1.8) contrast(1.3)',
+          mixBlendMode: 'overlay'
+        }}
+      />
       
       {/* Contenu principal */}
-      <div className="flex-1 px-5 flex flex-col items-center justify-center">
+      <div className="flex-1 px-5 flex flex-col items-center justify-center relative z-10">
         <div className="max-w-md mx-auto w-full">
           {/* Logo et titre */}
           <div className="text-center mb-12 animate-fade-in-up">

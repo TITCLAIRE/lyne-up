@@ -34,10 +34,23 @@ function AppLayout() {
         background: 'linear-gradient(135deg, #003366, #004488, #0055AA, #003366)'
       }}
     >
-      {/* Motif de fond ésotérique subtil */}
-      <div className="esoteric-background-pattern animated" />
+      {/* Image de fond directe */}
+      <img 
+        src="/Fond app.png" 
+        alt=""
+        className="fixed inset-0 w-full h-full object-cover pointer-events-none z-0"
+        style={{
+          opacity: 0.15,
+          filter: 'hue-rotate(200deg) brightness(1.5) contrast(1.2)',
+          mixBlendMode: 'overlay'
+        }}
+        onLoad={() => console.log('✅ Image de fond chargée avec succès')}
+        onError={() => console.log('❌ Erreur de chargement de l\'image de fond')}
+      />
       
-      <Header />
+      <div className="relative z-10">
+        <Header />
+      </div>
       <main className="relative">
         <Outlet />
       </main>
