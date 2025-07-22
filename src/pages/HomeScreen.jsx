@@ -2,10 +2,19 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Heart, BookOpen, HandHeart } from 'lucide-react';
 import { useAppStore } from '../store/appStore';
+import DailyRoutine from '../components/DailyRoutine';
+import WeeklyPrograms from '../components/WeeklyPrograms';
 
 export default function HomeScreen() {
   return (
     <div className="px-5 pb-5">
+      {/* Routine Quotidienne */}
+      <DailyRoutine />
+      
+      {/* Programmes Thématiques */}
+      <WeeklyPrograms />
+      
+      {/* Sessions principales */}
       <div className="grid grid-cols-2 gap-4 auto-rows-fr">
         <Link to="/intro/libre" className="home-card bg-gradient-to-r from-pink-500/20 to-purple-500/20 border-2 border-pink-500/30">
           <div className="flex flex-col items-center justify-center h-full p-6 text-center">
