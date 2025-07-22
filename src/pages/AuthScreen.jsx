@@ -390,18 +390,6 @@ export default function AuthScreen() {
           </div>
         </div>
         
-        {/* Avantages Premium */}
-        <div className="bg-gradient-to-r from-green-500/10 to-emerald-500/10 border border-green-500/20 rounded-xl p-4 mb-8">
-          <h4 className="text-sm font-semibold text-green-200 mb-3">✨ Fonctionnalités Premium :</h4>
-          <div className="grid grid-cols-2 gap-2 text-xs text-green-100/90">
-            <div className="flex items-center"><span className="w-1 h-1 bg-green-400 rounded-full mr-2"></span>Méditations thématiques</div>
-            <div className="flex items-center"><span className="w-1 h-1 bg-green-400 rounded-full mr-2"></span>Auto-hypnose guidée</div>
-            <div className="flex items-center"><span className="w-1 h-1 bg-green-400 rounded-full mr-2"></span>Voix premium Claire & Thierry</div>
-            <div className="flex items-center"><span className="w-1 h-1 bg-green-400 rounded-full mr-2"></span>Sessions illimitées</div>
-            <div className="flex items-center"><span className="w-1 h-1 bg-green-400 rounded-full mr-2"></span>Statistiques avancées</div>
-            <div className="flex items-center"><span className="w-1 h-1 bg-green-400 rounded-full mr-2"></span>Support prioritaire</div>
-          </div>
-        </div>
 
         {/* Note de développement */}
         <div className="mt-8 p-4 bg-green-500/10 border border-green-500/20 rounded-xl">
