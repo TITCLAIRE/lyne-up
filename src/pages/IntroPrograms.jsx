@@ -185,21 +185,22 @@ export default function IntroPrograms() {
       {/* Message pour utilisateurs non Premium */}
       {!isPremium && (
         <div className="bg-gradient-to-r from-amber-500/10 to-orange-500/10 border border-amber-500/20 rounded-xl p-4">
-        <h4 className="text-sm font-semibold text-blue-200 mb-3">Autres programmes disponibles :</h4>
-        <div className="grid gap-2 text-xs text-blue-100/80">
-          {Object.values(weeklyPrograms)
-            .filter(program => program.id !== selectedProgram)
-            .map((program, index) => (
-              <div key={index} className="flex items-center gap-2">
-                <span className="w-1 h-1 bg-blue-400 rounded-full"></span>
-                {program.name}
-              </div>
-            ))}
+          <h4 className="text-sm font-semibold text-blue-200 mb-3">Autres programmes disponibles :</h4>
+          <div className="grid gap-2 text-xs text-blue-100/80">
+            {Object.values(weeklyPrograms)
+              .filter(program => program.id !== selectedProgram)
+              .map((program, index) => (
+                <div key={index} className="flex items-center gap-2">
+                  <span className="w-1 h-1 bg-blue-400 rounded-full"></span>
+                  {program.name}
+                </div>
+              ))}
+          </div>
+          <p className="text-xs text-blue-100/60 mt-3">
+            Un nouveau programme vous sera proposé demain !
+          </p>
         </div>
-        <p className="text-xs text-blue-100/60 mt-3">
-          Un nouveau programme vous sera proposé demain !
-        </p>
-      </div>
+      )}
 
       {!isAuthenticated && (
         <div className="bg-gradient-to-r from-orange-500/10 to-red-500/10 border border-orange-500/20 rounded-xl p-4">
@@ -214,6 +215,7 @@ export default function IntroPrograms() {
                   ? 'Les programmes thématiques sur 7 jours nécessitent un compte Premium. Créez votre compte et passez Premium pour débloquer ces parcours guidés.'
                   : 'Les programmes thématiques sur 7 jours sont réservés aux membres Premium. Passez Premium pour débloquer tous les parcours guidés et fonctionnalités avancées.'
                 }
+              </p>
               {isPremium === false && isAuthenticated && (
                 <div className="mt-3 bg-amber-500/10 rounded-lg p-3">
                   <p className="text-xs text-amber-100/90">
