@@ -16,7 +16,6 @@ export default function AuthScreen() {
   const [showResendOption, setShowResendOption] = useState(false);
   const [resendEmail, setResendEmail] = useState('');
   const [processingPayment, setProcessingPayment] = useState(false);
-  const [processingPayment, setProcessingPayment] = useState(false);
   
   const navigate = useNavigate();
   const { setAuthenticated } = useAppStore();
