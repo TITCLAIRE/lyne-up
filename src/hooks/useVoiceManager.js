@@ -315,10 +315,12 @@ export const useVoiceManager = () => {
     if (!voiceSettings.enabled) return;
     
     console.log('🎵 TENTATIVE LECTURE AUDIO COMPLET:', audioPath);
+    console.log('🔍 Test d\'accès au fichier...');
     
     // Vérifier si l'URL existe
     fetch(audioPath, { method: 'HEAD' })
       .then(response => {
+        console.log('📡 Réponse serveur:', response.status, response.statusText);
         if (response.ok) {
           console.log('✅ FICHIER AUDIO COMPLET TROUVÉ:', audioPath, `(${response.status})`);
           
@@ -326,17 +328,36 @@ export const useVoiceManager = () => {
             const audio = new Audio(audioPath);
             fullAudioRef.current = audio;
             
+            // Logs détaillés pour le debug
+            audio.onloadstart = () => {
+              console.log('🔄 Début du chargement audio:', audioPath);
+            };
+            
+            audio.oncanplay = () => {
+              console.log('✅ Audio prêt à être joué:', audioPath);
+            };
+            
+            audio.onloadeddata = () => {
+              console.log('📊 Données audio chargées:', audioPath);
+            };
+            
             audio.onended = () => {
               console.log('✅ AUDIO COMPLET TERMINÉ:', audioPath);
               fullAudioRef.current = null;
             };
             
             audio.onerror = (error) => {
-              console.error('❌ ERREUR AUDIO COMPLET:', error, audioPath);
+              console.error('❌ ERREUR AUDIO COMPLET:', error);
+              console.error('📄 Détails de l\'erreur:', {
+                error: error.target?.error,
+                networkState: error.target?.networkState,
+                readyState: error.target?.readyState,
+                src: error.target?.src
+              });
               
               // Fallback vers synthèse vocale
               if (fallbackText) {
-                console.log('🔄 FALLBACK SYNTHÈSE pour audio complet - Raison:', error.message);
+                console.log('🔄 FALLBACK SYNTHÈSE pour audio complet - Raison: Erreur de chargement');
                 speakWithSynthesis(fallbackText);
               }
               
@@ -350,11 +371,12 @@ export const useVoiceManager = () => {
             console.log('🔊 LECTURE AUDIO COMPLET DÉMARRÉE:', audioPath);
             audio.play()
               .catch(error => {
-                console.error('❌ ERREUR LECTURE AUDIO COMPLET:', error, audioPath);
+                console.error('❌ ERREUR LECTURE AUDIO COMPLET:', error);
+                console.error('📄 Détails play() error:', error.name, error.message);
                 
                 // Fallback vers synthèse vocale
                 if (fallbackText) {
-                  console.log('🔄 FALLBACK SYNTHÈSE pour audio complet - Raison:', error.message);
+                  console.log('🔄 FALLBACK SYNTHÈSE pour audio complet - Raison: Erreur play()');
                   speakWithSynthesis(fallbackText);
                 }
                 
@@ -365,26 +387,32 @@ export const useVoiceManager = () => {
             
             // Fallback vers synthèse vocale
             if (fallbackText) {
-              console.log('🔄 FALLBACK SYNTHÈSE pour audio complet - Raison:', error.message);
+              console.log('🔄 FALLBACK SYNTHÈSE pour audio complet - Raison: Erreur création');
               speakWithSynthesis(fallbackText);
             }
           }
         } else {
-          console.error('❌ FICHIER AUDIO COMPLET NON TROUVÉ:', audioPath, `(${response.status})`);
+          console.error('❌ FICHIER AUDIO COMPLET NON ACCESSIBLE:', audioPath, `(${response.status} ${response.statusText})`);
+          
+          if (response.status === 429) {
+            console.error('🚫 ERREUR 429: Trop de requêtes - GitHub bloque l\'accès direct aux fichiers');
+            console.log('💡 SOLUTION: Utiliser GitHub Pages ou un CDN pour servir les fichiers audio');
+          }
           
           // Fallback vers synthèse vocale
           if (fallbackText) {
-            console.log('🔄 FALLBACK SYNTHÈSE pour audio complet - Raison:', 'Fichier non trouvé');
+            console.log('🔄 FALLBACK SYNTHÈSE pour audio complet - Raison: Fichier non accessible');
             speakWithSynthesis(fallbackText);
           }
         }
       })
       .catch(error => {
-        console.error('❌ ERREUR VÉRIFICATION AUDIO COMPLET:', error, audioPath);
+        console.error('❌ ERREUR RÉSEAU VÉRIFICATION AUDIO:', error);
+        console.error('📄 Détails réseau:', error.name, error.message);
         
         // Fallback vers synthèse vocale
         if (fallbackText) {
-          console.log('🔄 FALLBACK SYNTHÈSE pour audio complet - Raison:', error.message);
+          console.log('🔄 FALLBACK SYNTHÈSE pour audio complet - Raison: Erreur réseau');
           speakWithSynthesis(fallbackText);
         }
       });
