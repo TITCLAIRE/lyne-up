@@ -352,17 +352,30 @@ export const useVoiceManager = () => {
             };
             
             audio.onerror = (error) => {
-              console.error('❌ ERREUR AUDIO COMPLET:', error);
-              console.error('📄 Détails de l\'erreur:', {
-                error: error.target?.error,
+              console.error('❌ ERREUR AUDIO COMPLET:', audioPath);
+              console.error('📄 Détails de l\'erreur audio:', {
+                errorCode: error.target?.error?.code,
+                errorMessage: error.target?.error?.message,
                 networkState: error.target?.networkState,
                 readyState: error.target?.readyState,
-                src: error.target?.src
+                src: error.target?.src,
+                currentTime: error.target?.currentTime,
+                duration: error.target?.duration
               });
+              
+              // Diagnostic spécifique pour les erreurs courantes
+              if (error.target?.error?.code === 4) {
+                console.error('🚫 ERREUR MEDIA_ELEMENT_ERROR: Fichier audio corrompu ou format non supporté');
+                console.log('💡 SOLUTION: Ré-encoder le fichier metatron.mp3 en MP3 standard (128kbps, 44.1kHz)');
+              } else if (error.target?.error?.code === 2) {
+                console.error('🌐 ERREUR NETWORK: Problème de réseau ou fichier non accessible');
+              } else if (error.target?.error?.code === 3) {
+                console.error('🔧 ERREUR DECODE: Impossible de décoder le fichier audio');
+              }
               
               // Fallback vers synthèse vocale
               if (fallbackText) {
-                console.log('🔄 FALLBACK SYNTHÈSE pour audio complet - Raison: Erreur de chargement');
+                console.log('🔄 FALLBACK SYNTHÈSE pour audio complet - Raison: Erreur audio code', error.target?.error?.code);
                 try {
                   speakWithSynthesis(fallbackText);
                 } catch (synthError) {
