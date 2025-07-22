@@ -92,15 +92,13 @@ export default function HomeScreen() {
 
         {/* Routine Quotidienne */}
         <Link 
-          to={dailySession?.path || '/sessions/guidees/recentrage'} 
+          to="/intro/routine"
           className="home-card bg-gradient-to-r from-orange-500/20 to-red-500/20 border-2 border-orange-500/30"
         >
           <div className="flex flex-col items-center justify-center h-full p-6 text-center">
             <Target size={32} className="mb-4 text-orange-400" />
             <h2 className="text-lg font-bold mb-1">Routine Quotidienne</h2>
-            <span className="text-white/70 text-xs">
-              {dailySession ? `${dailySession.name} • ${dailySession.duration}` : 'Session du jour'}
-            </span>
+            <span className="text-white/70 text-xs">Laissez-vous surprendre</span>
           </div>
         </Link>
 
