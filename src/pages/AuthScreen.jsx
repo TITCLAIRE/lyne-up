@@ -129,17 +129,21 @@ export default function AuthScreen() {
       let data;
       try {
         const responseText = await response.text();
+        console.log('📄 Réponse brute du serveur:', responseText);
+        
         if (!responseText) {
           throw new Error('Réponse vide du serveur');
         }
         data = JSON.parse(responseText);
       } catch (jsonError) {
         console.error('❌ Erreur parsing JSON:', jsonError);
-        throw new Error('Réponse invalide du serveur');
+        console.error('📄 Contenu de la réponse:', await response.text());
+        throw new Error(`Réponse invalide du serveur. Vérifiez que la clé Stripe est configurée dans Netlify.`);
       }
       
       if (!response.ok) {
-        throw new Error(data.error || 'Erreur lors de la création de la session de paiement');
+        console.error('❌ Erreur HTTP:', response.status, data);
+        throw new Error(data?.error || data?.message || `Erreur serveur (${response.status})`);
       }
       
       console.log('✅ Session Stripe créée:', data.sessionId);
