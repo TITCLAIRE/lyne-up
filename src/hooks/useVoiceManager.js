@@ -150,6 +150,57 @@ export const useVoiceManager = () => {
     }
   }, [isSessionActive, clearAllTimeouts]);
   
+  // Fonction pour parler avec la synthèse vocale
+  const speakWithSynthesis = useCallback((text) => {
+    if (!voiceSettings.enabled || !text) return;
+    
+    try {
+      // Arrêter toute synthèse vocale en cours
+      if (synth.current) {
+        synth.current.cancel();
+      }
+      
+      // Créer une nouvelle utterance
+      const utterance = new SpeechSynthesisUtterance(text);
+      currentUtterance.current = utterance;
+      
+      // Sélectionner une voix française
+      if (voices.current.length > 0) {
+        utterance.voice = voices.current[0];
+      }
+      
+      // Configurer les paramètres
+      utterance.volume = voiceSettings.volume;
+      utterance.rate = 0.9; // Légèrement plus lent pour la clarté
+      utterance.pitch = 1.0;
+      utterance.lang = 'fr-FR';
+      
+      // Événements
+      utterance.onstart = () => {
+        console.log('🗣️ SYNTHÈSE VOCALE:', text.substring(0, 30) + (text.length > 30 ? '...' : ''));
+      };
+      
+      utterance.onend = () => {
+        console.log('✅ SYNTHÈSE TERMINÉE');
+        currentUtterance.current = null;
+      };
+      
+      utterance.onerror = (event) => {
+        if (event.error === 'interrupted') {
+          console.warn('⚠️ SYNTHÈSE INTERROMPUE:', event);
+        } else {
+          console.error('❌ ERREUR SYNTHÈSE:', event);
+        }
+        currentUtterance.current = null;
+      };
+      
+      // Parler
+      synth.current.speak(utterance);
+    } catch (error) {
+      console.error('❌ ERREUR LORS DE LA SYNTHÈSE VOCALE:', error);
+    }
+  }, [voiceSettings.enabled, voiceSettings.volume]);
+  
   // Fonction pour jouer le prochain audio dans la file d'attente
   const playNextInQueue = useCallback(() => {
     if (audioQueue.current.length === 0) {
@@ -215,7 +266,7 @@ export const useVoiceManager = () => {
       
       playNextInQueue();
     }
-  }, [voiceSettings.volume]);
+  }, [voiceSettings.volume, speakWithSynthesis]);
   
   // Fonction pour ajouter un audio à la file d'attente
   const queueAudio = useCallback((url, key, fallbackText) => {
@@ -257,7 +308,7 @@ export const useVoiceManager = () => {
           speakWithSynthesis(fallbackText);
         }
       });
-  }, [playNextInQueue]);
+  }, [playNextInQueue, speakWithSynthesis]);
   
   // Fonction pour jouer un fichier audio complet (pour les méditations avec un seul fichier)
   const playFullAudio = useCallback((audioPath, fallbackText) => {
@@ -338,57 +389,6 @@ export const useVoiceManager = () => {
         }
       });
   }, [voiceSettings.enabled, voiceSettings.volume, speakWithSynthesis]);
-  
-  // Fonction pour parler avec la synthèse vocale
-  const speakWithSynthesis = useCallback((text) => {
-    if (!voiceSettings.enabled || !text) return;
-    
-    try {
-      // Arrêter toute synthèse vocale en cours
-      if (synth.current) {
-        synth.current.cancel();
-      }
-      
-      // Créer une nouvelle utterance
-      const utterance = new SpeechSynthesisUtterance(text);
-      currentUtterance.current = utterance;
-      
-      // Sélectionner une voix française
-      if (voices.current.length > 0) {
-        utterance.voice = voices.current[0];
-      }
-      
-      // Configurer les paramètres
-      utterance.volume = voiceSettings.volume;
-      utterance.rate = 0.9; // Légèrement plus lent pour la clarté
-      utterance.pitch = 1.0;
-      utterance.lang = 'fr-FR';
-      
-      // Événements
-      utterance.onstart = () => {
-        console.log('🗣️ SYNTHÈSE VOCALE:', text.substring(0, 30) + (text.length > 30 ? '...' : ''));
-      };
-      
-      utterance.onend = () => {
-        console.log('✅ SYNTHÈSE TERMINÉE');
-        currentUtterance.current = null;
-      };
-      
-      utterance.onerror = (event) => {
-        if (event.error === 'interrupted') {
-          console.warn('⚠️ SYNTHÈSE INTERROMPUE:', event);
-        } else {
-          console.error('❌ ERREUR SYNTHÈSE:', event);
-        }
-        currentUtterance.current = null;
-      };
-      
-      // Parler
-      synth.current.speak(utterance);
-    } catch (error) {
-      console.error('❌ ERREUR LORS DE LA SYNTHÈSE VOCALE:', error);
-    }
-  }, [voiceSettings.enabled, voiceSettings.volume]);
   
   // Fonction principale pour parler (avec audio ou synthèse)
   const speak = useCallback((text, audioKey = null) => {
