@@ -16,7 +16,7 @@ export const useAppStore = create(
       // NOUVEAU : États pour le parcours utilisateur
       showStartScreen: false, // Désactiver pour le développement
       isTrialMode: false, // Mode session d'essai
-      isAuthenticated: false, // Désactiver pour forcer l'authentification
+      isAuthenticated: false, // État d'authentification géré par Supabase
       userProfile: null, // Profil utilisateur
       
       sessionSettings: {

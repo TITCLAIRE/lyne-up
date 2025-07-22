@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { Header } from '../components/Header';
 import { SidePanel } from '../components/SidePanel';
 import { useAppStore } from '../store/appStore';
@@ -15,6 +15,7 @@ function AppLayout() {
   } = useAppStore();
   
   const navigate = useNavigate();
+  const location = useLocation();
   const { user, loading } = useSupabase();
   
   // Initialiser les gestionnaires
@@ -22,43 +23,52 @@ function AppLayout() {
   useVoiceManager();
   useHeartRateDetector();
 
-  // Gérer l'authentification avec Supabase
+  // Gérer l'authentification et les redirections de manière centralisée
   useEffect(() => {
+    // Ne rien faire tant que Supabase charge
     if (!loading) {
-      if (user && !isAuthenticated) {
-        // Utilisateur connecté dans Supabase mais pas dans le store
-        console.log('✅ Utilisateur connecté, mise à jour du store');
-        setAuthenticated(true, {
-          id: user.id,
-          email: user.email,
-          name: user.user_metadata?.full_name || 'Utilisateur',
-          isPremium: false, // Sera mis à jour selon l'abonnement
-          subscriptionStatus: 'free', // Par défaut
-          trialEndsAt: null // Sera mis à jour si essai gratuit actif
-        });
-      } else if (!user && isAuthenticated) {
-        // Utilisateur déconnecté de Supabase
-        console.log('❌ Utilisateur déconnecté, nettoyage du store');
-        setAuthenticated(false, null);
-        // Rediriger vers la page d'authentification si nécessaire
-        navigate('/auth');
-      }
-    }
-  }, [user, loading, isAuthenticated, setAuthenticated, navigate]);
-
-  // Rediriger vers l'authentification si pas connecté
-  useEffect(() => {
-    if (!loading && !user && !isAuthenticated) {
-      // Permettre l'accès à certaines pages sans authentification
-      const currentPath = window.location.pathname;
+      const currentPath = location.pathname;
       const publicPaths = ['/start', '/auth', '/free-session', '/discovery-session'];
+      const isPublicPath = publicPaths.includes(currentPath);
       
-      if (!publicPaths.includes(currentPath)) {
-        console.log('🔒 Redirection vers authentification - utilisateur non connecté');
-        navigate('/auth');
+      console.log('🔄 Vérification auth - User:', !!user, 'Authenticated:', isAuthenticated, 'Path:', currentPath);
+      
+      if (user) {
+        // Utilisateur connecté dans Supabase
+        if (!isAuthenticated) {
+          // Synchroniser le store avec Supabase
+          console.log('✅ Synchronisation store avec utilisateur Supabase');
+          setAuthenticated(true, {
+            id: user.id,
+            email: user.email,
+            name: user.user_metadata?.full_name || 'Utilisateur',
+            isPremium: false, // Sera mis à jour selon l'abonnement
+            subscriptionStatus: 'free', // Par défaut
+            trialEndsAt: null // Sera mis à jour si essai gratuit actif
+          });
+        }
+        
+        // Rediriger les utilisateurs connectés depuis les pages publiques vers l'accueil
+        if (isPublicPath && currentPath !== '/free-session' && currentPath !== '/discovery-session') {
+          console.log('🏠 Redirection utilisateur connecté vers accueil');
+          navigate('/', { replace: true });
+        }
+      } else {
+        // Utilisateur non connecté dans Supabase
+        if (isAuthenticated) {
+          // Nettoyer le store
+          console.log('❌ Nettoyage store - utilisateur déconnecté de Supabase');
+          setAuthenticated(false, null);
+        }
+        
+        // Rediriger vers l'authentification si sur une route protégée
+        if (!isPublicPath) {
+          console.log('🔒 Redirection vers authentification - route protégée');
+          navigate('/auth', { replace: true });
+        }
       }
     }
-  }, [loading, user, isAuthenticated, navigate]);
+  }, [user, loading, isAuthenticated, setAuthenticated, navigate, location.pathname]);
 
   // Afficher un loader pendant la vérification de l'authentification
   if (loading) {
