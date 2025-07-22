@@ -324,7 +324,77 @@ export default function AuthScreen() {
             onClick={toggleMode}
             className="text-cyan-400 hover:text-cyan-300 font-medium transition-colors bg-cyan-500/10 px-4 py-2 rounded-lg border border-cyan-500/30"
           >
+            {isLogin ? 'Créer un compte' : 'Se connecter'}
+          </button>
+        </div>
+
+        {/* Options Premium */}
+        {!isLogin && (
+          <div className="space-y-4 mb-8">
+            <div className="text-center mb-6">
+              <h3 className="text-xl font-semibold text-white mb-2">
+                Ou passez directement Premium
+              </h3>
+              <p className="text-white/80 text-sm">
+                Accès immédiat à toutes les fonctionnalités avancées
+              </p>
             </div>
+
+            {/* Achat annuel */}
+            <button
+              onClick={() => handlePremiumPurchase('yearly')}
+              disabled={loading || processingPayment}
+              className="w-full bg-gradient-to-r from-purple-600 to-purple-700 text-white py-4 px-6 rounded-2xl font-semibold flex items-center justify-between hover:from-purple-700 hover:to-purple-800 transition-all duration-200 border border-purple-500/30"
+            >
+              <div className="flex items-center gap-3">
+                <Crown size={24} className="text-purple-200" />
+                <div className="text-left">
+                  <div className="font-bold">Premium Annuel</div>
+                  <div className="text-sm text-purple-200">Renouvelable chaque année</div>
+                </div>
+              </div>
+              <div className="text-right">
+                <div className="text-2xl font-bold">14,99€</div>
+                <div className="text-sm text-purple-200">/an</div>
+              </div>
+            </button>
+
+            {/* Achat à vie */}
+            <button
+              onClick={() => handlePremiumPurchase('lifetime')}
+              disabled={loading || processingPayment}
+              className="w-full bg-gradient-to-r from-amber-500 to-orange-500 text-white py-4 px-6 rounded-2xl font-semibold flex items-center justify-between hover:from-amber-600 hover:to-orange-600 transition-all duration-200 border-2 border-amber-400/50 relative overflow-hidden"
+            >
+              {/* Badge "POPULAIRE" */}
+              <div className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-bl-lg">
+                POPULAIRE
+              </div>
+              
+              <div className="flex items-center gap-3">
+                <Sparkles size={24} className="text-amber-200" />
+                <div className="text-left">
+                  <div className="font-bold">Premium à Vie</div>
+                  <div className="text-sm text-amber-200">Paiement unique, accès permanent</div>
+                </div>
+              </div>
+              <div className="text-right">
+                <div className="text-2xl font-bold">49€</div>
+                <div className="text-sm text-amber-200">à vie</div>
+              </div>
+            </button>
+          </div>
+        )}
+
+        {/* Avantages Premium */}
+        <div className="bg-gradient-to-r from-green-500/10 to-emerald-500/10 border border-green-500/20 rounded-xl p-4 mb-8">
+          <h4 className="text-sm font-semibold text-green-200 mb-3">✨ Fonctionnalités Premium :</h4>
+          <div className="grid grid-cols-2 gap-2 text-xs text-green-100/90">
+            <div className="flex items-center"><span className="w-1 h-1 bg-green-400 rounded-full mr-2"></span>Méditations thématiques</div>
+            <div className="flex items-center"><span className="w-1 h-1 bg-green-400 rounded-full mr-2"></span>Auto-hypnose guidée</div>
+            <div className="flex items-center"><span className="w-1 h-1 bg-green-400 rounded-full mr-2"></span>Voix premium Claire & Thierry</div>
+            <div className="flex items-center"><span className="w-1 h-1 bg-green-400 rounded-full mr-2"></span>Sessions illimitées</div>
+            <div className="flex items-center"><span className="w-1 h-1 bg-green-400 rounded-full mr-2"></span>Statistiques avancées</div>
+            <div className="flex items-center"><span className="w-1 h-1 bg-green-400 rounded-full mr-2"></span>Support prioritaire</div>
           </div>
         </div>
         
