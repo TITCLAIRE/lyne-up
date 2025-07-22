@@ -137,7 +137,7 @@ export default function AuthScreen() {
         data = JSON.parse(responseText);
       } catch (jsonError) {
         console.error('❌ Erreur parsing JSON:', jsonError);
-        console.error('📄 Contenu de la réponse:', await response.text());
+        console.error('📄 Contenu de la réponse déjà lu');
         throw new Error(`Réponse invalide du serveur. Vérifiez que la clé Stripe est configurée dans Netlify.`);
       }
       
