@@ -126,7 +126,17 @@ export default function AuthScreen() {
         }),
       });
       
-      const data = await response.json();
+      let data;
+      try {
+        const responseText = await response.text();
+        if (!responseText) {
+          throw new Error('Réponse vide du serveur');
+        }
+        data = JSON.parse(responseText);
+      } catch (jsonError) {
+        console.error('❌ Erreur parsing JSON:', jsonError);
+        throw new Error('Réponse invalide du serveur');
+      }
       
       if (!response.ok) {
         throw new Error(data.error || 'Erreur lors de la création de la session de paiement');
