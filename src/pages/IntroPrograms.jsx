@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Play, Calendar, Shield, Moon, Zap, Heart, Lock } from 'lucide-react';
+import { Play, Calendar, Shield, Moon, Zap, Heart, Lock, Crown } from 'lucide-react';
 import { useAppStore } from '../store/appStore';
 import { weeklyPrograms } from '../data/programs';
 
 export default function IntroPrograms() {
   const [selectedProgram, setSelectedProgram] = useState(null);
   const navigate = useNavigate();
-  const { setCurrentSession, setCurrentMeditation, updateCoherenceSettings, isAuthenticated } = useAppStore();
+  const { setCurrentSession, setCurrentMeditation, updateCoherenceSettings, isAuthenticated, userProfile } = useAppStore();
+
+  // Vérifier si l'utilisateur est Premium
+  const isPremium = userProfile?.isPremium || false;
 
   // Icônes pour les programmes
   const programIcons = {
@@ -42,7 +45,7 @@ export default function IntroPrograms() {
   }, []);
 
   const handleStartProgram = (programId) => {
-    if (!isAuthenticated) {
+    if (!isAuthenticated || !isPremium) {
       navigate('/auth');
       return;
     }
@@ -151,7 +154,7 @@ export default function IntroPrograms() {
             </div>
           </div>
 
-          {isAuthenticated ? (
+          {isAuthenticated && isPremium ? (
             <button
               onClick={() => handleStartProgram(selectedProgram)}
               className="w-full bg-gradient-to-r from-purple-500 to-indigo-500 text-white py-3 px-4 rounded-xl font-semibold flex items-center justify-center gap-2 hover:from-purple-600 hover:to-indigo-600 transition-all duration-200"
@@ -159,7 +162,7 @@ export default function IntroPrograms() {
               <Play size={20} />
               Commencer le programme
             </button>
-          ) : (
+          ) : !isAuthenticated ? (
             <button
               onClick={() => navigate('/auth')}
               className="w-full bg-gradient-to-r from-purple-500 to-indigo-500 text-white py-3 px-4 rounded-xl font-semibold flex items-center justify-center gap-2 hover:from-purple-600 hover:to-indigo-600 transition-all duration-200"
@@ -167,12 +170,21 @@ export default function IntroPrograms() {
               <Lock size={20} />
               Se connecter pour commencer
             </button>
+          ) : (
+            <button
+              onClick={() => navigate('/auth')}
+              className="w-full bg-gradient-to-r from-amber-500 to-orange-500 text-white py-3 px-4 rounded-xl font-semibold flex items-center justify-center gap-2 hover:from-amber-600 hover:to-orange-600 transition-all duration-200"
+            >
+              <Crown size={20} />
+              Passer Premium pour débloquer
+            </button>
           )}
         </div>
       )}
 
-      {/* Autres programmes disponibles */}
-      <div className="bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-blue-500/20 rounded-xl p-4 mb-6">
+      {/* Message pour utilisateurs non Premium */}
+      {!isPremium && (
+        <div className="bg-gradient-to-r from-amber-500/10 to-orange-500/10 border border-amber-500/20 rounded-xl p-4">
         <h4 className="text-sm font-semibold text-blue-200 mb-3">Autres programmes disponibles :</h4>
         <div className="grid gap-2 text-xs text-blue-100/80">
           {Object.values(weeklyPrograms)
@@ -192,12 +204,23 @@ export default function IntroPrograms() {
       {!isAuthenticated && (
         <div className="bg-gradient-to-r from-orange-500/10 to-red-500/10 border border-orange-500/20 rounded-xl p-4">
           <div className="flex items-start gap-3">
-            <Lock size={20} className="text-orange-400 mt-0.5 flex-shrink-0" />
+            <Crown size={20} className="text-amber-400 mt-0.5 flex-shrink-0" />
             <div>
-              <p className="text-sm text-orange-200 font-medium mb-1">Compte requis :</p>
-              <p className="text-xs text-white/70">
-                Créez un compte gratuit pour accéder aux programmes thématiques et suivre votre progression.
+              <p className="text-sm text-amber-200 font-medium mb-1">
+                {!isAuthenticated ? 'Fonctionnalité Premium :' : 'Passez Premium :'}
               </p>
+              <p className="text-xs text-white/70">
+                {!isAuthenticated 
+                  ? 'Les programmes thématiques sur 7 jours nécessitent un compte Premium. Créez votre compte et passez Premium pour débloquer ces parcours guidés.'
+                  : 'Les programmes thématiques sur 7 jours sont réservés aux membres Premium. Passez Premium pour débloquer tous les parcours guidés et fonctionnalités avancées.'
+                }
+              {isPremium === false && isAuthenticated && (
+                <div className="mt-3 bg-amber-500/10 rounded-lg p-3">
+                  <p className="text-xs text-amber-100/90">
+                    💎 <strong>Premium à vie :</strong> 9,99€ • Accès à tous les programmes, méditations premium, voix enregistrées et bien plus !
+                  </p>
+                </div>
+              )}
             </div>
           </div>
         </div>

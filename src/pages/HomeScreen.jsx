@@ -106,12 +106,18 @@ export default function HomeScreen() {
         {/* Programmes 7 jours */}
         <Link 
           to="/intro/programs"
-          className="home-card bg-gradient-to-r from-purple-500/20 to-indigo-500/20 border-2 border-purple-500/30"
+          className="home-card bg-gradient-to-r from-amber-500/20 to-orange-500/20 border-2 border-amber-500/30"
         >
           <div className="flex flex-col items-center justify-center h-full p-6 text-center">
-            <Calendar size={32} className="mb-4 text-purple-400" />
+            <div className="relative">
+              <Calendar size={32} className="mb-4 text-amber-400" />
+              <div className="absolute -top-1 -right-1 w-4 h-4 bg-gradient-to-r from-amber-400 to-yellow-500 rounded-full flex items-center justify-center">
+                <span className="text-xs font-bold text-black">👑</span>
+              </div>
+            </div>
             <h2 className="text-lg font-bold mb-1">Programmes 7 jours</h2>
             <span className="text-white/70 text-xs">Parcours thématiques guidés</span>
+            <span className="text-amber-300 text-xs font-medium mt-1">Premium</span>
           </div>
         </Link>
 
