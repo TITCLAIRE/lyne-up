@@ -15,6 +15,7 @@ export default function AuthScreen() {
   const [error, setError] = useState('');
   const [showResendOption, setShowResendOption] = useState(false);
   const [resendEmail, setResendEmail] = useState('');
+  const [processingPayment, setProcessingPayment] = useState(false);
   
   const navigate = useNavigate();
   const { setAuthenticated } = useAppStore();
@@ -90,6 +91,57 @@ export default function AuthScreen() {
       setError(result.error || 'Erreur lors du renvoi de l\'email');
     }
     setLoading(false);
+  };
+
+  // Fonction pour gérer l'achat Premium
+  const handlePremiumPurchase = async (planType) => {
+    setProcessingPayment(true);
+    
+    try {
+      // IDs des prix Stripe - À remplacer par vos vrais IDs de prix
+      const priceIds = {
+        yearly: 'price_VOTRE_ID_ANNUEL', // Remplacez par votre ID de prix annuel
+        lifetime: 'price_VOTRE_ID_VIE'   // Remplacez par votre ID de prix à vie
+      };
+      
+      const priceId = priceIds[planType];
+      
+      if (!priceId) {
+        throw new Error('ID de prix non configuré');
+      }
+      
+      console.log('🛒 Création session Stripe pour:', planType, priceId);
+      
+      // Appeler la fonction Netlify pour créer la session de paiement
+      const response = await fetch('/.netlify/functions/create-checkout-session', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          priceId: priceId,
+          customerEmail: formData.email || undefined,
+          customerName: formData.name || undefined,
+        }),
+      });
+      
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.error || 'Erreur lors de la création de la session de paiement');
+      }
+      
+      console.log('✅ Session Stripe créée:', data.sessionId);
+      
+      // Rediriger vers Stripe Checkout
+      window.location.href = data.url;
+      
+    } catch (error) {
+      console.error('❌ Erreur achat Premium:', error);
+      setError(`Erreur lors du paiement : ${error.message}`);
+    } finally {
+      setProcessingPayment(false);
+    }
   };
 
   return (
@@ -245,13 +297,13 @@ export default function AuthScreen() {
 
           <button
             type="submit"
-            disabled={loading}
+            disabled={loading || processingPayment}
             className="w-full bg-gradient-to-r from-cyan-500 to-blue-500 text-white py-4 px-6 rounded-2xl font-semibold flex items-center justify-center gap-2 hover:from-cyan-600 hover:to-blue-600 transition-all duration-200"
           >
-            {loading ? (
+            {loading || processingPayment ? (
               <>
                 <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-                {isLogin ? 'Connexion...' : 'Création...'}
+                {processingPayment ? 'Redirection...' : isLogin ? 'Connexion...' : 'Création...'}
               </>
             ) : (
               <>
@@ -276,26 +328,73 @@ export default function AuthScreen() {
         </div>
 
         {/* Offre premium */}
-        <div className="bg-gradient-to-r from-purple-500/20 to-pink-500/20 border border-purple-500/30 rounded-xl p-6">
+        <div className="bg-gradient-to-r from-purple-500/10 to-pink-500/10 border border-purple-500/20 rounded-xl p-6 mb-6">
           <div className="flex items-start gap-3">
             <Crown size={24} className="text-purple-400 mt-1 flex-shrink-0" />
             <div className="text-left">
               <h3 className="text-lg font-semibold text-purple-200 mb-2">
-                🎁 Offre de lancement
+                🎁 Passez au Premium
               </h3>
               <p className="text-white/80 text-sm leading-relaxed mb-3">
-                Accédez à toutes les fonctionnalités premium : sessions express, 
-                méditations thématiques, voix premium et bien plus !
+                Débloquez toutes les fonctionnalités : méditations thématiques, 
+                auto-hypnose, voix premium Claire & Thierry et bien plus !
               </p>
-              <div className="bg-purple-500/10 rounded-lg p-3">
-                <p className="text-sm font-semibold text-purple-200">
-                  Premium à vie : <span className="text-2xl">9,99€</span>
-                </p>
-                <p className="text-xs text-purple-100/80">
-                  Toutes les mises à jour incluses • Aucun abonnement
-                </p>
+              
+              {/* Options de tarification */}
+              <div className="grid gap-3">
+                {/* Abonnement annuel */}
+                <button
+                  onClick={() => handlePremiumPurchase('yearly')}
+                  disabled={loading}
+                  className="bg-gradient-to-r from-blue-500/20 to-cyan-500/20 border border-blue-500/30 rounded-lg p-4 text-left hover:from-blue-500/30 hover:to-cyan-500/30 transition-all duration-200 group"
+                >
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm font-semibold text-blue-200">Premium Annuel</p>
+                      <p className="text-xs text-blue-100/80">Renouvelable chaque année</p>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-lg font-bold text-blue-200">14,99€</p>
+                      <p className="text-xs text-blue-100/60">/an</p>
+                    </div>
+                  </div>
+                </button>
+                
+                {/* Achat à vie */}
+                <button
+                  onClick={() => handlePremiumPurchase('lifetime')}
+                  disabled={loading}
+                  className="bg-gradient-to-r from-amber-500/20 to-yellow-500/20 border-2 border-amber-500/40 rounded-lg p-4 text-left hover:from-amber-500/30 hover:to-yellow-500/30 transition-all duration-200 group relative"
+                >
+                  <div className="absolute -top-2 -right-2 bg-gradient-to-r from-amber-400 to-yellow-500 text-black text-xs font-bold px-2 py-1 rounded-full">
+                    POPULAIRE
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm font-semibold text-amber-200">Premium à Vie</p>
+                      <p className="text-xs text-amber-100/80">Accès permanent • Toutes les mises à jour</p>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-lg font-bold text-amber-200">49€</p>
+                      <p className="text-xs text-amber-100/60">une seule fois</p>
+                    </div>
+                  </div>
+                </button>
               </div>
             </div>
+          </div>
+        </div>
+        
+        {/* Avantages Premium */}
+        <div className="bg-gradient-to-r from-green-500/10 to-emerald-500/10 border border-green-500/20 rounded-xl p-4 mb-8">
+          <h4 className="text-sm font-semibold text-green-200 mb-3">✨ Fonctionnalités Premium :</h4>
+          <div className="grid grid-cols-2 gap-2 text-xs text-green-100/90">
+            <div className="flex items-center"><span className="w-1 h-1 bg-green-400 rounded-full mr-2"></span>Méditations thématiques</div>
+            <div className="flex items-center"><span className="w-1 h-1 bg-green-400 rounded-full mr-2"></span>Auto-hypnose guidée</div>
+            <div className="flex items-center"><span className="w-1 h-1 bg-green-400 rounded-full mr-2"></span>Voix premium Claire & Thierry</div>
+            <div className="flex items-center"><span className="w-1 h-1 bg-green-400 rounded-full mr-2"></span>Sessions illimitées</div>
+            <div className="flex items-center"><span className="w-1 h-1 bg-green-400 rounded-full mr-2"></span>Statistiques avancées</div>
+            <div className="flex items-center"><span className="w-1 h-1 bg-green-400 rounded-full mr-2"></span>Support prioritaire</div>
           </div>
         </div>
 
