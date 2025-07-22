@@ -136,8 +136,17 @@ export const useVoiceManager = () => {
       // Arrêter tout audio en cours
       if (audioElementRef.current) {
         audioElementRef.current.pause();
+        audioElementRef.current.src = '';
         audioElementRef.current = null;
         console.log('🔇 Lecture audio arrêtée');
+      }
+      
+      // Arrêter l'audio complet en cours (Métatron)
+      if (fullAudioRef.current) {
+        fullAudioRef.current.pause();
+        fullAudioRef.current.src = '';
+        fullAudioRef.current = null;
+        console.log('🔇 Audio complet Métatron arrêté');
       }
       
       // Vider la file d'attente
@@ -314,6 +323,12 @@ export const useVoiceManager = () => {
   const playFullAudio = useCallback((audioPath, fallbackText) => {
     if (!voiceSettings.enabled) return;
     
+    // Vérifier que la session est toujours active
+    if (!isSessionActive) {
+      console.log('🔇 Session inactive, annulation lecture audio complet');
+      return;
+    }
+    
     console.log('🎵 TENTATIVE LECTURE AUDIO COMPLET:', audioPath);
     
     // Vérifier que le fallbackText n'est pas trop long pour éviter les plantages
@@ -349,6 +364,12 @@ export const useVoiceManager = () => {
             audio.onended = () => {
               console.log('✅ AUDIO COMPLET TERMINÉ:', audioPath);
               fullAudioRef.current = null;
+              
+              // Vérifier si la session est toujours active après la fin de l'audio
+              if (!isSessionActive) {
+                console.log('🔇 Session inactive après fin audio, pas de message de fin');
+                return;
+              }
             };
             
             audio.onerror = (error) => {
@@ -1035,6 +1056,12 @@ export const useVoiceManager = () => {
       
       // Essayer de charger l'audio complet après 5 secondes
       createTrackedTimeout(() => {
+        // Vérifier que la session est toujours active avant de démarrer l'audio
+        if (!isSessionActive) {
+          console.log('🔇 Session inactive, annulation du démarrage audio Métatron');
+          return;
+        }
+        
         const gender = voiceSettings.gender;
         const audioPath = `/audio/meditation/${gender}/metatron.mp3`;
         const fallbackText = meditationData.fallbackStart; // Utiliser le fallback court
@@ -1043,18 +1070,29 @@ export const useVoiceManager = () => {
         playFullAudio(audioPath, fallbackText);
       }, 5000); // Démarrage à 5 secondes
       
-      // Programmer les phases de fallback au cas où l'audio ne marche pas
+      // Programmer les phases de fallback SEULEMENT si l'audio ne marche pas
+      // On va les programmer avec une vérification de session active
       if (meditationData.guidance.phases) {
         meditationData.guidance.phases.forEach((phaseText, index) => {
           createTrackedTimeout(() => {
+            // Vérifier que la session est toujours active
+            if (!isSessionActive) {
+              console.log(`🔇 Session inactive, annulation phase Métatron ${index + 1}`);
+              return;
+            }
             console.log(`🌟 Métatron fallback - Phase ${index + 1}`);
             speak(phaseText);
           }, (index + 1) * 45000); // Une phase toutes les 45 secondes
         });
       }
       
-      // Message de fin
+      // Message de fin avec vérification de session active
       createTrackedTimeout(() => {
+        // Vérifier que la session est toujours active
+        if (!isSessionActive) {
+          console.log('🔇 Session inactive, annulation message de fin Métatron');
+          return;
+        }
         speak(meditationData.guidance.end);
       }, 270000); // 4min 30s
 
