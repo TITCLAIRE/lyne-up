@@ -93,56 +93,6 @@ export default function AuthScreen() {
     setLoading(false);
   };
 
-  // Fonction pour gérer l'achat Premium
-  const handlePremiumPurchase = async (planType) => {
-    setProcessingPayment(true);
-    
-    try {
-      // IDs des prix Stripe - À remplacer par vos vrais IDs de prix
-      const priceIds = {
-        yearly: 'price_VOTRE_ID_ANNUEL', // Remplacez par votre ID de prix annuel
-        lifetime: 'price_VOTRE_ID_VIE'   // Remplacez par votre ID de prix à vie
-      };
-      
-      const priceId = priceIds[planType];
-      
-      if (!priceId) {
-        throw new Error('ID de prix non configuré');
-      }
-      
-      console.log('🛒 Création session Stripe pour:', planType, priceId);
-      
-      // Appeler la fonction Netlify pour créer la session de paiement
-      const response = await fetch('/.netlify/functions/create-checkout-session', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          priceId: priceId,
-          customerEmail: formData.email || undefined,
-          customerName: formData.name || undefined,
-        }),
-      });
-      
-      const data = await response.json();
-      
-      if (!response.ok) {
-        throw new Error(data.error || 'Erreur lors de la création de la session de paiement');
-      }
-      
-      console.log('✅ Session Stripe créée:', data.sessionId);
-      
-      // Rediriger vers Stripe Checkout
-      window.location.href = data.url;
-      
-    } catch (error) {
-      console.error('❌ Erreur achat Premium:', error);
-      setError(`Erreur lors du paiement : ${error.message}`);
-    } finally {
-      setProcessingPayment(false);
-    }
-  };
 
   // Fonction pour gérer l'achat Premium
   const handlePremiumPurchase = async (planType) => {
