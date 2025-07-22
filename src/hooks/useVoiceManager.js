@@ -314,7 +314,7 @@ export const useVoiceManager = () => {
   const playFullAudio = useCallback((audioPath, fallbackText) => {
     if (!voiceSettings.enabled) return;
     
-    console.log('🎵 LECTURE AUDIO COMPLET:', audioPath);
+    console.log('🎵 TENTATIVE LECTURE AUDIO COMPLET:', audioPath);
     
     // Vérifier si l'URL existe
     fetch(audioPath, { method: 'HEAD' })
@@ -370,7 +370,7 @@ export const useVoiceManager = () => {
             }
           }
         } else {
-          console.log('❌ FICHIER AUDIO COMPLET NON TROUVÉ:', audioPath, `(${response.status})`);
+          console.error('❌ FICHIER AUDIO COMPLET NON TROUVÉ:', audioPath, `(${response.status})`);
           
           // Fallback vers synthèse vocale
           if (fallbackText) {
@@ -944,12 +944,36 @@ export const useVoiceManager = () => {
     
     sessionGuidanceStarted.current = true;
     
+    console.log('🎤 DÉMARRAGE GUIDAGE - Session:', currentSession, 'Méditation:', currentMeditation);
+    
     if (currentSession === 'switch') {
       return startSosStressGuidance();
     } else if (currentSession === 'scan') {
       return startScanGuidance();
     } else if (currentSession === 'coherence') {
       return startCoherenceGuidance();
+    } else if (currentSession === 'meditation' && currentMeditation === 'metatron') {
+      // Pour la méditation Métatron avec fichier audio complet
+      console.log('🌟 DÉMARRAGE MÉDITATION MÉTATRON');
+      const meditationData = spiritualMeditations[currentMeditation];
+      if (!meditationData) {
+        console.error('❌ Données de méditation Métatron non trouvées');
+        return false;
+      }
+
+      console.log('🌟 Démarrage méditation Métatron avec fichier audio complet');
+      
+      // Démarrer l'audio complet après 5 secondes
+      createTrackedTimeout(() => {
+        const gender = voiceSettings.gender;
+        const audioPath = `/audio/meditation/${gender}/metatron.mp3`;
+        const fallbackText = meditationData.guidance.start;
+        
+        console.log('🎵 TENTATIVE LECTURE MÉTATRON:', audioPath);
+        playFullAudio(audioPath, fallbackText);
+      }, 5000); // Démarrage à 5 secondes
+
+      return true;
     } else if (currentSession === 'meditation' && currentMeditation && currentMeditation !== 'metatron') {
       // Pour les autres méditations
       const meditationData = meditations[currentMeditation];
@@ -974,27 +998,6 @@ export const useVoiceManager = () => {
       createTrackedTimeout(() => {
         speak(meditationData.guidance.end);
       }, meditationData.duration * 1000 - 10000); // 10 secondes avant la fin
-
-      return true;
-    } else if (currentSession === 'meditation' && currentMeditation === 'metatron') {
-      // Pour la méditation Métatron avec fichier audio complet
-      const meditationData = spiritualMeditations[currentMeditation];
-      if (!meditationData) {
-        console.error('❌ Données de méditation Métatron non trouvées');
-        return false;
-      }
-
-      console.log('🌟 Démarrage méditation Métatron avec fichier audio complet');
-      
-      // Démarrer l'audio complet après 5 secondes
-      createTrackedTimeout(() => {
-        const gender = voiceSettings.gender;
-        const audioPath = `/audio/meditation/${gender}/metatron.mp3`;
-        const fallbackText = meditationData.guidance.start;
-        
-        console.log('🎵 Lecture audio Métatron:', audioPath);
-        playFullAudio(audioPath, fallbackText);
-      }, 5000); // Démarrage à 5 secondes
 
       return true;
     } else {
