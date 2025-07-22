@@ -137,7 +137,7 @@ export const spiritualMeditations = {
     borderColor: 'rgba(139, 92, 246, 0.3)',
     breathingPattern: { inhale: 4, hold: 0, exhale: 6 }, // Rythme 4/6
     frequency: '741hz', // 741 Hz - Éveil de l'intuition
-    audioFile: 'metatron', // Fichier audio complet
+    hasFullAudio: true, // Indique qu'il y a un fichier audio complet
     guidance: {
       start: "Bienvenue dans cette méditation d'invocation de l'archange Métatron. Installez-vous confortablement et laissez-vous guider par cette connexion spirituelle profonde.",
       // Pas de phases intermédiaires car c'est un fichier audio complet

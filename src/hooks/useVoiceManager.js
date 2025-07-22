@@ -412,6 +412,12 @@ export const useVoiceManager = () => {
     
     // Vérifier les fichiers audio de méditation en premier
     if (currentSession === 'meditation' && currentMeditation) {
+      // Cas spécial pour Métatron - fichier audio complet
+      if (currentMeditation === 'metatron') {
+        audioPath = `/audio/meditation/${gender}/metatron.mp3`;
+        audioKey = 'metatron-complete';
+        console.log(`🌟 Méditation Métatron - Fichier audio complet: ${audioPath}`);
+      } else {
       const meditationData = meditations[currentMeditation] || spiritualMeditations[currentMeditation];
       if (meditationData && meditationData.audioFiles && audioKey) {
         const fileName = meditationData.audioFiles[audioKey];
@@ -419,6 +425,7 @@ export const useVoiceManager = () => {
           audioPath = `/audio/meditation/${gender}/${fileName}.mp3`;
           console.log(`🎤 Tentative de lecture audio de méditation: ${audioPath} (${audioKey})`);
         }
+      }
       }
     } else if (sessionType === 'switch') {
       // Essayer de trouver un fichier audio pour SOS Stress
@@ -982,7 +989,7 @@ export const useVoiceManager = () => {
       // Démarrer l'audio complet après 5 secondes
       createTrackedTimeout(() => {
         const gender = voiceSettings.gender;
-        const audioPath = `/audio/meditation/${gender}/${meditationData.audioFile}.mp3`;
+        const audioPath = `/audio/meditation/${gender}/metatron.mp3`;
         const fallbackText = meditationData.guidance.start;
         
         console.log('🎵 Lecture audio Métatron:', audioPath);
