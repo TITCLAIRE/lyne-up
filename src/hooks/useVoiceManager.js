@@ -315,7 +315,12 @@ export const useVoiceManager = () => {
     if (!voiceSettings.enabled) return;
     
     console.log('🎵 TENTATIVE LECTURE AUDIO COMPLET:', audioPath);
-    console.log('🔍 Test d\'accès au fichier...');
+    
+    // Vérifier que le fallbackText n'est pas trop long pour éviter les plantages
+    if (fallbackText && fallbackText.length > 500) {
+      console.warn('⚠️ Texte de fallback très long, risque de plantage de la synthèse vocale');
+      console.log('📏 Longueur du texte:', fallbackText.length, 'caractères');
+    }
     
     // Vérifier si l'URL existe
     fetch(audioPath, { method: 'HEAD' })
@@ -358,7 +363,11 @@ export const useVoiceManager = () => {
               // Fallback vers synthèse vocale
               if (fallbackText) {
                 console.log('🔄 FALLBACK SYNTHÈSE pour audio complet - Raison: Erreur de chargement');
-                speakWithSynthesis(fallbackText);
+                try {
+                  speakWithSynthesis(fallbackText);
+                } catch (synthError) {
+                  console.error('❌ ERREUR SYNTHÈSE VOCALE FALLBACK:', synthError);
+                }
               }
               
               fullAudioRef.current = null;
@@ -377,7 +386,11 @@ export const useVoiceManager = () => {
                 // Fallback vers synthèse vocale
                 if (fallbackText) {
                   console.log('🔄 FALLBACK SYNTHÈSE pour audio complet - Raison: Erreur play()');
-                  speakWithSynthesis(fallbackText);
+                  try {
+                    speakWithSynthesis(fallbackText);
+                  } catch (synthError) {
+                    console.error('❌ ERREUR SYNTHÈSE VOCALE FALLBACK:', synthError);
+                  }
                 }
                 
                 fullAudioRef.current = null;
@@ -388,7 +401,11 @@ export const useVoiceManager = () => {
             // Fallback vers synthèse vocale
             if (fallbackText) {
               console.log('🔄 FALLBACK SYNTHÈSE pour audio complet - Raison: Erreur création');
-              speakWithSynthesis(fallbackText);
+              try {
+                speakWithSynthesis(fallbackText);
+              } catch (synthError) {
+                console.error('❌ ERREUR SYNTHÈSE VOCALE FALLBACK:', synthError);
+              }
             }
           }
         } else {
@@ -402,7 +419,11 @@ export const useVoiceManager = () => {
           // Fallback vers synthèse vocale
           if (fallbackText) {
             console.log('🔄 FALLBACK SYNTHÈSE pour audio complet - Raison: Fichier non accessible');
-            speakWithSynthesis(fallbackText);
+            try {
+              speakWithSynthesis(fallbackText);
+            } catch (synthError) {
+              console.error('❌ ERREUR SYNTHÈSE VOCALE FALLBACK:', synthError);
+            }
           }
         }
       })
@@ -413,7 +434,11 @@ export const useVoiceManager = () => {
         // Fallback vers synthèse vocale
         if (fallbackText) {
           console.log('🔄 FALLBACK SYNTHÈSE pour audio complet - Raison: Erreur réseau');
-          speakWithSynthesis(fallbackText);
+          try {
+            speakWithSynthesis(fallbackText);
+          } catch (synthError) {
+            console.error('❌ ERREUR SYNTHÈSE VOCALE FALLBACK:', synthError);
+          }
         }
       });
   }, [voiceSettings.enabled, voiceSettings.volume, speakWithSynthesis]);
@@ -983,7 +1008,7 @@ export const useVoiceManager = () => {
     } else if (currentSession === 'meditation' && currentMeditation === 'metatron') {
       // Pour la méditation Métatron avec fichier audio complet
       console.log('🌟 DÉMARRAGE MÉDITATION MÉTATRON');
-      const meditationData = spiritualMeditations[currentMeditation];
+      const meditationData = spiritualMeditations[currentMeditation] || meditations[currentMeditation];
       if (!meditationData) {
         console.error('❌ Données de méditation Métatron non trouvées');
         return false;
@@ -991,15 +1016,34 @@ export const useVoiceManager = () => {
 
       console.log('🌟 Démarrage méditation Métatron avec fichier audio complet');
       
-      // Démarrer l'audio complet après 5 secondes
+      // Message d'accueil immédiat avec fallback court
+      const fallbackMessage = meditationData.fallbackStart || "Bienvenue dans cette méditation spirituelle. Installez-vous confortablement.";
+      speak(fallbackMessage);
+      
+      // Essayer de charger l'audio complet après 5 secondes
       createTrackedTimeout(() => {
         const gender = voiceSettings.gender;
         const audioPath = `/audio/meditation/${gender}/metatron.mp3`;
-        const fallbackText = meditationData.guidance.start;
+        const fallbackText = meditationData.fallbackStart; // Utiliser le fallback court
         
         console.log('🎵 TENTATIVE LECTURE MÉTATRON:', audioPath);
         playFullAudio(audioPath, fallbackText);
       }, 5000); // Démarrage à 5 secondes
+      
+      // Programmer les phases de fallback au cas où l'audio ne marche pas
+      if (meditationData.guidance.phases) {
+        meditationData.guidance.phases.forEach((phaseText, index) => {
+          createTrackedTimeout(() => {
+            console.log(`🌟 Métatron fallback - Phase ${index + 1}`);
+            speak(phaseText);
+          }, (index + 1) * 45000); // Une phase toutes les 45 secondes
+        });
+      }
+      
+      // Message de fin
+      createTrackedTimeout(() => {
+        speak(meditationData.guidance.end);
+      }, 270000); // 4min 30s
 
       return true;
     } else if (currentSession === 'meditation' && currentMeditation && currentMeditation !== 'metatron') {
