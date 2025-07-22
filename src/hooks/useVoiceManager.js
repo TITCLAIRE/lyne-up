@@ -21,6 +21,7 @@ export const useVoiceManager = () => {
   const audioQueue = useRef([]);
   const isPlayingAudio = useRef(false);
   const timeoutsRef = useRef([]);
+  const fullAudioRef = useRef(null);
   
   // Fonction pour créer un timeout qui sera automatiquement suivi
   const createTrackedTimeout = useCallback((callback, delay) => {
@@ -257,6 +258,86 @@ export const useVoiceManager = () => {
         }
       });
   }, [playNextInQueue]);
+  
+  // Fonction pour jouer un fichier audio complet (pour les méditations avec un seul fichier)
+  const playFullAudio = useCallback((audioPath, fallbackText) => {
+    if (!voiceSettings.enabled) return;
+    
+    console.log('🎵 LECTURE AUDIO COMPLET:', audioPath);
+    
+    // Vérifier si l'URL existe
+    fetch(audioPath, { method: 'HEAD' })
+      .then(response => {
+        if (response.ok) {
+          console.log('✅ FICHIER AUDIO COMPLET TROUVÉ:', audioPath, `(${response.status})`);
+          
+          try {
+            const audio = new Audio(audioPath);
+            fullAudioRef.current = audio;
+            
+            audio.onended = () => {
+              console.log('✅ AUDIO COMPLET TERMINÉ:', audioPath);
+              fullAudioRef.current = null;
+            };
+            
+            audio.onerror = (error) => {
+              console.error('❌ ERREUR AUDIO COMPLET:', error, audioPath);
+              
+              // Fallback vers synthèse vocale
+              if (fallbackText) {
+                console.log('🔄 FALLBACK SYNTHÈSE pour audio complet - Raison:', error.message);
+                speakWithSynthesis(fallbackText);
+              }
+              
+              fullAudioRef.current = null;
+            };
+            
+            // Définir le volume
+            audio.volume = voiceSettings.volume;
+            
+            // Jouer l'audio
+            console.log('🔊 LECTURE AUDIO COMPLET DÉMARRÉE:', audioPath);
+            audio.play()
+              .catch(error => {
+                console.error('❌ ERREUR LECTURE AUDIO COMPLET:', error, audioPath);
+                
+                // Fallback vers synthèse vocale
+                if (fallbackText) {
+                  console.log('🔄 FALLBACK SYNTHÈSE pour audio complet - Raison:', error.message);
+                  speakWithSynthesis(fallbackText);
+                }
+                
+                fullAudioRef.current = null;
+              });
+          } catch (error) {
+            console.error('❌ ERREUR CRÉATION AUDIO COMPLET:', error);
+            
+            // Fallback vers synthèse vocale
+            if (fallbackText) {
+              console.log('🔄 FALLBACK SYNTHÈSE pour audio complet - Raison:', error.message);
+              speakWithSynthesis(fallbackText);
+            }
+          }
+        } else {
+          console.log('❌ FICHIER AUDIO COMPLET NON TROUVÉ:', audioPath, `(${response.status})`);
+          
+          // Fallback vers synthèse vocale
+          if (fallbackText) {
+            console.log('🔄 FALLBACK SYNTHÈSE pour audio complet - Raison:', 'Fichier non trouvé');
+            speakWithSynthesis(fallbackText);
+          }
+        }
+      })
+      .catch(error => {
+        console.error('❌ ERREUR VÉRIFICATION AUDIO COMPLET:', error, audioPath);
+        
+        // Fallback vers synthèse vocale
+        if (fallbackText) {
+          console.log('🔄 FALLBACK SYNTHÈSE pour audio complet - Raison:', error.message);
+          speakWithSynthesis(fallbackText);
+        }
+      });
+  }, [voiceSettings.enabled, voiceSettings.volume, speakWithSynthesis]);
   
   // Fonction pour parler avec la synthèse vocale
   const speakWithSynthesis = useCallback((text) => {
@@ -575,6 +656,12 @@ export const useVoiceManager = () => {
       audioElementRef.current = null;
     }
     
+    // Arrêter l'audio complet en cours
+    if (fullAudioRef.current) {
+      fullAudioRef.current.pause();
+      fullAudioRef.current = null;
+    }
+    
     // Arrêter tous les éléments audio en cours
     document.querySelectorAll('audio').forEach(audio => {
       console.log('🔇 Arrêt forcé d\'un élément audio:', audio.src);
@@ -882,12 +969,33 @@ export const useVoiceManager = () => {
       }, meditationData.duration * 1000 - 10000); // 10 secondes avant la fin
 
       return true;
+    } else if (currentSession === 'meditation' && currentMeditation === 'metatron') {
+      // Pour la méditation Métatron avec fichier audio complet
+      const meditationData = spiritualMeditations[currentMeditation];
+      if (!meditationData) {
+        console.error('❌ Données de méditation Métatron non trouvées');
+        return false;
+      }
+
+      console.log('🌟 Démarrage méditation Métatron avec fichier audio complet');
+      
+      // Démarrer l'audio complet après 5 secondes
+      createTrackedTimeout(() => {
+        const gender = voiceSettings.gender;
+        const audioPath = `/audio/meditation/${gender}/${meditationData.audioFile}.mp3`;
+        const fallbackText = meditationData.guidance.start;
+        
+        console.log('🎵 Lecture audio Métatron:', audioPath);
+        playFullAudio(audioPath, fallbackText);
+      }, 5000); // Démarrage à 5 secondes
+
+      return true;
     } else {
       // Pour les autres sessions, utiliser un guidage générique
       speak("Bienvenue dans votre session. Suivez le rythme respiratoire et laissez-vous guider.");
       return true;
     }
-  }, [currentSession, currentMeditation, startSosStressGuidance, startScanGuidance, startCoherenceGuidance, speak, voiceSettings.enabled, voiceSettings.gender, isSessionActive, createTrackedTimeout]);
+  }, [currentSession, currentMeditation, startSosStressGuidance, startScanGuidance, startCoherenceGuidance, speak, voiceSettings.enabled, voiceSettings.gender, isSessionActive, createTrackedTimeout, playFullAudio]);
   
   return {
     speak,

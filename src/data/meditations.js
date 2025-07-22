@@ -127,4 +127,21 @@ export const meditations = {
 };
 
 // Méditations spirituelles
-export const spiritualMeditations = {};
+export const spiritualMeditations = {
+  metatron: {
+    name: 'Invocation de l\'Archange Métatron',
+    icon: 'Star',
+    duration: 300, // 5 minutes
+    description: 'Connexion spirituelle avec l\'Archange Métatron',
+    color: 'rgba(139, 92, 246, 0.2)',
+    borderColor: 'rgba(139, 92, 246, 0.3)',
+    breathingPattern: { inhale: 4, hold: 0, exhale: 6 }, // Rythme 4/6
+    frequency: '741hz', // 741 Hz - Éveil de l'intuition
+    audioFile: 'metatron', // Fichier audio complet
+    guidance: {
+      start: "Bienvenue dans cette méditation d'invocation de l'archange Métatron. Installez-vous confortablement et laissez-vous guider par cette connexion spirituelle profonde.",
+      // Pas de phases intermédiaires car c'est un fichier audio complet
+      end: "Votre connexion avec l'Archange Métatron est établie. Gardez cette énergie sacrée avec vous."
+    }
+  }
+};
