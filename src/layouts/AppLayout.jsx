@@ -32,15 +32,33 @@ function AppLayout() {
           id: user.id,
           email: user.email,
           name: user.user_metadata?.full_name || 'Utilisateur',
-          isPremium: false // Sera mis à jour selon l'abonnement
+          isPremium: false, // Sera mis à jour selon l'abonnement
+          subscriptionStatus: 'free', // Par défaut
+          trialEndsAt: null // Sera mis à jour si essai gratuit actif
         });
       } else if (!user && isAuthenticated) {
         // Utilisateur déconnecté de Supabase
         console.log('❌ Utilisateur déconnecté, nettoyage du store');
         setAuthenticated(false, null);
+        // Rediriger vers la page d'authentification si nécessaire
+        navigate('/auth');
       }
     }
-  }, [user, loading, isAuthenticated, setAuthenticated]);
+  }, [user, loading, isAuthenticated, setAuthenticated, navigate]);
+
+  // Rediriger vers l'authentification si pas connecté
+  useEffect(() => {
+    if (!loading && !user && !isAuthenticated) {
+      // Permettre l'accès à certaines pages sans authentification
+      const currentPath = window.location.pathname;
+      const publicPaths = ['/start', '/auth', '/free-session', '/discovery-session'];
+      
+      if (!publicPaths.includes(currentPath)) {
+        console.log('🔒 Redirection vers authentification - utilisateur non connecté');
+        navigate('/auth');
+      }
+    }
+  }, [loading, user, isAuthenticated, navigate]);
 
   // Afficher un loader pendant la vérification de l'authentification
   if (loading) {
@@ -49,7 +67,7 @@ function AppLayout() {
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-900 to-purple-900">
         <div className="text-center">
           <div className="w-12 h-12 border-4 border-white/30 border-t-white rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-white/70">Chargement...</p>
+          <p className="text-white/70">Vérification de votre session...</p>
         </div>
       </div>
     );

@@ -392,6 +392,15 @@ export const SidePanel = () => {
                 }`}>
                   {userProfile?.isPremium ? '👑 Premium' : '🎁 Gratuit'}
                 </div>
+                
+                {/* Affichage de l'essai gratuit si actif */}
+                {userProfile?.trialEndsAt && new Date(userProfile.trialEndsAt) > new Date() && (
+                  <div className="mt-2 bg-purple-500/20 border border-purple-500/30 rounded-lg p-2">
+                    <p className="text-xs text-purple-200">
+                      🎁 Essai Premium actif jusqu'au {new Date(userProfile.trialEndsAt).toLocaleDateString('fr-FR')}
+                    </p>
+                  </div>
+                )}
               </div>
               
               <button 

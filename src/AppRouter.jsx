@@ -51,10 +51,10 @@ export default function AppRouter() {
         {/* Routes principales avec layout */}
         <Route path="/" element={<AppLayout />}>
           <Route index element={<HomeScreen />} />
-        <Route path="/intro/libre" element={<IntroLibre />} />
-        <Route path="/intro/guidees" element={<IntroGuidee />} />
-        <Route path="/intro/voyage" element={<IntroVoyage />} />
-        <Route path="/intro/blog" element={<IntroBlog />} />
+          <Route path="/intro/libre" element={<IntroLibre />} />
+          <Route path="/intro/guidees" element={<IntroGuidee />} />
+          <Route path="/intro/voyage" element={<IntroVoyage />} />
+          <Route path="/intro/blog" element={<IntroBlog />} />
           
           {/* Section libre */}
           <Route path="sessions/libre" element={<SessionLibre />} />
@@ -82,6 +82,9 @@ export default function AppRouter() {
           
           {/* Résultats */}
           <Route path="results" element={<ResultsScreen />} />
+          
+          {/* Route pour les utilisateurs non authentifiés */}
+          <Route path="*" element={<HomeScreen />} />
         </Route>
       </Routes>
     </BrowserRouter>

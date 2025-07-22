@@ -23,15 +23,25 @@ export const useSupabase = () => {
 
     getSession();
 
-      (event, session) => {
-      }
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
+        console.log('🔄 Changement d\'état auth:', event, !!session?.user);
+        setUser(session?.user ?? null);
+        
+        if (session?.user) {
+          // Récupérer les données utilisateur complètes
+          const userData = await getUserProfile(session.user.id);
+          setAuthenticated(true, userData);
+        } else {
+          setAuthenticated(false, null);
+        }
+        
+        setLoading(false);
       }
     );
 
     return () => subscription.unsubscribe();
-  }, []);
+  }, [setAuthenticated]);
 
   // Fonction pour récupérer le profil utilisateur complet
   const getUserProfile = async (userId) => {
@@ -43,11 +53,27 @@ export const useSupabase = () => {
         .single();
 
       if (error) {
-        console.error('❌ Erreur récupération profil:', error);
-        return null;
+        console.log('⚠️ Profil utilisateur non trouvé, création automatique via trigger');
+        // Le profil sera créé automatiquement par le trigger
+        // Retourner un profil par défaut en attendant
+        return {
+          id: userId,
+          email: user?.email || '',
+          name: user?.user_metadata?.full_name || 'Utilisateur',
+          isPremium: false,
+          subscriptionStatus: 'free',
+          trialEndsAt: null
+        };
       }
 
-      return data;
+      return {
+        id: data.id,
+        email: data.email,
+        name: data.full_name || 'Utilisateur',
+        isPremium: data.subscription_status === 'premium',
+        subscriptionStatus: data.subscription_status || 'free',
+        trialEndsAt: data.trial_ends_at
+      };
     } catch (error) {
       console.error('❌ Erreur getUserProfile:', error);
       return null;

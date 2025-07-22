@@ -14,9 +14,9 @@ export const useAppStore = create(
       freeSessionType: 'coherence', // Toujours 'coherence' pour la séance découverte
       
       // NOUVEAU : États pour le parcours utilisateur
-     showStartScreen: false, // Désactiver pour le développement
+      showStartScreen: false, // Désactiver pour le développement
       isTrialMode: false, // Mode session d'essai
-      isAuthenticated: true, // Activer pour le développement
+      isAuthenticated: false, // Désactiver pour forcer l'authentification
       userProfile: null, // Profil utilisateur
       
       sessionSettings: {
@@ -136,7 +136,7 @@ export const useAppStore = create(
         set({ 
           isAuthenticated: authenticated, 
           userProfile,
-          currentScreen: authenticated ? 'home' : 'auth'
+          // Ne pas changer l'écran automatiquement, laisser la navigation gérer cela
         });
       },
       
@@ -162,7 +162,7 @@ export const useAppStore = create(
           isTrialMode: false,
           isAuthenticated: false,
           userProfile: null,
-          currentScreen: 'start'
+          currentScreen: 'home'
         });
       },
       
