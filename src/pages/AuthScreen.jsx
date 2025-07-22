@@ -15,14 +15,9 @@ export default function AuthScreen() {
   const [error, setError] = useState('');
   const [showResendOption, setShowResendOption] = useState(false);
   const [resendEmail, setResendEmail] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
-  const [showResendOption, setShowResendOption] = useState(false);
-  const [resendEmail, setResendEmail] = useState('');
   
   const navigate = useNavigate();
   const { setAuthenticated } = useAppStore();
-  const { signUp, signIn, resendConfirmation } = useSupabase();
   const { signUp, signIn, resendConfirmation } = useSupabase();
 
   const handleInputChange = (e) => {
@@ -34,9 +29,6 @@ export default function AuthScreen() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
-    setError('');
-    
     setLoading(true);
     setError('');
     
@@ -85,40 +77,6 @@ export default function AuthScreen() {
   const handleResendConfirmation = async () => {
     setLoading(true);
     const result = await resendConfirmation(resendEmail);
-      }
-      
-      if (result.success) {
-        console.log('✅ Authentification réussie');
-        // L'authentification est gérée automatiquement par useSupabase
-        navigate('/');
-      } else {
-        setError(result.error || 'Une erreur est survenue');
-        
-        // Afficher l'option de renvoi d'email si l'email n'est pas confirmé
-        if (result.errorCode === 'email_not_confirmed') {
-          setShowResendOption(true);
-          setResendEmail(result.email);
-        }
-      }
-    } catch (error) {
-      console.error('❌ Erreur authentification:', error);
-      setError('Une erreur inattendue est survenue');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const toggleMode = () => {
-    setIsLogin(!isLogin);
-    setFormData({ email: '', password: '', name: '' });
-    setError('');
-    setShowResendOption(false);
-    setResendEmail('');
-  };
-
-  const handleResendConfirmation = async () => {
-    setLoading(true);
-    const result = await resendConfirmation(resendEmail);
     
     if (result.success) {
       setError('');
@@ -129,11 +87,7 @@ export default function AuthScreen() {
       setError(result.error || 'Erreur lors du renvoi de l\'email');
     }
     setLoading(false);
-      setError('');
-      setShowResendOption(false);
-      // Afficher un message de succès
-      setError('✅ Email de confirmation renvoyé ! Vérifiez votre boîte mail.');
-    } else {
+  };
 
   return (
     <div 
@@ -193,36 +147,6 @@ export default function AuthScreen() {
         )}
 
         {/* Formulaire */}
-        {error && (
-          <div className={`border rounded-xl p-4 mb-6 ${
-            error.startsWith('✅') 
-              ? 'bg-green-500/20 border-green-500/30' 
-              : 'bg-red-500/20 border-red-500/30'
-          }`}>
-            <p className={`text-sm text-center ${
-              error.startsWith('✅') ? 'text-green-200' : 'text-red-200'
-            }`}>
-              {error}
-            </p>
-            
-            {/* Option pour renvoyer l'email de confirmation */}
-            {showResendOption && (
-              <div className="mt-4 pt-4 border-t border-red-500/20">
-                <p className="text-red-100 text-xs text-center mb-3">
-                  Vous n'avez pas reçu l'email ? Vérifiez vos spams ou :
-                </p>
-                <button
-                  onClick={handleResendConfirmation}
-                  disabled={loading}
-                  className="w-full bg-red-500/20 hover:bg-red-500/30 text-red-200 py-2 px-4 rounded-lg text-sm transition-colors border border-red-500/30"
-                >
-                  {loading ? 'Envoi...' : 'Renvoyer l\'email de confirmation'}
-                </button>
-              </div>
-            )}
-          </div>
-        )}
-        
         {error && (
           <div className={`border rounded-xl p-4 mb-6 ${
             error.startsWith('✅') 
@@ -319,20 +243,10 @@ export default function AuthScreen() {
           <button
             type="submit"
             disabled={loading}
-            disabled={loading}
             className="w-full bg-gradient-to-r from-cyan-500 to-blue-500 text-white py-4 px-6 rounded-2xl font-semibold flex items-center justify-center gap-2 hover:from-cyan-600 hover:to-blue-600 transition-all duration-200"
           >
             {loading ? (
               <>
-                <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-                {isLogin ? 'Connexion...' : 'Création...'}
-              </>
-            ) : (
-              <>
-                {isLogin ? 'Se connecter' : 'Créer mon compte gratuit'}
-                <ArrowRight size={20} />
-              </>
-            )}
                 <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
                 {isLogin ? 'Connexion...' : 'Création...'}
               </>
