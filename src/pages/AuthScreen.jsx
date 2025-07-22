@@ -354,48 +354,26 @@ export default function AuthScreen() {
               </p>
             </div>
 
-            {/* Achat annuel */}
-            <button
-              onClick={() => handlePremiumPurchase('yearly')}
-              disabled={loading || processingPayment}
-              className="w-full bg-gradient-to-r from-purple-600 to-purple-700 text-white py-4 px-6 rounded-2xl font-semibold flex items-center justify-between hover:from-purple-700 hover:to-purple-800 transition-all duration-200 border border-purple-500/30"
-            >
-              <div className="flex items-center gap-3">
-                <Crown size={24} className="text-purple-200" />
-                <div className="text-left">
-                  <div className="font-bold">Premium Annuel</div>
-                  <div className="text-sm text-purple-200">Renouvelable chaque année</div>
+            {/* Message de configuration en cours */}
+            <div className="bg-gradient-to-r from-orange-500/20 to-red-500/20 border border-orange-500/30 rounded-xl p-6">
+              <div className="flex items-start gap-3">
+                <Crown size={24} className="text-orange-400 mt-1 flex-shrink-0" />
+                <div>
+                  <h4 className="text-lg font-semibold text-orange-200 mb-2">
+                    Paiements en cours de configuration
+                  </h4>
+                  <p className="text-white/80 text-sm leading-relaxed mb-3">
+                    Les options de paiement Premium seront bientôt disponibles. 
+                    En attendant, créez votre compte gratuit pour accéder à toutes les fonctionnalités de base.
+                  </p>
+                  <div className="bg-orange-500/10 rounded-lg p-3">
+                    <p className="text-xs text-orange-100/90">
+                      💳 <strong>Bientôt disponible :</strong> Premium à vie (49€) et Premium annuel (14,99€/an)
+                    </p>
+                  </div>
                 </div>
               </div>
-              <div className="text-right">
-                <div className="text-2xl font-bold">14,99€</div>
-                <div className="text-sm text-purple-200">/an</div>
-              </div>
-            </button>
-
-            {/* Achat à vie */}
-            <button
-              onClick={() => handlePremiumPurchase('lifetime')}
-              disabled={loading || processingPayment}
-              className="w-full bg-gradient-to-r from-amber-500 to-orange-500 text-white py-4 px-6 rounded-2xl font-semibold flex items-center justify-between hover:from-amber-600 hover:to-orange-600 transition-all duration-200 border-2 border-amber-400/50 relative overflow-hidden"
-            >
-              {/* Badge "POPULAIRE" */}
-              <div className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-bl-lg">
-                POPULAIRE
-              </div>
-              
-              <div className="flex items-center gap-3">
-                <Sparkles size={24} className="text-amber-200" />
-                <div className="text-left">
-                  <div className="font-bold">Premium à Vie</div>
-                  <div className="text-sm text-amber-200">Paiement unique, accès permanent</div>
-                </div>
-              </div>
-              <div className="text-right">
-                <div className="text-2xl font-bold">49€</div>
-                <div className="text-sm text-amber-200">à vie</div>
-              </div>
-            </button>
+            </div>
           </div>
         )}
 
