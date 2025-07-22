@@ -16,6 +16,7 @@ export default function AuthScreen() {
   const [showResendOption, setShowResendOption] = useState(false);
   const [resendEmail, setResendEmail] = useState('');
   const [processingPayment, setProcessingPayment] = useState(false);
+  const [processingPayment, setProcessingPayment] = useState(false);
   
   const navigate = useNavigate();
   const { setAuthenticated } = useAppStore();
@@ -91,6 +92,57 @@ export default function AuthScreen() {
       setError(result.error || 'Erreur lors du renvoi de l\'email');
     }
     setLoading(false);
+  };
+
+  // Fonction pour gérer l'achat Premium
+  const handlePremiumPurchase = async (planType) => {
+    setProcessingPayment(true);
+    
+    try {
+      // IDs des prix Stripe - À remplacer par vos vrais IDs de prix
+      const priceIds = {
+        yearly: 'price_VOTRE_ID_ANNUEL', // Remplacez par votre ID de prix annuel
+        lifetime: 'price_VOTRE_ID_VIE'   // Remplacez par votre ID de prix à vie
+      };
+      
+      const priceId = priceIds[planType];
+      
+      if (!priceId) {
+        throw new Error('ID de prix non configuré');
+      }
+      
+      console.log('🛒 Création session Stripe pour:', planType, priceId);
+      
+      // Appeler la fonction Netlify pour créer la session de paiement
+      const response = await fetch('/.netlify/functions/create-checkout-session', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          priceId: priceId,
+          customerEmail: formData.email || undefined,
+          customerName: formData.name || undefined,
+        }),
+      });
+      
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.error || 'Erreur lors de la création de la session de paiement');
+      }
+      
+      console.log('✅ Session Stripe créée:', data.sessionId);
+      
+      // Rediriger vers Stripe Checkout
+      window.location.href = data.url;
+      
+    } catch (error) {
+      console.error('❌ Erreur achat Premium:', error);
+      setError(`Erreur lors du paiement : ${error.message}`);
+    } finally {
+      setProcessingPayment(false);
+    }
   };
 
   // Fonction pour gérer l'achat Premium
@@ -380,11 +432,58 @@ export default function AuthScreen() {
                     </div>
                   </div>
                 </button>
+                  className="bg-gradient-to-r from-blue-500/20 to-cyan-500/20 border border-blue-500/30 rounded-lg p-4 text-left hover:from-blue-500/30 hover:to-cyan-500/30 transition-all duration-200 group"
+                >
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm font-semibold text-blue-200">Premium Annuel</p>
+                      <p className="text-xs text-blue-100/80">Renouvelable chaque année</p>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-lg font-bold text-blue-200">14,99€</p>
+                      <p className="text-xs text-blue-100/60">/an</p>
+                    </div>
+                  </div>
+                </button>
+                
+                {/* Achat à vie */}
+                <button
+                  onClick={() => handlePremiumPurchase('lifetime')}
+                  disabled={loading}
+                  className="bg-gradient-to-r from-amber-500/20 to-yellow-500/20 border-2 border-amber-500/40 rounded-lg p-4 text-left hover:from-amber-500/30 hover:to-yellow-500/30 transition-all duration-200 group relative"
+                >
+                  <div className="absolute -top-2 -right-2 bg-gradient-to-r from-amber-400 to-yellow-500 text-black text-xs font-bold px-2 py-1 rounded-full">
+                    POPULAIRE
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm font-semibold text-amber-200">Premium à Vie</p>
+                      <p className="text-xs text-amber-100/80">Accès permanent • Toutes les mises à jour</p>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-lg font-bold text-amber-200">49€</p>
+                      <p className="text-xs text-amber-100/60">une seule fois</p>
+                    </div>
+                  </div>
+                </button>
               </div>
             </div>
           </div>
         </div>
         
+        {/* Avantages Premium */}
+        <div className="bg-gradient-to-r from-green-500/10 to-emerald-500/10 border border-green-500/20 rounded-xl p-4 mb-8">
+          <h4 className="text-sm font-semibold text-green-200 mb-3">✨ Fonctionnalités Premium :</h4>
+          <div className="grid grid-cols-2 gap-2 text-xs text-green-100/90">
+            <div className="flex items-center"><span className="w-1 h-1 bg-green-400 rounded-full mr-2"></span>Méditations thématiques</div>
+            <div className="flex items-center"><span className="w-1 h-1 bg-green-400 rounded-full mr-2"></span>Auto-hypnose guidée</div>
+            <div className="flex items-center"><span className="w-1 h-1 bg-green-400 rounded-full mr-2"></span>Voix premium Claire & Thierry</div>
+            <div className="flex items-center"><span className="w-1 h-1 bg-green-400 rounded-full mr-2"></span>Sessions illimitées</div>
+            <div className="flex items-center"><span className="w-1 h-1 bg-green-400 rounded-full mr-2"></span>Statistiques avancées</div>
+            <div className="flex items-center"><span className="w-1 h-1 bg-green-400 rounded-full mr-2"></span>Support prioritaire</div>
+          </div>
+        </div>
+
         {/* Avantages Premium */}
         <div className="bg-gradient-to-r from-green-500/10 to-emerald-500/10 border border-green-500/20 rounded-xl p-4 mb-8">
           <h4 className="text-sm font-semibold text-green-200 mb-3">✨ Fonctionnalités Premium :</h4>
