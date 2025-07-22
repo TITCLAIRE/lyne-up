@@ -132,10 +132,17 @@ export const useAppStore = create(
       },
       
       setAuthenticated: (authenticated, userProfile = null) => {
-        console.log('🔐 STORE: setAuthenticated appelé:', authenticated, userProfile ? 'avec profil' : 'sans profil');
-        set({ 
-          isAuthenticated: authenticated, 
-          userProfile,
+        set((state) => {
+          // Éviter les mises à jour inutiles
+          if (state.isAuthenticated === authenticated && state.userProfile === userProfile) {
+            return state; // Pas de changement
+          }
+          
+          console.log('🔐 STORE: setAuthenticated:', authenticated, userProfile ? 'avec profil' : 'sans profil');
+          return { 
+            isAuthenticated: authenticated, 
+            userProfile,
+          };
         });
       },
       

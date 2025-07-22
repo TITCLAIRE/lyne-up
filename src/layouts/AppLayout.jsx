@@ -7,6 +7,7 @@ import { useSupabase } from '../hooks/useSupabase';
 import { useAudioManager } from '../hooks/useAudioManager';
 import { useVoiceManager } from '../hooks/useVoiceManager';
 import { useHeartRateDetector } from '../hooks/useHeartRateDetector';
+import { useRef } from 'react';
 
 function AppLayout() {
   const { 
@@ -17,6 +18,8 @@ function AppLayout() {
   const navigate = useNavigate();
   const location = useLocation();
   const { user, loading } = useSupabase();
+  const lastAuthState = useRef({ user: null, isAuthenticated: null, loading: true });
+  const hasRedirected = useRef(false);
   
   // Initialiser les gestionnaires
   useAudioManager();
@@ -25,60 +28,51 @@ function AppLayout() {
 
   // Gérer l'authentification et les redirections de manière centralisée
   useEffect(() => {
-    console.log('🔄 AppLayout: useEffect auth - Loading:', loading, 'User:', !!user, 'Authenticated:', isAuthenticated, 'Path:', location.pathname);
+    // Éviter les re-exécutions inutiles
+    const currentState = { user: !!user, isAuthenticated, loading };
+    const lastState = lastAuthState.current;
+    
+    if (
+      currentState.user === lastState.user &&
+      currentState.isAuthenticated === lastState.isAuthenticated &&
+      currentState.loading === lastState.loading
+    ) {
+      return; // Aucun changement, pas besoin de re-exécuter
+    }
+    
+    lastAuthState.current = currentState;
+    console.log('🔄 AppLayout: Auth state changed - Loading:', loading, 'User:', !!user, 'Auth:', isAuthenticated);
     
     // Ne rien faire tant que Supabase charge
-    if (!loading) {
+    if (!loading && !hasRedirected.current) {
       const currentPath = location.pathname;
       const publicPaths = ['/start', '/auth', '/free-session', '/discovery-session'];
       const isPublicPath = publicPaths.includes(currentPath);
       
-      console.log('🔄 AppLayout: Vérification auth - User:', !!user, 'Authenticated:', isAuthenticated, 'Path:', currentPath, 'IsPublic:', isPublicPath);
-      
       if (user) {
         // Utilisateur connecté dans Supabase
-        if (!isAuthenticated) {
-          // Synchroniser le store avec Supabase
-          console.log('✅ AppLayout: Synchronisation store avec utilisateur Supabase');
-          setAuthenticated(true, {
-            id: user.id,
-            email: user.email,
-            name: user.user_metadata?.full_name || 'Utilisateur',
-            isPremium: false, // Sera mis à jour selon l'abonnement
-            subscriptionStatus: 'free', // Par défaut
-            trialEndsAt: null // Sera mis à jour si essai gratuit actif
-          });
-          return; // Éviter les redirections multiples
-        }
-        
         // Rediriger les utilisateurs connectés depuis les pages publiques vers l'accueil
         if (isAuthenticated && isPublicPath && currentPath !== '/free-session' && currentPath !== '/discovery-session') {
           console.log('🏠 AppLayout: Redirection utilisateur connecté vers accueil');
+          hasRedirected.current = true;
           navigate('/', { replace: true });
+          setTimeout(() => { hasRedirected.current = false; }, 1000);
         }
       } else {
         // Utilisateur non connecté dans Supabase
-        if (isAuthenticated) {
-          // Nettoyer le store
-          console.log('❌ AppLayout: Nettoyage store - utilisateur déconnecté de Supabase');
-          setAuthenticated(false, null);
-          return; // Éviter les redirections multiples
-        }
-        
         // Rediriger vers l'authentification si sur une route protégée
         if (!isPublicPath) {
           console.log('🔒 AppLayout: Redirection vers authentification - route protégée');
+          hasRedirected.current = true;
           navigate('/auth', { replace: true });
+          setTimeout(() => { hasRedirected.current = false; }, 1000);
         }
       }
-    } else {
-      console.log('⏳ AppLayout: Chargement en cours...');
     }
   }, [user, loading, isAuthenticated, setAuthenticated, navigate, location.pathname]);
 
   // Afficher un loader pendant la vérification de l'authentification
   if (loading) {
-    console.log('⏳ AppLayout: Affichage du loader');
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-900 to-purple-900">
         <div className="text-center">
@@ -89,7 +83,6 @@ function AppLayout() {
     );
   }
 
-  console.log('🔄 AppLayout: Rendu final - User:', !!user, 'Authenticated:', isAuthenticated, 'Loading:', loading, 'Path:', location.pathname);
 
   return (
     <div 
