@@ -32,24 +32,27 @@ export default function AuthScreen() {
     setLoading(true);
     setError('');
     
-    console.log('🔐 Tentative d\'authentification:', { isLogin, email: formData.email });
+    console.log('🔐 AuthScreen: Tentative d\'authentification:', { isLogin, email: formData.email });
     
     try {
       let result;
       
       if (isLogin) {
         // Connexion
+        console.log('🔐 AuthScreen: Tentative de connexion...');
         result = await signIn(formData.email, formData.password);
       } else {
         // Inscription
+        console.log('🔐 AuthScreen: Tentative d\'inscription...');
         result = await signUp(formData.email, formData.password, formData.name);
       }
       
       if (result.success) {
-        console.log('✅ Authentification réussie');
+        console.log('✅ AuthScreen: Authentification réussie, attente de la redirection automatique...');
         // L'authentification est gérée automatiquement par useSupabase
-        navigate('/');
+        // La redirection sera gérée par AppLayout une fois l'état synchronisé
       } else {
+        console.log('❌ AuthScreen: Échec de l\'authentification:', result.error);
         setError(result.error || 'Une erreur est survenue');
         
         // Afficher l'option de renvoi d'email si l'email n'est pas confirmé
@@ -59,7 +62,7 @@ export default function AuthScreen() {
         }
       }
     } catch (error) {
-      console.error('❌ Erreur authentification:', error);
+      console.error('❌ AuthScreen: Erreur authentification:', error);
       setError('Une erreur inattendue est survenue');
     } finally {
       setLoading(false);

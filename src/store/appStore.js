@@ -132,11 +132,10 @@ export const useAppStore = create(
       },
       
       setAuthenticated: (authenticated, userProfile = null) => {
-        console.log('🔐 STORE: Authentification:', authenticated);
+        console.log('🔐 STORE: setAuthenticated appelé:', authenticated, userProfile ? 'avec profil' : 'sans profil');
         set({ 
           isAuthenticated: authenticated, 
           userProfile,
-          // Ne pas changer l'écran automatiquement, laisser la navigation gérer cela
         });
       },
       

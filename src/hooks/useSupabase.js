@@ -10,14 +10,21 @@ export const useSupabase = () => {
   useEffect(() => {
     // Récupérer la session actuelle
     const getSession = async () => {
+      console.log('🔍 useSupabase: Récupération de la session...');
       const { data: { session } } = await supabase.auth.getSession();
+      console.log('🔍 useSupabase: Session récupérée:', !!session?.user, session?.user?.email);
       setUser(session?.user ?? null);
       setLoading(false);
       
       if (session?.user) {
         // Récupérer les données utilisateur complètes
+        console.log('🔍 useSupabase: Récupération du profil utilisateur...');
         const userData = await getUserProfile(session.user.id);
+        console.log('🔍 useSupabase: Profil utilisateur récupéré:', userData);
         setAuthenticated(true, userData);
+      } else {
+        console.log('🔍 useSupabase: Aucune session trouvée');
+        setAuthenticated(false, null);
       }
     };
 
@@ -25,14 +32,17 @@ export const useSupabase = () => {
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
-        console.log('🔄 Changement d\'état auth:', event, !!session?.user);
+        console.log('🔄 useSupabase: Changement d\'état auth:', event, !!session?.user, session?.user?.email);
         setUser(session?.user ?? null);
         
         if (session?.user) {
           // Récupérer les données utilisateur complètes
+          console.log('🔍 useSupabase: Récupération du profil après changement d\'état...');
           const userData = await getUserProfile(session.user.id);
+          console.log('🔍 useSupabase: Profil récupéré après changement:', userData);
           setAuthenticated(true, userData);
         } else {
+          console.log('🔍 useSupabase: Nettoyage de l\'état après déconnexion');
           setAuthenticated(false, null);
         }
         
@@ -45,6 +55,7 @@ export const useSupabase = () => {
 
   // Fonction pour récupérer le profil utilisateur complet
   const getUserProfile = async (userId) => {
+    console.log('🔍 getUserProfile: Début pour userId:', userId);
     try {
       const { data, error } = await supabase
         .from('users')
@@ -53,20 +64,22 @@ export const useSupabase = () => {
         .single();
 
       if (error) {
-        console.log('⚠️ Profil utilisateur non trouvé, création automatique via trigger');
+        console.log('⚠️ getUserProfile: Profil utilisateur non trouvé, création automatique via trigger. Erreur:', error.message);
         // Le profil sera créé automatiquement par le trigger
         // Retourner un profil par défaut en attendant
-        return {
+        const defaultProfile = {
           id: userId,
-          email: user?.email || '',
-          name: user?.user_metadata?.full_name || 'Utilisateur',
+          email: '',
+          name: 'Utilisateur',
           isPremium: false,
           subscriptionStatus: 'free',
           trialEndsAt: null
         };
+        console.log('🔍 getUserProfile: Retour profil par défaut:', defaultProfile);
+        return defaultProfile;
       }
 
-      return {
+      const userProfile = {
         id: data.id,
         email: data.email,
         name: data.full_name || 'Utilisateur',
@@ -74,8 +87,10 @@ export const useSupabase = () => {
         subscriptionStatus: data.subscription_status || 'free',
         trialEndsAt: data.trial_ends_at
       };
+      console.log('🔍 getUserProfile: Profil trouvé:', userProfile);
+      return userProfile;
     } catch (error) {
-      console.error('❌ Erreur getUserProfile:', error);
+      console.error('❌ getUserProfile: Erreur:', error);
       return null;
     }
   };

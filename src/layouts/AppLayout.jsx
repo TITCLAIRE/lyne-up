@@ -25,19 +25,21 @@ function AppLayout() {
 
   // Gérer l'authentification et les redirections de manière centralisée
   useEffect(() => {
+    console.log('🔄 AppLayout: useEffect auth - Loading:', loading, 'User:', !!user, 'Authenticated:', isAuthenticated, 'Path:', location.pathname);
+    
     // Ne rien faire tant que Supabase charge
     if (!loading) {
       const currentPath = location.pathname;
       const publicPaths = ['/start', '/auth', '/free-session', '/discovery-session'];
       const isPublicPath = publicPaths.includes(currentPath);
       
-      console.log('🔄 Vérification auth - User:', !!user, 'Authenticated:', isAuthenticated, 'Path:', currentPath);
+      console.log('🔄 AppLayout: Vérification auth - User:', !!user, 'Authenticated:', isAuthenticated, 'Path:', currentPath, 'IsPublic:', isPublicPath);
       
       if (user) {
         // Utilisateur connecté dans Supabase
         if (!isAuthenticated) {
           // Synchroniser le store avec Supabase
-          console.log('✅ Synchronisation store avec utilisateur Supabase');
+          console.log('✅ AppLayout: Synchronisation store avec utilisateur Supabase');
           setAuthenticated(true, {
             id: user.id,
             email: user.email,
@@ -46,33 +48,37 @@ function AppLayout() {
             subscriptionStatus: 'free', // Par défaut
             trialEndsAt: null // Sera mis à jour si essai gratuit actif
           });
+          return; // Éviter les redirections multiples
         }
         
         // Rediriger les utilisateurs connectés depuis les pages publiques vers l'accueil
-        if (isPublicPath && currentPath !== '/free-session' && currentPath !== '/discovery-session') {
-          console.log('🏠 Redirection utilisateur connecté vers accueil');
+        if (isAuthenticated && isPublicPath && currentPath !== '/free-session' && currentPath !== '/discovery-session') {
+          console.log('🏠 AppLayout: Redirection utilisateur connecté vers accueil');
           navigate('/', { replace: true });
         }
       } else {
         // Utilisateur non connecté dans Supabase
         if (isAuthenticated) {
           // Nettoyer le store
-          console.log('❌ Nettoyage store - utilisateur déconnecté de Supabase');
+          console.log('❌ AppLayout: Nettoyage store - utilisateur déconnecté de Supabase');
           setAuthenticated(false, null);
+          return; // Éviter les redirections multiples
         }
         
         // Rediriger vers l'authentification si sur une route protégée
         if (!isPublicPath) {
-          console.log('🔒 Redirection vers authentification - route protégée');
+          console.log('🔒 AppLayout: Redirection vers authentification - route protégée');
           navigate('/auth', { replace: true });
         }
       }
+    } else {
+      console.log('⏳ AppLayout: Chargement en cours...');
     }
   }, [user, loading, isAuthenticated, setAuthenticated, navigate, location.pathname]);
 
   // Afficher un loader pendant la vérification de l'authentification
   if (loading) {
-    console.log('⏳ Chargement de la session...');
+    console.log('⏳ AppLayout: Affichage du loader');
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-900 to-purple-900">
         <div className="text-center">
@@ -83,7 +89,7 @@ function AppLayout() {
     );
   }
 
-  console.log('🔄 Rendu AppLayout - User:', !!user, 'Authenticated:', isAuthenticated, 'Loading:', loading);
+  console.log('🔄 AppLayout: Rendu final - User:', !!user, 'Authenticated:', isAuthenticated, 'Loading:', loading, 'Path:', location.pathname);
 
   return (
     <div 
