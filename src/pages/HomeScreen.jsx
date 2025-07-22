@@ -63,33 +63,7 @@ export default function HomeScreen() {
     <div className="px-5 pb-5">
       {/* Grille principale 2x3 */}
       <div className="grid grid-cols-2 gap-4 auto-rows-fr mb-6">
-        {/* Routine Quotidienne */}
-        <Link 
-          to={dailySession?.path || '/sessions/guidees/recentrage'} 
-          className="home-card bg-gradient-to-r from-orange-500/20 to-red-500/20 border-2 border-orange-500/30"
-        >
-          <div className="flex flex-col items-center justify-center h-full p-6 text-center">
-            <Target size={32} className="mb-4 text-orange-400" />
-            <h2 className="text-lg font-bold mb-1">Routine Quotidienne</h2>
-            <span className="text-white/70 text-xs">
-              {dailySession ? `${dailySession.name} • ${dailySession.duration}` : 'Session du jour'}
-            </span>
-          </div>
-        </Link>
-
-        {/* Programmes 7 jours */}
-        <Link 
-          to={weeklyProgram?.path || '/sessions/voyage/meditations'} 
-          className="home-card bg-gradient-to-r from-purple-500/20 to-indigo-500/20 border-2 border-purple-500/30"
-        >
-          <div className="flex flex-col items-center justify-center h-full p-6 text-center">
-            <Calendar size={32} className="mb-4 text-purple-400" />
-            <h2 className="text-lg font-bold mb-1">Programmes 7 jours</h2>
-            <span className="text-white/70 text-xs">
-              {weeklyProgram ? weeklyProgram.name : 'Programme thématique'}
-            </span>
-          </div>
-        </Link>
+        {/* Ligne 1 : Cohérence Cardiaque */}
 
         <Link to="/intro/libre" className="home-card bg-gradient-to-r from-pink-500/20 to-purple-500/20 border-2 border-pink-500/30">
           <div className="flex flex-col items-center justify-center h-full p-6 text-center">
@@ -107,11 +81,41 @@ export default function HomeScreen() {
           </div>
         </Link>
 
+        {/* Ligne 2 : Méditation et Routine Quotidienne */}
         <Link to="/intro/voyage" className="home-card bg-gradient-to-r from-violet-500/20 to-purple-500/20 border-2 border-violet-500/30">
           <div className="flex flex-col items-center justify-center h-full p-6 text-center">
             <Heart size={32} className="mb-4 text-violet-400" />
             <h2 className="text-lg font-bold mb-1">Méditation & Auto-hypnose</h2>
             <span className="text-white/70 text-xs">Voyage intérieur</span>
+          </div>
+        </Link>
+
+        {/* Routine Quotidienne */}
+        <Link 
+          to={dailySession?.path || '/sessions/guidees/recentrage'} 
+          className="home-card bg-gradient-to-r from-orange-500/20 to-red-500/20 border-2 border-orange-500/30"
+        >
+          <div className="flex flex-col items-center justify-center h-full p-6 text-center">
+            <Target size={32} className="mb-4 text-orange-400" />
+            <h2 className="text-lg font-bold mb-1">Routine Quotidienne</h2>
+            <span className="text-white/70 text-xs">
+              {dailySession ? `${dailySession.name} • ${dailySession.duration}` : 'Session du jour'}
+            </span>
+          </div>
+        </Link>
+
+        {/* Ligne 3 : Programmes 7 jours et Le Blog */}
+        {/* Programmes 7 jours */}
+        <Link 
+          to={weeklyProgram?.path || '/sessions/voyage/meditations'} 
+          className="home-card bg-gradient-to-r from-purple-500/20 to-indigo-500/20 border-2 border-purple-500/30"
+        >
+          <div className="flex flex-col items-center justify-center h-full p-6 text-center">
+            <Calendar size={32} className="mb-4 text-purple-400" />
+            <h2 className="text-lg font-bold mb-1">Programmes 7 jours</h2>
+            <span className="text-white/70 text-xs">
+              {weeklyProgram ? weeklyProgram.name : 'Programme thématique'}
+            </span>
           </div>
         </Link>
 
