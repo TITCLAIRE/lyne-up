@@ -14,7 +14,7 @@ export const useAppStore = create(
       freeSessionType: 'coherence', // Toujours 'coherence' pour la séance découverte
       
       // NOUVEAU : États pour le parcours utilisateur
-      showStartScreen: false, // Désactiver pour le développement
+      showLaunchScreen: true, // Afficher l'écran de lancement au premier démarrage
       isTrialMode: false, // Mode session d'essai
       isAuthenticated: false, // État d'authentification géré par Supabase
       userProfile: null, // Profil utilisateur
@@ -91,10 +91,10 @@ export const useAppStore = create(
       },
       
       // NOUVELLES ACTIONS pour le parcours utilisateur
-      completeStartScreen: () => {
-        console.log('🎯 STORE: Page de démarrage terminée');
+      completeLaunchScreen: () => {
+        console.log('🎯 STORE: Écran de lancement terminé');
         set({ 
-          showStartScreen: false,
+          showLaunchScreen: false,
           isTrialMode: false, // Désactiver le mode essai pour rester en mode développement
           isAuthenticated: true // Considérer l'utilisateur comme authentifié
         });
@@ -150,7 +150,7 @@ export const useAppStore = create(
       resetApp: () => {
         console.log('🔄 STORE: Réinitialisation complète de l\'application');
         set({ 
-          showStartScreen: true,
+          showLaunchScreen: true,
           isTrialMode: false,
           isAuthenticated: false,
           userProfile: null,
@@ -164,7 +164,7 @@ export const useAppStore = create(
       resetOnboarding: () => {
         console.log('🔄 STORE: Réinitialisation de l\'onboarding');
         set({ 
-          showStartScreen: false,
+          showLaunchScreen: true,
           isTrialMode: false,
           isAuthenticated: false,
           userProfile: null,
@@ -232,8 +232,8 @@ export const useAppStore = create(
         sessionSettings: state.sessionSettings,
         freeSessionSettings: state.freeSessionSettings,
         trialCoherenceSettings: state.trialCoherenceSettings,
-        // IMPORTANT: Ne pas persister les états d'authentification et de lancement
-        // pour garantir que l'application redémarre toujours avec la page de démarrage
+        showLaunchScreen: state.showLaunchScreen,
+        // IMPORTANT: Persister l'état de l'écran de lancement pour qu'il ne s'affiche qu'une fois
       }),
     }
   )

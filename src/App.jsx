@@ -23,7 +23,7 @@ import { useHeartRateDetector } from './hooks/useHeartRateDetector';
 function App() {
   const { 
     currentScreen, 
-    showLaunchScreen, 
+    showLaunchScreen,
     isTrialMode, 
     isAuthenticated 
   } = useAppStore();

@@ -46,7 +46,7 @@ function AppLayout() {
     // Ne rien faire tant que Supabase charge
     if (!loading && !hasRedirected.current) {
       const currentPath = location.pathname;
-      const publicPaths = ['/start', '/auth', '/free-session', '/discovery-session'];
+      const publicPaths = ['/', '/start', '/auth', '/free-session', '/discovery-session'];
       const isPublicPath = publicPaths.includes(currentPath);
       
       if (user) {
