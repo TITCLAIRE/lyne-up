@@ -24,6 +24,7 @@ import IntroGuidee from './pages/IntroGuidee';
 import IntroVoyage from './pages/IntroVoyage';
 import IntroBlog from './pages/IntroBlog';
 import IntroRoutine from './pages/IntroRoutine';
+import IntroPrograms from './pages/IntroPrograms';
 import GuidedSessionRunner from './pages/sessions/GuidedSessionRunner';
 import CoherenceSessionRunner from './pages/sessions/CoherenceSessionRunner';
 import FreeSessionRunner from './pages/sessions/FreeSessionRunner';
@@ -57,6 +58,7 @@ export default function AppRouter() {
           <Route path="/intro/voyage" element={<IntroVoyage />} />
           <Route path="/intro/blog" element={<IntroBlog />} />
           <Route path="/intro/routine" element={<IntroRoutine />} />
+          <Route path="/intro/programs" element={<IntroPrograms />} />
           
           {/* Section libre */}
           <Route path="sessions/libre" element={<SessionLibre />} />

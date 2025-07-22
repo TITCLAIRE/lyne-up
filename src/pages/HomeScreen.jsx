@@ -105,15 +105,13 @@ export default function HomeScreen() {
         {/* Ligne 3 : Programmes 7 jours et Le Blog */}
         {/* Programmes 7 jours */}
         <Link 
-          to={weeklyProgram?.path || '/sessions/voyage/meditations'} 
+          to="/intro/programs"
           className="home-card bg-gradient-to-r from-purple-500/20 to-indigo-500/20 border-2 border-purple-500/30"
         >
           <div className="flex flex-col items-center justify-center h-full p-6 text-center">
             <Calendar size={32} className="mb-4 text-purple-400" />
             <h2 className="text-lg font-bold mb-1">Programmes 7 jours</h2>
-            <span className="text-white/70 text-xs">
-              {weeklyProgram ? weeklyProgram.name : 'Programme thématique'}
-            </span>
+            <span className="text-white/70 text-xs">Parcours thématiques guidés</span>
           </div>
         </Link>
 
