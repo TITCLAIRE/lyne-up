@@ -9,32 +9,21 @@ export const Header = () => {
   return (
     <header className="flex items-center justify-between p-5 relative z-10">
       <div className="flex items-center gap-4 flex-1 min-w-0">
-        <Link to="/" className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 overflow-hidden">
+        <Link to="/" className="flex items-center gap-3 flex-1 min-w-0">
           <img 
             src="/logo/Logo Respir.io web.png" 
             alt="Respir.io Logo" 
-            className="w-10 h-10 object-contain"
+            className="h-8 object-contain"
             onError={(e) => {
               const target = e.target;
               target.style.display = 'none';
               const parent = target.parentElement;
               if (parent) {
-                parent.innerHTML = '<span class="text-2xl">🧘‍♀️</span>';
-                parent.classList.add('bg-gradient-to-br', 'from-cyan-400', 'to-purple-500');
+                parent.innerHTML = '<span class="text-white text-xl font-bold">Respir.io</span>';
               }
             }}
           />
         </Link>
-        <div className="min-w-0 flex-1">
-          <Link to="/" className="text-2xl font-bold bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent truncate block">
-            Respir.io
-          </Link>
-          <div className="flex flex-col">
-            <p className="text-sm text-white/70 truncate">
-              by l'Instant Opportun
-            </p>
-          </div>
-        </div>
       </div>
       
       <button
