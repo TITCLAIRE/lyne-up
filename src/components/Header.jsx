@@ -13,7 +13,7 @@ export const Header = () => {
           <img 
             src="/logo/Logo Respir.io web.png" 
             alt="Respir.io Logo" 
-            className="h-8 object-contain"
+            className="h-12 object-contain brightness-0 invert"
             onError={(e) => {
               const target = e.target;
               target.style.display = 'none';
