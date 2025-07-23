@@ -77,7 +77,7 @@ exports.handler = async (event, context) => {
       // Métadonnées pour identifier la transaction
       metadata: {
         product_type: 'premium_lifetime',
-        app_name: 'L\'Instant Opportun',
+        app_name: 'Respir.io',
         ...(customerName && { customer_name: customerName }),
       },
       

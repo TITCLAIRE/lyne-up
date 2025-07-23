@@ -24,7 +24,7 @@ export const LaunchScreen = () => {
 
   const steps = [
     {
-      title: "Bienvenue dans L'Instant Opportun",
+      title: "Bienvenue dans Respir.io",
       subtitle: "Votre compagnon de bien-être pour la cohérence cardiaque",
       content: (
         <div className="text-center space-y-6">
@@ -38,8 +38,8 @@ export const LaunchScreen = () => {
             {/* Container du logo principal */}
             <div className="absolute inset-6 rounded-2xl flex items-center justify-center overflow-hidden bg-gradient-to-br from-cyan-400/20 to-purple-500/20 border border-white/20 backdrop-blur-sm animate-float">
               <img 
-                src="/logo/ChatGPT Image 21 juin 2025, 18_14_03.png" 
-                alt="L'Instant Opportun Logo" 
+                src="/logo/respir-io-logo.png" 
+                alt="Respir.io Logo" 
                 className="w-16 h-16 object-contain animate-glow"
                 onError={(e) => {
                   const target = e.target;

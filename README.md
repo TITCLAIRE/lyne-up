@@ -1,6 +1,6 @@
-# 🧘‍♀️ L'Instant Opportun - Cohérence Cardiaque Intégrative
+# 🧘‍♀️ Respir.io - Cohérence Cardiaque Intégrative
 
-Application web de cohérence cardiaque intégrative avec guidage vocal premium et sons binauraux thérapeutiques.
+Application web de cohérence cardiaque intégrative avec guidage vocal premium et sons binauraux thérapeutiques par l'Instant Opportun.
 
 ## ✨ Fonctionnalités
 
@@ -43,7 +43,7 @@ Application web de cohérence cardiaque intégrative avec guidage vocal premium 
 - **Design moderne** et intuitif
 - **PWA** installable comme app native
 - **Responsive** mobile et desktop
-- **Logo L'Instant Opportun** intégré
+- **Logo Respir.io** intégré
 
 ## 🚀 Déploiement
 
@@ -54,8 +54,8 @@ Application web de cohérence cardiaque intégrative avec guidage vocal premium 
 
 ```bash
 # Cloner le repository
-git clone https://github.com/votre-username/instant-opportun.git
-cd instant-opportun
+git clone https://github.com/votre-username/respir-io.git
+cd respir-io
 
 # Installer les dépendances
 npm install
@@ -69,7 +69,7 @@ npm run dev
 1. **Fork** ce repository sur GitHub
 2. **Connecter à Netlify** :
    - Aller sur [netlify.com](https://netlify.com)
-   - "New site from Git" → Sélectionner votre fork
+   - "New site from Git" → Sélectionner votre repository respir-io
    - Build command: `npm run build`
    - Publish directory: `dist`
 
@@ -159,5 +159,3 @@ npm run dev
 MIT License - Voir [LICENSE](LICENSE) pour plus de détails.
 
 ---
-
-**🧘‍♀️ L'Instant Opportun** - Transformez votre bien-être avec la cohérence cardiaque intégrative ✨

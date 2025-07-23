@@ -11,8 +11,8 @@ export const Header = () => {
       <div className="flex items-center gap-4 flex-1 min-w-0">
         <Link to="/" className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 overflow-hidden">
           <img 
-            src="/logo/ChatGPT Image 21 juin 2025, 18_14_03.png" 
-            alt="L'Instant Opportun Logo" 
+            src="/logo/respir-io-logo.png" 
+            alt="Respir.io Logo" 
             className="w-10 h-10 object-contain"
             onError={(e) => {
               const target = e.target;
@@ -27,11 +27,11 @@ export const Header = () => {
         </Link>
         <div className="min-w-0 flex-1">
           <Link to="/" className="text-2xl font-bold bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent truncate block">
-            L'Instant Opportun
+            Respir.io
           </Link>
           <div className="flex flex-col">
             <p className="text-sm text-white/70 truncate">
-              Cohérence Cardiaque Intégrative
+              by l'Instant Opportun
             </p>
           </div>
         </div>

@@ -58,8 +58,8 @@ export default function StartScreen() {
               {/* Container du logo principal */}
               <div className="absolute inset-0 rounded-2xl flex items-center justify-center overflow-hidden bg-gradient-to-br from-cyan-400/20 to-purple-500/20 border border-white/20 backdrop-blur-sm animate-float">
                 <img 
-                  src="/logo/ChatGPT Image 21 juin 2025, 18_14_03.png" 
-                  alt="L'Instant Opportun Logo" 
+                  src="/logo/respir-io-logo.png" 
+                  alt="Respir.io Logo" 
                   className="w-24 h-24 object-contain animate-glow"
                   onError={(e) => {
                     const target = e.target;
@@ -74,7 +74,7 @@ export default function StartScreen() {
             </div>
             
             <h1 className="text-4xl font-bold mb-3 bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
-              L'Instant Opportun
+              Respir.io
             </h1>
             <p className="text-white/80 text-xl">
               Respirez. Vivez mieux.
