@@ -58,7 +58,7 @@ export default function StartScreen() {
               {/* Container du logo principal */}
               <div className="absolute inset-0 rounded-2xl flex items-center justify-center overflow-hidden bg-gradient-to-br from-cyan-400/20 to-purple-500/20 border border-white/20 backdrop-blur-sm animate-float">
                 <img 
-                  src="/logo/respir-io-logo.png" 
+                  src="/logo/Logo Respir.io web.png" 
                   alt="Respir.io Logo" 
                   className="w-24 h-24 object-contain animate-glow"
                   onError={(e) => {

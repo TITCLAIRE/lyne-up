@@ -11,7 +11,7 @@ export const Header = () => {
       <div className="flex items-center gap-4 flex-1 min-w-0">
         <Link to="/" className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 overflow-hidden">
           <img 
-            src="/logo/respir-io-logo.png" 
+            src="/logo/Logo Respir.io web.png" 
             alt="Respir.io Logo" 
             className="w-10 h-10 object-contain"
             onError={(e) => {
