@@ -59,7 +59,11 @@ export const SidePanel = () => {
 
   // Fonction pour tester la voix de synthèse
   const handleTestSynthesisVoice = () => {
-    speak("Ceci est un test de la voix de synthèse. Votre application fonctionne correctement.");
+    if (speak) {
+      speak("Ceci est un test de la voix de synthèse. Votre application fonctionne correctement.");
+    } else {
+      console.log('❌ Fonction speak non disponible');
+    }
   };
   
   const handleResetOnboarding = () => {
