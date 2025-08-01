@@ -491,28 +491,36 @@ export const useVoiceManager = () => {
     
     // Essayer d'abord de trouver un fichier audio correspondant
     const sessionType = currentSession;
-    // Utiliser directement audioKey s'il est fourni
     const gender = voiceSettings.gender;
     
     // Construire le chemin du fichier audio en fonction du type de session
     let audioPath = null;
     
-    // Vérifier les fichiers audio de méditation en premier
+    // MÉDITATIONS - Système amélioré avec audioKey
     if (currentSession === 'meditation' && currentMeditation) {
-      // Cas spécial pour Métatron - fichier audio complet
       if (currentMeditation === 'metatron') {
+        // Cas spécial pour Métatron - fichier audio complet
         audioPath = `/audio/meditation/${gender}/metatron.mp3`;
         audioKey = 'metatron-complete';
         console.log(`🌟 Méditation Métatron - Fichier audio complet: ${audioPath}`);
+      } else if (currentMeditation === 'gratitude' && audioKey) {
+        // Méditation Gratitude avec audioKey
+        audioPath = `/audio/meditation/${gender}/gratitude-${audioKey}.mp3`;
+        console.log(`🙏 Méditation Gratitude - Fichier audio: ${audioPath} (${audioKey})`);
+      } else if (currentMeditation === 'abundance' && audioKey) {
+        // Méditation Abondance avec audioKey
+        audioPath = `/audio/meditation/${gender}/abundance-${audioKey}.mp3`;
+        console.log(`💰 Méditation Abondance - Fichier audio: ${audioPath} (${audioKey})`);
       } else {
-      const meditationData = meditations[currentMeditation] || spiritualMeditations[currentMeditation];
-      if (meditationData && meditationData.audioFiles && audioKey) {
-        const fileName = meditationData.audioFiles[audioKey];
-        if (fileName) {
-          audioPath = `/audio/meditation/${gender}/${fileName}.mp3`;
-          console.log(`🎤 Tentative de lecture audio de méditation: ${audioPath} (${audioKey})`);
+        // Autres méditations - système générique
+        const meditationData = meditations[currentMeditation] || spiritualMeditations[currentMeditation];
+        if (meditationData && meditationData.audioFiles && audioKey) {
+          const fileName = meditationData.audioFiles[audioKey];
+          if (fileName) {
+            audioPath = `/audio/meditation/${gender}/${fileName}.mp3`;
+            console.log(`🎤 Tentative de lecture audio de méditation: ${audioPath} (${audioKey})`);
+          }
         }
-      }
       }
     } else if (sessionType === 'switch') {
       // Essayer de trouver un fichier audio pour SOS Stress
@@ -545,181 +553,61 @@ export const useVoiceManager = () => {
         audioKey = 'completion';
       }
     } else if (sessionType === 'scan') {
-      // Essayer de trouver un fichier audio pour Scan Corporel
-      if (text.includes('Bienvenue dans cette séance de scan')) {
+      // SCAN CORPOREL - Système amélioré avec audioKey
+      if (audioKey === 'welcome' || text.includes('Bienvenue dans cette séance de scan')) {
         audioPath = `/audio/scan-corporel/${gender}/welcome.mp3`;
         audioKey = 'welcome';
-      } else if (text.includes('Portez votre attention sur le sommet')) {
+      } else if (audioKey === 'head' || text.includes('Portez votre attention sur le sommet')) {
         audioPath = `/audio/scan-corporel/${gender}/head.mp3`;
         audioKey = 'head';
-      } else if (text.includes('Descendez vers votre visage')) {
+      } else if (audioKey === 'face' || text.includes('Descendez vers votre visage')) {
         audioPath = `/audio/scan-corporel/${gender}/face.mp3`;
         audioKey = 'face';
-      } else if (text.includes('Votre cou et vos épaules')) {
+      } else if (audioKey === 'neck' || text.includes('Votre cou et vos épaules')) {
         audioPath = `/audio/scan-corporel/${gender}/neck.mp3`;
         audioKey = 'neck';
-      } else if (text.includes('Votre poitrine s\'ouvre')) {
+      } else if (audioKey === 'chest' || text.includes('Votre poitrine s\'ouvre')) {
         audioPath = `/audio/scan-corporel/${gender}/chest.mp3`;
         audioKey = 'chest';
-      } else if (text.includes('Votre dos se détend')) {
+      } else if (audioKey === 'back' || text.includes('Votre dos se détend')) {
         audioPath = `/audio/scan-corporel/${gender}/back.mp3`;
         audioKey = 'back';
-      } else if (text.includes('Votre ventre se gonfle')) {
+      } else if (audioKey === 'abdomen' || text.includes('Votre ventre se gonfle')) {
         audioPath = `/audio/scan-corporel/${gender}/abdomen.mp3`;
         audioKey = 'abdomen';
-      } else if (text.includes('Vos hanches et votre bassin')) {
+      } else if (audioKey === 'hips' || text.includes('Vos hanches et votre bassin')) {
         audioPath = `/audio/scan-corporel/${gender}/hips.mp3`;
         audioKey = 'hips';
-      } else if (text.includes('Vos cuisses')) {
+      } else if (audioKey === 'thighs' || text.includes('Vos cuisses')) {
         audioPath = `/audio/scan-corporel/${gender}/thighs.mp3`;
         audioKey = 'thighs';
-      } else if (text.includes('Vos genoux')) {
+      } else if (audioKey === 'knees' || text.includes('Vos genoux')) {
         audioPath = `/audio/scan-corporel/${gender}/knees.mp3`;
         audioKey = 'knees';
-      } else if (text.includes('Vos mollets')) {
+      } else if (audioKey === 'calves' || text.includes('Vos mollets')) {
         audioPath = `/audio/scan-corporel/${gender}/calves.mp3`;
         audioKey = 'calves';
-      } else if (text.includes('Vos chevilles')) {
+      } else if (audioKey === 'ankles' || text.includes('Vos chevilles')) {
         audioPath = `/audio/scan-corporel/${gender}/ankles.mp3`;
         audioKey = 'ankles';
-      } else if (text.includes('Vos pieds')) {
+      } else if (audioKey === 'feet' || text.includes('Vos pieds')) {
         audioPath = `/audio/scan-corporel/${gender}/feet.mp3`;
         audioKey = 'feet';
-      } else if (text.includes('Une vague de bien-être')) {
+      } else if (audioKey === 'wholebody' || text.includes('Une vague de bien-être')) {
         audioPath = `/audio/scan-corporel/${gender}/wholebody.mp3`;
         audioKey = 'wholebody';
-      } else if (text.includes('Observez votre respiration')) {
+      } else if (audioKey === 'breathing' || text.includes('Observez votre respiration')) {
         audioPath = `/audio/scan-corporel/${gender}/breathing.mp3`;
         audioKey = 'breathing';
-      } else if (text.includes('Prenez conscience de votre corps')) {
+      } else if (audioKey === 'awareness' || text.includes('Prenez conscience de votre corps')) {
         audioPath = `/audio/scan-corporel/${gender}/awareness.mp3`;
         audioKey = 'awareness';
-      } else if (text.includes('Restez dans cet état')) {
+      } else if (audioKey === 'presence' || text.includes('Restez dans cet état')) {
         audioPath = `/audio/scan-corporel/${gender}/presence.mp3`;
         audioKey = 'presence';
-      } else if (text.includes('Progressivement, reprenez conscience')) {
+      } else if (audioKey === 'completion' || text.includes('Progressivement, reprenez conscience')) {
         audioPath = `/audio/scan-corporel/${gender}/completion.mp3`;
         audioKey = 'completion';
-      }
-    } else if (sessionType === 'meditation' && currentMeditation === 'gratitude') {
-      // Essayer de trouver un fichier audio pour Méditation Gratitude
-      if (text.includes('Bienvenue dans cette méditation de gratitude')) {
-        audioPath = `/audio/meditation/${gender}/gratitude-installation.mp3`;
-        audioKey = 'gratitude-installation';
-      } else if (text.includes('Commençons par établir un rythme respiratoire')) {
-        audioPath = `/audio/meditation/${gender}/gratitude-coherence-setup.mp3`;
-        audioKey = 'gratitude-coherence-setup';
-      } else if (text.includes('Portez maintenant votre attention sur votre cœur')) {
-        audioPath = `/audio/meditation/${gender}/gratitude-breathing-heart.mp3`;
-        audioKey = 'gratitude-breathing-heart';
-      } else if (text.includes('Éveillez maintenant le sentiment de gratitude')) {
-        audioPath = `/audio/meditation/${gender}/gratitude-awakening.mp3`;
-        audioKey = 'gratitude-awakening';
-      } else if (text.includes('Inspirez... et pensez à une chose')) {
-        audioPath = `/audio/meditation/${gender}/gratitude-first.mp3`;
-        audioKey = 'gratitude-first';
-      } else if (text.includes('Élargissez maintenant votre gratitude vers les personnes')) {
-        audioPath = `/audio/meditation/${gender}/gratitude-loved-ones.mp3`;
-        audioKey = 'gratitude-loved-ones';
-      } else if (text.includes('Dirigez maintenant votre gratitude vers votre corps')) {
-        audioPath = `/audio/meditation/${gender}/gratitude-body.mp3`;
-        audioKey = 'gratitude-body';
-      } else if (text.includes('Élargissez encore votre gratitude vers la nature')) {
-        audioPath = `/audio/meditation/${gender}/gratitude-nature.mp3`;
-        audioKey = 'gratitude-nature';
-      } else if (text.includes('Ancrez maintenant cette énergie de gratitude')) {
-        audioPath = `/audio/meditation/${gender}/gratitude-anchoring.mp3`;
-        audioKey = 'gratitude-anchoring';
-      } else if (text.includes('Intégrez pleinement cette énergie de gratitude')) {
-        audioPath = `/audio/meditation/${gender}/gratitude-integration.mp3`;
-        audioKey = 'gratitude-integration';
-      } else if (text.includes('Doucement, prenez une respiration plus profonde. Remerciez-vous')) {
-        audioPath = `/audio/meditation/${gender}/gratitude-conclusion.mp3`;
-        audioKey = 'gratitude-conclusion';
-      }
-    } else if (sessionType === 'meditation' && currentMeditation === 'metatron') {
-      // Essayer de trouver un fichier audio pour Méditation Métatron
-      if (text.includes('Bienvenue dans cette méditation d\'invocation')) {
-        audioPath = `/audio/meditation/${gender}/metatron-welcome.mp3`;
-        audioKey = 'metatron-welcome';
-      } else if (text.includes('Ô Metatron, ange de la Présence')) {
-        audioPath = `/audio/meditation/${gender}/metatron-invocation.mp3`;
-        audioKey = 'metatron-invocation';
-      } else if (text.includes('Que ta lumière entoure mon esprit')) {
-        audioPath = `/audio/meditation/${gender}/metatron-light.mp3`;
-        audioKey = 'metatron-light';
-      } else if (text.includes('Toi qui écris dans les Livres Célestes')) {
-        audioPath = `/audio/meditation/${gender}/metatron-memory.mp3`;
-        audioKey = 'metatron-memory';
-      } else if (text.includes('Toi qui transmets la pensée divine')) {
-        audioPath = `/audio/meditation/${gender}/metatron-inspiration.mp3`;
-        audioKey = 'metatron-inspiration';
-      } else if (text.includes('Entoure-moi de ton Cube sacré')) {
-        audioPath = `/audio/meditation/${gender}/metatron-protection.mp3`;
-        audioKey = 'metatron-protection';
-      } else if (text.includes('Metatron, Archange de feu blanc')) {
-        audioPath = `/audio/meditation/${gender}/metatron-elevation.mp3`;
-        audioKey = 'metatron-elevation';
-      }
-    } else if (sessionType === 'meditation' && currentMeditation === 'abundance') {
-      // Essayer de trouver un fichier audio pour Méditation Abondance
-      if (text.includes('Bienvenue dans cette méditation')) {
-        audioPath = `/audio/meditation/${gender}/abundance-introduction.mp3`;
-        audioKey = 'abundance-introduction';
-      } else if (text.includes('Inspirez profondément par le nez pendant 5 secondes')) {
-        audioPath = `/audio/meditation/${gender}/abundance-rhythm-start.mp3`;
-        audioKey = 'abundance-rhythm-start';
-      } else if (text.includes('Inspirez... l\'univers vous remplit')) {
-        audioPath = `/audio/meditation/${gender}/abundance-energy-breath.mp3`;
-        audioKey = 'abundance-energy-breath';
-      } else if (text.includes('Inspirez... accueillez l\'abondance')) {
-        audioPath = `/audio/meditation/${gender}/abundance-abundance-breath.mp3`;
-        audioKey = 'abundance-abundance-breath';
-      } else if (text.includes('Votre cœur entre en cohérence')) {
-        audioPath = `/audio/meditation/${gender}/abundance-coherence.mp3`;
-        audioKey = 'abundance-coherence';
-      } else if (text.includes('Maintenant, tout en gardant ce rythme respiratoire, visualisez')) {
-        audioPath = `/audio/meditation/${gender}/abundance-visualize.mp3`;
-        audioKey = 'abundance-visualize';
-      } else if (text.includes('Inspirez... voyez votre désir comme déjà réalisé')) {
-        audioPath = `/audio/meditation/${gender}/abundance-realization-breath.mp3`;
-        audioKey = 'abundance-realization-breath';
-      } else if (text.includes('Inspirez... imprégnez chaque cellule')) {
-        audioPath = `/audio/meditation/${gender}/abundance-cellular-breath.mp3`;
-        audioKey = 'abundance-cellular-breath';
-      } else if (text.includes('Votre cœur cohérent amplifie')) {
-        audioPath = `/audio/meditation/${gender}/abundance-amplify.mp3`;
-        audioKey = 'abundance-amplify';
-      } else if (text.includes('Inspirez... Je suis digne de recevoir')) {
-        audioPath = `/audio/meditation/${gender}/abundance-worthy-breath.mp3`;
-        audioKey = 'abundance-worthy-breath';
-      } else if (text.includes('Inspirez... sentez la joie de la réalisation')) {
-        audioPath = `/audio/meditation/${gender}/abundance-joy-breath.mp3`;
-        audioKey = 'abundance-joy-breath';
-      } else if (text.includes('L\'univers conspire en votre faveur')) {
-        audioPath = `/audio/meditation/${gender}/abundance-universe.mp3`;
-        audioKey = 'abundance-universe';
-      } else if (text.includes('Inspirez... Je co-crée avec l\'univers')) {
-        audioPath = `/audio/meditation/${gender}/abundance-cocreate-breath.mp3`;
-        audioKey = 'abundance-cocreate-breath';
-      } else if (text.includes('Inspirez... amplifiez le sentiment de gratitude')) {
-        audioPath = `/audio/meditation/${gender}/abundance-gratitude-breath.mp3`;
-        audioKey = 'abundance-gratitude-breath';
-      } else if (text.includes('Continuez ce rythme de respiration consciente')) {
-        audioPath = `/audio/meditation/${gender}/abundance-manifestation-cycle.mp3`;
-        audioKey = 'abundance-manifestation-cycle';
-      } else if (text.includes('Continuez à respirer en cohérence cardiaque, sachant que votre désir')) {
-        audioPath = `/audio/meditation/${gender}/abundance-anchor.mp3`;
-        audioKey = 'abundance-anchor';
-      } else if (text.includes('Inspirez... Je suis aligné avec mes désirs')) {
-        audioPath = `/audio/meditation/${gender}/abundance-alignment.mp3`;
-        audioKey = 'abundance-alignment';
-      } else if (text.includes('Votre cœur cohérent est votre boussole')) {
-        audioPath = `/audio/meditation/${gender}/abundance-compass.mp3`;
-        audioKey = 'abundance-compass';
-      } else if (text.includes('Doucement, prenez une respiration plus profonde. Remerciez-vous')) {
-        audioPath = `/audio/meditation/${gender}/abundance-completion.mp3`;
-        audioKey = 'abundance-completion';
       }
     }
     
@@ -881,97 +769,97 @@ export const useVoiceManager = () => {
       return false;
     }
     
-    console.log('🧠 DÉMARRAGE SCAN CORPOREL', voiceSettings.gender === 'female' ? '(Claire)' : '(Thierry)');
+    console.log('🧠 DÉMARRAGE SCAN CORPOREL COMPLET', voiceSettings.gender === 'female' ? '(Claire)' : '(Thierry)');
     
     // Nettoyer tout timeout existant pour éviter les doublons
     clearAllTimeouts(); 
     
-    // Séquence 1 - Message d'accueil (0s)
-    speak("Bienvenue dans cette séance de scan corporel. Installez-vous confortablement, fermez les yeux si vous le souhaitez. Nous allons explorer chaque partie de votre corps pour une relaxation profonde.");
+    // Séquence 1 - Message d'accueil (0s) - AVEC FICHIER AUDIO
+    speak("Bienvenue dans cette séance de scan corporel. Installez-vous confortablement, fermez les yeux si vous le souhaitez. Nous allons explorer chaque partie de votre corps pour une relaxation profonde.", "welcome");
     
     // Séquence 2 - Tête (30s)
     createTrackedTimeout(() => {
-      speak("Portez votre attention sur le sommet de votre tête. Sentez cette zone se détendre complètement.");
+      speak("Portez votre attention sur le sommet de votre tête. Sentez cette zone se détendre complètement.", "head");
     }, 30000);
     
     // Séquence 3 - Visage (60s)
     createTrackedTimeout(() => {
-      speak("Descendez vers votre visage. Relâchez votre front, vos sourcils, vos paupières. Détendez vos mâchoires, votre langue, votre gorge.");
+      speak("Descendez vers votre visage. Relâchez votre front, vos sourcils, vos paupières. Détendez vos mâchoires, votre langue, votre gorge.", "face");
     }, 60000);
     
     // Séquence 4 - Cou (90s)
     createTrackedTimeout(() => {
-      speak("Votre cou et vos épaules se relâchent maintenant. Laissez partir toute tension accumulée dans cette zone.");
+      speak("Votre cou et vos épaules se relâchent maintenant. Laissez partir toute tension accumulée dans cette zone.", "neck");
     }, 90000);
     
     // Séquence 5 - Poitrine (120s)
     createTrackedTimeout(() => {
-      speak("Votre poitrine s'ouvre et se détend à chaque respiration. Sentez l'air qui entre et qui sort librement.");
+      speak("Votre poitrine s'ouvre et se détend à chaque respiration. Sentez l'air qui entre et qui sort librement.", "chest");
     }, 120000);
     
     // Séquence 6 - Dos (150s)
     createTrackedTimeout(() => {
-      speak("Votre dos se détend vertèbre par vertèbre, du haut vers le bas. Chaque vertèbre s'aligne parfaitement.");
+      speak("Votre dos se détend vertèbre par vertèbre, du haut vers le bas. Chaque vertèbre s'aligne parfaitement.", "back");
     }, 150000);
     
     // Séquence 7 - Ventre (180s)
     createTrackedTimeout(() => {
-      speak("Votre ventre se gonfle et se dégonfle naturellement, sans effort. Sentez une douce chaleur s'y répandre.");
+      speak("Votre ventre se gonfle et se dégonfle naturellement, sans effort. Sentez une douce chaleur s'y répandre.", "abdomen");
     }, 180000);
     
     // Séquence 8 - Hanches (210s)
     createTrackedTimeout(() => {
-      speak("Vos hanches et votre bassin se relâchent complètement. Sentez le poids de votre corps s'enfoncer dans le support.");
+      speak("Vos hanches et votre bassin se relâchent complètement. Sentez le poids de votre corps s'enfoncer dans le support.", "hips");
     }, 210000);
     
     // Séquence 9 - Cuisses (240s)
     createTrackedTimeout(() => {
-      speak("Vos cuisses se détendent profondément. Toute tension s'évapore à chaque expiration.");
+      speak("Vos cuisses se détendent profondément. Toute tension s'évapore à chaque expiration.", "thighs");
     }, 240000);
     
-    // Séquence 10 - Genoux (255s)
+    // Séquence 10 - Genoux (255s) - NOUVEAU
     createTrackedTimeout(() => {
-      speak("Vos genoux se détendent. Sentez l'espace dans vos articulations.");
+      speak("Vos genoux se détendent. Sentez l'espace dans vos articulations.", "knees");
     }, 255000);
     
     // Séquence 11 - Mollets (270s)
     createTrackedTimeout(() => {
-      speak("Vos mollets se relâchent entièrement. Sentez l'énergie circuler librement.");
+      speak("Vos mollets se relâchent entièrement. Sentez l'énergie circuler librement.", "calves");
     }, 270000);
     
-    // Séquence 12 - Chevilles (285s)
+    // Séquence 12 - Chevilles (285s) - NOUVEAU
     createTrackedTimeout(() => {
-      speak("Vos chevilles se détendent. Sentez l'espace dans ces articulations.");
+      speak("Vos chevilles se détendent. Sentez l'espace dans ces articulations.", "ankles");
     }, 285000);
     
     // Séquence 13 - Pieds (300s)
     createTrackedTimeout(() => {
-      speak("Vos pieds, jusqu'au bout de vos orteils, sont maintenant complètement détendus et lourds.");
+      speak("Vos pieds, jusqu'au bout de vos orteils, sont maintenant complètement détendus et lourds.", "feet");
     }, 300000);
     
     // Séquence 14 - Corps entier (360s)
     createTrackedTimeout(() => {
-      speak("Une vague de bien-être parcourt maintenant tout votre corps, de la tête aux pieds. Vous êtes dans un état de relaxation profonde.");
+      speak("Une vague de bien-être parcourt maintenant tout votre corps, de la tête aux pieds. Vous êtes dans un état de relaxation profonde.", "wholebody");
     }, 360000);
     
-    // Séquence 15 - Respiration (420s)
+    // Séquence 15 - Respiration (420s) - NOUVEAU
     createTrackedTimeout(() => {
-      speak("Observez votre respiration, calme et régulière. Chaque inspiration vous apporte énergie et vitalité. Chaque expiration approfondit votre relaxation.");
+      speak("Observez votre respiration, calme et régulière. Chaque inspiration vous apporte énergie et vitalité. Chaque expiration approfondit votre relaxation.", "breathing");
     }, 420000);
     
-    // Séquence 16 - Conscience (480s)
+    // Séquence 16 - Conscience (480s) - NOUVEAU
     createTrackedTimeout(() => {
-      speak("Prenez conscience de votre corps dans son ensemble, parfaitement détendu et en harmonie.");
+      speak("Prenez conscience de votre corps dans son ensemble, parfaitement détendu et en harmonie.", "awareness");
     }, 480000);
     
-    // Séquence 17 - Présence (540s)
+    // Séquence 17 - Présence (540s) - NOUVEAU
     createTrackedTimeout(() => {
-      speak("Restez dans cet état de relaxation profonde, en pleine conscience de votre corps et de votre respiration.");
+      speak("Restez dans cet état de relaxation profonde, en pleine conscience de votre corps et de votre respiration.", "presence");
     }, 540000);
     
     // Séquence 18 - Fin (570s)
     createTrackedTimeout(() => {
-      speak("Progressivement, reprenez conscience de votre environnement. Bougez doucement vos doigts, vos orteils. Étirez-vous si vous le souhaitez. Votre corps est maintenant complètement détendu et votre esprit apaisé.");
+      speak("Progressivement, reprenez conscience de votre environnement. Bougez doucement vos doigts, vos orteils. Étirez-vous si vous le souhaitez. Votre corps est maintenant complètement détendu et votre esprit apaisé.", "completion");
     }, 570000);
     
     return true;
@@ -1062,28 +950,153 @@ export const useVoiceManager = () => {
           return;
         }
         
-        const gender = voiceSettings.gender;
-        const audioPath = `/audio/meditation/${gender}/metatron.mp3`;
+        // Pour les autres méditations - SYSTÈME AMÉLIORÉ
+        const meditationData = meditations[currentMeditation] || spiritualMeditations[currentMeditation];
         const fallbackText = meditationData.fallbackStart; // Utiliser le fallback court
         
         console.log('🎵 TENTATIVE LECTURE MÉTATRON:', audioPath);
         playFullAudio(audioPath, fallbackText);
       }, 5000); // Démarrage à 5 secondes
-      
-      // Programmer les phases de fallback SEULEMENT si l'audio ne marche pas
+        console.log(`🧘 DÉMARRAGE MÉDITATION ${currentMeditation.toUpperCase()}`, voiceSettings.gender === 'female' ? '(Claire)' : '(Thierry)');
+        
+        // Nettoyer tout timeout existant
+        clearAllTimeouts();
+        
+        if (currentMeditation === 'gratitude') {
+          // MÉDITATION GRATITUDE - 11 séquences avec timings précis
+          speak(meditationData.guidance.start, "installation");
+          
+          createTrackedTimeout(() => {
+            speak("Commençons par établir un rythme respiratoire apaisant. Inspirez profondément par le nez pendant 5 secondes... Expirez doucement par la bouche pendant 5 secondes...", "coherence-setup");
+          }, 30000);
+          
+          createTrackedTimeout(() => {
+            speak("Portez maintenant votre attention sur votre cœur. Imaginez que vous respirez directement par le centre de votre poitrine.", "breathing-heart");
+          }, 60000);
+          
+          createTrackedTimeout(() => {
+            speak("Éveillez maintenant le sentiment de gratitude. Commencez simplement, par les choses les plus évidentes.", "awakening");
+          }, 90000);
+          
+          createTrackedTimeout(() => {
+            speak("Inspirez... et pensez à une chose pour laquelle vous êtes profondément reconnaissant aujourd'hui.", "first");
+          }, 120000);
+          
+          createTrackedTimeout(() => {
+            speak("Élargissez maintenant votre gratitude vers les personnes qui enrichissent votre vie.", "loved-ones");
+          }, 150000);
+          
+          createTrackedTimeout(() => {
+            speak("Dirigez maintenant votre gratitude vers votre corps, ce véhicule extraordinaire.", "body");
+          }, 180000);
+          
+          createTrackedTimeout(() => {
+            speak("Élargissez encore votre gratitude vers la nature et l'univers.", "nature");
+          }, 210000);
+          
+          createTrackedTimeout(() => {
+            speak("Ancrez maintenant cette énergie de gratitude dans chaque cellule de votre corps.", "anchoring");
+          }, 240000);
+          
+          createTrackedTimeout(() => {
+            speak("Intégrez pleinement cette énergie de gratitude. Laissez-la rayonner à travers vous.", "integration");
+          }, 270000);
+          
+          createTrackedTimeout(() => {
+            speak(meditationData.guidance.end, "conclusion");
+          }, 285000);
+          
+        } else if (currentMeditation === 'abundance') {
+          // MÉDITATION ABONDANCE - 19 séquences avec timings précis
+          speak(meditationData.guidance.start, "introduction");
+          
+          createTrackedTimeout(() => {
+            speak("Inspirez profondément par le nez pendant 5 secondes... Expirez doucement par la bouche pendant 5 secondes...", "rhythm-start");
+          }, 30000);
+          
+          createTrackedTimeout(() => {
+            speak("Inspirez... l'univers vous remplit d'énergie positive... Expirez... libérez toute tension...", "energy-breath");
+          }, 40000);
+          
+          createTrackedTimeout(() => {
+            speak("Inspirez... accueillez l'abondance... Expirez... laissez partir les doutes...", "abundance-breath");
+          }, 50000);
+          
+          createTrackedTimeout(() => {
+            speak("Votre cœur entre en cohérence, créant un champ magnétique puissant autour de vous.", "coherence");
+          }, 60000);
+          
+          createTrackedTimeout(() => {
+            speak("Maintenant, tout en gardant ce rythme respiratoire, visualisez clairement ce que vous désirez manifester.", "visualize");
+          }, 65000);
+          
+          createTrackedTimeout(() => {
+            speak("Inspirez... voyez votre désir comme déjà réalisé... Expirez... ressentez la gratitude...", "realization-breath");
+          }, 73000);
+          
+          createTrackedTimeout(() => {
+            speak("Inspirez... imprégnez chaque cellule de cette vision... Expirez... rayonnez cette énergie...", "cellular-breath");
+          }, 83000);
+          
+          createTrackedTimeout(() => {
+            speak("Votre cœur cohérent amplifie votre pouvoir de manifestation.", "amplify");
+          }, 93000);
+          
+          createTrackedTimeout(() => {
+            speak("Inspirez... Je suis digne de recevoir... Expirez... J'attire naturellement ce qui est bon pour moi...", "worthy-breath");
+          }, 98000);
+          
+          createTrackedTimeout(() => {
+            speak("Inspirez... sentez la joie de la réalisation... Expirez... ancrez cette certitude...", "joy-breath");
+          }, 108000);
+          
+          createTrackedTimeout(() => {
+            speak("L'univers conspire en votre faveur. Votre vibration attire ce qui lui correspond.", "universe");
+          }, 118000);
+          
+          createTrackedTimeout(() => {
+            speak("Inspirez... Je co-crée avec l'univers... Expirez... Tout se met en place parfaitement...", "cocreate-breath");
+          }, 125000);
+          
+          createTrackedTimeout(() => {
+            speak("Inspirez... amplifiez le sentiment de gratitude... Expirez... diffusez votre lumière...", "gratitude-breath");
+          }, 135000);
+          
+          createTrackedTimeout(() => {
+            speak("Continuez ce rythme de respiration consciente. À chaque inspiration, vous attirez vos désirs. À chaque expiration, vous lâchez prise avec confiance.", "manifestation-cycle");
+          }, 145000);
+          
+          createTrackedTimeout(() => {
+            speak("Continuez à respirer en cohérence cardiaque, sachant que votre désir est en route vers vous.", "anchor");
+          }, 300000);
+          
+          createTrackedTimeout(() => {
+            speak("Inspirez... Je suis aligné avec mes désirs... Expirez... Je lâche prise avec confiance...", "alignment");
+          }, 318000);
+          
+          createTrackedTimeout(() => {
+            speak("Votre cœur cohérent est votre boussole vers l'abondance.", "compass");
+          }, 328000);
+          
+          createTrackedTimeout(() => {
+            speak(meditationData.guidance.end, "completion");
+          }, 333000);
+          
+        } else {
+          // Autres méditations - système générique
+          speak(meditationData.guidance.start, meditationData.audioFiles?.welcome);
       // On va les programmer avec une vérification de session active
-      if (meditationData.guidance.phases) {
-        meditationData.guidance.phases.forEach((phaseText, index) => {
           createTrackedTimeout(() => {
             // Vérifier que la session est toujours active
             if (!isSessionActive) {
               console.log(`🔇 Session inactive, annulation phase Métatron ${index + 1}`);
-              return;
-            }
-            console.log(`🌟 Métatron fallback - Phase ${index + 1}`);
-            speak(phaseText);
-          }, (index + 1) * 45000); // Une phase toutes les 45 secondes
-        });
+          // Programmer les phases avec des délais génériques
+          meditationData.guidance.phases.forEach((phaseText, index) => {
+            createTrackedTimeout(() => {
+              console.log(`🧘 Méditation ${currentMeditation} - Phase ${index + 1}`);
+              speak(phaseText);
+            }, (index + 1) * 30000);
+          });
       }
       
       // Message de fin avec vérification de session active
@@ -1110,10 +1123,11 @@ export const useVoiceManager = () => {
 
       // Programmer les phases avec des délais génériques
       meditationData.guidance.phases.forEach((phaseText, index) => {
-        // Délai simple: 30s par phase
-        createTrackedTimeout(() => {
-          console.log(`🧘 Méditation ${currentMeditation} - Phase ${index + 1}`);
-          speak(phaseText);
+          // Message de fin
+          createTrackedTimeout(() => {
+            speak(meditationData.guidance.end);
+          }, meditationData.duration * 1000 - 10000);
+        }
         }, (index + 1) * 30000);
       });
 
