@@ -14,14 +14,6 @@ export const Header = () => {
             src="/logo/Logo Respir.io web.png" 
             alt="Respir.io Logo" 
             className="h-12 object-contain brightness-0 invert"
-            onError={(e) => {
-              const target = e.target;
-              target.style.display = 'none';
-              const parent = target.parentElement;
-              if (parent) {
-                parent.innerHTML = '<span class="text-white text-xl font-bold">Respir.io</span>';
-              }
-            }}
           />
         </Link>
       </div>

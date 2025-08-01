@@ -101,8 +101,6 @@ function AppLayout() {
           filter: 'hue-rotate(200deg) brightness(1.2) contrast(0.9)',
           mixBlendMode: 'overlay'
         }}
-        onLoad={() => console.log('✅ Image de fond chargée avec succès')}
-        onError={() => console.log('❌ Erreur de chargement de l\'image de fond')}
       />
       
       <div className="relative z-10">

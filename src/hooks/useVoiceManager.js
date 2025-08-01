@@ -274,37 +274,18 @@ export const useVoiceManager = () => {
   const queueAudio = useCallback((url, key, fallbackText) => {
     console.log('🎵 TENTATIVE LECTURE AUDIO PREMIUM:', url);
     
-    fetch(url, { method: 'HEAD' })
-      .then(response => {
-        if (response.ok) {
-          console.log('✅ FICHIER AUDIO PREMIUM TROUVÉ:', url, `(${response.status})`);
-          
-          audioQueue.current.push({
-            url,
-            key,
-            fallbackText
-          });
-          
-          if (!isPlayingAudio.current) {
-            playNextInQueue();
-          }
-        } else {
-          console.log('❌ FICHIER AUDIO PREMIUM NON TROUVÉ:', url, `(${response.status})`);
-          
-          if (fallbackText) {
-            console.log('🔄 FALLBACK SYNTHÈSE pour:', key);
-            speakWithSynthesis(fallbackText);
-          }
-        }
-      })
-      .catch(error => {
-        console.error('❌ ERREUR VÉRIFICATION AUDIO:', error, url);
-        
-        if (fallbackText) {
-          console.log('🔄 FALLBACK SYNTHÈSE pour:', key);
-          speakWithSynthesis(fallbackText);
-        }
-      });
+    // Essayer de jouer directement l'audio sans vérification fetch
+    console.log('🎵 TENTATIVE LECTURE DIRECTE:', url);
+    
+    audioQueue.current.push({
+      url,
+      key,
+      fallbackText
+    });
+    
+    if (!isPlayingAudio.current) {
+      playNextInQueue();
+    }
   }, [playNextInQueue, speakWithSynthesis]);
   
   // Fonction principale pour parler
