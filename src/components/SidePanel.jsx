@@ -264,6 +264,18 @@ export const SidePanel = () => {
                 </div>
               </div>
 
+              {/* Debug du système vocal */}
+              <div className="bg-yellow-500/10 border border-yellow-500/20 rounded-lg p-3">
+                <p className="text-xs text-yellow-200 mb-2">
+                  <strong>Debug Vocal :</strong>
+                </p>
+                <div className="text-xs text-yellow-100/80 space-y-1">
+                  <div>Voix activée : {voiceSettings.enabled ? '✅ Oui' : '❌ Non'}</div>
+                  <div>Genre : {voiceSettings.gender === 'female' ? 'Claire' : 'Thierry'}</div>
+                  <div>Volume : {Math.round(voiceSettings.volume * 100)}%</div>
+                </div>
+              </div>
+
               <div>
                 <label className="block text-sm text-white/70 mb-2">
                   Volume voix <span className="text-xs text-white/50">(recommandé: 60-70%)</span>
@@ -295,9 +307,9 @@ export const SidePanel = () => {
                 </div>
               </div>
 
-              <div className="rounded-lg p-3 bg-green-500/10 border border-green-500/30">
+              <div className="rounded-lg p-3 bg-blue-500/10 border border-blue-500/30">
                 <p className="text-xs text-green-200">
-                  <strong>Voix locales :</strong> Fichiers MP3 premium avec fallback automatique vers synthèse vocale si fichier manquant.
+                  <strong>Système vocal :</strong> Fichiers MP3 premium Claire/Thierry + fallback synthèse vocale française.
                 </p>
               </div>
             </div>

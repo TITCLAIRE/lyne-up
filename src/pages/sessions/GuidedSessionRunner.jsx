@@ -210,12 +210,12 @@ export default function GuidedSessionRunner() {
   // Démarrage vocal automatique
   useEffect(() => {
     if (isSessionActive && !voiceSystemStarted && voiceSettings.enabled) {
-      console.log('🎤 DÉMARRAGE VOCAL AUTOMATIQUE pour session guidée:', currentSession || sessionId, 'Méditation:', currentMeditation);
+      console.log('🎤 DÉMARRAGE VOCAL AUTOMATIQUE - Session:', currentSession || sessionId, 'Méditation:', currentMeditation, 'Voix enabled:', voiceSettings.enabled);
       setVoiceSystemStarted(true);
       
       // Démarrage immédiat du guidage vocal
       if (currentSession === 'switch' || sessionId === 'switch') {
-        console.log('🚨 DÉMARRAGE DIRECT GUIDAGE SWITCH');
+        console.log('🚨 DÉMARRAGE DIRECT GUIDAGE SWITCH - Voix enabled:', voiceSettings.enabled);
         // Message d'accueil (0s)
         speak("Bienvenue dans votre bulle de calme. Posez vos pieds bien à plat sur le sol. Détendez vos épaules.");
         
@@ -234,16 +234,17 @@ export default function GuidedSessionRunner() {
         }, 28000);
       } else if (currentMeditation === 'metatron') {
         // Pour Métatron, on utilise le système normal mais sans démarrer le guidage vocal
-        console.log('🌟 Méditation Métatron - Démarrage du guidage spécifique');
+        console.log('🌟 Méditation Métatron - Démarrage du guidage spécifique - Voix enabled:', voiceSettings.enabled);
         setTimeout(() => {
           const success = startSessionGuidance();
-          console.log('🎤 Démarrage guidage vocal Métatron:', success ? 'réussi' : 'échoué');
+          console.log('🎤 Démarrage guidage vocal Métatron:', success ? 'réussi' : 'échoué', 'Voix enabled:', voiceSettings.enabled);
         }, 500);
       } else {
         // Pour les autres sessions, utiliser le système normal
+        console.log('🎤 DÉMARRAGE GUIDAGE NORMAL - Session:', currentSession, 'Méditation:', currentMeditation);
         setTimeout(() => {
           const success = startSessionGuidance();
-          console.log('🎤 Démarrage guidage vocal guidé:', success ? 'réussi' : 'échoué');
+          console.log('🎤 Démarrage guidage vocal guidé:', success ? 'réussi' : 'échoué', 'Voix enabled:', voiceSettings.enabled);
         }, 500);
       }
     }

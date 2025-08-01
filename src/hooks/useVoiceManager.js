@@ -861,7 +861,7 @@ export const useVoiceManager = () => {
   // Fonction principale pour démarrer le guidage vocal
   const startSessionGuidance = useCallback(() => {
     if (!voiceSettings.enabled || !isSessionActive) {
-      console.log('🔇 Guidage vocal désactivé ou session inactive');
+      console.log('🔇 Guidage vocal désactivé ou session inactive - Enabled:', voiceSettings.enabled, 'Active:', isSessionActive);
       return false;
     }
     
@@ -871,21 +871,27 @@ export const useVoiceManager = () => {
     }
     
     sessionGuidanceStarted.current = true;
-    console.log('🎤 DÉMARRAGE GUIDAGE - Session:', currentSession, 'Méditation:', currentMeditation);
+    console.log('🎤 DÉMARRAGE GUIDAGE VOCAL - Session:', currentSession, 'Méditation:', currentMeditation, 'Voix activée:', voiceSettings.enabled);
     
     // Router vers la bonne fonction selon la session
     if (currentSession === 'switch') {
+      console.log('🚨 Démarrage SOS Stress');
       return startSosStressGuidance();
     } else if (currentSession === 'scan') {
+      console.log('🧠 Démarrage Scan Corporel');
       return startScanGuidance();
     } else if (currentSession === 'meditation' && currentMeditation === 'gratitude') {
+      console.log('🙏 Démarrage Méditation Gratitude');
       return startGratitudeGuidance();
     } else if (currentSession === 'meditation' && currentMeditation === 'abundance') {
+      console.log('💰 Démarrage Méditation Abondance');
       return startAbundanceGuidance();
     } else if (currentSession === 'meditation' && currentMeditation === 'metatron') {
+      console.log('🌟 Démarrage Méditation Métatron');
       return startMetatronGuidance();
     } else {
       // Guidage générique pour les autres sessions
+      console.log('🎤 Guidage générique pour session:', currentSession);
       speak("Bienvenue dans votre session. Suivez le rythme respiratoire et laissez-vous guider.");
       return true;
     }
