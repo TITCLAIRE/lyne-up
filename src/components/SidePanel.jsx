@@ -17,7 +17,9 @@ export const SidePanel = () => {
     updateAudioSettings,
     voiceSettings,
     updateVoiceSettings,
-    resetOnboarding
+    resetOnboarding,
+    isSessionActive,
+    currentSession
   } = useAppStore();
 
   // Importer le hook useVoiceManager pour tester les voix
