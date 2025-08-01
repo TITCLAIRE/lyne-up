@@ -305,12 +305,39 @@ export const SidePanel = () => {
                     Tester la voix
                   </button>
                 </div>
+                
+                {/* NOUVEAU: Bouton de diagnostic vocal */}
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => {
+                      const { logVoiceState } = useVoiceManager();
+                      if (logVoiceState) {
+                        logVoiceState();
+                      } else {
+                        console.log('🔍 DIAGNOSTIC VOCAL:');
+                        console.log('  - Voix activée:', voiceSettings.enabled);
+                        console.log('  - Genre:', voiceSettings.gender);
+                        console.log('  - Volume:', voiceSettings.volume);
+                      }
+                    }}
+                    className="w-full bg-yellow-500/20 border border-yellow-500/30 rounded-lg p-3 text-sm hover:bg-yellow-500/30 transition-colors"
+                  >
+                    🔍 Diagnostic vocal
+                  </button>
+                </div>
               </div>
 
               <div className="rounded-lg p-3 bg-blue-500/10 border border-blue-500/30">
                 <p className="text-xs text-green-200">
                   <strong>Système vocal :</strong> Fichiers MP3 premium Claire/Thierry + fallback synthèse vocale française.
                 </p>
+                
+                {/* NOUVEAU: État vocal en temps réel */}
+                <div className="mt-2 text-xs text-white/70">
+                  <div>État: {voiceSettings.enabled ? '✅ Activé' : '❌ Désactivé'}</div>
+                  <div>Voix: {voiceSettings.gender === 'female' ? 'Claire' : 'Thierry'}</div>
+                  <div>Volume: {Math.round(voiceSettings.volume * 100)}%</div>
+                </div>
               </div>
             </div>
           </div>

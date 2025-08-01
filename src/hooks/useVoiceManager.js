@@ -21,9 +21,38 @@ export const useVoiceManager = () => {
   const timeoutsRef = useRef([]);
   const fullAudioRef = useRef(null);
   
+  // DIAGNOSTIC COMPLET - Fonction pour logger l'état
+  const logVoiceState = useCallback(() => {
+    console.log('🔍 DIAGNOSTIC VOCAL COMPLET:');
+    console.log('  - voiceSettings.enabled:', voiceSettings.enabled);
+    console.log('  - voiceSettings.gender:', voiceSettings.gender);
+    console.log('  - voiceSettings.volume:', voiceSettings.volume);
+    console.log('  - currentSession:', currentSession);
+    console.log('  - currentMeditation:', currentMeditation);
+    console.log('  - isSessionActive:', isSessionActive);
+    console.log('  - sessionGuidanceStarted:', sessionGuidanceStarted.current);
+    console.log('  - timeouts actifs:', timeoutsRef.current.length);
+    console.log('  - isInitialized:', isInitialized.current);
+  }, [voiceSettings, currentSession, currentMeditation, isSessionActive]);
+  
   // Fonction pour créer un timeout qui sera automatiquement suivi
-  const createTrackedTimeout = useCallback((callback, delay) => {
+  const createTrackedTimeout = useCallback((callback, delay, description = '') => {
+    console.log(`⏰ CRÉATION TIMEOUT: ${description} dans ${delay}ms`);
+    
     const timeoutId = setTimeout(() => {
+      console.log(`🔔 EXÉCUTION TIMEOUT: ${description}`);
+      
+      // Vérifier l'état avant d'exécuter
+      if (!isSessionActive) {
+        console.log('⚠️ Session inactive, timeout annulé:', description);
+        return;
+      }
+      
+      if (!voiceSettings.enabled) {
+        console.log('⚠️ Voix désactivée, timeout annulé:', description);
+        return;
+      }
+      
       // Supprimer ce timeout de la liste des timeouts actifs
       timeoutsRef.current = timeoutsRef.current.filter(id => id !== timeoutId);
       callback();
@@ -31,16 +60,18 @@ export const useVoiceManager = () => {
     
     // Ajouter ce timeout à la liste des timeouts actifs
     timeoutsRef.current.push(timeoutId);
+    console.log(`✅ TIMEOUT CRÉÉ: ${description} (ID: ${timeoutId})`);
     
     return timeoutId;
-  }, []);
+  }, [isSessionActive, voiceSettings.enabled]);
   
   // Fonction pour nettoyer tous les timeouts
   const clearAllTimeouts = useCallback(() => {
-    console.log(`🧹 Nettoyage de ${timeoutsRef.current.length} timeouts actifs`);
+    console.log(`🧹 NETTOYAGE: ${timeoutsRef.current.length} timeouts actifs`);
     
     timeoutsRef.current.forEach(id => {
       clearTimeout(id);
+      console.log(`🗑️ Timeout supprimé: ${id}`);
     });
     
     timeoutsRef.current = [];
@@ -102,6 +133,7 @@ export const useVoiceManager = () => {
   
   // Réinitialiser le guidage vocal lorsque la session change
   useEffect(() => {
+    console.log('🔄 RESET GUIDAGE VOCAL - Nouvelle session');
     sessionGuidanceStarted.current = false;
     clearAllTimeouts();
   }, [currentSession, currentMeditation, clearAllTimeouts]);
@@ -109,7 +141,7 @@ export const useVoiceManager = () => {
   // Arrêter le guidage vocal lorsque la session est arrêtée
   useEffect(() => {
     if (!isSessionActive) {
-      console.log('🔇 Session inactive - ARRÊT COMPLET du guidage vocal');
+      console.log('🔇 SESSION INACTIVE - ARRÊT COMPLET du guidage vocal');
       clearAllTimeouts();
       
       if (synth.current) {
@@ -139,7 +171,12 @@ export const useVoiceManager = () => {
   
   // Fonction pour parler avec la synthèse vocale
   const speakWithSynthesis = useCallback((text) => {
-    if (!voiceSettings.enabled || !text) return;
+    if (!voiceSettings.enabled || !text) {
+      console.log('🔇 SYNTHÈSE ANNULÉE - Voix désactivée ou texte vide');
+      return;
+    }
+    
+    console.log('🗣️ SYNTHÈSE VOCALE:', text.substring(0, 50) + '...');
     
     try {
       if (synth.current) {
@@ -159,7 +196,7 @@ export const useVoiceManager = () => {
       utterance.lang = 'fr-FR';
       
       utterance.onstart = () => {
-        console.log('🗣️ SYNTHÈSE VOCALE:', text.substring(0, 50) + '...');
+        console.log('🎤 SYNTHÈSE DÉMARRÉE');
       };
       
       utterance.onend = () => {
@@ -182,6 +219,7 @@ export const useVoiceManager = () => {
   const playNextInQueue = useCallback(() => {
     if (audioQueue.current.length === 0) {
       isPlayingAudio.current = false;
+      console.log('📭 File d\'attente audio vide');
       return;
     }
     
@@ -271,13 +309,24 @@ export const useVoiceManager = () => {
   
   // Fonction principale pour parler
   const speak = useCallback((text, audioKey = null) => {
-    if (!voiceSettings.enabled || !text) return;
+    console.log('🎤 SPEAK APPELÉ:', { text: text?.substring(0, 30), audioKey, enabled: voiceSettings.enabled });
+    
+    if (!voiceSettings.enabled || !text) {
+      console.log('🔇 SPEAK ANNULÉ - Voix désactivée ou texte vide');
+      return;
+    }
     
     const gender = voiceSettings.gender;
     let audioPath = null;
     
+    // SYSTÈME PREMIUM POUR SCAN CORPOREL
+    if (currentSession === 'scan' && audioKey) {
+      audioPath = `/audio/scan-corporel/${gender}/${audioKey}.mp3`;
+      console.log(`🧠 SCAN CORPOREL - Audio premium: ${audioPath} (${audioKey})`);
+    }
+    
     // SYSTÈME PREMIUM POUR MÉDITATIONS
-    if (currentSession === 'meditation' && currentMeditation && audioKey) {
+    else if (currentSession === 'meditation' && currentMeditation && audioKey) {
       if (currentMeditation === 'gratitude') {
         audioPath = `/audio/meditation/${gender}/gratitude-${audioKey}.mp3`;
         console.log(`🙏 MÉDITATION GRATITUDE - Audio premium: ${audioPath} (${audioKey})`);
@@ -289,12 +338,6 @@ export const useVoiceManager = () => {
         audioPath = `/audio/meditation/${gender}/metatron.mp3`;
         console.log(`🌟 MÉDITATION MÉTATRON - Audio complet: ${audioPath}`);
       }
-    }
-    
-    // SYSTÈME PREMIUM POUR SCAN CORPOREL
-    else if (currentSession === 'scan' && audioKey) {
-      audioPath = `/audio/scan-corporel/${gender}/${audioKey}.mp3`;
-      console.log(`🧠 SCAN CORPOREL - Audio premium: ${audioPath} (${audioKey})`);
     }
     
     // SYSTÈME PREMIUM POUR SOS STRESS
@@ -372,536 +415,134 @@ export const useVoiceManager = () => {
     return true;
   }, [clearAllTimeouts]);
   
-  // Fonction pour démarrer le guidage vocal SOS Stress
-  const startSosStressGuidance = useCallback(() => {
-    if (!voiceSettings.enabled || !isSessionActive) {
-      console.log('🔇 Guidage SOS Stress désactivé');
+  // Fonction pour démarrer le guidage vocal Scan Corporel - SIMPLIFIÉE ET CORRIGÉE
+  const startScanGuidance = useCallback(() => {
+    console.log('🧠 DÉMARRAGE SCAN CORPOREL - DIAGNOSTIC COMPLET');
+    logVoiceState();
+    
+    if (!voiceSettings.enabled) {
+      console.log('🔇 SCAN: Voix désactivée');
       return false;
     }
     
-    console.log('🚨 DÉMARRAGE SOS STRESS COMPLET');
+    if (!isSessionActive) {
+      console.log('🔇 SCAN: Session inactive');
+      return false;
+    }
+    
+    console.log('🧠 SCAN CORPOREL - DÉMARRAGE IMMÉDIAT');
+    clearAllTimeouts();
+    
+    // Séquence 1 - Accueil (0s) - IMMÉDIAT
+    console.log('🧠 SCAN: Séquence 1 - Accueil (IMMÉDIAT)');
+    speak("Bienvenue dans cette séance de scan corporel. Installez-vous confortablement, fermez les yeux si vous le souhaitez.", "welcome");
+    
+    // TEST IMMÉDIAT - Séquence 2 après 5 secondes pour tester
+    createTrackedTimeout(() => {
+      console.log('🧠 SCAN: TEST - Séquence 2 (5s)');
+      speak("TEST - Portez votre attention sur le sommet de votre tête.", "head");
+    }, 5000, "TEST Scan Tête");
+    
+    // Séquence 2 - Tête (30s)
+    createTrackedTimeout(() => {
+      console.log('🧠 SCAN: Séquence 2 - Tête (30s)');
+      speak("Portez votre attention sur le sommet de votre tête. Sentez cette zone se détendre complètement.", "head");
+    }, 30000, "Scan Tête");
+    
+    // Séquence 3 - Visage (60s)
+    createTrackedTimeout(() => {
+      console.log('🧠 SCAN: Séquence 3 - Visage (60s)');
+      speak("Descendez vers votre visage. Relâchez votre front, vos sourcils, vos paupières.", "face");
+    }, 60000, "Scan Visage");
+    
+    // Séquence 4 - Cou (90s)
+    createTrackedTimeout(() => {
+      console.log('🧠 SCAN: Séquence 4 - Cou (90s)');
+      speak("Votre cou et vos épaules se relâchent maintenant. Laissez partir toute tension.", "neck");
+    }, 90000, "Scan Cou");
+    
+    console.log('✅ SCAN CORPOREL: 4 timeouts de test programmés');
+    console.log('📊 État final:', {
+      voiceEnabled: voiceSettings.enabled,
+      sessionActive: isSessionActive,
+      timeouts: timeoutsRef.current.length
+    });
+    
+    return true;
+  }, [voiceSettings.enabled, isSessionActive, speak, clearAllTimeouts, createTrackedTimeout, logVoiceState]);
+  
+  // Fonction pour démarrer le guidage vocal SOS Stress
+  const startSosStressGuidance = useCallback(() => {
+    console.log('🚨 DÉMARRAGE SOS STRESS - DIAGNOSTIC COMPLET');
+    logVoiceState();
+    
+    if (!voiceSettings.enabled || !isSessionActive) {
+      console.log('🔇 SOS: Voix désactivée ou session inactive');
+      return false;
+    }
+    
+    console.log('🚨 SOS STRESS - DÉMARRAGE IMMÉDIAT');
     clearAllTimeouts();
     
     // Séquence 1 - Accueil (0.5s)
     createTrackedTimeout(() => {
-      speak("Bienvenue dans votre bulle de calme. Posez vos pieds bien à plat sur le sol. Détendez vos épaules.", "welcome");
-    }, 500);
+      speak("Bienvenue dans votre bulle de calme. Posez vos pieds bien à plat sur le sol.", "welcome");
+    }, 500, "SOS Accueil");
     
     // Séquence 2 - Inspiration (12s)
     createTrackedTimeout(() => {
       speak("Inspirez le calme", "breathe-calm");
-    }, 12000);
+    }, 12000, "SOS Inspiration");
     
-    // Séquence 3 - Ancrage (28s)
-    createTrackedTimeout(() => {
-      speak("Vos pieds touchent le sol. Vous êtes ancré, solide, stable.", "grounding");
-    }, 28000);
-    
-    // Séquence 4 - Expiration (37s)
-    createTrackedTimeout(() => {
-      speak("Soufflez doucement", "breathe-softly");
-    }, 37000);
-    
-    // Séquence 5 - Inspiration (48s)
-    createTrackedTimeout(() => {
-      speak("Accueillez l'air frais", "breathe-fresh");
-    }, 48000);
-    
-    // Séquence 6 - Libération (58s)
-    createTrackedTimeout(() => {
-      speak("Le stress s'évapore à chaque souffle. Votre corps se détend profondément.", "stress-release");
-    }, 58000);
-    
-    // Séquence 7 - Expiration (67s)
-    createTrackedTimeout(() => {
-      speak("Relâchez tout", "breathe-release");
-    }, 67000);
-    
-    // Séquence 8 - Recentrage (78s)
-    createTrackedTimeout(() => {
-      speak("Vous retrouvez votre centre. Tout va bien. Vous êtes en sécurité.", "center-peace");
-    }, 78000);
-    
-    // Séquence 9 - Fin (85s)
-    createTrackedTimeout(() => {
-      speak("Parfait. Vous avez retrouvé votre calme intérieur. Gardez cette sensation avec vous.", "completion");
-    }, 85000);
-    
+    console.log('✅ SOS STRESS: Timeouts programmés');
     return true;
-  }, [voiceSettings.enabled, isSessionActive, speak, clearAllTimeouts, createTrackedTimeout]);
-  
-  // Fonction pour démarrer le guidage vocal Scan Corporel
-  const startScanGuidance = useCallback(() => {
-    if (!voiceSettings.enabled || !isSessionActive) {
-      console.log('🔇 Guidage Scan désactivé');
-      return false;
-    }
-    
-    console.log('🧠 DÉMARRAGE SCAN CORPOREL COMPLET - SYSTÈME CORRIGÉ');
-    clearAllTimeouts();
-    
-    // Séquence 1 - Accueil (0s) - IMMÉDIAT
-    console.log('🧠 SCAN: Séquence 1 - Accueil (0s)');
-    speak("Bienvenue dans cette séance de scan corporel. Installez-vous confortablement, fermez les yeux si vous le souhaitez. Nous allons explorer chaque partie de votre corps pour une relaxation profonde.", "welcome");
-    
-    // Séquence 2 - Tête (30s) - FORCÉ
-    createTrackedTimeout(() => {
-      console.log('🧠 SCAN: Séquence 2 - Tête (30s)');
-      if (!isSessionActive) {
-        console.log('⚠️ Session inactive, arrêt du guidage');
-        return;
-      }
-      speak("Portez votre attention sur le sommet de votre tête. Sentez cette zone se détendre complètement.", "head");
-    }, 30000);
-    
-    // Séquence 3 - Visage (60s) - FORCÉ
-    createTrackedTimeout(() => {
-      console.log('🧠 SCAN: Séquence 3 - Visage (60s)');
-      if (!isSessionActive) return;
-      speak("Descendez vers votre visage. Relâchez votre front, vos sourcils, vos paupières. Détendez vos mâchoires, votre langue, votre gorge.", "face");
-    }, 60000);
-    
-    // Séquence 4 - Cou (90s) - FORCÉ
-    createTrackedTimeout(() => {
-      console.log('🧠 SCAN: Séquence 4 - Cou (90s)');
-      if (!isSessionActive) return;
-      speak("Votre cou et vos épaules se relâchent maintenant. Laissez partir toute tension accumulée dans cette zone.", "neck");
-    }, 90000);
-    
-    // Séquence 5 - Poitrine (120s) - FORCÉ
-    createTrackedTimeout(() => {
-      console.log('🧠 SCAN: Séquence 5 - Poitrine (120s)');
-      if (!isSessionActive) return;
-      speak("Votre poitrine s'ouvre et se détend à chaque respiration. Sentez l'air qui entre et qui sort librement.", "chest");
-    }, 120000);
-    
-    // Séquence 6 - Dos (150s) - FORCÉ
-    createTrackedTimeout(() => {
-      console.log('🧠 SCAN: Séquence 6 - Dos (150s)');
-      if (!isSessionActive) return;
-      speak("Votre dos se détend vertèbre par vertèbre, du haut vers le bas. Chaque vertèbre s'aligne parfaitement.", "back");
-    }, 150000);
-    
-    // Séquence 7 - Ventre (180s) - FORCÉ
-    createTrackedTimeout(() => {
-      console.log('🧠 SCAN: Séquence 7 - Ventre (180s)');
-      if (!isSessionActive) return;
-      speak("Votre ventre se gonfle et se dégonfle naturellement, sans effort. Sentez une douce chaleur s'y répandre.", "abdomen");
-    }, 180000);
-    
-    // Séquence 8 - Hanches (210s) - FORCÉ
-    createTrackedTimeout(() => {
-      console.log('🧠 SCAN: Séquence 8 - Hanches (210s)');
-      if (!isSessionActive) return;
-      speak("Vos hanches et votre bassin se relâchent complètement. Sentez le poids de votre corps s'enfoncer dans le support.", "hips");
-    }, 210000);
-    
-    // Séquence 9 - Cuisses (240s) - FORCÉ
-    createTrackedTimeout(() => {
-      console.log('🧠 SCAN: Séquence 9 - Cuisses (240s)');
-      if (!isSessionActive) return;
-      speak("Vos cuisses se détendent profondément. Toute tension s'évapore à chaque expiration.", "thighs");
-    }, 240000);
-    
-    // Séquence 10 - Genoux (255s) - FORCÉ
-    createTrackedTimeout(() => {
-      console.log('🧠 SCAN: Séquence 10 - Genoux (255s)');
-      if (!isSessionActive) return;
-      speak("Vos genoux se détendent. Sentez l'espace dans vos articulations.", "knees");
-    }, 255000);
-    
-    // Séquence 11 - Mollets (270s) - FORCÉ
-    createTrackedTimeout(() => {
-      console.log('🧠 SCAN: Séquence 11 - Mollets (270s)');
-      if (!isSessionActive) return;
-      speak("Vos mollets se relâchent entièrement. Sentez l'énergie circuler librement.", "calves");
-    }, 270000);
-    
-    // Séquence 12 - Chevilles (285s) - FORCÉ
-    createTrackedTimeout(() => {
-      console.log('🧠 SCAN: Séquence 12 - Chevilles (285s)');
-      if (!isSessionActive) return;
-      speak("Vos chevilles se détendent. Sentez l'espace dans ces articulations.", "ankles");
-    }, 285000);
-    
-    // Séquence 13 - Pieds (300s) - FORCÉ
-    createTrackedTimeout(() => {
-      console.log('🧠 SCAN: Séquence 13 - Pieds (300s)');
-      if (!isSessionActive) return;
-      speak("Vos pieds, jusqu'au bout de vos orteils, sont maintenant complètement détendus et lourds.", "feet");
-    }, 300000);
-    
-    // Séquence 14 - Corps entier (360s) - FORCÉ
-    createTrackedTimeout(() => {
-      console.log('🧠 SCAN: Séquence 14 - Corps entier (360s)');
-      if (!isSessionActive) return;
-      speak("Une vague de bien-être parcourt maintenant tout votre corps, de la tête aux pieds. Vous êtes dans un état de relaxation profonde.", "wholebody");
-    }, 360000);
-    
-    // Séquence 15 - Respiration (420s) - FORCÉ
-    createTrackedTimeout(() => {
-      console.log('🧠 SCAN: Séquence 15 - Respiration (420s)');
-      if (!isSessionActive) return;
-      speak("Observez votre respiration, calme et régulière. Chaque inspiration vous apporte énergie et vitalité.", "breathing");
-    }, 420000);
-    
-    // Séquence 16 - Conscience (480s) - FORCÉ
-    createTrackedTimeout(() => {
-      console.log('🧠 SCAN: Séquence 16 - Conscience (480s)');
-      if (!isSessionActive) return;
-      speak("Prenez conscience de votre corps dans son ensemble, parfaitement détendu et en harmonie.", "awareness");
-    }, 480000);
-    
-    // Séquence 17 - Présence (540s) - FORCÉ
-    createTrackedTimeout(() => {
-      console.log('🧠 SCAN: Séquence 17 - Présence (540s)');
-      if (!isSessionActive) return;
-      speak("Restez dans cet état de relaxation profonde, en pleine conscience de votre corps et de votre respiration.", "presence");
-    }, 540000);
-    
-    // Séquence 18 - Fin (570s) - FORCÉ
-    createTrackedTimeout(() => {
-      console.log('🧠 SCAN: Séquence 18 - Fin (570s)');
-      if (!isSessionActive) return;
-      speak("Progressivement, reprenez conscience de votre environnement. Bougez doucement vos doigts, vos orteils. Votre corps est maintenant complètement détendu.", "completion");
-    }, 570000);
-    
-    console.log('✅ SCAN CORPOREL: Tous les timeouts programmés');
-    return true;
-  }, [voiceSettings.enabled, isSessionActive, speak, clearAllTimeouts, createTrackedTimeout]);
-  
-  // Fonction pour démarrer le guidage vocal Gratitude
-  const startGratitudeGuidance = useCallback(() => {
-    if (!voiceSettings.enabled || !isSessionActive) {
-      console.log('🔇 Guidage Gratitude désactivé');
-      return false;
-    }
-    
-    console.log('🙏 DÉMARRAGE MÉDITATION GRATITUDE COMPLÈTE - SYSTÈME CORRIGÉ');
-    clearAllTimeouts();
-    
-    // Séquence 1 - Installation (0s) - IMMÉDIAT
-    console.log('🙏 GRATITUDE: Séquence 1 - Installation (0s)');
-    speak("Bienvenue dans cette méditation de gratitude. Installez-vous confortablement, le dos droit, les pieds bien ancrés au sol. Fermez doucement les yeux et prenez conscience de votre respiration naturelle.", "installation");
-    
-    // Séquence 2 - Cohérence setup (30s) - FORCÉ
-    createTrackedTimeout(() => {
-      console.log('🙏 GRATITUDE: Séquence 2 - Cohérence setup (30s)');
-      if (!isSessionActive) return;
-      speak("Commençons par établir un rythme respiratoire apaisant. Inspirez profondément par le nez pendant 5 secondes... Expirez doucement par la bouche pendant 5 secondes...", "coherence-setup");
-    }, 30000);
-    
-    // Séquence 3 - Respiration cœur (60s) - FORCÉ
-    createTrackedTimeout(() => {
-      console.log('🙏 GRATITUDE: Séquence 3 - Respiration cœur (60s)');
-      if (!isSessionActive) return;
-      speak("Portez maintenant votre attention sur votre cœur. Imaginez que vous respirez directement par le centre de votre poitrine.", "breathing-heart");
-    }, 60000);
-    
-    // Séquence 4 - Éveil gratitude (90s) - FORCÉ
-    createTrackedTimeout(() => {
-      console.log('🙏 GRATITUDE: Séquence 4 - Éveil gratitude (90s)');
-      if (!isSessionActive) return;
-      speak("Éveillez maintenant le sentiment de gratitude. Commencez simplement, par les choses les plus évidentes.", "awakening");
-    }, 90000);
-    
-    // Séquence 5 - Première gratitude (120s) - FORCÉ
-    createTrackedTimeout(() => {
-      console.log('🙏 GRATITUDE: Séquence 5 - Première gratitude (120s)');
-      if (!isSessionActive) return;
-      speak("Inspirez... et pensez à une chose pour laquelle vous êtes profondément reconnaissant aujourd'hui. Expirez... et laissez cette gratitude rayonner.", "first");
-    }, 120000);
-    
-    // Séquence 6 - Proches (150s) - FORCÉ
-    createTrackedTimeout(() => {
-      console.log('🙏 GRATITUDE: Séquence 6 - Proches (150s)');
-      if (!isSessionActive) return;
-      speak("Élargissez maintenant votre gratitude vers les personnes qui enrichissent votre vie. Visualisez le visage d'un être cher.", "loved-ones");
-    }, 150000);
-    
-    // Séquence 7 - Corps (180s) - FORCÉ
-    createTrackedTimeout(() => {
-      console.log('🙏 GRATITUDE: Séquence 7 - Corps (180s)');
-      if (!isSessionActive) return;
-      speak("Dirigez maintenant votre gratitude vers votre corps, ce véhicule extraordinaire qui vous permet de vivre chaque expérience.", "body");
-    }, 180000);
-    
-    // Séquence 8 - Nature (210s) - FORCÉ
-    createTrackedTimeout(() => {
-      console.log('🙏 GRATITUDE: Séquence 8 - Nature (210s)');
-      if (!isSessionActive) return;
-      speak("Élargissez encore votre gratitude vers la nature et l'univers. Remerciez le soleil qui vous réchauffe, l'eau qui vous désaltère.", "nature");
-    }, 210000);
-    
-    // Séquence 9 - Ancrage (240s) - FORCÉ
-    createTrackedTimeout(() => {
-      console.log('🙏 GRATITUDE: Séquence 9 - Ancrage (240s)');
-      if (!isSessionActive) return;
-      speak("Ancrez maintenant cette énergie de gratitude dans chaque cellule de votre corps. La gratitude transforme ce que vous avez en suffisance.", "anchoring");
-    }, 240000);
-    
-    // Séquence 10 - Intégration (270s) - FORCÉ
-    createTrackedTimeout(() => {
-      console.log('🙏 GRATITUDE: Séquence 10 - Intégration (270s)');
-      if (!isSessionActive) return;
-      speak("Intégrez pleinement cette énergie de gratitude. Laissez-la rayonner à travers vous, transformant votre perception du monde.", "integration");
-    }, 270000);
-    
-    // Séquence 11 - Conclusion (285s) - FORCÉ
-    createTrackedTimeout(() => {
-      console.log('🙏 GRATITUDE: Séquence 11 - Conclusion (285s)');
-      if (!isSessionActive) return;
-      speak("Doucement, prenez une respiration plus profonde. Remerciez-vous pour ce moment de connexion. Quand vous êtes prêt, ouvrez les yeux.", "conclusion");
-    }, 285000);
-    
-    console.log('✅ GRATITUDE: Tous les timeouts programmés');
-    return true;
-  }, [voiceSettings.enabled, isSessionActive, speak, clearAllTimeouts, createTrackedTimeout]);
-  
-  // Fonction pour démarrer le guidage vocal Abondance
-  const startAbundanceGuidance = useCallback(() => {
-    if (!voiceSettings.enabled || !isSessionActive) {
-      console.log('🔇 Guidage Abondance désactivé');
-      return false;
-    }
-    
-    console.log('💰 DÉMARRAGE MÉDITATION ABONDANCE COMPLÈTE - SYSTÈME CORRIGÉ');
-    clearAllTimeouts();
-    
-    // Séquence 1 - Introduction (0s) - IMMÉDIAT
-    console.log('💰 ABONDANCE: Séquence 1 - Introduction (0s)');
-    speak("Bienvenue dans cette méditation de cohérence cardiaque intégrative sur la loi de l'attraction. Installez-vous confortablement, le dos droit, les pieds bien ancrés au sol.", "introduction");
-    
-    // Séquence 2 - Rythme (30s) - FORCÉ
-    createTrackedTimeout(() => {
-      console.log('💰 ABONDANCE: Séquence 2 - Rythme (30s)');
-      if (!isSessionActive) return;
-      speak("Inspirez profondément par le nez pendant 5 secondes... Expirez doucement par la bouche pendant 5 secondes...", "rhythm-start");
-    }, 30000);
-    
-    // Séquence 3 - Énergie (40s) - FORCÉ
-    createTrackedTimeout(() => {
-      console.log('💰 ABONDANCE: Séquence 3 - Énergie (40s)');
-      if (!isSessionActive) return;
-      speak("Inspirez... l'univers vous remplit d'énergie positive... Expirez... libérez toute tension...", "energy-breath");
-    }, 40000);
-    
-    // Séquence 4 - Abondance (50s) - FORCÉ
-    createTrackedTimeout(() => {
-      console.log('💰 ABONDANCE: Séquence 4 - Abondance (50s)');
-      if (!isSessionActive) return;
-      speak("Inspirez... accueillez l'abondance... Expirez... laissez partir les doutes...", "abundance-breath");
-    }, 50000);
-    
-    // Séquence 5 - Cohérence (60s) - FORCÉ
-    createTrackedTimeout(() => {
-      console.log('💰 ABONDANCE: Séquence 5 - Cohérence (60s)');
-      if (!isSessionActive) return;
-      speak("Votre cœur entre en cohérence, créant un champ magnétique puissant autour de vous.", "coherence");
-    }, 60000);
-    
-    // Séquence 6 - Visualisation (65s) - FORCÉ
-    createTrackedTimeout(() => {
-      console.log('💰 ABONDANCE: Séquence 6 - Visualisation (65s)');
-      if (!isSessionActive) return;
-      speak("Maintenant, tout en gardant ce rythme respiratoire, visualisez clairement ce que vous désirez manifester.", "visualize");
-    }, 65000);
-    
-    // Séquence 7 - Réalisation (73s) - FORCÉ
-    createTrackedTimeout(() => {
-      console.log('💰 ABONDANCE: Séquence 7 - Réalisation (73s)');
-      if (!isSessionActive) return;
-      speak("Inspirez... voyez votre désir comme déjà réalisé... Expirez... ressentez la gratitude...", "realization-breath");
-    }, 73000);
-    
-    // Séquence 8 - Cellulaire (83s) - FORCÉ
-    createTrackedTimeout(() => {
-      console.log('💰 ABONDANCE: Séquence 8 - Cellulaire (83s)');
-      if (!isSessionActive) return;
-      speak("Inspirez... imprégnez chaque cellule de cette vision... Expirez... rayonnez cette énergie...", "cellular-breath");
-    }, 83000);
-    
-    // Séquence 9 - Amplification (93s) - FORCÉ
-    createTrackedTimeout(() => {
-      console.log('💰 ABONDANCE: Séquence 9 - Amplification (93s)');
-      if (!isSessionActive) return;
-      speak("Votre cœur cohérent amplifie votre pouvoir de manifestation.", "amplify");
-    }, 93000);
-    
-    // Séquence 10 - Mérite (98s) - FORCÉ
-    createTrackedTimeout(() => {
-      console.log('💰 ABONDANCE: Séquence 10 - Mérite (98s)');
-      if (!isSessionActive) return;
-      speak("Inspirez... Je suis digne de recevoir... Expirez... J'attire naturellement ce qui est bon pour moi...", "worthy-breath");
-    }, 98000);
-    
-    // Séquence 11 - Joie (108s) - FORCÉ
-    createTrackedTimeout(() => {
-      console.log('💰 ABONDANCE: Séquence 11 - Joie (108s)');
-      if (!isSessionActive) return;
-      speak("Inspirez... sentez la joie de la réalisation... Expirez... ancrez cette certitude...", "joy-breath");
-    }, 108000);
-    
-    // Séquence 12 - Univers (118s) - FORCÉ
-    createTrackedTimeout(() => {
-      console.log('💰 ABONDANCE: Séquence 12 - Univers (118s)');
-      if (!isSessionActive) return;
-      speak("L'univers conspire en votre faveur. Votre vibration attire ce qui lui correspond.", "universe");
-    }, 118000);
-    
-    // Séquence 13 - Co-création (125s) - FORCÉ
-    createTrackedTimeout(() => {
-      console.log('💰 ABONDANCE: Séquence 13 - Co-création (125s)');
-      if (!isSessionActive) return;
-      speak("Inspirez... Je co-crée avec l'univers... Expirez... Tout se met en place parfaitement...", "cocreate-breath");
-    }, 125000);
-    
-    // Séquence 14 - Gratitude (135s) - FORCÉ
-    createTrackedTimeout(() => {
-      console.log('💰 ABONDANCE: Séquence 14 - Gratitude (135s)');
-      if (!isSessionActive) return;
-      speak("Inspirez... amplifiez le sentiment de gratitude... Expirez... diffusez votre lumière...", "gratitude-breath");
-    }, 135000);
-    
-    // Séquence 15 - Cycle manifestation (145s) - FORCÉ
-    createTrackedTimeout(() => {
-      console.log('💰 ABONDANCE: Séquence 15 - Cycle manifestation (145s)');
-      if (!isSessionActive) return;
-      speak("Continuez ce rythme de respiration consciente. À chaque inspiration, vous attirez vos désirs. À chaque expiration, vous lâchez prise avec confiance.", "manifestation-cycle");
-    }, 145000);
-    
-    // Séquence 16 - Ancrage (300s) - FORCÉ
-    createTrackedTimeout(() => {
-      console.log('💰 ABONDANCE: Séquence 16 - Ancrage (300s)');
-      if (!isSessionActive) return;
-      speak("Continuez à respirer en cohérence cardiaque, sachant que votre désir est en route vers vous.", "anchor");
-    }, 300000);
-    
-    // Séquence 17 - Alignement (318s) - FORCÉ
-    createTrackedTimeout(() => {
-      console.log('💰 ABONDANCE: Séquence 17 - Alignement (318s)');
-      if (!isSessionActive) return;
-      speak("Inspirez... Je suis aligné avec mes désirs... Expirez... Je lâche prise avec confiance...", "alignment");
-    }, 318000);
-    
-    // Séquence 18 - Boussole (328s) - FORCÉ
-    createTrackedTimeout(() => {
-      console.log('💰 ABONDANCE: Séquence 18 - Boussole (328s)');
-      if (!isSessionActive) return;
-      speak("Votre cœur cohérent est votre boussole vers l'abondance.", "compass");
-    }, 328000);
-    
-    // Séquence 19 - Fin (333s) - FORCÉ
-    createTrackedTimeout(() => {
-      console.log('💰 ABONDANCE: Séquence 19 - Fin (333s)');
-      if (!isSessionActive) return;
-      speak("Doucement, prenez une respiration plus profonde. Remerciez-vous pour ce moment de connexion et de création.", "completion");
-    }, 333000);
-    
-    console.log('✅ ABONDANCE: Tous les timeouts programmés');
-    return true;
-  }, [voiceSettings.enabled, isSessionActive, speak, clearAllTimeouts, createTrackedTimeout]);
-  
-  // Fonction pour démarrer le guidage vocal Métatron
-  const startMetatronGuidance = useCallback(() => {
-    if (!voiceSettings.enabled || !isSessionActive) {
-      console.log('🔇 Guidage Métatron désactivé');
-      return false;
-    }
-    
-    console.log('🌟 DÉMARRAGE MÉDITATION MÉTATRON');
-    clearAllTimeouts();
-    
-    const gender = voiceSettings.gender;
-    const audioPath = `/audio/meditation/${gender}/metatron.mp3`;
-    const fallbackText = "Bienvenue dans cette méditation d'invocation de l'archange Métatron. Installez-vous confortablement et fermez les yeux.";
-    
-    // Essayer de jouer le fichier audio complet
-    console.log('🎵 TENTATIVE LECTURE MÉTATRON COMPLET:', audioPath);
-    
-    fetch(audioPath, { method: 'HEAD' })
-      .then(response => {
-        if (response.ok) {
-          console.log('✅ FICHIER MÉTATRON TROUVÉ:', audioPath);
-          
-          const audio = new Audio(audioPath);
-          fullAudioRef.current = audio;
-          
-          audio.onended = () => {
-            console.log('✅ MÉDITATION MÉTATRON TERMINÉE');
-            fullAudioRef.current = null;
-          };
-          
-          audio.onerror = (error) => {
-            console.error('❌ ERREUR AUDIO MÉTATRON:', error);
-            speakWithSynthesis(fallbackText);
-            fullAudioRef.current = null;
-          };
-          
-          audio.volume = voiceSettings.volume;
-          audio.play()
-            .catch(error => {
-              console.error('❌ ERREUR LECTURE MÉTATRON:', error);
-              speakWithSynthesis(fallbackText);
-              fullAudioRef.current = null;
-            });
-        } else {
-          console.log('❌ FICHIER MÉTATRON NON TROUVÉ, fallback synthèse');
-          speakWithSynthesis(fallbackText);
-        }
-      })
-      .catch(error => {
-        console.error('❌ ERREUR VÉRIFICATION MÉTATRON:', error);
-        speakWithSynthesis(fallbackText);
-      });
-    
-    return true;
-  }, [voiceSettings.enabled, voiceSettings.gender, voiceSettings.volume, isSessionActive, speakWithSynthesis, clearAllTimeouts]);
+  }, [voiceSettings.enabled, isSessionActive, speak, clearAllTimeouts, createTrackedTimeout, logVoiceState]);
   
   // Fonction principale pour démarrer le guidage vocal
   const startSessionGuidance = useCallback(() => {
-    if (!voiceSettings.enabled || !isSessionActive) {
-      console.log('🔇 Guidage vocal désactivé ou session inactive - Enabled:', voiceSettings.enabled, 'Active:', isSessionActive);
+    console.log('🎤 START SESSION GUIDANCE APPELÉ');
+    logVoiceState();
+    
+    if (!voiceSettings.enabled) {
+      console.log('🔇 GUIDAGE ANNULÉ - Voix désactivée');
+      return false;
+    }
+    
+    if (!isSessionActive) {
+      console.log('🔇 GUIDAGE ANNULÉ - Session inactive');
       return false;
     }
     
     if (sessionGuidanceStarted.current) {
-      console.log('⚠️ Guidage vocal déjà démarré');
+      console.log('⚠️ GUIDAGE DÉJÀ DÉMARRÉ');
       return false;
     }
     
     sessionGuidanceStarted.current = true;
-    console.log('🎤 DÉMARRAGE GUIDAGE VOCAL - Session:', currentSession, 'Méditation:', currentMeditation, 'Voix activée:', voiceSettings.enabled);
+    console.log('🎤 DÉMARRAGE GUIDAGE VOCAL - Session:', currentSession, 'Méditation:', currentMeditation);
     
     // Router vers la bonne fonction selon la session
     if (currentSession === 'switch') {
-      console.log('🚨 Démarrage SOS Stress');
+      console.log('🚨 ROUTER: Démarrage SOS Stress');
       return startSosStressGuidance();
     } else if (currentSession === 'scan') {
-      console.log('🧠 Démarrage Scan Corporel');
+      console.log('🧠 ROUTER: Démarrage Scan Corporel');
       return startScanGuidance();
-    } else if (currentSession === 'meditation' && currentMeditation === 'gratitude') {
-      console.log('🙏 Démarrage Méditation Gratitude');
-      return startGratitudeGuidance();
-    } else if (currentSession === 'meditation' && currentMeditation === 'abundance') {
-      console.log('💰 Démarrage Méditation Abondance');
-      return startAbundanceGuidance();
-    } else if (currentSession === 'meditation' && currentMeditation === 'metatron') {
-      console.log('🌟 Démarrage Méditation Métatron');
-      return startMetatronGuidance();
     } else {
       // Guidage générique pour les autres sessions
-      console.log('🎤 Guidage générique pour session:', currentSession);
+      console.log('🎤 ROUTER: Guidage générique pour session:', currentSession);
       speak("Bienvenue dans votre session. Suivez le rythme respiratoire et laissez-vous guider.");
       return true;
     }
-  }, [currentSession, currentMeditation, startSosStressGuidance, startScanGuidance, startGratitudeGuidance, startAbundanceGuidance, startMetatronGuidance, speak, voiceSettings.enabled, isSessionActive]);
+  }, [currentSession, currentMeditation, startSosStressGuidance, startScanGuidance, speak, voiceSettings.enabled, isSessionActive, logVoiceState]);
   
   return {
     speak,
     stop,
     clearAllTimeouts,
+    logVoiceState, // NOUVEAU: Fonction de diagnostic
     startSessionGuidance: useCallback(() => {
+      console.log('🔄 RESET ET DÉMARRAGE GUIDAGE');
       sessionGuidanceStarted.current = false;
       clearAllTimeouts();
       return startSessionGuidance();
