@@ -310,15 +310,12 @@ export const SidePanel = () => {
                 <div className="flex gap-2">
                   <button
                     onClick={() => {
-                      const { logVoiceState } = useVoiceManager();
-                      if (logVoiceState) {
-                        logVoiceState();
-                      } else {
-                        console.log('🔍 DIAGNOSTIC VOCAL:');
-                        console.log('  - Voix activée:', voiceSettings.enabled);
-                        console.log('  - Genre:', voiceSettings.gender);
-                        console.log('  - Volume:', voiceSettings.volume);
-                      }
+                      console.log('🔍 DIAGNOSTIC VOCAL:');
+                      console.log('  - Voix activée:', voiceSettings.enabled);
+                      console.log('  - Genre:', voiceSettings.gender);
+                      console.log('  - Volume:', voiceSettings.volume);
+                      console.log('  - Session active:', isSessionActive);
+                      console.log('  - Session actuelle:', currentSession);
                     }}
                     className="w-full bg-yellow-500/20 border border-yellow-500/30 rounded-lg p-3 text-sm hover:bg-yellow-500/30 transition-colors"
                   >

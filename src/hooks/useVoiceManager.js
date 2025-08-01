@@ -500,7 +500,7 @@ export const useVoiceManager = () => {
   
   // Fonction principale pour démarrer le guidage vocal
   const startSessionGuidance = useCallback(() => {
-    console.log('🎤 START SESSION GUIDANCE APPELÉ');
+    console.log('🎤 START SESSION GUIDANCE APPELÉ - Session:', currentSession, 'Méditation:', currentMeditation);
     logVoiceState();
     
     if (!voiceSettings.enabled) {
@@ -519,7 +519,7 @@ export const useVoiceManager = () => {
     }
     
     sessionGuidanceStarted.current = true;
-    console.log('🎤 DÉMARRAGE GUIDAGE VOCAL - Session:', currentSession, 'Méditation:', currentMeditation);
+    console.log('🎤 DÉMARRAGE GUIDAGE VOCAL CONFIRMÉ - Session:', currentSession, 'Méditation:', currentMeditation);
     
     // Router vers la bonne fonction selon la session
     if (currentSession === 'switch') {

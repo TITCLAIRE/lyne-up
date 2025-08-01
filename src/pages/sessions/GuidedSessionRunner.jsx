@@ -210,7 +210,14 @@ export default function GuidedSessionRunner() {
   // Démarrage vocal automatique
   useEffect(() => {
     if (isSessionActive && !voiceSystemStarted && voiceSettings.enabled) {
-      console.log('🎤 DÉMARRAGE VOCAL AUTOMATIQUE - Session:', currentSession || sessionId, 'Méditation:', currentMeditation, 'Voix enabled:', voiceSettings.enabled);
+      console.log('🎤 DÉMARRAGE VOCAL AUTOMATIQUE - Session:', currentSession || sessionId, 'Méditation:', currentMeditation);
+      console.log('🔍 État vocal:', {
+        voiceEnabled: voiceSettings.enabled,
+        sessionActive: isSessionActive,
+        voiceStarted: voiceSystemStarted,
+        currentSession: currentSession,
+        sessionId: sessionId
+      });
       setVoiceSystemStarted(true);
       
       // Démarrage immédiat du guidage vocal
@@ -241,10 +248,17 @@ export default function GuidedSessionRunner() {
         }, 500);
       } else {
         // Pour les autres sessions, utiliser le système normal
-        console.log('🎤 DÉMARRAGE GUIDAGE NORMAL - Session:', currentSession, 'Méditation:', currentMeditation);
+        console.log('🎤 DÉMARRAGE GUIDAGE NORMAL - Session:', currentSession || sessionId, 'Méditation:', currentMeditation);
         setTimeout(() => {
           const success = startSessionGuidance();
-          console.log('🎤 Démarrage guidage vocal guidé:', success ? 'réussi' : 'échoué', 'Voix enabled:', voiceSettings.enabled);
+          console.log('🎤 Démarrage guidage vocal guidé:', success ? 'réussi' : 'échoué');
+          console.log('🔍 Détails:', {
+            success: success,
+            voiceEnabled: voiceSettings.enabled,
+            sessionActive: isSessionActive,
+            currentSession: currentSession || sessionId,
+            meditation: currentMeditation
+          });
         }, 500);
       }
     }
