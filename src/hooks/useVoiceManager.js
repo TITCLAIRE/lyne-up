@@ -437,97 +437,136 @@ export const useVoiceManager = () => {
       return false;
     }
     
-    console.log('🧠 DÉMARRAGE SCAN CORPOREL COMPLET');
+    console.log('🧠 DÉMARRAGE SCAN CORPOREL COMPLET - SYSTÈME CORRIGÉ');
     clearAllTimeouts();
     
-    // Séquence 1 - Accueil (0s)
+    // Séquence 1 - Accueil (0s) - IMMÉDIAT
+    console.log('🧠 SCAN: Séquence 1 - Accueil (0s)');
     speak("Bienvenue dans cette séance de scan corporel. Installez-vous confortablement, fermez les yeux si vous le souhaitez. Nous allons explorer chaque partie de votre corps pour une relaxation profonde.", "welcome");
     
-    // Séquence 2 - Tête (30s)
+    // Séquence 2 - Tête (30s) - FORCÉ
     createTrackedTimeout(() => {
+      console.log('🧠 SCAN: Séquence 2 - Tête (30s)');
+      if (!isSessionActive) {
+        console.log('⚠️ Session inactive, arrêt du guidage');
+        return;
+      }
       speak("Portez votre attention sur le sommet de votre tête. Sentez cette zone se détendre complètement.", "head");
     }, 30000);
     
-    // Séquence 3 - Visage (60s)
+    // Séquence 3 - Visage (60s) - FORCÉ
     createTrackedTimeout(() => {
+      console.log('🧠 SCAN: Séquence 3 - Visage (60s)');
+      if (!isSessionActive) return;
       speak("Descendez vers votre visage. Relâchez votre front, vos sourcils, vos paupières. Détendez vos mâchoires, votre langue, votre gorge.", "face");
     }, 60000);
     
-    // Séquence 4 - Cou (90s)
+    // Séquence 4 - Cou (90s) - FORCÉ
     createTrackedTimeout(() => {
+      console.log('🧠 SCAN: Séquence 4 - Cou (90s)');
+      if (!isSessionActive) return;
       speak("Votre cou et vos épaules se relâchent maintenant. Laissez partir toute tension accumulée dans cette zone.", "neck");
     }, 90000);
     
-    // Séquence 5 - Poitrine (120s)
+    // Séquence 5 - Poitrine (120s) - FORCÉ
     createTrackedTimeout(() => {
+      console.log('🧠 SCAN: Séquence 5 - Poitrine (120s)');
+      if (!isSessionActive) return;
       speak("Votre poitrine s'ouvre et se détend à chaque respiration. Sentez l'air qui entre et qui sort librement.", "chest");
     }, 120000);
     
-    // Séquence 6 - Dos (150s)
+    // Séquence 6 - Dos (150s) - FORCÉ
     createTrackedTimeout(() => {
+      console.log('🧠 SCAN: Séquence 6 - Dos (150s)');
+      if (!isSessionActive) return;
       speak("Votre dos se détend vertèbre par vertèbre, du haut vers le bas. Chaque vertèbre s'aligne parfaitement.", "back");
     }, 150000);
     
-    // Séquence 7 - Ventre (180s)
+    // Séquence 7 - Ventre (180s) - FORCÉ
     createTrackedTimeout(() => {
+      console.log('🧠 SCAN: Séquence 7 - Ventre (180s)');
+      if (!isSessionActive) return;
       speak("Votre ventre se gonfle et se dégonfle naturellement, sans effort. Sentez une douce chaleur s'y répandre.", "abdomen");
     }, 180000);
     
-    // Séquence 8 - Hanches (210s)
+    // Séquence 8 - Hanches (210s) - FORCÉ
     createTrackedTimeout(() => {
+      console.log('🧠 SCAN: Séquence 8 - Hanches (210s)');
+      if (!isSessionActive) return;
       speak("Vos hanches et votre bassin se relâchent complètement. Sentez le poids de votre corps s'enfoncer dans le support.", "hips");
     }, 210000);
     
-    // Séquence 9 - Cuisses (240s)
+    // Séquence 9 - Cuisses (240s) - FORCÉ
     createTrackedTimeout(() => {
+      console.log('🧠 SCAN: Séquence 9 - Cuisses (240s)');
+      if (!isSessionActive) return;
       speak("Vos cuisses se détendent profondément. Toute tension s'évapore à chaque expiration.", "thighs");
     }, 240000);
     
-    // Séquence 10 - Genoux (255s)
+    // Séquence 10 - Genoux (255s) - FORCÉ
     createTrackedTimeout(() => {
+      console.log('🧠 SCAN: Séquence 10 - Genoux (255s)');
+      if (!isSessionActive) return;
       speak("Vos genoux se détendent. Sentez l'espace dans vos articulations.", "knees");
     }, 255000);
     
-    // Séquence 11 - Mollets (270s)
+    // Séquence 11 - Mollets (270s) - FORCÉ
     createTrackedTimeout(() => {
+      console.log('🧠 SCAN: Séquence 11 - Mollets (270s)');
+      if (!isSessionActive) return;
       speak("Vos mollets se relâchent entièrement. Sentez l'énergie circuler librement.", "calves");
     }, 270000);
     
-    // Séquence 12 - Chevilles (285s)
+    // Séquence 12 - Chevilles (285s) - FORCÉ
     createTrackedTimeout(() => {
+      console.log('🧠 SCAN: Séquence 12 - Chevilles (285s)');
+      if (!isSessionActive) return;
       speak("Vos chevilles se détendent. Sentez l'espace dans ces articulations.", "ankles");
     }, 285000);
     
-    // Séquence 13 - Pieds (300s)
+    // Séquence 13 - Pieds (300s) - FORCÉ
     createTrackedTimeout(() => {
+      console.log('🧠 SCAN: Séquence 13 - Pieds (300s)');
+      if (!isSessionActive) return;
       speak("Vos pieds, jusqu'au bout de vos orteils, sont maintenant complètement détendus et lourds.", "feet");
     }, 300000);
     
-    // Séquence 14 - Corps entier (360s)
+    // Séquence 14 - Corps entier (360s) - FORCÉ
     createTrackedTimeout(() => {
+      console.log('🧠 SCAN: Séquence 14 - Corps entier (360s)');
+      if (!isSessionActive) return;
       speak("Une vague de bien-être parcourt maintenant tout votre corps, de la tête aux pieds. Vous êtes dans un état de relaxation profonde.", "wholebody");
     }, 360000);
     
-    // Séquence 15 - Respiration (420s)
+    // Séquence 15 - Respiration (420s) - FORCÉ
     createTrackedTimeout(() => {
+      console.log('🧠 SCAN: Séquence 15 - Respiration (420s)');
+      if (!isSessionActive) return;
       speak("Observez votre respiration, calme et régulière. Chaque inspiration vous apporte énergie et vitalité.", "breathing");
     }, 420000);
     
-    // Séquence 16 - Conscience (480s)
+    // Séquence 16 - Conscience (480s) - FORCÉ
     createTrackedTimeout(() => {
+      console.log('🧠 SCAN: Séquence 16 - Conscience (480s)');
+      if (!isSessionActive) return;
       speak("Prenez conscience de votre corps dans son ensemble, parfaitement détendu et en harmonie.", "awareness");
     }, 480000);
     
-    // Séquence 17 - Présence (540s)
+    // Séquence 17 - Présence (540s) - FORCÉ
     createTrackedTimeout(() => {
+      console.log('🧠 SCAN: Séquence 17 - Présence (540s)');
+      if (!isSessionActive) return;
       speak("Restez dans cet état de relaxation profonde, en pleine conscience de votre corps et de votre respiration.", "presence");
     }, 540000);
     
-    // Séquence 18 - Fin (570s)
+    // Séquence 18 - Fin (570s) - FORCÉ
     createTrackedTimeout(() => {
+      console.log('🧠 SCAN: Séquence 18 - Fin (570s)');
+      if (!isSessionActive) return;
       speak("Progressivement, reprenez conscience de votre environnement. Bougez doucement vos doigts, vos orteils. Votre corps est maintenant complètement détendu.", "completion");
     }, 570000);
     
+    console.log('✅ SCAN CORPOREL: Tous les timeouts programmés');
     return true;
   }, [voiceSettings.enabled, isSessionActive, speak, clearAllTimeouts, createTrackedTimeout]);
   
@@ -538,62 +577,84 @@ export const useVoiceManager = () => {
       return false;
     }
     
-    console.log('🙏 DÉMARRAGE MÉDITATION GRATITUDE COMPLÈTE');
+    console.log('🙏 DÉMARRAGE MÉDITATION GRATITUDE COMPLÈTE - SYSTÈME CORRIGÉ');
     clearAllTimeouts();
     
-    // Séquence 1 - Installation (0s)
+    // Séquence 1 - Installation (0s) - IMMÉDIAT
+    console.log('🙏 GRATITUDE: Séquence 1 - Installation (0s)');
     speak("Bienvenue dans cette méditation de gratitude. Installez-vous confortablement, le dos droit, les pieds bien ancrés au sol. Fermez doucement les yeux et prenez conscience de votre respiration naturelle.", "installation");
     
-    // Séquence 2 - Cohérence setup (30s)
+    // Séquence 2 - Cohérence setup (30s) - FORCÉ
     createTrackedTimeout(() => {
+      console.log('🙏 GRATITUDE: Séquence 2 - Cohérence setup (30s)');
+      if (!isSessionActive) return;
       speak("Commençons par établir un rythme respiratoire apaisant. Inspirez profondément par le nez pendant 5 secondes... Expirez doucement par la bouche pendant 5 secondes...", "coherence-setup");
     }, 30000);
     
-    // Séquence 3 - Respiration cœur (60s)
+    // Séquence 3 - Respiration cœur (60s) - FORCÉ
     createTrackedTimeout(() => {
+      console.log('🙏 GRATITUDE: Séquence 3 - Respiration cœur (60s)');
+      if (!isSessionActive) return;
       speak("Portez maintenant votre attention sur votre cœur. Imaginez que vous respirez directement par le centre de votre poitrine.", "breathing-heart");
     }, 60000);
     
-    // Séquence 4 - Éveil gratitude (90s)
+    // Séquence 4 - Éveil gratitude (90s) - FORCÉ
     createTrackedTimeout(() => {
+      console.log('🙏 GRATITUDE: Séquence 4 - Éveil gratitude (90s)');
+      if (!isSessionActive) return;
       speak("Éveillez maintenant le sentiment de gratitude. Commencez simplement, par les choses les plus évidentes.", "awakening");
     }, 90000);
     
-    // Séquence 5 - Première gratitude (120s)
+    // Séquence 5 - Première gratitude (120s) - FORCÉ
     createTrackedTimeout(() => {
+      console.log('🙏 GRATITUDE: Séquence 5 - Première gratitude (120s)');
+      if (!isSessionActive) return;
       speak("Inspirez... et pensez à une chose pour laquelle vous êtes profondément reconnaissant aujourd'hui. Expirez... et laissez cette gratitude rayonner.", "first");
     }, 120000);
     
-    // Séquence 6 - Proches (150s)
+    // Séquence 6 - Proches (150s) - FORCÉ
     createTrackedTimeout(() => {
+      console.log('🙏 GRATITUDE: Séquence 6 - Proches (150s)');
+      if (!isSessionActive) return;
       speak("Élargissez maintenant votre gratitude vers les personnes qui enrichissent votre vie. Visualisez le visage d'un être cher.", "loved-ones");
     }, 150000);
     
-    // Séquence 7 - Corps (180s)
+    // Séquence 7 - Corps (180s) - FORCÉ
     createTrackedTimeout(() => {
+      console.log('🙏 GRATITUDE: Séquence 7 - Corps (180s)');
+      if (!isSessionActive) return;
       speak("Dirigez maintenant votre gratitude vers votre corps, ce véhicule extraordinaire qui vous permet de vivre chaque expérience.", "body");
     }, 180000);
     
-    // Séquence 8 - Nature (210s)
+    // Séquence 8 - Nature (210s) - FORCÉ
     createTrackedTimeout(() => {
+      console.log('🙏 GRATITUDE: Séquence 8 - Nature (210s)');
+      if (!isSessionActive) return;
       speak("Élargissez encore votre gratitude vers la nature et l'univers. Remerciez le soleil qui vous réchauffe, l'eau qui vous désaltère.", "nature");
     }, 210000);
     
-    // Séquence 9 - Ancrage (240s)
+    // Séquence 9 - Ancrage (240s) - FORCÉ
     createTrackedTimeout(() => {
+      console.log('🙏 GRATITUDE: Séquence 9 - Ancrage (240s)');
+      if (!isSessionActive) return;
       speak("Ancrez maintenant cette énergie de gratitude dans chaque cellule de votre corps. La gratitude transforme ce que vous avez en suffisance.", "anchoring");
     }, 240000);
     
-    // Séquence 10 - Intégration (270s)
+    // Séquence 10 - Intégration (270s) - FORCÉ
     createTrackedTimeout(() => {
+      console.log('🙏 GRATITUDE: Séquence 10 - Intégration (270s)');
+      if (!isSessionActive) return;
       speak("Intégrez pleinement cette énergie de gratitude. Laissez-la rayonner à travers vous, transformant votre perception du monde.", "integration");
     }, 270000);
     
-    // Séquence 11 - Conclusion (285s)
+    // Séquence 11 - Conclusion (285s) - FORCÉ
     createTrackedTimeout(() => {
+      console.log('🙏 GRATITUDE: Séquence 11 - Conclusion (285s)');
+      if (!isSessionActive) return;
       speak("Doucement, prenez une respiration plus profonde. Remerciez-vous pour ce moment de connexion. Quand vous êtes prêt, ouvrez les yeux.", "conclusion");
     }, 285000);
     
+    console.log('✅ GRATITUDE: Tous les timeouts programmés');
     return true;
   }, [voiceSettings.enabled, isSessionActive, speak, clearAllTimeouts, createTrackedTimeout]);
   
@@ -604,102 +665,140 @@ export const useVoiceManager = () => {
       return false;
     }
     
-    console.log('💰 DÉMARRAGE MÉDITATION ABONDANCE COMPLÈTE');
+    console.log('💰 DÉMARRAGE MÉDITATION ABONDANCE COMPLÈTE - SYSTÈME CORRIGÉ');
     clearAllTimeouts();
     
-    // Séquence 1 - Introduction (0s)
+    // Séquence 1 - Introduction (0s) - IMMÉDIAT
+    console.log('💰 ABONDANCE: Séquence 1 - Introduction (0s)');
     speak("Bienvenue dans cette méditation de cohérence cardiaque intégrative sur la loi de l'attraction. Installez-vous confortablement, le dos droit, les pieds bien ancrés au sol.", "introduction");
     
-    // Séquence 2 - Rythme (30s)
+    // Séquence 2 - Rythme (30s) - FORCÉ
     createTrackedTimeout(() => {
+      console.log('💰 ABONDANCE: Séquence 2 - Rythme (30s)');
+      if (!isSessionActive) return;
       speak("Inspirez profondément par le nez pendant 5 secondes... Expirez doucement par la bouche pendant 5 secondes...", "rhythm-start");
     }, 30000);
     
-    // Séquence 3 - Énergie (40s)
+    // Séquence 3 - Énergie (40s) - FORCÉ
     createTrackedTimeout(() => {
+      console.log('💰 ABONDANCE: Séquence 3 - Énergie (40s)');
+      if (!isSessionActive) return;
       speak("Inspirez... l'univers vous remplit d'énergie positive... Expirez... libérez toute tension...", "energy-breath");
     }, 40000);
     
-    // Séquence 4 - Abondance (50s)
+    // Séquence 4 - Abondance (50s) - FORCÉ
     createTrackedTimeout(() => {
+      console.log('💰 ABONDANCE: Séquence 4 - Abondance (50s)');
+      if (!isSessionActive) return;
       speak("Inspirez... accueillez l'abondance... Expirez... laissez partir les doutes...", "abundance-breath");
     }, 50000);
     
-    // Séquence 5 - Cohérence (60s)
+    // Séquence 5 - Cohérence (60s) - FORCÉ
     createTrackedTimeout(() => {
+      console.log('💰 ABONDANCE: Séquence 5 - Cohérence (60s)');
+      if (!isSessionActive) return;
       speak("Votre cœur entre en cohérence, créant un champ magnétique puissant autour de vous.", "coherence");
     }, 60000);
     
-    // Séquence 6 - Visualisation (65s)
+    // Séquence 6 - Visualisation (65s) - FORCÉ
     createTrackedTimeout(() => {
+      console.log('💰 ABONDANCE: Séquence 6 - Visualisation (65s)');
+      if (!isSessionActive) return;
       speak("Maintenant, tout en gardant ce rythme respiratoire, visualisez clairement ce que vous désirez manifester.", "visualize");
     }, 65000);
     
-    // Séquence 7 - Réalisation (73s)
+    // Séquence 7 - Réalisation (73s) - FORCÉ
     createTrackedTimeout(() => {
+      console.log('💰 ABONDANCE: Séquence 7 - Réalisation (73s)');
+      if (!isSessionActive) return;
       speak("Inspirez... voyez votre désir comme déjà réalisé... Expirez... ressentez la gratitude...", "realization-breath");
     }, 73000);
     
-    // Séquence 8 - Cellulaire (83s)
+    // Séquence 8 - Cellulaire (83s) - FORCÉ
     createTrackedTimeout(() => {
+      console.log('💰 ABONDANCE: Séquence 8 - Cellulaire (83s)');
+      if (!isSessionActive) return;
       speak("Inspirez... imprégnez chaque cellule de cette vision... Expirez... rayonnez cette énergie...", "cellular-breath");
     }, 83000);
     
-    // Séquence 9 - Amplification (93s)
+    // Séquence 9 - Amplification (93s) - FORCÉ
     createTrackedTimeout(() => {
+      console.log('💰 ABONDANCE: Séquence 9 - Amplification (93s)');
+      if (!isSessionActive) return;
       speak("Votre cœur cohérent amplifie votre pouvoir de manifestation.", "amplify");
     }, 93000);
     
-    // Séquence 10 - Mérite (98s)
+    // Séquence 10 - Mérite (98s) - FORCÉ
     createTrackedTimeout(() => {
+      console.log('💰 ABONDANCE: Séquence 10 - Mérite (98s)');
+      if (!isSessionActive) return;
       speak("Inspirez... Je suis digne de recevoir... Expirez... J'attire naturellement ce qui est bon pour moi...", "worthy-breath");
     }, 98000);
     
-    // Séquence 11 - Joie (108s)
+    // Séquence 11 - Joie (108s) - FORCÉ
     createTrackedTimeout(() => {
+      console.log('💰 ABONDANCE: Séquence 11 - Joie (108s)');
+      if (!isSessionActive) return;
       speak("Inspirez... sentez la joie de la réalisation... Expirez... ancrez cette certitude...", "joy-breath");
     }, 108000);
     
-    // Séquence 12 - Univers (118s)
+    // Séquence 12 - Univers (118s) - FORCÉ
     createTrackedTimeout(() => {
+      console.log('💰 ABONDANCE: Séquence 12 - Univers (118s)');
+      if (!isSessionActive) return;
       speak("L'univers conspire en votre faveur. Votre vibration attire ce qui lui correspond.", "universe");
     }, 118000);
     
-    // Séquence 13 - Co-création (125s)
+    // Séquence 13 - Co-création (125s) - FORCÉ
     createTrackedTimeout(() => {
+      console.log('💰 ABONDANCE: Séquence 13 - Co-création (125s)');
+      if (!isSessionActive) return;
       speak("Inspirez... Je co-crée avec l'univers... Expirez... Tout se met en place parfaitement...", "cocreate-breath");
     }, 125000);
     
-    // Séquence 14 - Gratitude (135s)
+    // Séquence 14 - Gratitude (135s) - FORCÉ
     createTrackedTimeout(() => {
+      console.log('💰 ABONDANCE: Séquence 14 - Gratitude (135s)');
+      if (!isSessionActive) return;
       speak("Inspirez... amplifiez le sentiment de gratitude... Expirez... diffusez votre lumière...", "gratitude-breath");
     }, 135000);
     
-    // Séquence 15 - Cycle manifestation (145s)
+    // Séquence 15 - Cycle manifestation (145s) - FORCÉ
     createTrackedTimeout(() => {
+      console.log('💰 ABONDANCE: Séquence 15 - Cycle manifestation (145s)');
+      if (!isSessionActive) return;
       speak("Continuez ce rythme de respiration consciente. À chaque inspiration, vous attirez vos désirs. À chaque expiration, vous lâchez prise avec confiance.", "manifestation-cycle");
     }, 145000);
     
-    // Séquence 16 - Ancrage (300s)
+    // Séquence 16 - Ancrage (300s) - FORCÉ
     createTrackedTimeout(() => {
+      console.log('💰 ABONDANCE: Séquence 16 - Ancrage (300s)');
+      if (!isSessionActive) return;
       speak("Continuez à respirer en cohérence cardiaque, sachant que votre désir est en route vers vous.", "anchor");
     }, 300000);
     
-    // Séquence 17 - Alignement (318s)
+    // Séquence 17 - Alignement (318s) - FORCÉ
     createTrackedTimeout(() => {
+      console.log('💰 ABONDANCE: Séquence 17 - Alignement (318s)');
+      if (!isSessionActive) return;
       speak("Inspirez... Je suis aligné avec mes désirs... Expirez... Je lâche prise avec confiance...", "alignment");
     }, 318000);
     
-    // Séquence 18 - Boussole (328s)
+    // Séquence 18 - Boussole (328s) - FORCÉ
     createTrackedTimeout(() => {
+      console.log('💰 ABONDANCE: Séquence 18 - Boussole (328s)');
+      if (!isSessionActive) return;
       speak("Votre cœur cohérent est votre boussole vers l'abondance.", "compass");
     }, 328000);
     
-    // Séquence 19 - Fin (333s)
+    // Séquence 19 - Fin (333s) - FORCÉ
     createTrackedTimeout(() => {
+      console.log('💰 ABONDANCE: Séquence 19 - Fin (333s)');
+      if (!isSessionActive) return;
       speak("Doucement, prenez une respiration plus profonde. Remerciez-vous pour ce moment de connexion et de création.", "completion");
     }, 333000);
     
+    console.log('✅ ABONDANCE: Tous les timeouts programmés');
     return true;
   }, [voiceSettings.enabled, isSessionActive, speak, clearAllTimeouts, createTrackedTimeout]);
   
