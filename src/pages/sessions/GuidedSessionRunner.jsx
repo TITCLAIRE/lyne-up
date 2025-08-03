@@ -209,60 +209,42 @@ export default function GuidedSessionRunner() {
 
   // Démarrage vocal automatique
   useEffect(() => {
-    if (isSessionActive && !voiceSystemStarted && voiceSettings.enabled) {
+    if (isSessionActive && voiceSettings.enabled) {
       console.log('🎤 DÉMARRAGE VOCAL AUTOMATIQUE - Session:', currentSession || sessionId, 'Méditation:', currentMeditation);
-      console.log('🔍 État vocal:', {
-        voiceEnabled: voiceSettings.enabled,
-        sessionActive: isSessionActive,
-        voiceStarted: voiceSystemStarted,
-        currentSession: currentSession,
-        sessionId: sessionId
-      });
-      setVoiceSystemStarted(true);
       
-      // Démarrage immédiat du guidage vocal
-      if (currentSession === 'switch' || sessionId === 'switch') {
-        console.log('🚨 DÉMARRAGE DIRECT GUIDAGE SWITCH - Voix enabled:', voiceSettings.enabled);
-        // Message d'accueil (0s)
-        speak("Bienvenue dans votre bulle de calme. Posez vos pieds bien à plat sur le sol. Détendez vos épaules.");
+      // Démarrage immédiat selon la session
+      if (currentSession === 'scan' || sessionId === 'scan') {
+        console.log('🧠 DÉMARRAGE SCAN CORPOREL');
+        speak("Bienvenue dans cette séance de scan corporel. Installez-vous confortablement.");
         
-        // Séquence 2 - Inspiration (12s)
+        setTimeout(() => {
+          if (isSessionActive && voiceSettings.enabled) {
+            speak("Portez votre attention sur le sommet de votre tête. Sentez cette zone se détendre.");
+          }
+        }, 30000);
+        
+        setTimeout(() => {
+          if (isSessionActive && voiceSettings.enabled) {
+            speak("Descendez vers votre visage. Relâchez votre front, vos sourcils.");
+          }
+        }, 60000);
+        
+      } else if (currentSession === 'switch' || sessionId === 'switch') {
+        console.log('🚨 DÉMARRAGE SOS STRESS');
+        speak("Bienvenue dans votre bulle de calme. Posez vos pieds bien à plat sur le sol.");
+        
         setTimeout(() => {
           if (isSessionActive && voiceSettings.enabled) {
             speak("Inspirez le calme");
           }
         }, 12000);
         
-        // Séquence 3 - Ancrage (28s)
-        setTimeout(() => {
-          if (isSessionActive && voiceSettings.enabled) {
-            speak("Vos pieds touchent le sol. Vous êtes ancré, solide, stable.");
-          }
-        }, 28000);
-      } else if (currentMeditation === 'metatron') {
-        // Pour Métatron, on utilise le système normal mais sans démarrer le guidage vocal
-        console.log('🌟 Méditation Métatron - Démarrage du guidage spécifique - Voix enabled:', voiceSettings.enabled);
-        setTimeout(() => {
-          const success = startSessionGuidance();
-          console.log('🎤 Démarrage guidage vocal Métatron:', success ? 'réussi' : 'échoué', 'Voix enabled:', voiceSettings.enabled);
-        }, 500);
       } else {
-        // Pour les autres sessions, utiliser le système normal
-        console.log('🎤 DÉMARRAGE GUIDAGE NORMAL - Session:', currentSession || sessionId, 'Méditation:', currentMeditation);
-        setTimeout(() => {
-          const success = startSessionGuidance();
-          console.log('🎤 Démarrage guidage vocal guidé:', success ? 'réussi' : 'échoué');
-          console.log('🔍 Détails:', {
-            success: success,
-            voiceEnabled: voiceSettings.enabled,
-            sessionActive: isSessionActive,
-            currentSession: currentSession || sessionId,
-            meditation: currentMeditation
-          });
-        }, 500);
+        console.log('🎤 DÉMARRAGE SESSION GÉNÉRIQUE');
+        speak("Bienvenue dans votre session. Suivez le guide respiratoire.");
       }
     }
-  }, [isSessionActive, voiceSystemStarted, voiceSettings.enabled, startSessionGuidance, currentSession, sessionId, speak, currentMeditation]);
+  }, [isSessionActive, voiceSettings.enabled, currentSession, sessionId, speak, currentMeditation]);
 
   const handleToggleSession = () => {
     if (!isSessionActive) {
