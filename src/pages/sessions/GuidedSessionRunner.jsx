@@ -11,6 +11,7 @@ import { sessions, getBreathingPattern } from '../../data/sessions';
 import { meditations, spiritualMeditations } from '../../data/meditations';
 
 import { useCallback } from 'react';
+import { useRef } from 'react';
 
 export default function GuidedSessionRunner() {
   const { sessionId } = useParams();
@@ -45,9 +46,6 @@ export default function GuidedSessionRunner() {
   const [currentProgressivePhase, setCurrentProgressivePhase] = useState(0);
   const [progressivePhaseChanged, setProgressivePhaseChanged] = useState(false);
   const [lastProgressiveCheck, setLastProgressiveCheck] = useState(0);
-
-  // Ref pour gérer le timeout de guidage
-  const guidanceTimeoutRef = useRef(null);
 
   // Ref pour gérer le timeout de guidage
   const guidanceTimeoutRef = useRef(null);
