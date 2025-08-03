@@ -39,7 +39,7 @@ export const useVoiceManager = () => {
   
   // Fonction simple pour parler
   const speak = useCallback((text) => {
-    console.log('🎤 SPEAK SIMPLE:', text?.substring(0, 50));
+    console.log('🎤 SPEAK:', text?.substring(0, 50));
     
     if (!voiceSettings.enabled || !text) {
       console.log('🔇 Voix désactivée ou texte vide');
@@ -91,9 +91,9 @@ export const useVoiceManager = () => {
     }
   }, []);
   
-  // Fonction pour démarrer le guidage vocal - VERSION ULTRA-SIMPLE
+  // Fonction pour démarrer le guidage vocal
   const startSessionGuidance = useCallback(() => {
-    console.log('🎤 START SESSION GUIDANCE SIMPLE - Session:', currentSession);
+    console.log('🎤 START SESSION GUIDANCE - Session:', currentSession);
     
     if (!voiceSettings.enabled) {
       console.log('🔇 Voix désactivée');
