@@ -46,6 +46,12 @@ export default function GuidedSessionRunner() {
   const [progressivePhaseChanged, setProgressivePhaseChanged] = useState(false);
   const [lastProgressiveCheck, setLastProgressiveCheck] = useState(0);
 
+  // Ref pour gérer le timeout de guidage
+  const guidanceTimeoutRef = useRef(null);
+
+  // Ref pour gérer le timeout de guidage
+  const guidanceTimeoutRef = useRef(null);
+
   // Initialiser la session en fonction du paramètre d'URL
   useEffect(() => {
     if (sessionId) {
@@ -206,44 +212,28 @@ export default function GuidedSessionRunner() {
       }, 2000);
     }
   }, [timeRemaining, isSessionActive, sessionEnding, currentSession, speak, stopAudio, stopBreathing, stopVoice, navigate]);
-
-  // Démarrage vocal automatique
-  useEffect(() => {
-    if (isSessionActive && voiceSettings.enabled) {
-      console.log('🎤 DÉMARRAGE VOCAL AUTOMATIQUE - Session:', currentSession || sessionId, 'Méditation:', currentMeditation);
+        clearTimeout(guidanceTimeoutRef.current);
+      }
       
-      // Démarrage immédiat selon la session
-      if (currentSession === 'scan' || sessionId === 'scan') {
-        console.log('🧠 DÉMARRAGE SCAN CORPOREL');
-        speak("Bienvenue dans cette séance de scan corporel. Installez-vous confortablement.");
-        
-        setTimeout(() => {
-          if (isSessionActive && voiceSettings.enabled) {
-            speak("Portez votre attention sur le sommet de votre tête. Sentez cette zone se détendre.");
-          }
-        }, 30000);
-        
-        setTimeout(() => {
-          if (isSessionActive && voiceSettings.enabled) {
-            speak("Descendez vers votre visage. Relâchez votre front, vos sourcils.");
-          }
-        }, 60000);
-        
-      } else if (currentSession === 'switch' || sessionId === 'switch') {
-        console.log('🚨 DÉMARRAGE SOS STRESS');
-        speak("Bienvenue dans votre bulle de calme. Posez vos pieds bien à plat sur le sol.");
-        
-        setTimeout(() => {
-          if (isSessionActive && voiceSettings.enabled) {
-            speak("Inspirez le calme");
-          }
-        }, 12000);
-        
       } else {
         console.log('🎤 DÉMARRAGE SESSION GÉNÉRIQUE');
         speak("Bienvenue dans votre session. Suivez le guide respiratoire.");
       }
     }
+    
+    // Cleanup function
+    return () => {
+      if (guidanceTimeoutRef.current) {
+        clearTimeout(guidanceTimeoutRef.current);
+      }
+    };
+    
+    // Cleanup function
+    return () => {
+      if (guidanceTimeoutRef.current) {
+        clearTimeout(guidanceTimeoutRef.current);
+      }
+    };
   }, [isSessionActive, voiceSettings.enabled, currentSession, sessionId, speak, currentMeditation]);
 
   const handleToggleSession = () => {
@@ -288,16 +278,10 @@ export default function GuidedSessionRunner() {
       
       // Démarrage du guidage vocal pour la session
       // Attendre un peu pour que tout soit initialisé
-      const guidanceTimeout = setTimeout(() => {
+      guidanceTimeoutRef.current = setTimeout(() => {
         if (voiceSettings.enabled) {
           console.log('🎤 Démarrage guidage vocal après délai');
           const success = startSessionGuidance();
-          console.log('🎤 Démarrage guidage vocal guidé:', success ? 'réussi' : 'échoué');
-        }
-      }, 1000);
-      
-      // Nettoyer le timeout si la session est arrêtée avant qu'il ne se déclenche
-      return () => clearTimeout(guidanceTimeout);
     } else {
       setSessionActive(false);
       console.log('⏸️ PAUSE session guidée:', currentSession || sessionId);
@@ -315,6 +299,18 @@ export default function GuidedSessionRunner() {
       if (clearAllTimeouts) {
         console.log('🧹 Nettoyage forcé de tous les timeouts lors de la pause');
         clearAllTimeouts();
+      }
+      
+      // Nettoyer le timeout de guidage
+      if (guidanceTimeoutRef.current) {
+        clearTimeout(guidanceTimeoutRef.current);
+        guidanceTimeoutRef.current = null;
+      }
+      
+      // Nettoyer le timeout de guidage
+      if (guidanceTimeoutRef.current) {
+        clearTimeout(guidanceTimeoutRef.current);
+        guidanceTimeoutRef.current = null;
       }
       
       setLastPhase(null);
@@ -371,6 +367,18 @@ export default function GuidedSessionRunner() {
       clearAllTimeouts();
     }
     
+    // Nettoyer le timeout de guidage
+    if (guidanceTimeoutRef.current) {
+      clearTimeout(guidanceTimeoutRef.current);
+      guidanceTimeoutRef.current = null;
+    }
+    
+    // Nettoyer le timeout de guidage
+    if (guidanceTimeoutRef.current) {
+      clearTimeout(guidanceTimeoutRef.current);
+      guidanceTimeoutRef.current = null;
+    }
+    
     if (resetTimer) resetTimer();
     setLastPhase(null);
     setSessionEnding(false);
@@ -424,6 +432,16 @@ export default function GuidedSessionRunner() {
       // Nettoyer tous les timeouts
       if (clearAllTimeouts) {
         clearAllTimeouts();
+      }
+      
+      // Nettoyer le timeout de guidage
+      if (guidanceTimeoutRef.current) {
+        clearTimeout(guidanceTimeoutRef.current);
+      }
+      
+      // Nettoyer le timeout de guidage
+      if (guidanceTimeoutRef.current) {
+        clearTimeout(guidanceTimeoutRef.current);
       }
       
       // Arrêter tous les timeouts manuellement
