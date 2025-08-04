@@ -1,4 +1,4 @@
-import { useRef, useCallback } from 'react';
+import { useRef, useCallback, useEffect } from 'react';
 import { useAppStore } from '../store/appStore';
 
 export function useVoiceManager() {
