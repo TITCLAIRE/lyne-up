@@ -1,7 +1,25 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useAppStore } from '../../store/appStore';
 import { sessions, getBreathingPattern } from '../../data/sessions';
 import { meditations, spiritualMeditations } from '../../data/meditations';
+import { BreathingGuide } from '../../components/BreathingGuide';
+import { 
+  Play, 
+  Pause, 
+  Home, 
+  Target, 
+  RotateCcw, 
+  TrendingUp, 
+  Settings, 
+  Baby, 
+  Users, 
+  Brain, 
+  Sparkles, 
+  Heart, 
+  Headphones,
+  Wind
+} from 'lucide-react';
 
 export function useVoiceManager() {
   const { currentSession, currentMeditation, voiceSettings } = useAppStore();
@@ -99,6 +117,33 @@ export function useVoiceManager() {
     clearAllTimeouts
   };
 }
+
+export function GuidedSessionRunner() {
+  const { sessionId } = useParams();
+  const navigate = useNavigate();
+  
+  const { 
+    currentSession, 
+    setCurrentSession,
+    isSessionActive, 
+    setSessionActive, 
+    currentMeditation,
+    breathingState,
+    timeRemaining,
+    progress,
+    startTimer,
+    stopTimer,
+    resetTimer,
+    startBreathing,
+    stopBreathing,
+    audioSettings,
+    voiceSettings,
+    startAudio,
+    stopAudio,
+    playGong
+  } = useAppStore();
+
+  const { speak, stop: stopVoice, startSessionGuidance, clearAllTimeouts } = useVoiceManager();
 
   const [lastPhase, setLastPhase] = useState(null);
   const [sessionEnding, setSessionEnding] = useState(false);
