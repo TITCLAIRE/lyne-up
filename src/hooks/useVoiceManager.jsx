@@ -21,7 +21,10 @@ export function useVoiceManager() {
   }, []);
   
   const speak = useCallback((text, delay = 0) => {
-    if (!text || !voiceSettings.enabled) return;
+    if (!text || !voiceSettings.enabled) {
+      console.log('🔇 Synthèse vocale désactivée ou texte vide');
+      return;
+    }
     
     console.log('🎤 SYNTHÈSE VOCALE:', text);
     
@@ -58,72 +61,6 @@ export function useVoiceManager() {
       window.speechSynthesis.speak(utterance);
     }
   }, [voiceSettings]);
-  
-  // Fonction pour jouer un fichier audio premium avec fallback vers synthèse
-  const playPremiumAudio = useCallback(async (audioKey, fallbackText, delay = 0) => {
-    if (!voiceSettings.enabled) return;
-
-    const gender = voiceSettings.gender === 'male' ? 'male' : 'female';
-    const voiceName = gender === 'male' ? 'Thierry' : 'Claire';
-    const audioPath = `/audio/sos-stress/${gender}/${audioKey}.mp3`;
-    
-    console.log(`🎵 TENTATIVE LECTURE AUDIO PREMIUM: ${audioPath} (${voiceName})`);
-
-    const timeoutId = setTimeout(async () => {
-      try {
-        // Test d'existence du fichier d'abord
-        const response = await fetch(audioPath, { method: 'HEAD' });
-        
-        if (response.ok) {
-          console.log(`✅ FICHIER TROUVÉ: ${audioPath} (${response.status})`);
-          
-          // Arrêter l'audio précédent
-          if (currentAudioRef.current) {
-            currentAudioRef.current.pause();
-            currentAudioRef.current = null;
-          }
-          
-          // Créer et jouer le fichier audio
-          const audio = new Audio(audioPath);
-          audio.volume = voiceSettings.volume;
-          currentAudioRef.current = audio;
-          
-          audio.oncanplaythrough = async () => {
-            try {
-              await audio.play();
-              console.log(`🔊 LECTURE PREMIUM DÉMARRÉE: ${audioPath} (${voiceName})`);
-            } catch (playError) {
-              console.log(`❌ ERREUR LECTURE: ${audioPath} - Fallback synthèse`);
-              speak(fallbackText);
-            }
-          };
-          
-          audio.onended = () => {
-            console.log(`✅ AUDIO PREMIUM TERMINÉ: ${audioPath} (${voiceName})`);
-            currentAudioRef.current = null;
-          };
-          
-          audio.onerror = () => {
-            console.log(`❌ ERREUR AUDIO: ${audioPath} - Fallback synthèse`);
-            speak(fallbackText);
-          };
-          
-          // Charger le fichier
-          audio.load();
-          
-        } else {
-          console.log(`❌ FICHIER NON TROUVÉ: ${audioPath} (${response.status}) - Fallback synthèse`);
-          speak(fallbackText);
-        }
-        
-      } catch (error) {
-        console.log(`🔄 FALLBACK SYNTHÈSE pour: ${audioKey} - Raison:`, error.message);
-        speak(fallbackText);
-      }
-    }, delay);
-    
-    timeoutsRef.current.push(timeoutId);
-  }, [voiceSettings, speak]);
 
   const stopVoice = useCallback(() => {
     console.log('🔇 ARRÊT COMPLET DU SYSTÈME VOCAL');
@@ -143,94 +80,100 @@ export function useVoiceManager() {
   
   const startSessionGuidance = useCallback(() => {
     if (!voiceSettings.enabled) {
-      console.log('🔇 Guidage vocal désactivé');
+      console.log('🔇 Guidage vocal désactivé dans les paramètres');
       return false;
     }
     
     console.log('🎤 DÉMARRAGE GUIDAGE VOCAL - Session:', currentSession);
-    console.log('🎤 Voix sélectionnée:', voiceSettings.gender === 'male' ? 'Thierry' : 'Claire');
+    console.log('🎤 Voix activée:', voiceSettings.enabled);
+    console.log('🎤 Volume:', voiceSettings.volume);
+    console.log('🎤 Genre:', voiceSettings.gender);
     
-    // Nettoyage préventif
-    clearAllTimeouts();
+    // Test immédiat de la synthèse vocale
+    speak("Test du système vocal. Si vous entendez ceci, la synthèse vocale fonctionne.", 500);
     
     // Démarrage spécifique pour SOS Stress (session SWITCH)
     if (currentSession === 'switch') {
-      console.log('🚨 DÉMARRAGE SOS STRESS - DIAGNOSTIC COMPLET (' + (voiceSettings.gender === 'male' ? 'Thierry' : 'Claire') + ')');
-      console.log('🔍 TEST DES FICHIERS AUDIO SOS STRESS...');
+      console.log('🚨 DÉMARRAGE SOS STRESS - SYSTÈME PREMIUM + FALLBACK');
       
-      // Test immédiat de tous les fichiers
+      // Essayer d'abord les fichiers premium, puis fallback vers synthèse
       const gender = voiceSettings.gender === 'male' ? 'male' : 'female';
-      const audioFiles = [
-        'welcome', 'breathe-calm', 'grounding', 'breathe-softly', 
-        'breathe-fresh', 'stress-release', 'breathe-release', 'center-peace', 'completion'
-      ];
+      const voiceName = gender === 'male' ? 'Thierry' : 'Claire';
       
-      // Test de connectivité des fichiers
-      audioFiles.forEach(async (file, index) => {
-        try {
-          const response = await fetch(`/audio/sos-stress/${gender}/${file}.mp3`, { method: 'HEAD' });
-          if (response.ok) {
-            console.log(`✅ /audio/sos-stress/${gender}/${file}.mp3 (${response.status})`);
-          } else {
-            console.log(`❌ /audio/sos-stress/${gender}/${file}.mp3 (${response.status})`);
-          }
-        } catch (error) {
-          console.log(`❌ /audio/sos-stress/${gender}/${file}.mp3 (ERREUR RÉSEAU)`);
-        }
-      });
+      console.log('🔍 RECHERCHE FICHIERS PREMIUM POUR:', voiceName);
       
-      // Séquences SOS Stress avec timings parfaits
-      playPremiumAudio('welcome', 
-        "Bienvenue dans votre bulle de calme. Posez vos pieds bien à plat sur le sol. Détendez vos épaules.", 
-        500);
-      
-      playPremiumAudio('breathe-calm', 
-        "Inspirez le calme", 
-        12000);
-      
-      playPremiumAudio('grounding', 
-        "Vos pieds touchent le sol. Vous êtes ancré, solide, stable.", 
-        28000);
-      
-      playPremiumAudio('breathe-softly', 
-        "Soufflez doucement", 
-        37000);
-      
-      playPremiumAudio('breathe-fresh', 
-        "Accueillez l'air frais", 
-        48000);
-      
-      playPremiumAudio('stress-release', 
-        "Le stress s'évapore à chaque souffle. Votre corps se détend profondément.", 
-        58000);
-      
-      playPremiumAudio('breathe-release', 
-        "Relâchez tout", 
-        67000);
-      
-      playPremiumAudio('center-peace', 
-        "Vous retrouvez votre centre. Tout va bien. Vous êtes en sécurité.", 
-        78000);
-      
-      playPremiumAudio('completion', 
-        "Parfait. Vous avez retrouvé votre calme intérieur. Gardez cette sensation avec vous.", 
-        85000);
+      // Séquence 1 : Message d'accueil (0.5s)
+      const timeoutId1 = setTimeout(async () => {
+        const audioPath = `/audio/sos-stress/${gender}/welcome.mp3`;
+        console.log('🎵 TENTATIVE LECTURE PREMIUM:', audioPath);
         
-      console.log('✅ TOUTES LES SÉQUENCES SOS STRESS PROGRAMMÉES');
+        try {
+          const audio = new Audio(audioPath);
+          audio.volume = voiceSettings.volume;
+          currentAudioRef.current = audio;
+          
+          audio.oncanplaythrough = async () => {
+            try {
+              await audio.play();
+              console.log('🔊 LECTURE PREMIUM RÉUSSIE: welcome.mp3');
+            } catch (playError) {
+              console.log('🔄 FALLBACK SYNTHÈSE: welcome');
+              speak("Bienvenue dans votre bulle de calme. Posez vos pieds bien à plat sur le sol. Détendez vos épaules.");
+            }
+          };
+          
+          audio.onerror = () => {
+            console.log('🔄 FALLBACK SYNTHÈSE: welcome (erreur audio)');
+            speak("Bienvenue dans votre bulle de calme. Posez vos pieds bien à plat sur le sol. Détendez vos épaules.");
+          };
+          
+          audio.load();
+          
+        } catch (error) {
+          console.log('🔄 FALLBACK SYNTHÈSE: welcome (erreur chargement)');
+          speak("Bienvenue dans votre bulle de calme. Posez vos pieds bien à plat sur le sol. Détendez vos épaules.");
+        }
+      }, 500);
+      timeoutsRef.current.push(timeoutId1);
+      
+      // Séquence 2 : Guidage respiratoire (12s)
+      const timeoutId2 = setTimeout(() => {
+        speak("Inspirez le calme");
+      }, 12000);
+      timeoutsRef.current.push(timeoutId2);
+      
+      // Séquence 3 : Ancrage (28s)
+      const timeoutId3 = setTimeout(() => {
+        speak("Vos pieds touchent le sol. Vous êtes ancré, solide, stable.");
+      }, 28000);
+      timeoutsRef.current.push(timeoutId3);
+      
+      // Séquence 4 : Guidage respiratoire (37s)
+      const timeoutId4 = setTimeout(() => {
+        speak("Soufflez doucement");
+      }, 37000);
+      timeoutsRef.current.push(timeoutId4);
+      
+      // Séquence 5 : Message de fin (85s)
+      const timeoutId5 = setTimeout(() => {
+        speak("Parfait. Vous avez retrouvé votre calme intérieur. Gardez cette sensation avec vous.");
+      }, 85000);
+      timeoutsRef.current.push(timeoutId5);
+      
+      console.log('✅ SÉQUENCES SOS STRESS PROGRAMMÉES (Premium + Fallback)');
         
     } else {
-      // Autres sessions avec synthèse vocale
+      // Autres sessions avec synthèse vocale simple
       speak("Bienvenue dans votre session. Suivez le guide respiratoire.", 1000);
     }
     
     return true;
-  }, [currentSession, voiceSettings, clearAllTimeouts, playPremiumAudio, speak]);
+  }, [currentSession, voiceSettings, speak]);
   
   return {
     speak,
     stop: stopVoice,
     startSessionGuidance,
-    clearAllTimeouts,
-    playPremiumAudio
+    clearAllTimeouts
   };
 }
