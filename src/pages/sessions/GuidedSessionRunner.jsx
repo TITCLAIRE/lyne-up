@@ -270,8 +270,9 @@ export default function GuidedSessionRunner() {
       // Attendre un peu pour que tout soit initialisé
       guidanceTimeoutRef.current = setTimeout(() => {
         if (voiceSettings.enabled) {
-          console.log('🎤 Démarrage guidage vocal après délai');
+          console.log('🎤 DÉMARRAGE GUIDAGE VOCAL FORCÉ - Session:', currentSession || sessionId);
           const success = startSessionGuidance();
+          console.log('🎤 Résultat démarrage guidage:', success ? 'SUCCÈS' : 'ÉCHEC');
         }
       }, 1000);
     } else {
