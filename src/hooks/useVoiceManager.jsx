@@ -19,6 +19,47 @@ export function useVoiceManager() {
     }
   }, []);
   
+  const speak = useCallback((text, delay = 0) => {
+    if (!text || !voiceSettings.enabled) return;
+    
+    console.log('🎤 SPEAK:', text);
+    
+    // Arrêter toute synthèse en cours
+    window.speechSynthesis.cancel();
+    
+    // Arrêter l'audio premium en cours
+    if (currentAudioRef.current) {
+      currentAudioRef.current.pause();
+      currentAudioRef.current = null;
+    }
+    
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'fr-FR';
+    utterance.rate = 1;
+    utterance.volume = voiceSettings.volume;
+    
+    utterance.onstart = () => {
+      console.log('🎤 SYNTHÈSE DÉMARRÉE');
+    };
+    
+    utterance.onend = () => {
+      console.log('🎤 SYNTHÈSE TERMINÉE');
+    };
+    
+    utterance.onerror = (event) => {
+      console.error('❌ ERREUR SYNTHÈSE:', event);
+    };
+    
+    if (delay > 0) {
+      const timeoutId = setTimeout(() => {
+        window.speechSynthesis.speak(utterance);
+      }, delay);
+      timeoutsRef.current.push(timeoutId);
+    } else {
+      window.speechSynthesis.speak(utterance);
+    }
+  }, [voiceSettings]);
+  
   // Fonction pour jouer un fichier audio premium avec fallback
   const playPremiumAudio = useCallback(async (audioKey, fallbackText, delay = 0) => {
     if (!voiceSettings.enabled) return;
@@ -78,47 +119,6 @@ export function useVoiceManager() {
     timeoutsRef.current.push(timeoutId);
   }, [voiceSettings, speak]);
 
-  const speak = useCallback((text, delay = 0) => {
-    if (!text || !voiceSettings.enabled) return;
-    
-    console.log('🎤 SPEAK:', text);
-    
-    // Arrêter toute synthèse en cours
-    window.speechSynthesis.cancel();
-    
-    // Arrêter l'audio premium en cours
-    if (currentAudioRef.current) {
-      currentAudioRef.current.pause();
-      currentAudioRef.current = null;
-    }
-    
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = 'fr-FR';
-    utterance.rate = 1;
-    utterance.volume = voiceSettings.volume;
-    
-    utterance.onstart = () => {
-      console.log('🎤 SYNTHÈSE DÉMARRÉE');
-    };
-    
-    utterance.onend = () => {
-      console.log('🎤 SYNTHÈSE TERMINÉE');
-    };
-    
-    utterance.onerror = (event) => {
-      console.error('❌ ERREUR SYNTHÈSE:', event);
-    };
-    
-    if (delay > 0) {
-      const timeoutId = setTimeout(() => {
-        window.speechSynthesis.speak(utterance);
-      }, delay);
-      timeoutsRef.current.push(timeoutId);
-    } else {
-      window.speechSynthesis.speak(utterance);
-    }
-  }, [voiceSettings]);
-  
   const stopVoice = useCallback(() => {
     console.log('🔇 ARRÊT SYNTHÈSE VOCALE');
     window.speechSynthesis.cancel();
