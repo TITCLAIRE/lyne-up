@@ -7,8 +7,6 @@ export function useVoiceManager() {
   // Ref pour gérer les timeouts de guidage vocal
   const timeoutsRef = useRef([]);
   
-  // Système vocal simplifié
-  const timeoutsRef = useRef([]);
   
   const clearAllTimeouts = useCallback(() => {
     timeoutsRef.current.forEach(timeoutId => clearTimeout(timeoutId));
