@@ -4,6 +4,7 @@ import { X, Volume2, Mic, Download, Smartphone, RotateCcw, CloudLightning, Play,
 import { useAppStore } from '../store/appStore';
 import { useVoiceManager } from '../hooks/useVoiceManager';
 import { useSupabase } from '../hooks/useSupabase';
+import { VoiceTest } from './VoiceTest';
 
 export const SidePanel = () => {
   const navigate = useNavigate();
@@ -228,6 +229,9 @@ export const SidePanel = () => {
               Voix Premium
             </h3>
             <div className="bg-white/5 rounded-xl p-4 space-y-4">
+              {/* Composant de test vocal */}
+              <VoiceTest />
+              
               <div className="flex justify-between items-center">
                 <span>Guidage vocal</span>
                 <button
@@ -239,46 +243,6 @@ export const SidePanel = () => {
                   <div className={`w-5 h-5 bg-white rounded-full transition-transform ${
                     voiceSettings.enabled ? 'translate-x-6' : 'translate-x-0.5'
                   }`} />
-                </button>
-              </div>
-
-              {/* NOUVEAU: Bouton de test vocal immédiat */}
-              <div className="space-y-3">
-                <button
-                  onClick={() => {
-                    console.log('🎤 TEST VOCAL IMMÉDIAT');
-                    if (window.speechSynthesis) {
-                      const utterance = new SpeechSynthesisUtterance("Test vocal immédiat. Si vous entendez ceci, la synthèse vocale fonctionne.");
-                      utterance.lang = 'fr-FR';
-                      utterance.volume = voiceSettings.volume;
-                      window.speechSynthesis.speak(utterance);
-                    } else {
-                      console.log('❌ speechSynthesis non disponible');
-                    }
-                  }}
-                  className="w-full bg-green-500/20 border border-green-500/30 rounded-lg p-3 text-sm hover:bg-green-500/30 transition-colors"
-                >
-                  🎤 Test vocal immédiat
-                </button>
-                
-                <button
-                  onClick={() => {
-                    console.log('🔍 DIAGNOSTIC VOCAL COMPLET:');
-                    console.log('  - speechSynthesis disponible:', !!window.speechSynthesis);
-                    console.log('  - Voix activée:', voiceSettings.enabled);
-                    console.log('  - Genre:', voiceSettings.gender);
-                    console.log('  - Volume:', voiceSettings.volume);
-                    console.log('  - Session active:', isSessionActive);
-                    console.log('  - Session actuelle:', currentSession);
-                    
-                    // Test des autorisations audio
-                    navigator.permissions.query({name: 'microphone'}).then(result => {
-                      console.log('  - Permission micro:', result.state);
-                    }).catch(e => console.log('  - Permission micro: non testable'));
-                  }}
-                  className="w-full bg-yellow-500/20 border border-yellow-500/30 rounded-lg p-3 text-sm hover:bg-yellow-500/30 transition-colors"
-                >
-                  🔍 Diagnostic vocal complet
                 </button>
               </div>
 
@@ -310,18 +274,6 @@ export const SidePanel = () => {
                 </div>
               </div>
 
-              {/* Debug du système vocal */}
-              <div className="bg-yellow-500/10 border border-yellow-500/20 rounded-lg p-3">
-                <p className="text-xs text-yellow-200 mb-2">
-                  <strong>Debug Vocal :</strong>
-                </p>
-                <div className="text-xs text-yellow-100/80 space-y-1">
-                  <div>Voix activée : {voiceSettings.enabled ? '✅ Oui' : '❌ Non'}</div>
-                  <div>Genre : {voiceSettings.gender === 'female' ? 'Claire' : 'Thierry'}</div>
-                  <div>Volume : {Math.round(voiceSettings.volume * 100)}%</div>
-                </div>
-              </div>
-
               <div>
                 <label className="block text-sm text-white/70 mb-2">
                   Volume voix <span className="text-xs text-white/50">(recommandé: 60-70%)</span>
@@ -342,40 +294,11 @@ export const SidePanel = () => {
                 </div>
               </div>
 
-              <div className="space-y-3">
-                <div className="flex gap-2">
-                  <button
-                    onClick={handleTestSynthesisVoice} 
-                    className="w-full bg-white/10 border border-white/20 rounded-lg p-3 text-sm hover:bg-white/15 transition-colors"
-                  >
-                    Tester la voix
-                  </button>
-                </div>
-                
-                {/* NOUVEAU: Bouton de diagnostic vocal */}
-                <div className="flex gap-2">
-                  <button
-                    onClick={() => {
-                      console.log('🔍 DIAGNOSTIC VOCAL:');
-                      console.log('  - Voix activée:', voiceSettings.enabled);
-                      console.log('  - Genre:', voiceSettings.gender);
-                      console.log('  - Volume:', voiceSettings.volume);
-                      console.log('  - Session active:', isSessionActive);
-                      console.log('  - Session actuelle:', currentSession);
-                    }}
-                    className="w-full bg-yellow-500/20 border border-yellow-500/30 rounded-lg p-3 text-sm hover:bg-yellow-500/30 transition-colors"
-                  >
-                    🔍 Diagnostic vocal
-                  </button>
-                </div>
-              </div>
-
               <div className="rounded-lg p-3 bg-blue-500/10 border border-blue-500/30">
                 <p className="text-xs text-green-200">
                   <strong>Système vocal :</strong> Fichiers MP3 premium Claire/Thierry + fallback synthèse vocale française.
                 </p>
                 
-                {/* NOUVEAU: État vocal en temps réel */}
                 <div className="mt-2 text-xs text-white/70">
                   <div>État: {voiceSettings.enabled ? '✅ Activé' : '❌ Désactivé'}</div>
                   <div>Voix: {voiceSettings.gender === 'female' ? 'Claire' : 'Thierry'}</div>
