@@ -238,7 +238,7 @@ export function useVoiceManager() {
       // Séquence 1 : Message d'accueil (0s)
       const timeoutId1 = setTimeout(async () => {
         console.log('🎯 Scan - Séquence 1 (0s): Message d\'accueil');
-        await tryPremiumAudioScan('welcome', 
+        await tryPremiumAudio('welcome', 
           "Bienvenue dans cette séance de scan corporel. Installez-vous confortablement, fermez les yeux si vous le souhaitez. Nous allons explorer chaque partie de votre corps pour une relaxation profonde.");
       }, 1000);
       timeoutsRef.current.push(timeoutId1);
@@ -246,7 +246,7 @@ export function useVoiceManager() {
       // Séquence 2 : Tête (30s)
       const timeoutId2 = setTimeout(async () => {
         console.log('🎯 Scan - Séquence 2 (30s): Tête');
-        await tryPremiumAudioScan('head', 
+        await tryPremiumAudio('head', 
           "Portez votre attention sur le sommet de votre tête. Sentez cette zone se détendre complètement.");
       }, 30000);
       timeoutsRef.current.push(timeoutId2);
@@ -254,7 +254,7 @@ export function useVoiceManager() {
       // Séquence 3 : Visage (60s)
       const timeoutId3 = setTimeout(async () => {
         console.log('🎯 Scan - Séquence 3 (60s): Visage');
-        await tryPremiumAudioScan('face', 
+        await tryPremiumAudio('face', 
           "Descendez vers votre visage. Relâchez votre front, vos sourcils, vos paupières. Détendez vos mâchoires, votre langue, votre gorge.");
       }, 60000);
       timeoutsRef.current.push(timeoutId3);
@@ -262,7 +262,7 @@ export function useVoiceManager() {
       // Séquence 4 : Cou (90s)
       const timeoutId4 = setTimeout(async () => {
         console.log('🎯 Scan - Séquence 4 (90s): Cou et épaules');
-        await tryPremiumAudioScan('neck', 
+        await tryPremiumAudio('neck', 
           "Votre cou et vos épaules se relâchent maintenant. Laissez partir toute tension accumulée dans cette zone.");
       }, 90000);
       timeoutsRef.current.push(timeoutId4);
@@ -270,7 +270,7 @@ export function useVoiceManager() {
       // Séquence 5 : Poitrine (120s)
       const timeoutId5 = setTimeout(async () => {
         console.log('🎯 Scan - Séquence 5 (120s): Poitrine');
-        await tryPremiumAudioScan('chest', 
+        await tryPremiumAudio('chest', 
           "Votre poitrine s'ouvre et se détend à chaque respiration. Sentez l'air qui entre et qui sort librement.");
       }, 120000);
       timeoutsRef.current.push(timeoutId5);
@@ -278,7 +278,7 @@ export function useVoiceManager() {
       // Séquence 6 : Dos (150s)
       const timeoutId6 = setTimeout(async () => {
         console.log('🎯 Scan - Séquence 6 (150s): Dos');
-        await tryPremiumAudioScan('back', 
+        await tryPremiumAudio('back', 
           "Votre dos se détend vertèbre par vertèbre, du haut vers le bas. Chaque vertèbre s'aligne parfaitement.");
       }, 150000);
       timeoutsRef.current.push(timeoutId6);
@@ -286,7 +286,7 @@ export function useVoiceManager() {
       // Séquence 7 : Ventre (180s)
       const timeoutId7 = setTimeout(async () => {
         console.log('🎯 Scan - Séquence 7 (180s): Ventre');
-        await tryPremiumAudioScan('abdomen', 
+        await tryPremiumAudio('abdomen', 
           "Votre ventre se gonfle et se dégonfle naturellement, sans effort. Sentez une douce chaleur s'y répandre.");
       }, 180000);
       timeoutsRef.current.push(timeoutId7);
@@ -294,7 +294,7 @@ export function useVoiceManager() {
       // Séquence 8 : Hanches (210s)
       const timeoutId8 = setTimeout(async () => {
         console.log('🎯 Scan - Séquence 8 (210s): Hanches');
-        await tryPremiumAudioScan('hips', 
+        await tryPremiumAudio('hips', 
           "Vos hanches et votre bassin se relâchent complètement. Sentez le poids de votre corps s'enfoncer dans le support.");
       }, 210000);
       timeoutsRef.current.push(timeoutId8);
@@ -302,7 +302,7 @@ export function useVoiceManager() {
       // Séquence 9 : Cuisses (240s)
       const timeoutId9 = setTimeout(async () => {
         console.log('🎯 Scan - Séquence 9 (240s): Cuisses');
-        await tryPremiumAudioScan('thighs', 
+        await tryPremiumAudio('thighs', 
           "Vos cuisses se détendent profondément. Sentez les muscles se relâcher, devenir lourds et confortables.");
       }, 240000);
       timeoutsRef.current.push(timeoutId9);
@@ -310,7 +310,7 @@ export function useVoiceManager() {
       // Séquence 10 : Pieds (300s)
       const timeoutId10 = setTimeout(async () => {
         console.log('🎯 Scan - Séquence 10 (300s): Pieds');
-        await tryPremiumAudioScan('feet', 
+        await tryPremiumAudio('feet', 
           "Vos pieds, jusqu'au bout de vos orteils, sont maintenant complètement détendus et lourds.");
       }, 300000);
       timeoutsRef.current.push(timeoutId10);
@@ -318,7 +318,7 @@ export function useVoiceManager() {
       // Séquence 11 : Corps entier (360s)
       const timeoutId11 = setTimeout(async () => {
         console.log('🎯 Scan - Séquence 11 (360s): Corps entier');
-        await tryPremiumAudioScan('wholebody', 
+        await tryPremiumAudio('wholebody', 
           "Une vague de bien-être parcourt maintenant tout votre corps, de la tête aux pieds. Vous êtes dans un état de relaxation profonde.");
       }, 360000);
       timeoutsRef.current.push(timeoutId11);
@@ -326,7 +326,7 @@ export function useVoiceManager() {
       // Séquence 12 : Fin (570s)
       const timeoutId12 = setTimeout(async () => {
         console.log('🎯 Scan - Séquence 12 (570s): Fin');
-        await tryPremiumAudioScan('completion', 
+        await tryPremiumAudio('completion', 
           "Progressivement, reprenez conscience de votre environnement. Bougez doucement vos doigts, vos orteils. Votre corps est maintenant complètement détendu et votre esprit apaisé.");
       }, 570000);
       timeoutsRef.current.push(timeoutId12);
