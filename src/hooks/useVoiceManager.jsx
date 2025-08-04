@@ -1,12 +1,11 @@
 import { useRef, useCallback } from 'react';
-import { useAppStore } from '../../store/appStore';
+import { useAppStore } from '../store/appStore';
 
 export function useVoiceManager() {
   const { currentSession, currentMeditation, voiceSettings } = useAppStore();
 
   // Ref pour gérer les timeouts de guidage vocal
   const timeoutsRef = useRef([]);
-  
   
   const clearAllTimeouts = useCallback(() => {
     timeoutsRef.current.forEach(timeoutId => clearTimeout(timeoutId));
@@ -23,7 +22,7 @@ export function useVoiceManager() {
     
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.lang = 'fr-FR';
-    utterance.rate = voiceSettings.speed;
+    utterance.rate = 1;
     utterance.volume = voiceSettings.volume;
     
     utterance.onstart = () => {
@@ -38,7 +37,14 @@ export function useVoiceManager() {
       console.error('❌ ERREUR SYNTHÈSE:', event);
     };
     
-    window.speechSynthesis.speak(utterance);
+    if (delay > 0) {
+      const timeoutId = setTimeout(() => {
+        window.speechSynthesis.speak(utterance);
+      }, delay);
+      timeoutsRef.current.push(timeoutId);
+    } else {
+      window.speechSynthesis.speak(utterance);
+    }
   }, [voiceSettings]);
   
   const stopVoice = useCallback(() => {
@@ -48,7 +54,7 @@ export function useVoiceManager() {
   }, [clearAllTimeouts]);
   
   const startSessionGuidance = useCallback(() => {
-    if (!voiceSettings.enabled || !isSessionActive) return false;
+    if (!voiceSettings.enabled) return false;
     
     console.log('🎤 START SESSION GUIDANCE - Session:', currentSession);
     
@@ -77,9 +83,12 @@ export function useVoiceManager() {
     }
     
     return true;
-  }, [voiceSettings.enabled, isSessionActive, currentSession, speak, clearAllTimeouts]);
+  }, [voiceSettings.enabled, currentSession, speak, clearAllTimeouts]);
   
   return {
     speak,
-  }
+    stop: stopVoice,
+    startSessionGuidance,
+    clearAllTimeouts,
+  };
 }
