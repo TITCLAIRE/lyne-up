@@ -1,20 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { Play, Pause, Home, Headphones, Target, RotateCcw, TrendingUp, Settings, Baby, Users, Brain, Sparkles, Heart, Wind, Waves } from 'lucide-react';
 import { useAppStore } from '../../store/appStore';
-import { BreathingGuide } from '../../components/BreathingGuide';
-import { useSessionTimer } from '../../hooks/useSessionTimer';
-import { useBreathingAnimation } from '../../hooks/useBreathingAnimation';
-import { useAudioManager } from '../../hooks/useAudioManager';
-import { useVoiceManager } from '../../hooks/useVoiceManager'; 
 import { sessions, getBreathingPattern } from '../../data/sessions';
 import { meditations, spiritualMeditations } from '../../data/meditations';
 
-import { useCallback } from 'react';
-
 export function useVoiceManager() {
-  const { sessionId } = useParams();
-  const navigate = useNavigate();
+  const { currentSession, currentMeditation, voiceSettings } = useAppStore();
   
   const { 
     currentSession, 
@@ -23,18 +13,10 @@ export function useVoiceManager() {
     setSessionActive, 
     currentMeditation,
     audioSettings,
-    voiceSettings
   } = useAppStore();
 
-  // Fonction de fin de session - DOIT être définie AVANT useSessionTimer
-  const handleSessionComplete = useCallback(() => {
-    console.log('🏁 Session terminée, redirection vers les résultats');
-    navigate('/results');
-  }, [navigate]);
-
-  const { timeRemaining, progress, startTimer, stopTimer, resetTimer } = useSessionTimer(handleSessionComplete);
-  const { breathingState, startBreathing, stopBreathing } = useBreathingAnimation();
-  const { startAudio, stopAudio, playGong, getCurrentFrequencyName } = useAudioManager();
+  // Ref pour gérer les timeouts de guidage vocal
+  const timeoutsRef = useRef([]);
   
   // Système vocal simplifié
   const timeoutsRef = useRef([]);
@@ -44,7 +26,7 @@ export function useVoiceManager() {
     timeoutsRef.current = [];
   }, []);
   
-  const speak = useCallback((text) => {
+  const speak = useCallback((text, delay = 0) => {
     if (!text || !voiceSettings.enabled) return;
     
     console.log('🎤 SPEAK:', text);
