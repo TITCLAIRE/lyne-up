@@ -212,50 +212,19 @@ export default function GuidedSessionRunner() {
 
   // Gérer le démarrage du guidage vocal
   useEffect(() => {
-    if (isSessionActive && !voiceSystemStarted) {
-      console.log('🎤 ACTIVATION SYSTÈME VOCAL - Session:', currentSession || sessionId);
-      console.log('🎤 Paramètres vocaux:', voiceSettings);
+    if (isSessionActive && !voiceSystemStarted && voiceSettings.enabled) {
+      console.log('🎤 ACTIVATION SYSTÈME VOCAL FORCÉE - Session:', currentSession || sessionId);
+      console.log('🎤 Paramètres vocaux complets:', voiceSettings);
       setVoiceSystemStarted(true);
       
-      // Nettoyer le timeout précédent s'il existe
-      if (guidanceTimeoutRef.current) {
-        clearTimeout(guidanceTimeoutRef.current);
-      }
-      
-      // Test vocal immédiat pour vérifier que ça marche
-      guidanceTimeoutRef.current = setTimeout(() => {
-        console.log('🎤 TEST VOCAL IMMÉDIAT AU DÉMARRAGE');
-        
-        if (voiceSettings.enabled) {
-          // Test de base
-          if (window.speechSynthesis) {
-            const testUtterance = new SpeechSynthesisUtterance("Test vocal de démarrage");
-            testUtterance.lang = 'fr-FR';
-            testUtterance.volume = voiceSettings.volume;
-            window.speechSynthesis.speak(testUtterance);
-            console.log('✅ Test vocal lancé');
-          } else {
-            console.log('❌ speechSynthesis non disponible');
-          }
-          
-          // Puis démarrer le guidage
-          setTimeout(() => {
-            const success = startSessionGuidance();
-            console.log('🎤 Résultat du démarrage guidage:', success ? 'SUCCÈS' : 'ÉCHEC');
-          }, 2000);
-        } else {
-          console.log('🔇 Voix désactivée dans les paramètres');
-        }
+      // Démarrage immédiat du guidage vocal
+      console.log('🎤 DÉMARRAGE IMMÉDIAT DU GUIDAGE VOCAL');
+      setTimeout(() => {
+        const success = startSessionGuidance();
+        console.log('🎤 Résultat du démarrage guidage:', success ? 'SUCCÈS' : 'ÉCHEC');
       }, 1000);
     }
-    
-    // Cleanup function
-    return () => {
-      if (guidanceTimeoutRef.current) {
-        clearTimeout(guidanceTimeoutRef.current);
-      }
-    };
-  }, [isSessionActive, voiceSettings, currentSession, sessionId, startSessionGuidance, voiceSystemStarted]);
+  }, [isSessionActive, voiceSystemStarted, voiceSettings.enabled, startSessionGuidance, currentSession, sessionId, voiceSettings]);
 
   const handleToggleSession = () => {
     if (!isSessionActive) {
