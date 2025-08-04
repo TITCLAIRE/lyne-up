@@ -25,43 +25,10 @@ export function useVoiceManager() {
   }, []);
   
   const speak = useCallback((text, delay = 0) => {
-    if (!text || !voiceSettings.enabled) {
-      console.log('🔇 Synthèse vocale désactivée ou texte vide');
-      return;
-    }
-    
-    console.log('🎤 SYNTHÈSE VOCALE DÉCLENCHÉE:', text);
-    
-    // Arrêter toute synthèse en cours
-    window.speechSynthesis.cancel();
-    
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = 'fr-FR';
-    utterance.rate = 0.9;
-    utterance.volume = voiceSettings.volume;
-    
-    utterance.onstart = () => {
-      console.log('🎤 Synthèse démarrée avec succès');
-    };
-    
-    utterance.onend = () => {
-      console.log('🎤 Synthèse terminée avec succès');
-    };
-    
-    utterance.onerror = (event) => {
-      console.log('⚠️ Erreur synthèse:', event.error);
-    };
-    
-    if (delay > 0) {
-      const timeoutId = setTimeout(() => {
-        console.log('🎤 Exécution synthèse après délai:', delay, 'ms');
-        window.speechSynthesis.speak(utterance);
-      }, delay);
-      timeoutsRef.current.push(timeoutId);
-    } else {
-      console.log('🎤 Exécution synthèse immédiate');
-      window.speechSynthesis.speak(utterance);
-    }
+    // SYNTHÈSE VOCALE COMPLÈTEMENT DÉSACTIVÉE
+    // Seulement les voix premium sont utilisées
+    console.log('🔇 Synthèse vocale désactivée - Utilisation voix premium uniquement');
+    return;
   }, [voiceSettings]);
 
   const stopVoice = useCallback(() => {
@@ -118,8 +85,7 @@ export function useVoiceManager() {
       
       if (!response.ok) {
         console.log(`❌ FICHIER NON TROUVÉ: ${audioPath} (${response.status})`);
-        console.log(`🔄 FALLBACK SYNTHÈSE pour: ${audioKey} - Raison: Fichier non trouvé`);
-        speak(fallbackText);
+        console.log(`🔇 FICHIER MANQUANT: ${audioKey} - Pas de fallback synthèse`);
         return false;
       }
       
@@ -143,22 +109,19 @@ export function useVoiceManager() {
             };
             
           } catch (playError) {
-            console.log(`🔄 FALLBACK SYNTHÈSE pour: ${audioKey} - Raison: Erreur lecture`);
-            speak(fallbackText);
+            console.log(`🔇 ERREUR LECTURE: ${audioKey} - Pas de fallback synthèse`);
             resolve(false);
           }
         };
         
         audio.onerror = () => {
-          console.log(`🔄 FALLBACK SYNTHÈSE pour: ${audioKey} - Raison: Erreur audio`);
-          speak(fallbackText);
+          console.log(`🔇 ERREUR AUDIO: ${audioKey} - Pas de fallback synthèse`);
           resolve(false);
         };
         
         // Timeout de sécurité
         setTimeout(() => {
-          console.log(`🔄 FALLBACK SYNTHÈSE pour: ${audioKey} - Raison: Timeout`);
-          speak(fallbackText);
+          console.log(`🔇 TIMEOUT: ${audioKey} - Pas de fallback synthèse`);
           resolve(false);
         }, 3000);
         
@@ -166,8 +129,7 @@ export function useVoiceManager() {
       });
       
     } catch (error) {
-      console.log(`🔄 FALLBACK SYNTHÈSE pour: ${audioKey} - Raison: Erreur réseau`);
-      speak(fallbackText);
+      console.log(`🔇 ERREUR RÉSEAU: ${audioKey} - Pas de fallback synthèse`);
       return false;
     }
   }, [voiceSettings, speak]);
