@@ -68,6 +68,7 @@ export function useVoiceManager() {
     const audioPath = `/audio/sos-stress/${gender}/${audioKey}.mp3`;
     
     console.log(`🎵 TENTATIVE LECTURE AUDIO PREMIUM: ${audioPath} (${voiceName})`);
+    console.log(`🔍 Test d'existence du fichier: ${audioPath}`);
 
     const timeoutId = setTimeout(async () => {
       try {
@@ -84,25 +85,44 @@ export function useVoiceManager() {
         
         // Promesse pour gérer le chargement
         const loadPromise = new Promise((resolve, reject) => {
-          audio.oncanplaythrough = () => {
-            console.log(`✅ FICHIER PREMIUM CHARGÉ: ${audioPath} (${voiceName})`);
-            resolve();
-          };
-          
-          audio.onerror = (error) => {
-            console.log(`❌ FICHIER PREMIUM NON TROUVÉ: ${audioPath} - Fallback vers synthèse`);
-            reject(error);
-          };
-          
-          // Timeout de 2 secondes pour éviter les blocages
+          // Test d'existence du fichier d'abord
+          fetch(audioPath, { method: 'HEAD' })
+            .then(response => {
+              if (response.ok) {
+                console.log(`✅ FICHIER TROUVÉ: ${audioPath} (${response.status})`);
+                // Le fichier existe, procéder au chargement audio
+                audio.oncanplaythrough = () => {
+                  console.log(`✅ FICHIER PREMIUM CHARGÉ: ${audioPath} (${voiceName})`);
+                  resolve();
+                };
+                
+                audio.onerror = (error) => {
+                  console.log(`❌ ERREUR LECTURE AUDIO: ${audioPath}`, error);
+                  reject(error);
+                };
+                
+                // Charger le fichier audio
+                audio.load();
+              } else {
+                console.log(`❌ FICHIER NON TROUVÉ: ${audioPath} (${response.status})`);
+                reject(new Error(`Fichier non trouvé: ${response.status}`));
+              }
+            })
+            .catch(error => {
+              console.log(`❌ ERREUR RÉSEAU: ${audioPath}`, error);
+              reject(error);
+            });
+        });
+        
+        // Timeout de 3 secondes pour éviter les blocages
+        const timeoutPromise = new Promise((_, reject) => {
           setTimeout(() => {
-            reject(new Error('Timeout'));
-          }, 2000);
+            reject(new Error('Timeout de chargement'));
+          }, 3000);
         });
         
         try {
-          await loadPromise;
-          
+          await Promise.race([loadPromise, timeoutPromise]);
           // Fichier chargé avec succès, le jouer
           await audio.play();
           console.log(`🔊 LECTURE PREMIUM DÉMARRÉE: ${audioPath} (${voiceName})`);
@@ -114,13 +134,15 @@ export function useVoiceManager() {
           
         } catch (error) {
           // Fallback vers synthèse vocale
-          console.log(`🔄 FALLBACK SYNTHÈSE pour: ${audioKey} - Raison: ${error.message}`);
+          console.log(`🔄 FALLBACK SYNTHÈSE pour: ${audioKey} - Raison: Fichier non trouvé`);
           currentAudioRef.current = null;
+          console.log(`🗣️ SYNTHÈSE VOCALE: "${fallbackText}"`);
           speak(fallbackText);
         }
         
       } catch (error) {
-        console.log(`❌ ERREUR GÉNÉRALE: ${audioPath} - Fallback vers synthèse`);
+        console.log(`❌ ERREUR GÉNÉRALE: ${audioPath} - Fallback vers synthèse`, error);
+        console.log(`🗣️ SYNTHÈSE VOCALE: "${fallbackText}"`);
         speak(fallbackText);
       }
     }, delay);
