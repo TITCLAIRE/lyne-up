@@ -2,11 +2,12 @@ import { useRef, useCallback } from 'react';
 import { useAppStore } from '../store/appStore';
 
 export function useVoiceManager() {
-  const { voiceSettings, currentSession, currentMeditation } = useAppStore();
+  const { voiceSettings, currentSession, currentMeditation, isSessionActive } = useAppStore();
 
   // Ref pour gérer les timeouts de guidage vocal
   const timeoutsRef = useRef([]);
   const currentAudioRef = useRef(null);
+  const isGuidanceStartedRef = useRef(false);
   
   const clearAllTimeouts = useCallback(() => {
     console.log('🧹 Nettoyage de tous les timeouts:', timeoutsRef.current.length);
@@ -18,6 +19,9 @@ export function useVoiceManager() {
       currentAudioRef.current.pause();
       currentAudioRef.current = null;
     }
+    
+    // Reset du flag de démarrage
+    isGuidanceStartedRef.current = false;
   }, []);
   
   const speak = useCallback((text, delay = 0) => {
@@ -76,6 +80,13 @@ export function useVoiceManager() {
     clearAllTimeouts();
   }, [clearAllTimeouts]);
 
+  // Surveiller l'état de la session pour arrêter les guidances
+  useEffect(() => {
+    if (!isSessionActive && isGuidanceStartedRef.current) {
+      console.log('🔇 Session inactive détectée - Arrêt du guidage vocal');
+      stopVoice();
+    }
+  }, [isSessionActive, stopVoice]);
   const tryPremiumAudio = useCallback(async (audioKey, fallbackText, timing) => {
     if (!voiceSettings.enabled) {
       console.log('🔇 Voix désactivée, pas de lecture premium');
@@ -162,11 +173,18 @@ export function useVoiceManager() {
   }, [voiceSettings, speak]);
   
   const startSessionGuidance = useCallback(() => {
+    // Éviter les démarrages multiples
+    if (isGuidanceStartedRef.current) {
+      console.log('🔇 Guidage vocal déjà démarré, ignoré');
+      return false;
+    }
+    
     if (!voiceSettings.enabled) {
       console.log('🔇 Guidage vocal désactivé dans les paramètres');
       return false;
     }
     
+    isGuidanceStartedRef.current = true;
     console.log('🎤 DÉMARRAGE GUIDAGE VOCAL - Session:', currentSession);
     
     // Démarrage spécifique pour SOS Stress (session SWITCH)
@@ -323,15 +341,63 @@ export function useVoiceManager() {
       }, 360000);
       timeoutsRef.current.push(timeoutId11);
       
-      // Séquence 12 : Fin (570s)
+      // Séquence 12 : Chevilles (285s)
       const timeoutId12 = setTimeout(async () => {
-        console.log('🎯 Scan - Séquence 12 (570s): Fin');
+        console.log('🎯 Scan - Séquence 12 (285s): Chevilles');
+        await tryPremiumAudio('ankles', 
+          "Vos chevilles se détendent. Sentez l'espace dans ces articulations.");
+      }, 285000);
+      timeoutsRef.current.push(timeoutId12);
+      
+      // Séquence 13 : Pieds complet (300s)
+      const timeoutId13 = setTimeout(async () => {
+        console.log('🎯 Scan - Séquence 13 (300s): Pieds complet');
+        await tryPremiumAudio('feet', 
+          "Vos pieds, jusqu'au bout de vos orteils, sont maintenant complètement détendus et lourds.");
+      }, 300000);
+      timeoutsRef.current.push(timeoutId13);
+      
+      // Séquence 14 : Corps entier (360s)
+      const timeoutId14 = setTimeout(async () => {
+        console.log('🎯 Scan - Séquence 14 (360s): Corps entier');
+        await tryPremiumAudio('wholebody', 
+          "Une vague de bien-être parcourt maintenant tout votre corps, de la tête aux pieds.");
+      }, 360000);
+      timeoutsRef.current.push(timeoutId14);
+      
+      // Séquence 15 : Respiration (420s)
+      const timeoutId15 = setTimeout(async () => {
+        console.log('🎯 Scan - Séquence 15 (420s): Respiration');
+        await tryPremiumAudio('breathing', 
+          "Observez votre respiration, calme et régulière. Chaque inspiration vous apporte énergie et vitalité.");
+      }, 420000);
+      timeoutsRef.current.push(timeoutId15);
+      
+      // Séquence 16 : Conscience (480s)
+      const timeoutId16 = setTimeout(async () => {
+        console.log('🎯 Scan - Séquence 16 (480s): Conscience');
+        await tryPremiumAudio('awareness', 
+          "Prenez conscience de votre corps dans son ensemble, parfaitement détendu et en harmonie.");
+      }, 480000);
+      timeoutsRef.current.push(timeoutId16);
+      
+      // Séquence 17 : Présence (540s)
+      const timeoutId17 = setTimeout(async () => {
+        console.log('🎯 Scan - Séquence 17 (540s): Présence');
+        await tryPremiumAudio('presence', 
+          "Restez dans cet état de relaxation profonde, en pleine conscience de votre corps et de votre respiration.");
+      }, 540000);
+      timeoutsRef.current.push(timeoutId17);
+      
+      // Séquence 12 : Fin (570s)
+      const timeoutId18 = setTimeout(async () => {
+        console.log('🎯 Scan - Séquence 18 (570s): Fin');
         await tryPremiumAudio('completion', 
           "Progressivement, reprenez conscience de votre environnement. Bougez doucement vos doigts, vos orteils. Votre corps est maintenant complètement détendu et votre esprit apaisé.");
       }, 570000);
-      timeoutsRef.current.push(timeoutId12);
+      timeoutsRef.current.push(timeoutId18);
       
-      console.log('✅ TOUTES LES SÉQUENCES SCAN CORPOREL PROGRAMMÉES');
+      console.log('✅ TOUTES LES 18 SÉQUENCES SCAN CORPOREL PROGRAMMÉES');
       
     } else if (currentSession === 'meditation' && currentMeditation === 'gratitude') {
       console.log('🙏 DÉMARRAGE MÉDITATION GRATITUDE - SYSTÈME PREMIUM + FALLBACK');

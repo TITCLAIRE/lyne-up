@@ -212,18 +212,7 @@ export default function GuidedSessionRunner() {
 
   // Gérer le démarrage du guidage vocal
   useEffect(() => {
-    if (isSessionActive && !voiceSystemStarted && voiceSettings.enabled) {
-      console.log('🎤 ACTIVATION SYSTÈME VOCAL FORCÉE - Session:', currentSession || sessionId);
-      console.log('🎤 Paramètres vocaux complets:', voiceSettings);
-      setVoiceSystemStarted(true);
-      
-      // Démarrage immédiat du guidage vocal
-      console.log('🎤 DÉMARRAGE IMMÉDIAT DU GUIDAGE VOCAL');
-      setTimeout(() => {
-        const success = startSessionGuidance();
-        console.log('🎤 Résultat du démarrage guidage:', success ? 'SUCCÈS' : 'ÉCHEC');
-      }, 1000);
-    }
+    // Ce useEffect est supprimé car le guidage vocal est maintenant géré dans handleToggleSession
   }, [isSessionActive, voiceSystemStarted, voiceSettings.enabled, startSessionGuidance, currentSession, sessionId, voiceSettings]);
 
   const handleToggleSession = () => {
