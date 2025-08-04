@@ -186,7 +186,10 @@ export function useVoiceManager() {
     
     isGuidanceStartedRef.current = true;
     console.log('🎤 DÉMARRAGE GUIDAGE VOCAL - Session:', currentSession);
-    
+
+    // SUPPRESSION du message de test générique qui causait les doublons
+    // Plus de speak("Bienvenue dans votre session...") automatique
+
     // Démarrage spécifique pour SOS Stress (session SWITCH)
     if (currentSession === 'switch') {
       console.log('🚨 DÉMARRAGE SOS STRESS - SYSTÈME PREMIUM + FALLBACK');

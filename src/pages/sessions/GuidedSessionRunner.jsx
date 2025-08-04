@@ -212,7 +212,7 @@ export default function GuidedSessionRunner() {
 
   // Gérer le démarrage du guidage vocal
   useEffect(() => {
-    // Ce useEffect est supprimé car le guidage vocal est maintenant géré dans handleToggleSession
+    // Supprimé pour éviter les doublons avec le système premium
   }, [isSessionActive, voiceSystemStarted, voiceSettings.enabled, startSessionGuidance, currentSession, sessionId, voiceSettings]);
 
   const handleToggleSession = () => {
@@ -263,7 +263,7 @@ export default function GuidedSessionRunner() {
           const success = startSessionGuidance();
           console.log('🎤 Résultat démarrage guidage:', success ? 'SUCCÈS' : 'ÉCHEC');
         }
-      }, 1000);
+      }, 500);
     } else {
       setSessionActive(false);
       console.log('⏸️ PAUSE session guidée:', currentSession || sessionId);
