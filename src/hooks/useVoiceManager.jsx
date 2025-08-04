@@ -174,13 +174,14 @@ export function useVoiceManager() {
     
     console.log('🎤 DÉMARRAGE GUIDAGE VOCAL - Session:', currentSession);
     console.log('🎤 Voix sélectionnée:', voiceSettings.gender === 'male' ? 'Thierry' : 'Claire');
+    console.log('🔍 DIAGNOSTIC SYSTÈME VOCAL COMPLET...');
     
     // Nettoyage préventif
     clearAllTimeouts();
     
     // Démarrage spécifique pour SOS Stress (session SWITCH)
     if (currentSession === 'switch') {
-      console.log('🚨 DÉMARRAGE SOS STRESS - DIAGNOSTIC COMPLET (' + (voiceSettings.gender === 'male' ? 'Thierry' : 'Claire') + ')');
+      console.log('🚨 DÉMARRAGE SOS STRESS - SYSTÈME PREMIUM ACTIVÉ (' + (voiceSettings.gender === 'male' ? 'Thierry' : 'Claire') + ')');
       
       // Test de tous les fichiers SOS Stress
       const audioFiles = [
@@ -188,21 +189,25 @@ export function useVoiceManager() {
         'breathe-fresh', 'stress-release', 'breathe-release', 'center-peace', 'completion'
       ];
       
-      console.log('🔍 TEST DES FICHIERS AUDIO SOS STRESS...');
+      console.log('🔍 TEST IMMÉDIAT DES FICHIERS AUDIO SOS STRESS...');
       const gender = voiceSettings.gender === 'male' ? 'male' : 'female';
+      console.log('📁 Dossier utilisé:', `/audio/sos-stress/${gender}/`);
       
-      audioFiles.forEach(async (file) => {
+      // Test immédiat de tous les fichiers
+      audioFiles.forEach(async (file, index) => {
         try {
           const response = await fetch(`/audio/sos-stress/${gender}/${file}.mp3`, { method: 'HEAD' });
           if (response.ok) {
-            console.log(`✅ /audio/sos-stress/${gender}/${file}.mp3 (${response.status})`);
+            console.log(`✅ FICHIER ${index + 1}/9 TROUVÉ: ${file}.mp3 (${response.status})`);
           } else {
-            console.log(`❌ /audio/sos-stress/${gender}/${file}.mp3 (${response.status})`);
+            console.log(`❌ FICHIER ${index + 1}/9 MANQUANT: ${file}.mp3 (${response.status})`);
           }
         } catch (error) {
-          console.log(`❌ /audio/sos-stress/${gender}/${file}.mp3 (erreur réseau)`);
+          console.log(`❌ FICHIER ${index + 1}/9 ERREUR RÉSEAU: ${file}.mp3`, error);
         }
       });
+      
+      console.log('🎯 DÉMARRAGE IMMÉDIAT DES SÉQUENCES PREMIUM...');
       
       // Séquences SOS Stress avec timings parfaits
       playPremiumAudio('welcome', 
@@ -240,6 +245,8 @@ export function useVoiceManager() {
       playPremiumAudio('completion', 
         "Parfait. Vous avez retrouvé votre calme intérieur. Gardez cette sensation avec vous.", 
         85000);
+        
+      console.log('✅ TOUTES LES SÉQUENCES SOS STRESS PROGRAMMÉES');
         
     } else if (currentSession === 'scan') {
       console.log('🧘 DÉMARRAGE SCAN CORPOREL - SYSTÈME PREMIUM');

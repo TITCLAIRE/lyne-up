@@ -213,6 +213,7 @@ export default function GuidedSessionRunner() {
   // Gérer le démarrage du guidage vocal
   useEffect(() => {
     if (isSessionActive && voiceSettings.enabled && !voiceSystemStarted) {
+      console.log('🎤 ACTIVATION SYSTÈME VOCAL - Session:', currentSession || sessionId);
       setVoiceSystemStarted(true);
       
       // Nettoyer le timeout précédent s'il existe
@@ -220,34 +221,12 @@ export default function GuidedSessionRunner() {
         clearTimeout(guidanceTimeoutRef.current);
       }
       
-      // Démarrage spécifique selon le type de session
-      if (currentSession === 'meditation' && currentMeditation) {
-        console.log('🎤 DÉMARRAGE MÉDITATION:', currentMeditation);
-        const meditation = meditations[currentMeditation] || spiritualMeditations[currentMeditation];
-        if (meditation && meditation.guidance) {
-          speak(meditation.guidance);
-        } else {
-          speak("Bienvenue dans votre méditation. Laissez-vous porter par les sons et suivez votre respiration.");
-        }
-      } else if (currentSession === 'kids') {
-        console.log('🎤 DÉMARRAGE SESSION ENFANTS');
-        speak("Salut petit champion ! On va faire de la magie avec notre respiration. Suis le cercle qui grandit et rapetisse. C'est parti pour l'aventure !");
-      } else if (currentSession === 'reset') {
-        console.log('🎤 DÉMARRAGE SESSION RESET 4-7-8');
-        speak("Bienvenue dans le module Reset. Nous allons utiliser la technique 4-7-8 du docteur Andrew Weil. Inspirez par le nez pendant 4 secondes, retenez 7 secondes, expirez par la bouche pendant 8 secondes. Cette technique va réinitialiser votre système nerveux.");
-      } else if (currentSession === 'progressive') {
-        console.log('🎤 DÉMARRAGE ENTRAÎNEMENT PROGRESSIF');
-        speak("Bienvenue dans l'entraînement progressif. Nous commençons par un rythme débutant 3-3, puis nous progresserons vers 4-4, et finirons par la cohérence cardiaque 5-5. Votre capacité respiratoire va s'améliorer progressivement.");
-      } else if (currentSession === 'seniors') {
-        console.log('🎤 DÉMARRAGE SESSION SENIORS');
-        speak("Bienvenue dans le module Seniors Plus. Cette respiration douce 3-4 est parfaitement adaptée pour vous détendre et faire baisser naturellement votre tension artérielle. Respirez à votre rythme, sans forcer.");
-      } else if (currentSession === 'scan') {
-        console.log('🎤 DÉMARRAGE SCAN CORPOREL');
-        speak("Bienvenue dans le scan corporel. Nous allons parcourir votre corps de la tête aux pieds, en relâchant chaque tension. Laissez-vous guider par ma voix.");
-      } else {
-        console.log('🎤 DÉMARRAGE SESSION GÉNÉRIQUE');
-        speak("Bienvenue dans votre session. Suivez le guide respiratoire.");
-      }
+      // Utiliser le système de guidage centralisé
+      guidanceTimeoutRef.current = setTimeout(() => {
+        console.log('🎤 APPEL DU SYSTÈME DE GUIDAGE CENTRALISÉ');
+        const success = startSessionGuidance();
+        console.log('🎤 Résultat du démarrage:', success ? 'SUCCÈS' : 'ÉCHEC');
+      }, 1000);
     }
     
     // Cleanup function
@@ -256,7 +235,7 @@ export default function GuidedSessionRunner() {
         clearTimeout(guidanceTimeoutRef.current);
       }
     };
-  }, [isSessionActive, voiceSettings.enabled, currentSession, sessionId, speak, currentMeditation, voiceSystemStarted]);
+  }, [isSessionActive, voiceSettings.enabled, currentSession, sessionId, startSessionGuidance, voiceSystemStarted]);
 
   const handleToggleSession = () => {
     if (!isSessionActive) {
