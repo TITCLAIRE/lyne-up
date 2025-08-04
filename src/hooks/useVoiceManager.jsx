@@ -68,81 +68,56 @@ export function useVoiceManager() {
     const audioPath = `/audio/sos-stress/${gender}/${audioKey}.mp3`;
     
     console.log(`🎵 TENTATIVE LECTURE AUDIO PREMIUM: ${audioPath} (${voiceName})`);
-    console.log(`🔍 Test d'existence du fichier: ${audioPath}`);
 
     const timeoutId = setTimeout(async () => {
       try {
-        // Arrêter l'audio précédent
-        if (currentAudioRef.current) {
-          currentAudioRef.current.pause();
-          currentAudioRef.current = null;
-        }
+        // Test d'existence du fichier d'abord
+        const response = await fetch(audioPath, { method: 'HEAD' });
         
-        // Créer et tester le fichier audio
-        const audio = new Audio(audioPath);
-        audio.volume = voiceSettings.volume;
-        currentAudioRef.current = audio;
-        
-        // Promesse pour gérer le chargement
-        const loadPromise = new Promise((resolve, reject) => {
-          // Test d'existence du fichier d'abord
-          fetch(audioPath, { method: 'HEAD' })
-            .then(response => {
-              if (response.ok) {
-                console.log(`✅ FICHIER TROUVÉ: ${audioPath} (${response.status})`);
-                // Le fichier existe, procéder au chargement audio
-                audio.oncanplaythrough = () => {
-                  console.log(`✅ FICHIER PREMIUM CHARGÉ: ${audioPath} (${voiceName})`);
-                  resolve();
-                };
-                
-                audio.onerror = (error) => {
-                  console.log(`❌ ERREUR LECTURE AUDIO: ${audioPath}`, error);
-                  reject(error);
-                };
-                
-                // Charger le fichier audio
-                audio.load();
-              } else {
-                console.log(`❌ FICHIER NON TROUVÉ: ${audioPath} (${response.status})`);
-                reject(new Error(`Fichier non trouvé: ${response.status}`));
-              }
-            })
-            .catch(error => {
-              console.log(`❌ ERREUR RÉSEAU: ${audioPath}`, error);
-              reject(error);
-            });
-        });
-        
-        // Timeout de 3 secondes pour éviter les blocages
-        const timeoutPromise = new Promise((_, reject) => {
-          setTimeout(() => {
-            reject(new Error('Timeout de chargement'));
-          }, 3000);
-        });
-        
-        try {
-          await Promise.race([loadPromise, timeoutPromise]);
-          // Fichier chargé avec succès, le jouer
-          await audio.play();
-          console.log(`🔊 LECTURE PREMIUM DÉMARRÉE: ${audioPath} (${voiceName})`);
+        if (response.ok) {
+          console.log(`✅ FICHIER TROUVÉ: ${audioPath} (${response.status})`);
+          
+          // Arrêter l'audio précédent
+          if (currentAudioRef.current) {
+            currentAudioRef.current.pause();
+            currentAudioRef.current = null;
+          }
+          
+          // Créer et jouer le fichier audio
+          const audio = new Audio(audioPath);
+          audio.volume = voiceSettings.volume;
+          currentAudioRef.current = audio;
+          
+          audio.oncanplaythrough = async () => {
+            try {
+              await audio.play();
+              console.log(`🔊 LECTURE PREMIUM DÉMARRÉE: ${audioPath} (${voiceName})`);
+            } catch (playError) {
+              console.log(`❌ ERREUR LECTURE: ${audioPath} - Fallback synthèse`);
+              speak(fallbackText);
+            }
+          };
           
           audio.onended = () => {
             console.log(`✅ AUDIO PREMIUM TERMINÉ: ${audioPath} (${voiceName})`);
             currentAudioRef.current = null;
           };
           
-        } catch (error) {
-          // Fallback vers synthèse vocale
-          console.log(`🔄 FALLBACK SYNTHÈSE pour: ${audioKey} - Raison: Fichier non trouvé`);
-          currentAudioRef.current = null;
-          console.log(`🗣️ SYNTHÈSE VOCALE: "${fallbackText}"`);
+          audio.onerror = () => {
+            console.log(`❌ ERREUR AUDIO: ${audioPath} - Fallback synthèse`);
+            speak(fallbackText);
+          };
+          
+          // Charger le fichier
+          audio.load();
+          
+        } else {
+          console.log(`❌ FICHIER NON TROUVÉ: ${audioPath} (${response.status}) - Fallback synthèse`);
           speak(fallbackText);
         }
         
       } catch (error) {
-        console.log(`❌ ERREUR GÉNÉRALE: ${audioPath} - Fallback vers synthèse`, error);
-        console.log(`🗣️ SYNTHÈSE VOCALE: "${fallbackText}"`);
+        console.log(`🔄 FALLBACK SYNTHÈSE pour: ${audioKey} - Raison:`, error.message);
         speak(fallbackText);
       }
     }, delay);
@@ -174,40 +149,35 @@ export function useVoiceManager() {
     
     console.log('🎤 DÉMARRAGE GUIDAGE VOCAL - Session:', currentSession);
     console.log('🎤 Voix sélectionnée:', voiceSettings.gender === 'male' ? 'Thierry' : 'Claire');
-    console.log('🔍 DIAGNOSTIC SYSTÈME VOCAL COMPLET...');
     
     // Nettoyage préventif
     clearAllTimeouts();
     
     // Démarrage spécifique pour SOS Stress (session SWITCH)
     if (currentSession === 'switch') {
-      console.log('🚨 DÉMARRAGE SOS STRESS - SYSTÈME PREMIUM ACTIVÉ (' + (voiceSettings.gender === 'male' ? 'Thierry' : 'Claire') + ')');
+      console.log('🚨 DÉMARRAGE SOS STRESS - DIAGNOSTIC COMPLET (' + (voiceSettings.gender === 'male' ? 'Thierry' : 'Claire') + ')');
+      console.log('🔍 TEST DES FICHIERS AUDIO SOS STRESS...');
       
-      // Test de tous les fichiers SOS Stress
+      // Test immédiat de tous les fichiers
+      const gender = voiceSettings.gender === 'male' ? 'male' : 'female';
       const audioFiles = [
         'welcome', 'breathe-calm', 'grounding', 'breathe-softly', 
         'breathe-fresh', 'stress-release', 'breathe-release', 'center-peace', 'completion'
       ];
       
-      console.log('🔍 TEST IMMÉDIAT DES FICHIERS AUDIO SOS STRESS...');
-      const gender = voiceSettings.gender === 'male' ? 'male' : 'female';
-      console.log('📁 Dossier utilisé:', `/audio/sos-stress/${gender}/`);
-      
-      // Test immédiat de tous les fichiers
+      // Test de connectivité des fichiers
       audioFiles.forEach(async (file, index) => {
         try {
           const response = await fetch(`/audio/sos-stress/${gender}/${file}.mp3`, { method: 'HEAD' });
           if (response.ok) {
-            console.log(`✅ FICHIER ${index + 1}/9 TROUVÉ: ${file}.mp3 (${response.status})`);
+            console.log(`✅ /audio/sos-stress/${gender}/${file}.mp3 (${response.status})`);
           } else {
-            console.log(`❌ FICHIER ${index + 1}/9 MANQUANT: ${file}.mp3 (${response.status})`);
+            console.log(`❌ /audio/sos-stress/${gender}/${file}.mp3 (${response.status})`);
           }
         } catch (error) {
-          console.log(`❌ FICHIER ${index + 1}/9 ERREUR RÉSEAU: ${file}.mp3`, error);
+          console.log(`❌ /audio/sos-stress/${gender}/${file}.mp3 (ERREUR RÉSEAU)`);
         }
       });
-      
-      console.log('🎯 DÉMARRAGE IMMÉDIAT DES SÉQUENCES PREMIUM...');
       
       // Séquences SOS Stress avec timings parfaits
       playPremiumAudio('welcome', 
@@ -248,24 +218,6 @@ export function useVoiceManager() {
         
       console.log('✅ TOUTES LES SÉQUENCES SOS STRESS PROGRAMMÉES');
         
-    } else if (currentSession === 'scan') {
-      console.log('🧘 DÉMARRAGE SCAN CORPOREL - SYSTÈME PREMIUM');
-      
-      // Scan corporel avec fichiers premium
-      playPremiumAudio('welcome', 
-        "Bienvenue dans cette séance de scan corporel. Installez-vous confortablement.", 
-        500);
-      
-      playPremiumAudio('head', 
-        "Portez votre attention sur le sommet de votre tête. Ressentez cette zone.", 
-        30000);
-      
-      playPremiumAudio('face', 
-        "Maintenant, dirigez votre attention vers votre visage. Détendez tous les muscles.", 
-        60000);
-      
-      // Continuer avec les autres parties du corps...
-      
     } else {
       // Autres sessions avec synthèse vocale
       speak("Bienvenue dans votre session. Suivez le guide respiratoire.", 1000);
