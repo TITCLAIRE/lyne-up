@@ -212,7 +212,8 @@ export default function GuidedSessionRunner() {
 
   // Gérer le démarrage du guidage vocal
   useEffect(() => {
-    // Supprimé pour éviter les doublons avec le système premium
+    // COMPLÈTEMENT SUPPRIMÉ - Pas de démarrage automatique de synthèse
+    // Seules les voix premium sont utilisées via startSessionGuidance()
   }, [isSessionActive, voiceSystemStarted, voiceSettings.enabled, startSessionGuidance, currentSession, sessionId, voiceSettings]);
 
   const handleToggleSession = () => {
