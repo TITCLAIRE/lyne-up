@@ -83,3 +83,5 @@ export function useVoiceManager() {
   
   return {
     speak,
+  }
+}
