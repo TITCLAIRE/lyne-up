@@ -2,7 +2,7 @@ import { useRef, useCallback } from 'react';
 import { useAppStore } from '../store/appStore';
 
 export function useVoiceManager() {
-  const { voiceSettings, currentSession } = useAppStore();
+  const { voiceSettings, currentSession, currentMeditation } = useAppStore();
 
   // Ref pour gérer les timeouts de guidage vocal
   const timeoutsRef = useRef([]);
