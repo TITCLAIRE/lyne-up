@@ -104,7 +104,7 @@ export function useVoiceManager() {
       
       // Séquence 1 : Message d'accueil (0.5s)
       const timeoutId1 = setTimeout(async () => {
-        const audioPath = `/audio/sos-stress/${gender}/welcome.mp3`;
+        const audioPath = `./audio/sos-stress/${gender}/welcome.mp3`;
         console.log('🎵 TENTATIVE LECTURE PREMIUM:', audioPath);
         
         try {
