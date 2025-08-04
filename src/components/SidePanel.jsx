@@ -242,6 +242,46 @@ export const SidePanel = () => {
                 </button>
               </div>
 
+              {/* NOUVEAU: Bouton de test vocal immédiat */}
+              <div className="space-y-3">
+                <button
+                  onClick={() => {
+                    console.log('🎤 TEST VOCAL IMMÉDIAT');
+                    if (window.speechSynthesis) {
+                      const utterance = new SpeechSynthesisUtterance("Test vocal immédiat. Si vous entendez ceci, la synthèse vocale fonctionne.");
+                      utterance.lang = 'fr-FR';
+                      utterance.volume = voiceSettings.volume;
+                      window.speechSynthesis.speak(utterance);
+                    } else {
+                      console.log('❌ speechSynthesis non disponible');
+                    }
+                  }}
+                  className="w-full bg-green-500/20 border border-green-500/30 rounded-lg p-3 text-sm hover:bg-green-500/30 transition-colors"
+                >
+                  🎤 Test vocal immédiat
+                </button>
+                
+                <button
+                  onClick={() => {
+                    console.log('🔍 DIAGNOSTIC VOCAL COMPLET:');
+                    console.log('  - speechSynthesis disponible:', !!window.speechSynthesis);
+                    console.log('  - Voix activée:', voiceSettings.enabled);
+                    console.log('  - Genre:', voiceSettings.gender);
+                    console.log('  - Volume:', voiceSettings.volume);
+                    console.log('  - Session active:', isSessionActive);
+                    console.log('  - Session actuelle:', currentSession);
+                    
+                    // Test des autorisations audio
+                    navigator.permissions.query({name: 'microphone'}).then(result => {
+                      console.log('  - Permission micro:', result.state);
+                    }).catch(e => console.log('  - Permission micro: non testable'));
+                  }}
+                  className="w-full bg-yellow-500/20 border border-yellow-500/30 rounded-lg p-3 text-sm hover:bg-yellow-500/30 transition-colors"
+                >
+                  🔍 Diagnostic vocal complet
+                </button>
+              </div>
+
               <div>
                 <label className="block text-sm text-white/70 mb-2">Choix de la voix premium</label>
                 <div className="flex gap-2">

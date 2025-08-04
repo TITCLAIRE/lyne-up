@@ -212,8 +212,9 @@ export default function GuidedSessionRunner() {
 
   // Gérer le démarrage du guidage vocal
   useEffect(() => {
-    if (isSessionActive && voiceSettings.enabled && !voiceSystemStarted) {
+    if (isSessionActive && !voiceSystemStarted) {
       console.log('🎤 ACTIVATION SYSTÈME VOCAL - Session:', currentSession || sessionId);
+      console.log('🎤 Paramètres vocaux:', voiceSettings);
       setVoiceSystemStarted(true);
       
       // Nettoyer le timeout précédent s'il existe
@@ -221,11 +222,30 @@ export default function GuidedSessionRunner() {
         clearTimeout(guidanceTimeoutRef.current);
       }
       
-      // Utiliser le système de guidage centralisé
+      // Test vocal immédiat pour vérifier que ça marche
       guidanceTimeoutRef.current = setTimeout(() => {
-        console.log('🎤 APPEL DU SYSTÈME DE GUIDAGE CENTRALISÉ');
-        const success = startSessionGuidance();
-        console.log('🎤 Résultat du démarrage:', success ? 'SUCCÈS' : 'ÉCHEC');
+        console.log('🎤 TEST VOCAL IMMÉDIAT AU DÉMARRAGE');
+        
+        if (voiceSettings.enabled) {
+          // Test de base
+          if (window.speechSynthesis) {
+            const testUtterance = new SpeechSynthesisUtterance("Test vocal de démarrage");
+            testUtterance.lang = 'fr-FR';
+            testUtterance.volume = voiceSettings.volume;
+            window.speechSynthesis.speak(testUtterance);
+            console.log('✅ Test vocal lancé');
+          } else {
+            console.log('❌ speechSynthesis non disponible');
+          }
+          
+          // Puis démarrer le guidage
+          setTimeout(() => {
+            const success = startSessionGuidance();
+            console.log('🎤 Résultat du démarrage guidage:', success ? 'SUCCÈS' : 'ÉCHEC');
+          }, 2000);
+        } else {
+          console.log('🔇 Voix désactivée dans les paramètres');
+        }
       }, 1000);
     }
     
@@ -235,7 +255,7 @@ export default function GuidedSessionRunner() {
         clearTimeout(guidanceTimeoutRef.current);
       }
     };
-  }, [isSessionActive, voiceSettings.enabled, currentSession, sessionId, startSessionGuidance, voiceSystemStarted]);
+  }, [isSessionActive, voiceSettings, currentSession, sessionId, startSessionGuidance, voiceSystemStarted]);
 
   const handleToggleSession = () => {
     if (!isSessionActive) {

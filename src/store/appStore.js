@@ -35,7 +35,7 @@ export const useAppStore = create(
       
       voiceSettings: {
         enabled: true,
-        gender: 'female', // Claire par défaut
+       gender: 'female',
         volume: 0.7, // Volume voix recommandé 70%
       },
       
