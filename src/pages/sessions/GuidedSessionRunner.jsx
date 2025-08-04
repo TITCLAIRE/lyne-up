@@ -6,7 +6,7 @@ import { BreathingGuide } from '../../components/BreathingGuide';
 import { useSessionTimer } from '../../hooks/useSessionTimer';
 import { useBreathingAnimation } from '../../hooks/useBreathingAnimation';
 import { useAudioManager } from '../../hooks/useAudioManager';
-import { useVoiceManager } from '../../hooks/useVoiceManager'; 
+import { useVoiceManager } from '../../hooks/useVoiceManager.jsx';
 import { sessions, getBreathingPattern } from '../../data/sessions';
 import { meditations, spiritualMeditations } from '../../data/meditations';
 
