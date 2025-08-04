@@ -47,7 +47,11 @@ export function useVoiceManager() {
     };
     
     utterance.onerror = (event) => {
-      console.error('❌ ERREUR SYNTHÈSE:', event);
+      if (event.error === 'interrupted') {
+        console.log('⚠️ SYNTHÈSE INTERROMPUE (normal)');
+      } else {
+        console.error('❌ ERREUR SYNTHÈSE:', event);
+      }
     };
     
     if (delay > 0) {
