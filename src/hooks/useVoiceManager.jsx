@@ -290,79 +290,71 @@ export function useVoiceManager() {
       }, 240000);
       timeoutsRef.current.push(timeoutId9);
       
-      // Séquence 10 : Pieds (300s)
+      // Séquence 10 : Mollets (270s)
       const timeoutId10 = setTimeout(async () => {
-        console.log('🎯 Scan - Séquence 10 (300s): Pieds');
-        await tryPremiumAudio('feet', 
-          "Vos pieds, jusqu'au bout de vos orteils, sont maintenant complètement détendus et lourds.");
-      }, 300000);
+        console.log('🎯 Scan - Séquence 10 (270s): Mollets');
+        await tryPremiumAudio('calves', 
+          "Vos mollets se relâchent entièrement. Sentez l'énergie circuler librement.");
+      }, 270000);
       timeoutsRef.current.push(timeoutId10);
       
-      // Séquence 11 : Corps entier (360s)
+      // Séquence 11 : Chevilles (285s)
       const timeoutId11 = setTimeout(async () => {
-        console.log('🎯 Scan - Séquence 11 (360s): Corps entier');
-        await tryPremiumAudio('wholebody', 
-          "Une vague de bien-être parcourt maintenant tout votre corps, de la tête aux pieds. Vous êtes dans un état de relaxation profonde.");
-      }, 360000);
-      timeoutsRef.current.push(timeoutId11);
-      
-      // Séquence 12 : Chevilles (285s)
-      const timeoutId12 = setTimeout(async () => {
-        console.log('🎯 Scan - Séquence 12 (285s): Chevilles');
+        console.log('🎯 Scan - Séquence 11 (285s): Chevilles');
         await tryPremiumAudio('ankles', 
           "Vos chevilles se détendent. Sentez l'espace dans ces articulations.");
       }, 285000);
-      timeoutsRef.current.push(timeoutId12);
+      timeoutsRef.current.push(timeoutId11);
       
-      // Séquence 13 : Pieds complet (300s)
-      const timeoutId13 = setTimeout(async () => {
-        console.log('🎯 Scan - Séquence 13 (300s): Pieds complet');
+      // Séquence 12 : Pieds (300s)
+      const timeoutId12 = setTimeout(async () => {
+        console.log('🎯 Scan - Séquence 12 (300s): Pieds');
         await tryPremiumAudio('feet', 
           "Vos pieds, jusqu'au bout de vos orteils, sont maintenant complètement détendus et lourds.");
       }, 300000);
-      timeoutsRef.current.push(timeoutId13);
+      timeoutsRef.current.push(timeoutId12);
       
-      // Séquence 14 : Corps entier (360s)
-      const timeoutId14 = setTimeout(async () => {
-        console.log('🎯 Scan - Séquence 14 (360s): Corps entier');
+      // Séquence 13 : Corps entier (360s)
+      const timeoutId13 = setTimeout(async () => {
+        console.log('🎯 Scan - Séquence 13 (360s): Corps entier');
         await tryPremiumAudio('wholebody', 
           "Une vague de bien-être parcourt maintenant tout votre corps, de la tête aux pieds.");
       }, 360000);
-      timeoutsRef.current.push(timeoutId14);
+      timeoutsRef.current.push(timeoutId13);
       
-      // Séquence 15 : Respiration (420s)
-      const timeoutId15 = setTimeout(async () => {
-        console.log('🎯 Scan - Séquence 15 (420s): Respiration');
+      // Séquence 14 : Respiration (420s)
+      const timeoutId14 = setTimeout(async () => {
+        console.log('🎯 Scan - Séquence 14 (420s): Respiration');
         await tryPremiumAudio('breathing', 
           "Observez votre respiration, calme et régulière. Chaque inspiration vous apporte énergie et vitalité.");
       }, 420000);
-      timeoutsRef.current.push(timeoutId15);
+      timeoutsRef.current.push(timeoutId14);
       
-      // Séquence 16 : Conscience (480s)
-      const timeoutId16 = setTimeout(async () => {
-        console.log('🎯 Scan - Séquence 16 (480s): Conscience');
+      // Séquence 15 : Conscience (480s)
+      const timeoutId15 = setTimeout(async () => {
+        console.log('🎯 Scan - Séquence 15 (480s): Conscience');
         await tryPremiumAudio('awareness', 
           "Prenez conscience de votre corps dans son ensemble, parfaitement détendu et en harmonie.");
       }, 480000);
-      timeoutsRef.current.push(timeoutId16);
+      timeoutsRef.current.push(timeoutId15);
       
-      // Séquence 17 : Présence (540s)
-      const timeoutId17 = setTimeout(async () => {
-        console.log('🎯 Scan - Séquence 17 (540s): Présence');
+      // Séquence 16 : Présence (540s)
+      const timeoutId16 = setTimeout(async () => {
+        console.log('🎯 Scan - Séquence 16 (540s): Présence');
         await tryPremiumAudio('presence', 
           "Restez dans cet état de relaxation profonde, en pleine conscience de votre corps et de votre respiration.");
       }, 540000);
-      timeoutsRef.current.push(timeoutId17);
+      timeoutsRef.current.push(timeoutId16);
       
-      // Séquence 12 : Fin (570s)
-      const timeoutId18 = setTimeout(async () => {
-        console.log('🎯 Scan - Séquence 18 (570s): Fin');
+      // Séquence 17 : Fin (570s)
+      const timeoutId17 = setTimeout(async () => {
+        console.log('🎯 Scan - Séquence 17 (570s): Fin');
         await tryPremiumAudio('completion', 
           "Progressivement, reprenez conscience de votre environnement. Bougez doucement vos doigts, vos orteils. Votre corps est maintenant complètement détendu et votre esprit apaisé.");
       }, 570000);
-      timeoutsRef.current.push(timeoutId18);
+      timeoutsRef.current.push(timeoutId17);
       
-      console.log('✅ TOUTES LES 18 SÉQUENCES SCAN CORPOREL PROGRAMMÉES');
+      console.log('✅ TOUTES LES 17 SÉQUENCES SCAN CORPOREL PROGRAMMÉES');
       
     } else if (currentSession === 'meditation' && currentMeditation === 'gratitude') {
       console.log('🙏 DÉMARRAGE MÉDITATION GRATITUDE - SYSTÈME PREMIUM + FALLBACK');
@@ -640,12 +632,11 @@ export function useVoiceManager() {
       }, 333000);
       timeoutsRef.current.push(timeoutId19);
       
-      console.log('✅ TOUTES LES SÉQUENCES ABONDANCE PROGRAMMÉES');
+      console.log('✅ MÉDITATION ABONDANCE : 19 SÉQUENCES PROGRAMMÉES (fin à 354s = 5min 54s)');
         
     } else {
-      // Autres sessions avec synthèse vocale simple
-      console.log('🎤 Session autre que SOS Stress, guidage simple');
-      speak("Bienvenue dans votre session. Suivez le guide respiratoire.", 1000);
+      // Autres sessions - AUCUNE SYNTHÈSE AUTOMATIQUE
+      console.log('🔇 Session autre - Pas de guidage automatique, seulement voix premium si disponible');
     }
     
     return true;
