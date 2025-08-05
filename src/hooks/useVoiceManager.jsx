@@ -539,7 +539,8 @@ export function useVoiceManager() {
       timeoutsRef.current.push(timeoutId1);
         
     } else {
-      console.log('🔇 Session autre - Pas de guidage automatique');
+      console.log('🔇 Session autre - Aucun guidage vocal');
+      return false;
     }
     
     return true;
