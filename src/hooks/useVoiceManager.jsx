@@ -30,7 +30,7 @@ export function useVoiceManager() {
   }, []);
 
   const stopVoice = useCallback(() => {
-    console.log('🔇 ARRÊT COMPLET DU SYSTÈME VOCAL');
+    console.log('🔇 ARRÊT IMMÉDIAT ET COMPLET DU SYSTÈME VOCAL');
     
     // Arrêter la synthèse vocale
     window.speechSynthesis.cancel();
@@ -38,8 +38,15 @@ export function useVoiceManager() {
     // Arrêter l'audio premium
     if (currentAudioRef.current) {
       currentAudioRef.current.pause();
+      currentAudioRef.current.currentTime = 0; // Reset à zéro
       currentAudioRef.current = null;
     }
+    
+    // Arrêter TOUS les éléments audio de la page
+    document.querySelectorAll('audio').forEach(audio => {
+      audio.pause();
+      audio.currentTime = 0;
+    });
     
     // Nettoyer tous les timeouts
     clearAllTimeouts();
@@ -48,7 +55,7 @@ export function useVoiceManager() {
   // Surveiller l'état de la session pour arrêter les guidances
   useEffect(() => {
     if (!isSessionActive && isGuidanceStartedRef.current) {
-      console.log('🔇 Session inactive détectée - Arrêt du guidage vocal');
+      console.log('🔇 PAUSE DÉTECTÉE - ARRÊT IMMÉDIAT DE TOUT');
       stopVoice();
     }
   }, [isSessionActive, stopVoice]);

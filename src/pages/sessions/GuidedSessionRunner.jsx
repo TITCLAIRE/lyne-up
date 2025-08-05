@@ -182,9 +182,8 @@ export default function GuidedSessionRunner() {
 
   // Gérer la fin de session
   useEffect(() => {
-    // DÉSACTIVÉ - Plus de fin automatique de session
-    // Les sessions se terminent seulement quand l'utilisateur clique sur "Retour"
-    console.log('🔇 Fin automatique de session désactivée');
+    // COMPLÈTEMENT DÉSACTIVÉ - Aucune fin automatique
+    return; // Sortie immédiate, aucune logique de fin
   }, [timeRemaining, isSessionActive, sessionEnding, currentSession, speak, stopAudio, stopBreathing, stopVoice, navigate]);
 
   // Gérer le démarrage du guidage vocal
@@ -210,7 +209,7 @@ export default function GuidedSessionRunner() {
       const breathingPattern = getCurrentBreathingPattern();
       console.log('▶️ DÉMARRAGE session guidée:', currentSession || sessionId);
       setSessionActive(true);
-      setSessionEnding(false); 
+      setSessionEnding(false);
       setVoiceSystemStarted(false); 
       
       // Reset pour l'entraînement progressif
@@ -242,16 +241,22 @@ export default function GuidedSessionRunner() {
       // Démarrer le timer et la respiration
       let duration = sessionData?.duration || 180;
       
-      // CORRECTION SPÉCIALE POUR MÉTATRON : Forcer 5 minutes
+      // MÉTATRON : Session infinie (pas de timer)
       if (currentSession === 'meditation' && currentMeditation === 'metatron') {
-        duration = 300; // 5 minutes exactement
-        console.log('🌟 MÉTATRON: Durée forcée à 300 secondes (5 minutes)');
+        duration = 999999; // Durée infinie pour éviter toute fin automatique
+        console.log('🌟 MÉTATRON: Session infinie - Fin manuelle uniquement');
       }
       
-      // CORRECTION SPÉCIALE POUR ABONDANCE : Forcer 5 minutes 20s
+      // ABONDANCE : Session infinie (pas de timer)
       if (currentSession === 'meditation' && currentMeditation === 'abundance') {
-        duration = 320; // 5 minutes 20 secondes exactement
-        console.log('💰 ABONDANCE: Durée forcée à 320 secondes (5 minutes 20s)');
+        duration = 999999; // Durée infinie pour éviter toute fin automatique
+        console.log('💰 ABONDANCE: Session infinie - Fin manuelle uniquement');
+      }
+      
+      // GRATITUDE : Session infinie (pas de timer)
+      if (currentSession === 'meditation' && currentMeditation === 'gratitude') {
+        duration = 999999; // Durée infinie pour éviter toute fin automatique
+        console.log('🙏 GRATITUDE: Session infinie - Fin manuelle uniquement');
       }
       
       console.log('⏱️ Durée session:', duration, 'secondes');
