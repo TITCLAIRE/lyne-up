@@ -24,7 +24,7 @@ export const meditations = {
   abundance: {
     name: 'Abondance & Attraction',
     icon: 'DollarSign',
-    duration: 600, // 10 minutes
+    duration: 320, // 5 minutes 20 secondes - FORCÉ
     description: 'Attirez la prospérité et manifestez vos désirs',
     color: 'rgba(34, 197, 94, 0.2)',
     borderColor: 'rgba(34, 197, 94, 0.3)',
@@ -131,7 +131,7 @@ export const spiritualMeditations = {
   metatron: {
     name: 'Invocation de l\'Archange Métatron',
     icon: 'Star',
-    duration: 300, // 5 minutes (300 secondes)
+    duration: 300, // 5 minutes exactement - FORCÉ
     description: 'Connexion spirituelle avec l\'Archange Métatron',
     color: 'rgba(139, 92, 246, 0.2)',
     borderColor: 'rgba(139, 92, 246, 0.3)',

@@ -261,6 +261,12 @@ export default function GuidedSessionRunner() {
         console.log('🌟 MÉTATRON: Durée forcée à 300 secondes (5 minutes)');
       }
       
+      // CORRECTION SPÉCIALE POUR ABONDANCE : Forcer 5 minutes 20s
+      if (currentSession === 'meditation' && currentMeditation === 'abundance') {
+        duration = 320; // 5 minutes 20 secondes exactement
+        console.log('💰 ABONDANCE: Durée forcée à 320 secondes (5 minutes 20s)');
+      }
+      
       console.log('⏱️ Durée session:', duration, 'secondes');
       startTimer(duration);
       startBreathing(breathingPattern);
