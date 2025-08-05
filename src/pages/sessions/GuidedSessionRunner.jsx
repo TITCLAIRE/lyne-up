@@ -185,18 +185,8 @@ export default function GuidedSessionRunner() {
       console.log('🏁 Session guidée terminée - Redirection vers résultats');
       setSessionEnding(true);
       
-      // Message de fin adapté aux différentes sessions
-      if (currentSession === 'kids') {
-        speak("Super ! Tu as fait de la vraie magie avec ta respiration. Tu peux être fier de toi, petit champion !");
-      } else if (currentSession === 'reset') {
-        speak("Magnifique. Votre système nerveux est maintenant apaisé. Cette technique 4-7-8 peut être utilisée à tout moment pour retrouver instantanément le calme.");
-      } else if (currentSession === 'progressive') {
-        speak("Excellent ! Vous avez progressé du rythme débutant 3/3 jusqu'au rythme de cohérence cardiaque 5/5. Votre capacité respiratoire s'améliore.");
-      } else if (currentSession === 'seniors') {
-        speak("Excellent ! Vous avez pris soin de votre bien-être. Cette respiration douce peut être pratiquée à tout moment pour vous détendre et faire baisser votre tension.");
-      } else {
-        speak("Session terminée. Félicitations pour cette pratique.");
-      }
+      // PAS de message de fin automatique - Les voix premium gèrent la fin
+      console.log('🔇 Fin de session - Pas de message automatique');
       
       // Arrêter l'audio et la respiration
       stopAudio();
@@ -206,7 +196,7 @@ export default function GuidedSessionRunner() {
       setTimeout(() => {
         stopVoice();
         navigate('/results');
-      }, 2000);
+      }, 1000); // Délai réduit
     }
   }, [timeRemaining, isSessionActive, sessionEnding, currentSession, speak, stopAudio, stopBreathing, stopVoice, navigate]);
 
@@ -263,7 +253,14 @@ export default function GuidedSessionRunner() {
       }
       
       // Démarrer le timer et la respiration
-      const duration = sessionData?.duration || 180;
+      let duration = sessionData?.duration || 180;
+      
+      // CORRECTION SPÉCIALE POUR MÉTATRON : Forcer 5 minutes
+      if (currentSession === 'meditation' && currentMeditation === 'metatron') {
+        duration = 300; // 5 minutes exactement
+        console.log('🌟 MÉTATRON: Durée forcée à 300 secondes (5 minutes)');
+      }
+      
       console.log('⏱️ Durée session:', duration, 'secondes');
       startTimer(duration);
       startBreathing(breathingPattern);

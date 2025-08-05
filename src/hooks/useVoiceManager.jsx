@@ -25,9 +25,8 @@ export function useVoiceManager() {
   }, []);
   
   const speak = useCallback((text, delay = 0) => {
-    // SYNTHÈSE VOCALE COMPLÈTEMENT DÉSACTIVÉE
-    console.log('🔇 Synthèse vocale désactivée - Utilisation voix premium uniquement');
-    return;
+    // SYNTHÈSE VOCALE COMPLÈTEMENT DÉSACTIVÉE - MÊME PAS DE LOG
+    return false;
   }, []);
 
   const stopVoice = useCallback(() => {
