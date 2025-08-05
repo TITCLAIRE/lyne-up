@@ -212,8 +212,20 @@ export default function GuidedSessionRunner() {
 
   // Gérer le démarrage du guidage vocal
   useEffect(() => {
-    // COMPLÈTEMENT SUPPRIMÉ - Pas de démarrage automatique de synthèse
-    // Seules les voix premium sont utilisées via startSessionGuidance()
+    // DÉMARRAGE VOCAL UNIQUE - SEULEMENT POUR LES VOIX PREMIUM
+    if (isSessionActive && !voiceSystemStarted && voiceSettings.enabled) {
+      console.log('🎤 Démarrage vocal unique pour session:', currentSession || sessionId);
+      setVoiceSystemStarted(true);
+      
+      // Démarrage du guidage vocal après un délai
+      guidanceTimeoutRef.current = setTimeout(() => {
+        if (voiceSettings.enabled) {
+          console.log('🎤 DÉMARRAGE GUIDAGE VOCAL FORCÉ - Session:', currentSession || sessionId);
+          const success = startSessionGuidance();
+          console.log('🎤 Résultat démarrage guidage:', success ? 'SUCCÈS' : 'ÉCHEC');
+        }
+      }, 500);
+    }
   }, [isSessionActive, voiceSystemStarted, voiceSettings.enabled, startSessionGuidance, currentSession, sessionId, voiceSettings]);
 
   const handleToggleSession = () => {

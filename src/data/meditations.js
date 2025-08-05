@@ -131,14 +131,14 @@ export const spiritualMeditations = {
   metatron: {
     name: 'Invocation de l\'Archange Métatron',
     icon: 'Star',
-    duration: 300, // 5 minutes
+    duration: 300, // 5 minutes (300 secondes)
     description: 'Connexion spirituelle avec l\'Archange Métatron',
     color: 'rgba(139, 92, 246, 0.2)',
     borderColor: 'rgba(139, 92, 246, 0.3)',
     breathingPattern: { inhale: 4, hold: 0, exhale: 6 }, // Rythme 4/6
     frequency: '741hz', // 741 Hz - Éveil de l'intuition
     hasFullAudio: true, // Indique qu'il y a un fichier audio complet
-    fallbackStart: "Bienvenue dans cette méditation d'invocation de l'Archange Métatron. Installez-vous confortablement et fermez les yeux. Nous allons établir une connexion spirituelle avec cet être de lumière.",
+    isFullAudioMeditation: true, // Méditation avec un seul fichier audio complet
     guidance: {
       start: "Bienvenue dans cette méditation d'invocation de l'archange Métatron. Installez-vous confortablement. Fermez les yeux et prenez quelques profondes respirations. Nous allons établir une connexion avec cet être de lumière, gardien des archives akashiques et porteur de la géométrie sacrée. Suivez le rythme respiratoire et ouvrez votre coeur à cette présence divine. Ô Metatron, ange de la Présence, scribe de Lumière, gardien du Trône Divin, toi qui as connu la chair et t'es élevé au-delà, je t'appelle avec humilité. Que ta présence sacrée se manifeste dans cet espace. Je t'invite à m'accompagner dans cette méditation, à m'envelopper de ton énergie céleste. Que ta lumière entoure mon esprit, que ta sagesse éclaire mon cœur, que ta voix me guide sur les chemins de vérité. Toi qui écris dans les Livres Célestes, inscris en moi la mémoire de mon âme. Aide-moi à me souvenir de qui je suis, au-delà des voiles de l'oubli et des peurs humaines. Toi qui transmets la pensée divine, fais descendre en moi l'inspiration claire, la parole juste, et le silence plein de sens. Entoure-moi de ton Cube sacré, géométrie vivante de la création, bouclier de lumière contre les ombres. Metatron, Archange de feu blanc, ouvre les portes de la haute conscience. Aide-moi à élever ma fréquence, à faire rayonner l'amour, et à servir ce qui est plus grand que moi. Je te rends grâce pour ta présence, ta guidance et ta protection. Amen. Doucement, prenez conscience de votre corps, de votre respiration. Quand vous êtes prêt, ouvrez les yeux en gardant cette connexion sacrée avec l'Archange Métatron.",
       phases: [
@@ -148,7 +148,6 @@ export const spiritualMeditations = {
         "Entoure-moi de ton Cube sacré, géométrie vivante de la création.",
         "Metatron, Archange de feu blanc, ouvre les portes de la haute conscience."
       ],
-      // Pas de phases intermédiaires car c'est un fichier audio complet
       end: "Votre connexion avec l'Archange Métatron est établie. Gardez cette énergie sacrée avec vous."
     }
   }

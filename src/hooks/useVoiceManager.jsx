@@ -485,11 +485,13 @@ export function useVoiceManager() {
     } else if (currentSession === 'meditation' && currentMeditation === 'metatron') {
       console.log('🌟 DÉMARRAGE MÉDITATION MÉTATRON - VOIX PREMIUM UNIQUEMENT');
       
-      // Fichier audio complet
+      // Fichier audio complet - UN SEUL DÉCLENCHEMENT
       const timeoutId1 = setTimeout(async () => {
         await tryPremiumAudio('metatron', "");
       }, 1000);
       timeoutsRef.current.push(timeoutId1);
+      
+      // IMPORTANT : Pas d'autres timeouts pour Métatron car c'est un fichier complet de 5 minutes
         
     } else {
       console.log('🔇 Session autre - Pas de guidage automatique');
