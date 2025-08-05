@@ -257,21 +257,28 @@ export default function GuidedSessionRunner() {
     } else {
       setSessionActive(false);
       console.log('⏸️ PAUSE session guidée:', currentSession || sessionId);
-      stopTimer();
-      if (stopBreathing) stopBreathing(); 
-      if (stopAudio) stopAudio(); 
       
-      // Arrêt explicite de la voix avec vérification
-      if (stopVoice) {
-        console.log('🔇 ARRÊT FORCÉ de la voix lors de la pause');
-        stopVoice();
-      }
+      // ARRÊT BRUTAL ET IMMÉDIAT
+      stopTimer();
+      stopBreathing();
+      stopAudio();
+      
+      // ARRÊT IMMÉDIAT ET BRUTAL DE TOUT
+      console.log('🔇 ARRÊT BRUTAL DE TOUT AUDIO');
+      stopVoice();
+      
+      // Forcer l'arrêt de tous les audios
+      document.querySelectorAll('audio').forEach(audio => {
+        audio.pause();
+        audio.currentTime = 0;
+        audio.src = '';
+      });
+      
+      // Arrêt brutal de la synthèse
+      window.speechSynthesis.cancel();
 
-      // Nettoyage explicite de tous les timeouts
-      if (clearAllTimeouts) {
-        console.log('🧹 Nettoyage forcé de tous les timeouts lors de la pause');
-        clearAllTimeouts();
-      }
+      // Nettoyage brutal de tous les timeouts
+      clearAllTimeouts();
       
       // Nettoyer le timeout de guidage
       if (guidanceTimeoutRef.current) {
@@ -282,25 +289,6 @@ export default function GuidedSessionRunner() {
       setLastPhase(null);
       setSessionEnding(false); 
       setVoiceSystemStarted(false); 
-      
-      // Arrêt forcé de tous les timeouts
-      const highestId = setTimeout(() => {}, 0);
-      for (let i = 0; i < highestId; i++) {
-        clearTimeout(i);
-      }
-      
-      // Arrêt forcé de la synthèse vocale
-      window.speechSynthesis.cancel();
-
-      // Arrêter tous les éléments audio en cours
-      document.querySelectorAll('audio').forEach(audio => {
-        audio.pause();
-       try {
-         audio.src = '';
-       } catch (e) {
-         console.log('⚠️ Erreur lors de la réinitialisation de la source audio:', e);
-       }
-      });
       
       // Reset pour l'entraînement progressif
       if (currentSession === 'progressive') {
