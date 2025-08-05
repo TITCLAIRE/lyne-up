@@ -18,10 +18,8 @@ export const useSessionTimer = (onComplete = null) => {
         if (newTime <= 0) {
           setIsRunning(false);
           
-          // Appeler le callback de fin si fourni
-          if (onComplete && typeof onComplete === 'function') {
-            onComplete();
-          }
+          // DÉSACTIVÉ - Plus de callback automatique
+          console.log('⏰ Timer terminé - Pas de callback automatique');
           
           if (intervalRef.current) {
             clearInterval(intervalRef.current);

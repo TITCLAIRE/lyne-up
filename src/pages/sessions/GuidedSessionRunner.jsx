@@ -28,11 +28,12 @@ export default function GuidedSessionRunner() {
 
   // Fonction de fin de session - DOIT être définie AVANT useSessionTimer
   const handleSessionComplete = useCallback(() => {
-    console.log('🏁 Session terminée, redirection vers les résultats');
-    navigate('/results');
-  }, [navigate]);
+    // DÉSACTIVÉ - Pas de fin automatique pour éviter les arrêts brutaux
+    console.log('🚫 Fin automatique désactivée pour éviter les arrêts brutaux');
+    return false;
+  }, []);
 
-  const { timeRemaining, progress, startTimer, stopTimer, resetTimer } = useSessionTimer(handleSessionComplete);
+  const { timeRemaining, progress, startTimer, stopTimer, resetTimer } = useSessionTimer(null);
   const { breathingState, startBreathing, stopBreathing } = useBreathingAnimation();
   const { startAudio, stopAudio, playGong, getCurrentFrequencyName } = useAudioManager();
   const { speak, stop: stopVoice, startSessionGuidance, clearAllTimeouts } = useVoiceManager();
@@ -181,23 +182,9 @@ export default function GuidedSessionRunner() {
 
   // Gérer la fin de session
   useEffect(() => {
-    if (timeRemaining === 0 && isSessionActive && !sessionEnding) {
-      console.log('🏁 Session guidée terminée - Redirection vers résultats');
-      setSessionEnding(true);
-      
-      // PAS de message de fin automatique - Les voix premium gèrent la fin
-      console.log('🔇 Fin de session - Pas de message automatique');
-      
-      // Arrêter l'audio et la respiration
-      stopAudio();
-      stopBreathing();
-      
-      // Redirection après un court délai pour permettre au message de fin de se jouer
-      setTimeout(() => {
-        stopVoice();
-        navigate('/results');
-      }, 1000); // Délai réduit
-    }
+    // DÉSACTIVÉ - Plus de fin automatique de session
+    // Les sessions se terminent seulement quand l'utilisateur clique sur "Retour"
+    console.log('🔇 Fin automatique de session désactivée');
   }, [timeRemaining, isSessionActive, sessionEnding, currentSession, speak, stopAudio, stopBreathing, stopVoice, navigate]);
 
   // Gérer le démarrage du guidage vocal
