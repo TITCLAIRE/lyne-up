@@ -239,25 +239,7 @@ export default function GuidedSessionRunner() {
       }
       
       // Démarrer le timer et la respiration
-      let duration = sessionData?.duration || 180;
-      
-      // MÉTATRON : Session infinie (pas de timer)
-      if (currentSession === 'meditation' && currentMeditation === 'metatron') {
-        duration = 999999; // Durée infinie pour éviter toute fin automatique
-        console.log('🌟 MÉTATRON: Session infinie - Fin manuelle uniquement');
-      }
-      
-      // ABONDANCE : Session infinie (pas de timer)
-      if (currentSession === 'meditation' && currentMeditation === 'abundance') {
-        duration = 999999; // Durée infinie pour éviter toute fin automatique
-        console.log('💰 ABONDANCE: Session infinie - Fin manuelle uniquement');
-      }
-      
-      // GRATITUDE : Session infinie (pas de timer)
-      if (currentSession === 'meditation' && currentMeditation === 'gratitude') {
-        duration = 999999; // Durée infinie pour éviter toute fin automatique
-        console.log('🙏 GRATITUDE: Session infinie - Fin manuelle uniquement');
-      }
+      const duration = sessionData?.duration || 180;
       
       console.log('⏱️ Durée session:', duration, 'secondes');
       startTimer(duration);

@@ -25,18 +25,54 @@ export function useVoiceManager() {
   }, []);
   
   const speak = useCallback((text, delay = 0) => {
-    // SYNTHÈSE VOCALE COMPLÈTEMENT DÉSACTIVÉE - MÊME PAS DE LOG
-    return false;
+    if (!voiceSettings.enabled || !text) {
+      return false;
+    }
+
+    console.log('🗣️ Synthèse vocale:', text.substring(0, 50) + '...');
+    
+    try {
+      // Arrêter toute synthèse en cours
+      window.speechSynthesis.cancel();
+      
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'fr-FR';
+      utterance.rate = 0.8; // CORRECTION: Vitesse normale (pas accélérée)
+      utterance.pitch = 1.0;
+      utterance.volume = voiceSettings.volume;
+      
+      // Sélectionner une voix française si disponible
+      const voices = window.speechSynthesis.getVoices();
+      const frenchVoice = voices.find(voice => voice.lang.startsWith('fr'));
+      if (frenchVoice) {
+        utterance.voice = frenchVoice;
+      }
+      
+      if (delay > 0) {
+        const timeoutId = setTimeout(() => {
+          window.speechSynthesis.speak(utterance);
+        }, delay);
+        timeoutsRef.current.push(timeoutId);
+      } else {
+        window.speechSynthesis.speak(utterance);
+      }
+      
+      return true;
+    } catch (error) {
+      console.error('❌ Erreur synthèse vocale:', error);
+      return false;
+    }
   }, []);
 
   const stopVoice = useCallback(() => {
-    console.log('🔇 ARRÊT IMMÉDIAT ET COMPLET DU SYSTÈME VOCAL');
+    console.log('🔇 ARRÊT COMPLET DU SYSTÈME VOCAL');
     
     // Arrêter la synthèse vocale
     window.speechSynthesis.cancel();
     
     // Arrêter l'audio premium
     if (currentAudioRef.current) {
+      console.log('🔇 Arrêt audio premium en cours');
       currentAudioRef.current.pause();
       currentAudioRef.current.currentTime = 0; // Reset à zéro
       currentAudioRef.current = null;
@@ -491,13 +527,16 @@ export function useVoiceManager() {
     } else if (currentSession === 'meditation' && currentMeditation === 'metatron') {
       console.log('🌟 DÉMARRAGE MÉDITATION MÉTATRON - VOIX PREMIUM UNIQUEMENT');
       
-      // Fichier audio complet - UN SEUL DÉCLENCHEMENT
+      // UN SEUL fichier audio complet de 5 minutes
       const timeoutId1 = setTimeout(async () => {
-        await tryPremiumAudio('metatron', "");
+        console.log('🌟 Lecture fichier Métatron complet (5 minutes)');
+        const success = await tryPremiumAudio('metatron', "");
+        if (!success) {
+          console.log('❌ Fichier Métatron non trouvé, utilisation synthèse');
+          speak("Ô Metatron, ange de la Présence, scribe de Lumière, gardien du Trône Divin...");
+        }
       }, 1000);
       timeoutsRef.current.push(timeoutId1);
-      
-      // IMPORTANT : Pas d'autres timeouts pour Métatron car c'est un fichier complet de 5 minutes
         
     } else {
       console.log('🔇 Session autre - Pas de guidage automatique');
