@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Play, Pause, Home, Headphones, Target, RotateCcw, TrendingUp, Settings, Baby, Users, Brain, Sparkles, Heart, Wind, Waves } from 'lucide-react';
-import { useAppStore } from '../../store/appStore';
+import { useAppStore } from '../store/appStore';
 import { BreathingGuide } from '../../components/BreathingGuide';
 import { useSessionTimer } from '../../hooks/useSessionTimer';
 import { useBreathingAnimation } from '../../hooks/useBreathingAnimation';
