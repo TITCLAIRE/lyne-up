@@ -37,7 +37,16 @@
     <meta name="twitter:description" content="Application de cohérence cardiaque intégrative avec guidage vocal premium">
     <meta name="twitter:image" content="/logo/Logo Respir.io web.png">
   </head>
-  <body>
+ <script type="module">
+  import { ensureAudioUnlocked } from '/src/utils/audioUnlock.ts';
+
+  const unlockOnce = () => { ensureAudioUnlocked(); };
+
+  // 1er clic ou 1er toucher : on "réveille" l’audio (mobile & desktop)
+  document.addEventListener('click', unlockOnce, { once: true });
+  document.addEventListener('touchstart', unlockOnce, { once: true });
+</script>
+ <body>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
